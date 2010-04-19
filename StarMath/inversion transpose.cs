@@ -1,40 +1,62 @@
-﻿using System;
+﻿/*************************************************************************
+ *     This file & class is part of the StarMath Project
+ *     Copyright 2010 Matthew Ira Campbell, PhD.
+ *
+ *     StarMath is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *  
+ *     StarMath is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *  
+ *     You should have received a copy of the GNU General Public License
+ *     along with StarMath.  If not, see <http://www.gnu.org/licenses/>.
+ *     
+ *     Please find further details and contact information on GraphSynth
+ *     at http://starmath.codeplex.com/.
+ *************************************************************************/
+using System;
 
 namespace StarMathLib
 {
-    // note this is set to public for testing purposes only - remove when done.
     public static partial class StarMath
     {
         #region Matrix Inversion & Transpose
+        /// <summary>
+        /// Inverses the matrix A only if the matrix has already been
+        /// "triangularized" - meaning there are no elements in the bottom
+        /// triangle - A[i,j]=0.0 where j>i
+        /// </summary>
+        /// <param name="A">The matrix to invert. This matrix is unchanged by this function.</param>
+        /// <returns>The inverted matrix, A^-1.</returns>
         public static double[,] inverseUpper(double[,] A)
         {
             if (A.GetLength(0) != A.GetLength(1))
-            {
-                output("Matrix cannnot be inverted. Can only invert sqare matrices.");
-                return null;
-            }
+                throw new Exception("Matrix cannnot be inverted. Can only invert sqare matrices.");
+
             int size = A.GetLength(0);
             double[,] B = new double[size, size];
             B.Initialize();
-            double Bjj, v;
             double[] t = new double[size];
 
 
             for (int j = 0; j < size; j++)
             {
-                //if (A[innerK, innerK] == 0)
-                //    return null;
                 B[j, j] = 1 / A[j, j];
                 for (int i = 0; i < j; i++)
                     B[i, j] = A[i, j];
             }
             for (int j = 1; j < size; j++)
             {
-                Bjj = -B[j, j];
+                double Bjj = -B[j, j];
                 for (int i = 0; i < j; i++)
                     t[i] = B[i, j];
                 for (int i = 0; i < j; i++)
                 {
+                    double v;
                     if (i < j - 1)
                     {
                         v = 0.0;
@@ -50,19 +72,21 @@ namespace StarMathLib
             return B;
         }
 
+        /// <summary>
+        /// Inverses the matrix A only if the diagonal is all non-zero.
+        /// A[i,i] != 0.0
+        /// </summary>
+        /// <param name="A">The matrix to invert. This matrix is unchanged by this function.</param>
+        /// <returns>The inverted matrix, A^-1.</returns>
         public static double[,] inverse(double[,] A)
         {
-            output("inverting matrix...", 5);
             // this code is adapted from http://users.erols.com/mdinolfo/matrix.htm
             // one constraint/caveat in this function is that the diagonal elts. cannot
             // be zero.
             // if the matrix is not square or is less than B 2x2, 
             // then this function won't work
             if (A.GetLength(0) != A.GetLength(1))
-            {
-                output("Matrix cannnot be inverted. Can only invert sqare matrices.");
-                return null;
-            }
+                throw new Exception("Matrix cannnot be inverted. Can only invert sqare matrices.");     
             int size = A.GetLength(0);
             double[,] B = new double[size, size];
 
@@ -137,6 +161,11 @@ namespace StarMathLib
             return B;
         }
 
+        /// <summary>
+        /// Transposes the matrix, A.
+        /// </summary>
+        /// <param name="A">The matrix to transpose. This matrix is unchanged by this function.</param>
+        /// <returns>The transponse of A.</returns>
         public static double[,] transpose(double[,] A)
         {
             int CRowSize = A.GetLength(1);

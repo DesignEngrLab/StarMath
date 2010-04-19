@@ -1,50 +1,41 @@
-﻿using System;
+﻿/*************************************************************************
+ *     This file & class is part of the StarMath Project
+ *     Copyright 2010 Matthew Ira Campbell, PhD.
+ *
+ *     StarMath is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *  
+ *     StarMath is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *  
+ *     You should have received a copy of the GNU General Public License
+ *     along with StarMath.  If not, see <http://www.gnu.org/licenses/>.
+ *     
+ *     Please find further details and contact information on GraphSynth
+ *     at http://starmath.codeplex.com/.
+ *************************************************************************/
+using System;
 
 namespace StarMathLib
 {
-    // note this is set to public for testing purposes only - remove when done.
     public static partial class StarMath
     {
         #region Min max functions etc..
-        //Mukund's domain
-        public static double[] makeAP(double Start, double CommonDifference, double End)
-        {
 
-            int NumOfElements = (int)((double)(End - Start) / CommonDifference);
-
-            double[] AP = new double[NumOfElements];
-
-            for (int i = 0; i != NumOfElements; i++)
-                AP[i] = Start + CommonDifference * (double)i;
-
-            return AP;
-        }
-        public static int[] makeAP(int Start, int CommonDifference, int End)
-        {
-
-            int NumOfElements = (int)((End - Start) / CommonDifference);
-
-            int[] AP = new int[NumOfElements];
-
-            for (int i = 0; i != NumOfElements; i++)
-                AP[i] = Start + CommonDifference * i;
-
-            return AP;
-        }
-        public static double[,] multiply(double a, int[,] B)
-        {
-            double[,] c = new double[B.GetLength(0), B.GetLength(1)];
-            for (int i = 0; i != B.GetLength(0); i++)
-                for (int j = 0; j != B.GetLength(1); j++)
-                    c[i, j] = a * (double)B[i, j];
-            return c;
-        }
+        /// <summary>
+        /// Mins the specified A.
+        /// </summary>
+        /// <param name="A">The A.</param>
+        /// <returns></returns>
         public static double Min(double[,] A)
         {
-            double Min = 0.0;
             int maxRow = A.GetLength(0);
             int maxCol = A.GetLength(1);
-            Min = A[0, 0];
+            double Min = double.MaxValue;
             for (int i = 0; i != maxRow; i++)
             {
                 for (int j = 0; j != maxCol; j++)
@@ -55,12 +46,16 @@ namespace StarMathLib
             }
             return Min;
         }
+        /// <summary>
+        /// Maxes the specified A.
+        /// </summary>
+        /// <param name="A">The A.</param>
+        /// <returns></returns>
         public static double Max(double[,] A)
         {
-            double Max = 0.0;
             int maxRow = A.GetLength(0);
             int maxCol = A.GetLength(1);
-            Max = A[0, 0];
+            double Max = double.MinValue;
             for (int i = 0; i != maxRow; i++)
             {
                 for (int j = 0; j != maxCol; j++)
@@ -71,14 +66,17 @@ namespace StarMathLib
             }
             return Max;
         }
+        /// <summary>
+        /// Mins the max.
+        /// </summary>
+        /// <param name="A">The A.</param>
+        /// <returns></returns>
         public static double[] MinMax(double[,] A)
         {
-            double Max = 0.0;
-            double Min = 0.0;
             int maxRow = A.GetLength(0);
             int maxCol = A.GetLength(1);
-            Max = A[0, 0];
-            Min = A[0, 0];
+            double Max = double.MinValue;
+            double Min = double.MaxValue;
             for (int i = 0; i != maxRow; i++)
             {
                 for (int j = 0; j != maxCol; j++)
@@ -91,12 +89,16 @@ namespace StarMathLib
             }
             return (new double[] { Min, Max });
         }
+        /// <summary>
+        /// Mins the specified A.
+        /// </summary>
+        /// <param name="A">The A.</param>
+        /// <returns></returns>
         public static int Min(int[,] A)
         {
-            int Min = 0;
             int maxRow = A.GetLength(0);
             int maxCol = A.GetLength(1);
-            Min = A[0, 0];
+            int Min = int.MaxValue;
             for (int i = 0; i != maxRow; i++)
             {
                 for (int j = 0; j != maxCol; j++)
@@ -107,12 +109,16 @@ namespace StarMathLib
             }
             return Min;
         }
+        /// <summary>
+        /// Maxes the specified A.
+        /// </summary>
+        /// <param name="A">The A.</param>
+        /// <returns></returns>
         public static int Max(int[,] A)
         {
-            int Max = 0;
             int maxRow = A.GetLength(0);
             int maxCol = A.GetLength(1);
-            Max = A[0, 0];
+            int Max = int.MinValue;
             for (int i = 0; i != maxRow; i++)
             {
                 for (int j = 0; j != maxCol; j++)
@@ -123,11 +129,15 @@ namespace StarMathLib
             }
             return Max;
         }
+        /// <summary>
+        /// Maxes the specified A.
+        /// </summary>
+        /// <param name="A">The A.</param>
+        /// <returns></returns>
         public static int Max(int[] A)
         {
-            int Max = 0;
             int maxRow = A.GetLength(0);
-            Max = A[0];
+            int Max = int.MinValue;
             for (int i = 0; i != maxRow; i++)
             {
                 if (A[i] > Max)
@@ -135,14 +145,17 @@ namespace StarMathLib
             }
             return Max;
         }
+        /// <summary>
+        /// Mins the max.
+        /// </summary>
+        /// <param name="A">The A.</param>
+        /// <returns></returns>
         public static int[] MinMax(int[,] A)
         {
-            int Max = 0;
-            int Min = 0;
             int maxRow = A.GetLength(0);
             int maxCol = A.GetLength(1);
-            Max = A[0, 0];
-            Min = A[0, 0];
+            int Max = int.MinValue;
+            int Min = int.MaxValue;
             for (int i = 0; i != maxRow; i++)
             {
                 for (int j = 0; j != maxCol; j++)
@@ -155,14 +168,18 @@ namespace StarMathLib
             }
             return (new int[] { Min, Max });
         }
+        /// <summary>
+        /// Mins the RC.
+        /// </summary>
+        /// <param name="A">The A.</param>
+        /// <returns></returns>
         public static double[] MinRC(double[,] A)
         {
-            double Min = 0.0;
             int MinDim1 = 0; //Dim1 = rows
             int MinDim2 = 0; //Dim2 = columns
             int maxRow = A.GetLength(0);
             int maxCol = A.GetLength(1);
-            Min = A[0, 0];
+            double Min = double.MaxValue;
             for (int i = 0; i != maxRow; i++)
             {
                 for (int j = 0; j != maxCol; j++)
@@ -177,14 +194,18 @@ namespace StarMathLib
             }
             return new double[] { Min, MinDim1, MinDim2 };
         }
+        /// <summary>
+        /// Maxes the RC.
+        /// </summary>
+        /// <param name="A">The A.</param>
+        /// <returns></returns>
         public static double[] MaxRC(double[,] A)
         {
-            double Max = 0.0;
             int MaxDim1 = 0; //Dim1 = rows
             int MaxDim2 = 0; //Dim2 = columns
             int maxRow = A.GetLength(0);
             int maxCol = A.GetLength(1);
-            Max = A[0, 0];
+            double Max = double.MinValue;
             for (int i = 0; i != maxRow; i++)
             {
                 for (int j = 0; j != maxCol; j++)
@@ -199,18 +220,21 @@ namespace StarMathLib
             }
             return new double[] { Max, MaxDim1, MaxDim2 };
         }
+        /// <summary>
+        /// Mins the max RC.
+        /// </summary>
+        /// <param name="A">The A.</param>
+        /// <returns></returns>
         public static double[] MinMaxRC(double[,] A)
         {
-            double Max = 0.0;
-            double Min = 0.0;
             int MinDim1 = 0; //Dim1 = rows
             int MinDim2 = 0; //Dim2 = columns
             int MaxDim1 = 0; //Dim1 = rows
             int MaxDim2 = 0; //Dim2 = columns
             int maxRow = A.GetLength(0);
             int maxCol = A.GetLength(1);
-            Max = A[0, 0];
-            Min = A[0, 0];
+            double Max = double.MinValue;
+            double Min = double.MaxValue;
             for (int i = 0; i != maxRow; i++)
             {
                 for (int j = 0; j != maxCol; j++)
@@ -231,12 +255,16 @@ namespace StarMathLib
             }
             return (new double[] { Min, MinDim1, MinDim2, Max, MaxDim1, MaxDim2 });
         }
+        /// <summary>
+        /// Mins the R.
+        /// </summary>
+        /// <param name="A">The A.</param>
+        /// <returns></returns>
         public static double[] MinR(double[] A)
         {
-            double Min = 0.0;
             int MinDim = 0; //Dim1 = rows
             int maxRow = A.GetLength(0);
-            Min = A[0];
+            double Min = double.MaxValue;
             for (int i = 0; i < maxRow; i++)
             {
                 if (A[i] < Min)
@@ -247,196 +275,12 @@ namespace StarMathLib
             }
             return new double[] { Min, MinDim };
         }
-        public static double[,] GetColumns(int[] ColumnList, double[,] A)
-        {
-            int NumberOfValidColumns = 0;
-            int[] ValidColumns = new int[ColumnList.GetLength(0)];
-            for (int k = 0; k < ColumnList.GetLength(0); k++)
-            {
-                if (ColumnList[k] >= 0 && ColumnList[k] < A.GetLength(1))
-                {
-                    ValidColumns[NumberOfValidColumns] = ColumnList[k];
-                    NumberOfValidColumns++;
-                }
-            }
-            double[,] Columns = new double[A.GetLength(0), NumberOfValidColumns];
-
-            for (int k = 0; k < NumberOfValidColumns; k++)
-            {
-                for (int j = 0; j < A.GetLength(0); j++)
-                {
-                    Columns[j, k] = A[j, ValidColumns[k]];
-                }
-            }
-            return Columns;
-        }
-        public static double[] GetColumns(int[] ColumnList, double[] A)
-        {
-            int NumberOfValidColumns = 0;
-            int[] ValidColumns = new int[ColumnList.GetLength(0)];
-            for (int k = 0; k < ColumnList.GetLength(0); k++)
-            {
-                if (ColumnList[k] >= 0 && ColumnList[k] < A.GetLength(0))
-                {
-                    ValidColumns[NumberOfValidColumns] = ColumnList[k];
-                    NumberOfValidColumns++;
-                }
-            }
-            double[] Columns = new double[NumberOfValidColumns];
-
-            for (int k = 0; k < NumberOfValidColumns; k++)
-            {
-                Columns[k] = A[ValidColumns[k]];
-            }
-            return Columns;
-        }
-        public static int[] GetColumns(int[] ColumnList, int[] A)
-        {
-            int NumberOfValidColumns = 0;
-            int[] ValidColumns = new int[ColumnList.GetLength(0)];
-            for (int k = 0; k < ColumnList.GetLength(0); k++)
-            {
-                if (ColumnList[k] >= 0 && ColumnList[k] < A.GetLength(0))
-                {
-                    ValidColumns[NumberOfValidColumns] = ColumnList[k];
-                    NumberOfValidColumns++;
-                }
-            }
-            int[] Columns = new int[NumberOfValidColumns];
-
-            for (int k = 0; k < NumberOfValidColumns; k++)
-            {
-                Columns[k] = A[ValidColumns[k]];
-            }
-            return Columns;
-        }
-        public static double[,] GetRows(int[] RowList, double[,] A)
-        {
-            int NumberOfValidRows = 0;
-            int[] ValidRows = new int[RowList.GetLength(0)];
-            for (int k = 0; k < RowList.GetLength(0); k++)
-            {
-                if (RowList[k] >= 0 && RowList[k] < A.GetLength(0))
-                {
-                    ValidRows[NumberOfValidRows] = RowList[k];
-                    NumberOfValidRows++;
-                }
-            }
-            double[,] Rows = new double[NumberOfValidRows, A.GetLength(1)];
-
-            for (int k = 0; k < NumberOfValidRows; k++)
-            {
-                for (int j = 0; j < A.GetLength(1); j++)
-                {
-                    Rows[k, j] = A[ValidRows[k], j];
-                }
-            }
-            return Rows;
-        }
-        public static double[,] JoinCol(double[,] Matrix1, double[,] Matrix2)
-        {
-
-            int NumRows = 0;
-            int NumCols = 0;
-            int Mat1Cols = 0;
-            int Mat2Cols = 0;
-            double[,] JointMatrix;
-            if (Matrix1.GetLength(0) != Matrix2.GetLength(0))
-                throw new Exception("MatrixMath Size Error: Row dimensions do not match for matrix1 and matrix2");
-            else
-            {
-                NumRows = Matrix1.GetLength(0);
-                NumCols = Matrix1.GetLength(1) + Matrix2.GetLength(1);
-                Mat1Cols = Matrix1.GetLength(1);
-                Mat2Cols = Matrix2.GetLength(1);
-
-                JointMatrix = new double[NumRows, NumCols];
-
-                for (int j = 0; j < Mat1Cols; j++)
-                {
-                    for (int k = 0; k < NumRows; k++)
-                    {
-                        JointMatrix[k, j] = Matrix1[k, j];
-                    }
-                }
-
-                for (int j = 0; j < Mat2Cols; j++)
-                {
-                    for (int k = 0; k < NumRows; k++)
-                    {
-                        JointMatrix[k, j + Mat1Cols] = Matrix2[k, j];
-                    }
-                }
-                return JointMatrix;
-            }
-        }
-        public static double[,] JoinRow(double[,] Matrix1, double[,] Matrix2)
-        {
-
-            int NumRows = 0;
-            int NumCols = 0;
-            int Mat1Rows = 0;
-            int Mat2Rows = 0;
-            double[,] JointMatrix;
-            if (Matrix1.GetLength(1) != Matrix2.GetLength(1))
-                throw new Exception("MatrixMath Size Error: Column dimensions do not match for matrix1 and matrix2");
-            else
-            {
-                NumRows = Matrix1.GetLength(0) + Matrix2.GetLength(0);
-                NumCols = Matrix1.GetLength(1);
-                Mat1Rows = Matrix1.GetLength(0);
-                Mat2Rows = Matrix2.GetLength(0);
-                JointMatrix = new double[NumRows, NumCols];
-
-                for (int j = 0; j < Mat1Rows; j++)
-                {
-                    for (int k = 0; k < NumCols; k++)
-                    {
-                        JointMatrix[j, k] = Matrix1[j, k];
-                    }
-                }
-
-                for (int j = 0; j < Mat2Rows; j++)
-                {
-                    for (int k = 0; k < NumCols; k++)
-                    {
-                        JointMatrix[j + Mat1Rows, k] = Matrix2[j, k];
-                    }
-                }
-            }
-            return JointMatrix;
-
-        }
-        public static double[] JoinArr(double[] Array1, double[] Array2)
-        {
-            int Mat1Elements = Array1.GetLength(0);
-            int Mat2Elements = Array2.GetLength(0);
-            int NumElements = Mat1Elements + Mat2Elements;
-            double[] JointArray = new double[NumElements];
-
-            for (int j = 0; j < Mat1Elements; j++)
-                JointArray[j] = Array1[j];
-
-            for (int j = 0; j < Mat2Elements; j++)
-                JointArray[j + Mat1Elements] = Array2[j];
-
-            return JointArray;
-        }
-        public static int[] JoinArr(int[] Array1, int[] Array2)
-        {
-            int Mat1Elements = Array1.GetLength(0);
-            int Mat2Elements = Array2.GetLength(0);
-            int NumElements = Mat1Elements + Mat2Elements;
-            int[] JointArray = new int[NumElements];
-
-            for (int j = 0; j < Mat1Elements; j++)
-                JointArray[j] = Array1[j];
-
-            for (int j = 0; j < Mat2Elements; j++)
-                JointArray[j + Mat1Elements] = Array2[j];
-
-            return JointArray;
-        }
+        /// <summary>
+        /// Finds the specified find val.
+        /// </summary>
+        /// <param name="FindVal">The find val.</param>
+        /// <param name="A">The A.</param>
+        /// <returns></returns>
         public static int[] find(double FindVal, double[] A)
         {
             int Size_of_A = A.GetLength(0);
@@ -453,6 +297,12 @@ namespace StarMathLib
             }
             return GetColumns(makeAP(0, 1, k), SearchResults);
         }
+        /// <summary>
+        /// Finds the specified find val.
+        /// </summary>
+        /// <param name="FindVal">The find val.</param>
+        /// <param name="A">The A.</param>
+        /// <returns></returns>
         public static int[] find(int FindVal, int[] A)
         {
             int Size_of_A = A.GetLength(0);

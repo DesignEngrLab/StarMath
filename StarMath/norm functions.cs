@@ -160,5 +160,20 @@ namespace StarMathLib
             return Math.Sqrt(norm);
         }
         #endregion
+
+        #region Normalize
+
+
+        /// <summary>
+        ///   Returns to normalized vector (has lenght or 2-norm of 1))
+        ///   of the vector, x.
+        /// </summary>
+        /// <param name = "x">The vector, x.</param>
+        /// <returns>unit vector.</returns>
+        public static double[] normalize(double[] x)
+        {
+            return multiply((1/norm2(x)),x);
+        }
+        #endregion
     }
 }

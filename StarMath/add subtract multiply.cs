@@ -93,7 +93,11 @@ namespace StarMathLib
         /// <returns></returns>
         public static double[] multiplyCross(double[] A, double[] B)
         {
-            throw new NotImplementedException();
+            double[] solution = new double[3];
+            solution[0] = A[1] * B[2] - B[1] * A[2];
+            solution[1] = A[2] * B[0] - B[2] * A[0];
+            solution[2] = A[0] * B[1] - B[0] * A[1];
+            return solution;
         }
         /// <summary>
         /// Multiplies the vectors into A matrix.

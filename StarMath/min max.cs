@@ -19,6 +19,7 @@
  *     at http://starmath.codeplex.com/.
  *************************************************************************/
 using System;
+using System.Linq;
 
 namespace StarMathLib
 {
@@ -27,10 +28,10 @@ namespace StarMathLib
         #region Min max functions etc..
 
         /// <summary>
-        /// Mins the specified A.
+        /// Finds the minimum value in the given 2D double array
         /// </summary>
-        /// <param name="A">The A.</param>
-        /// <returns></returns>
+        /// <param name="A">The array to be searched for</param>
+        /// <returns>A double value that is the minimum of A</returns>
         public static double Min(double[,] A)
         {
             int maxRow = A.GetLength(0);
@@ -46,11 +47,12 @@ namespace StarMathLib
             }
             return Min;
         }
+
         /// <summary>
-        /// Maxes the specified A.
+        /// Finds the maximum value in the given 2D double array
         /// </summary>
-        /// <param name="A">The A.</param>
-        /// <returns></returns>
+        /// <param name="A">The array to be searched for</param>
+        /// <returns>A double value that is the maximum of A</returns>
         public static double Max(double[,] A)
         {
             int maxRow = A.GetLength(0);
@@ -66,11 +68,12 @@ namespace StarMathLib
             }
             return Max;
         }
+
         /// <summary>
-        /// Mins the max.
+        /// Finds the minimum and maximum value in the given 2D double array
         /// </summary>
-        /// <param name="A">The A.</param>
-        /// <returns></returns>
+        /// <param name="A">The array to be searched for</param>
+        /// <returns>A 1 x 2 double array that contains the minimum and maximum value in A</returns>
         public static double[] MinMax(double[,] A)
         {
             int maxRow = A.GetLength(0);
@@ -89,11 +92,12 @@ namespace StarMathLib
             }
             return (new double[] { Min, Max });
         }
+
         /// <summary>
-        /// Mins the specified A.
+        /// Finds the minimum value in the given 2D integer array
         /// </summary>
-        /// <param name="A">The A.</param>
-        /// <returns></returns>
+        /// <param name="A">The array to be searched for</param>
+        /// <returns>An integer value that is the minimum of A</returns>
         public static int Min(int[,] A)
         {
             int maxRow = A.GetLength(0);
@@ -109,11 +113,12 @@ namespace StarMathLib
             }
             return Min;
         }
+
         /// <summary>
-        /// Maxes the specified A.
+        /// Finds the maximum value in the given 2D integer array
         /// </summary>
-        /// <param name="A">The A.</param>
-        /// <returns></returns>
+        /// <param name="A">The array to be searched for</param>
+        /// <returns>An integer value that is the maximum of A</returns>
         public static int Max(int[,] A)
         {
             int maxRow = A.GetLength(0);
@@ -130,10 +135,10 @@ namespace StarMathLib
             return Max;
         }
         /// <summary>
-        /// Maxes the specified A.
+        /// Finds the maximum value in the given 1D integer array
         /// </summary>
-        /// <param name="A">The A.</param>
-        /// <returns></returns>
+        /// <param name="A">The array to be searched for</param>
+        /// <returns>An integer value that is the maximum of A</returns>
         public static int Max(int[] A)
         {
             int maxRow = A.GetLength(0);
@@ -146,10 +151,10 @@ namespace StarMathLib
             return Max;
         }
         /// <summary>
-        /// Mins the max.
+        /// Finds the minimum and maximum value in the given 2D double array
         /// </summary>
-        /// <param name="A">The A.</param>
-        /// <returns></returns>
+        /// <param name="A">The array to be searched for</param>
+        /// <returns>A 1 x 2 double array that contains the minimum and maximum value in A</returns>
         public static int[] MinMax(int[,] A)
         {
             int maxRow = A.GetLength(0);
@@ -169,10 +174,10 @@ namespace StarMathLib
             return (new int[] { Min, Max });
         }
         /// <summary>
-        /// Mins the RC.
+        /// Finds the minimum value in the given 2D double array and returns the row and column indices along with it.
         /// </summary>
-        /// <param name="A">The A.</param>
-        /// <returns></returns>
+        /// <param name="A">The array to be searched for</param>
+        /// <returns>A 1 x 3 double array that contains the minimum value and its row and column index in A</returns>
         public static double[] MinRC(double[,] A)
         {
             int MinDim1 = 0; //Dim1 = rows
@@ -195,10 +200,10 @@ namespace StarMathLib
             return new double[] { Min, MinDim1, MinDim2 };
         }
         /// <summary>
-        /// Maxes the RC.
+        /// Finds the maximum value in the given 2D double array and returns the row and column indices along with it.
         /// </summary>
-        /// <param name="A">The A.</param>
-        /// <returns></returns>
+        /// <param name="A">The array to be searched for</param>
+        /// <returns>A 1 x 3 double array that contains the maximum value and its row and column index in A</returns>
         public static double[] MaxRC(double[,] A)
         {
             int MaxDim1 = 0; //Dim1 = rows
@@ -221,10 +226,10 @@ namespace StarMathLib
             return new double[] { Max, MaxDim1, MaxDim2 };
         }
         /// <summary>
-        /// Mins the max RC.
+        /// Finds the minimum and maximum value in the given 2D double array and returns the row and column indices
         /// </summary>
-        /// <param name="A">The A.</param>
-        /// <returns></returns>
+        /// <param name="A">The array to be searched for</param>
+        /// <returns>A 1 x 6 double array that contains the min value and its row and col index and the max value and its row and col index in A</returns>
         public static double[] MinMaxRC(double[,] A)
         {
             int MinDim1 = 0; //Dim1 = rows
@@ -256,10 +261,10 @@ namespace StarMathLib
             return (new double[] { Min, MinDim1, MinDim2, Max, MaxDim1, MaxDim2 });
         }
         /// <summary>
-        /// Mins the R.
+        /// Finds the minimum value in the given 1D double array and returns its index along with it.
         /// </summary>
-        /// <param name="A">The A.</param>
-        /// <returns></returns>
+        /// <param name="A">The array to be searched for</param>
+        /// <returns>A 1 x 2 double array that contains the minimum value and its index in A</returns>
         public static double[] MinR(double[] A)
         {
             int MinDim = 0; //Dim1 = rows

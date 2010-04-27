@@ -27,11 +27,11 @@ namespace StarMathLib
         #region Add, Subtract, and Multiply functions
         #region Multiplication of Scalars, Vectors, and Matrices
         /// <summary>
-        /// Multiplies the specified a.
+        /// Multiplies all elements of a 1D double array with a double value.
         /// </summary>
-        /// <param name="a">A.</param>
-        /// <param name="B">The B.</param>
-        /// <returns></returns>
+        /// <param name="a">The double value to be multiplied</param>
+        /// <param name="B">The matrix to be multiplied with</param>
+        /// <returns>A 1D double array that contains the product</returns>
         public static double[] multiply(double a, double[] B)
         {
             // scale vector B by the amount of scalar B
@@ -42,11 +42,11 @@ namespace StarMathLib
             return c;
         }
         /// <summary>
-        /// Multiplies the specified a.
+        /// Multiplies all elements of a 2D double array with a double value.
         /// </summary>
-        /// <param name="a">A.</param>
-        /// <param name="B">The B.</param>
-        /// <returns></returns>
+        /// <param name="a">The double value to be multiplied</param>
+        /// <param name="B">The matrix to be multiplied with</param>
+        /// <returns>A 2D double array that contains the product</returns>
         public static double[,] multiply(double a, double[,] B)
         {
             double[,] c = new double[B.GetLength(0), B.GetLength(1)];
@@ -56,11 +56,12 @@ namespace StarMathLib
             return c;
         }
         /// <summary>
-        /// Multiplies the specified a.
+        /// <summary>
+        /// Multiplies all elements of a 2D int array with a double value.
         /// </summary>
-        /// <param name="a">A.</param>
-        /// <param name="B">The B.</param>
-        /// <returns></returns>
+        /// <param name="a">The double value to be multiplied</param>
+        /// <param name="B">The matrix to be multiplied with</param>
+        /// <returns>A 2D double array that contains the product</returns>
         public static double[,] multiply(double a, int[,] B)
         {
             double[,] c = new double[B.GetLength(0), B.GetLength(1)];
@@ -70,37 +71,38 @@ namespace StarMathLib
             return c;
         }
         /// <summary>
-        /// Multiplies the dot.
+        /// The dot product of the two 1D double vectors A and B
         /// </summary>
-        /// <param name="A">The A.</param>
-        /// <param name="B">The B.</param>
-        /// <returns></returns>
+        /// <param name="a">1D double Array 1</param>
+        /// <param name="B">1D double Array 2</param>
+        /// <returns>A double value that contains the dot product</returns>
         public static double multiplyDot(double[] A, double[] B)
         {
             // this is B dot term_i multiplication
             int size = A.GetLength(0);
-            if (size != B.GetLength(0)) return double.NaN;
+            if (size != B.GetLength(0))
+                throw new Exception("Matrix sizes do not match");
             double c = 0.0;
             for (int i = 0; i != size; i++)
                 c += A[i] * B[i];
             return c;
         }
         /// <summary>
-        /// Multiplies the cross.
+        /// The cross product of the two 1D double vectors A and B
         /// </summary>
-        /// <param name="A">The A.</param>
-        /// <param name="B">The B.</param>
-        /// <returns></returns>
+        /// <param name="a">1D double Array 1</param>
+        /// <param name="B">1D double Array 2</param>
+        /// <returns>A double value that contains the dot product</returns>
         public static double[] multiplyCross(double[] A, double[] B)
         {
             throw new NotImplementedException();
         }
         /// <summary>
-        /// Multiplies the vectors into A matrix.
+        /// Product of each element of array-1 (1D double) with each element of array-2 (1D double)
         /// </summary>
-        /// <param name="A">The A.</param>
-        /// <param name="B">The B.</param>
-        /// <returns></returns>
+        /// <param name="A">1D double Array 1</param>
+        /// <param name="B">1D double Array 2</param>
+        /// <returns>2D double array product matrix, value of element [i,j] = A[i] * B[j]</returns>
         public static double[,] multiplyVectorsIntoAMatrix(double[] A, double[] B)
         {
             int CRowSize = A.GetLength(0);
@@ -114,15 +116,15 @@ namespace StarMathLib
             return C;
         }
         /// <summary>
-        /// Multiplies the specified A.
+        /// Product of two matrices (2D double)
         /// </summary>
-        /// <param name="A">The A.</param>
-        /// <param name="B">The B.</param>
-        /// <returns></returns>
+        /// <param name="A">2D double Array 1</param>
+        /// <param name="B">2D double Array 1</param>
+        /// <returns>A 2D double array that is the product of the two matrices A and B</returns>
         public static double[,] multiply(double[,] A, double[,] B)
         {
             if (A.GetLength(1) != B.GetLength(0))
-                return null;
+                throw new Exception("Column count in first matrix must be equal to row count in second matrix");
             // this is B dot term_i multiplication
             int CRowSize = A.GetLength(0);
             int CColSize = B.GetLength(1);
@@ -140,17 +142,18 @@ namespace StarMathLib
             return C;
         }
         /// <summary>
-        /// Multiplies the specified A.
+        /// Product of two matrices (2D double and 1D double)
         /// </summary>
-        /// <param name="A">The A.</param>
-        /// <param name="B">The B.</param>
-        /// <returns></returns>
+        /// <param name="A">2D double Array</param>
+        /// <param name="B">1D double Array</param>
+        /// <returns>A 1D double array that is the product of the two matrices A and B</returns>
         public static double[] multiply(double[,] A, double[] B)
         {
             // this is B dot term_i multiplication
             int ARowSize = A.GetLength(0);
             int AColSize = A.GetLength(1);
-            if (AColSize != B.GetLength(0)) return null;
+            if (AColSize != B.GetLength(0))
+                throw new Exception("Column count in first matrix must be equal to row count in second matrix");
 
             double[] C = new double[ARowSize];
 
@@ -163,17 +166,18 @@ namespace StarMathLib
             return C;
         }
         /// <summary>
-        /// Multiplies the specified B.
+        /// Product of two matrices (1D double and 2D double)
         /// </summary>
-        /// <param name="B">The B.</param>
-        /// <param name="A">The A.</param>
-        /// <returns></returns>
+        /// <param name="A">1D double Array</param>
+        /// <param name="B">2D double Array</param>
+        /// <returns>A 1D double array that is the product of the two matrices A and B</returns>
         public static double[] multiply(double[] B, double[,] A)
         {
             // this is B dot term_i multiplication
             int CRowSize = A.GetLength(0);
             int CColSize = A.GetLength(1);
-            if (CRowSize != B.GetLength(0)) return null;
+            if (CRowSize != B.GetLength(0))
+                throw new Exception("Column count in first matrix must be equal to row count in second matrix");
 
             double[] C = new double[CColSize];
 
@@ -189,33 +193,35 @@ namespace StarMathLib
 
         #region Add Vector-to-Vector and Matrix-to-Matrix
         /// <summary>
-        /// Adds the specified A.
+        /// Adds arrays A and B 
         /// </summary>
-        /// <param name="A">The A.</param>
-        /// <param name="B">The B.</param>
-        /// <returns></returns>
+        /// <param name="A">1D double array 1</param>
+        /// <param name="B">1D double array 2</param>
+        /// <returns>1D double array that contains sum of vectros A and B</returns>
         public static double[] add(double[] A, double[] B)
         {
             // add vector A to vector B
             int size = A.GetLength(0);
-            if (size != B.GetLength(0)) return null;
+            if (size != B.GetLength(0)) throw new Exception("Matrix sizes do not match");
             double[] c = new double[size];
             for (int i = 0; i != size; i++)
                 c[i] = A[i] + B[i];
             return c;
         }
         /// <summary>
-        /// Adds the specified A.
+        /// Adds arrays A and B 
         /// </summary>
-        /// <param name="A">The A.</param>
-        /// <param name="B">The B.</param>
-        /// <returns></returns>
+        /// <param name="A">2D double array 1</param>
+        /// <param name="B">2D double array 2</param>
+        /// <returns>2D double array that contains sum of vectros A and B</returns>
         public static double[,] add(double[,] A, double[,] B)
         {
             int CRowSize = A.GetLength(0);
             int CColSize = A.GetLength(1);
-            if ((CRowSize != B.GetLength(0)) || (CColSize != B.GetLength(1)))
-                return null;
+            if (CRowSize != B.GetLength(0))
+                throw new Exception("Matrix row count do not match");
+            if(CColSize != B.GetLength(1))
+                throw new Exception("Matrix column count do not match");
 
             double[,] C = new double[CRowSize, CColSize];
 
@@ -225,17 +231,19 @@ namespace StarMathLib
             return C;
         }
         /// <summary>
-        /// Adds the specified A.
+        /// Adds arrays A and B 
         /// </summary>
-        /// <param name="A">The A.</param>
-        /// <param name="B">The B.</param>
-        /// <returns></returns>
+        /// <param name="A">2D double array 1</param>
+        /// <param name="B">2D int array 2</param>
+        /// <returns>2D double array that contains sum of vectros A and B</returns>
         public static double[,] add(double[,] A, int[,] B)
         {
             int CRowSize = A.GetLength(0);
             int CColSize = A.GetLength(1);
-            if ((CRowSize != B.GetLength(0)) || (CColSize != B.GetLength(1)))
-                return null;
+            if (CRowSize != B.GetLength(0))
+                throw new Exception("Matrix row count do not match");
+            if (CColSize != B.GetLength(1))
+                throw new Exception("Matrix column count do not match");
 
             double[,] C = new double[CRowSize, CColSize];
 
@@ -245,17 +253,19 @@ namespace StarMathLib
             return C;
         }
         /// <summary>
-        /// Adds the specified A.
+        /// Adds arrays A and B 
         /// </summary>
-        /// <param name="A">The A.</param>
-        /// <param name="B">The B.</param>
-        /// <returns></returns>
+        /// <param name="A">2D integer array 1</param>
+        /// <param name="B">2D integer array 2</param>
+        /// <returns>2D integer array that contains sum of vectros A and B</returns>
         public static int[,] add(int[,] A, int[,] B)
         {
             int CRowSize = A.GetLength(0);
             int CColSize = A.GetLength(1);
-            if ((CRowSize != B.GetLength(0)) || (CColSize != B.GetLength(1)))
-                return null;
+            if (CRowSize != B.GetLength(0))
+                throw new Exception("Matrix row count do not match");
+            if (CColSize != B.GetLength(1))
+                throw new Exception("Matrix column count do not match");
 
             int[,] C = new int[CRowSize, CColSize];
 
@@ -270,14 +280,15 @@ namespace StarMathLib
         /// <summary>
         /// Subtracts one vector (B) from the other (A). C = A - B.
         /// </summary>
-        /// <param name="A">The minuend vector, A.</param>
-        /// <param name="B">The subtrahend vector, B.</param>
-        /// <returns>Returns the difference vector, C</returns>
+        /// <param name="A">The minuend vector, A (1D double)</param>
+        /// <param name="B">The subtrahend vector, B (1D double)</param>
+        /// <returns>Returns the difference vector, C (1D double)</returns>
         public static double[] subtract(double[] A, double[] B)
         {
             // add vector A to vector B
             int size = A.GetLength(0);
-            if (size != B.GetLength(0)) return null;
+            if (size != B.GetLength(0))
+                throw new Exception("Matrix sizes do not match");
             double[] c = new double[size];
             for (int i = 0; i != size; i++)
                 c[i] = A[i] - B[i];
@@ -286,15 +297,17 @@ namespace StarMathLib
         /// <summary>
         /// Subtracts one matrix (B) from the other (A). C = A - B.
         /// </summary>
-        /// <param name="A">The minuend matrix, A.</param>
-        /// <param name="B">The subtrahend matrix, B.</param>
-        /// <returns>Returns the difference matrix, C</returns>
+        /// <param name="A">The minuend matrix, A (2D double).</param>
+        /// <param name="B">The subtrahend matrix, B (2D double).</param>
+        /// <returns>Returns the difference matrix, C (2D double)</returns>
         public static double[,] subtract(double[,] A, double[,] B)
         {
             int CRowSize = A.GetLength(0);
             int CColSize = A.GetLength(1);
-            if ((CRowSize != B.GetLength(0)) || (CColSize != B.GetLength(1)))
-                return null;
+            if (CRowSize != B.GetLength(0))
+                throw new Exception("Matrix row count do not match");
+            if (CColSize != B.GetLength(1))
+                throw new Exception("Matrix column count do not match");
 
             double[,] C = new double[CRowSize, CColSize];
 
@@ -306,15 +319,17 @@ namespace StarMathLib
         /// <summary>
         /// Subtracts one matrix (B) from the other (A). C = A - B.
         /// </summary>
-        /// <param name="A">The minuend matrix, A.</param>
-        /// <param name="B">The subtrahend matrix, B.</param>
-        /// <returns>Returns the difference matrix, C</returns>
+        /// <param name="A">The minuend matrix, A (2D integer).</param>
+        /// <param name="B">The subtrahend matrix, B (2D integer).</param>
+        /// <returns>Returns the difference matrix, C (2D integer)</returns>
         public static int[,] subtract(int[,] A, int[,] B)
         {
             int CRowSize = A.GetLength(0);
             int CColSize = A.GetLength(1);
-            if ((CRowSize != B.GetLength(0)) || (CColSize != B.GetLength(1)))
-                return null;
+            if (CRowSize != B.GetLength(0))
+                throw new Exception("Matrix row count do not match");
+            if (CColSize != B.GetLength(1))
+                throw new Exception("Matrix column count do not match");
 
             int[,] C = new int[CRowSize, CColSize];
 
@@ -322,6 +337,57 @@ namespace StarMathLib
                 for (int j = 0; j != CColSize; j++)
                     C[i, j] = A[i, j] - B[i, j];
             return C;
+        }
+        #endregion
+
+        #region Sum
+        /// <summary>
+        /// Sum up all the elements of a given matrix
+        /// </summary>
+        /// <param name="A">Matrix (1D double) whose parameters need to be summed up</param>
+        /// <returns>Returns the total (double) </returns>
+        public static double sum(double[] B)
+        {
+            double sum = 0.0;
+            foreach (double element in B)
+                sum = sum + element;
+            return sum;
+        }
+        /// <summary>
+        /// Sum up all the elements of a given matrix
+        /// </summary>
+        /// <param name="A">Matrix (1D int) whose parameters need to be summed up</param>
+        /// <returns>Returns the total (int) </returns>
+        public static double sum(int[] B)
+        {
+            int sum = 0;
+            foreach (int element in B)
+                sum = sum + element;
+            return sum;
+        }
+        /// <summary>
+        /// Sum up all the elements of a given matrix
+        /// </summary>
+        /// <param name="A">Matrix (2D double) whose parameters need to be summed up</param>
+        /// <returns>Returns the total (double) </returns>
+        public static double sum(double[,] B)
+        {
+            double sum = 0.0;
+            foreach (double element in B)
+                sum = sum + element;
+            return sum;
+        }
+        /// <summary>
+        /// Sum up all the elements of a given matrix
+        /// </summary>
+        /// <param name="A">Matrix (2D double) whose parameters need to be summed up</param>
+        /// <returns>Returns the total (int) </returns>
+        public static double sum(int[,] B)
+        {
+            int sum = 0;
+            foreach (int element in B)
+                sum = sum + element;
+            return sum;
         }
         #endregion
         #endregion

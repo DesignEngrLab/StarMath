@@ -1,6 +1,6 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 10.00
-# Visual Studio 2008
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestEXE for StarMath", "TestEXE for StarMath\TestEXE for StarMath.csproj", "{878DB77C-3BC3-4815-B47E-A45DE7F3F3D6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StarMath", "StarMath\StarMath.csproj", "{8B37DF1E-A3C9-42B6-BF1F-D65180FF556E}"

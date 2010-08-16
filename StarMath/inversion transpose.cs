@@ -86,43 +86,11 @@ namespace StarMathLib
             // if the matrix is not square or is less than B 2x2, 
             // then this function won't work
             if (A.GetLength(0) != A.GetLength(1))
-                throw new Exception("Matrix cannnot be inverted. Can only invert sqare matrices.");     
+                throw new Exception("Matrix cannnot be inverted. Can only invert sqare matrices.");
             int size = A.GetLength(0);
-            double[,] B = new double[size, size];
+            if (size == 1) return new double[,] { { 1 / A[0, 0] } };
 
-
-            if (size == 1)
-            {
-                B[0, 0] = 1 / A[0, 0];
-                return B;
-            }
-            for (int i = 0; i < size; i++)
-                for (int j = 0; j < size; j++)
-                    B[i, j] = A[i, j];
-
-            // normalize row 0
-            for (int i = 1; i < size; i++) B[0, i] /= B[0, 0];
-            #region LU factorization
-            for (int i = 1; i < size; i++)
-            {
-                for (int j = i; j < size; j++)
-                { // do B column of L
-                    double sum = 0.0;
-                    for (int k = 0; k < i; k++)
-                        sum += B[j, k] * B[k, i];
-                    B[j, i] -= sum;
-                }
-                if (i == size - 1) continue;
-                for (int j = i + 1; j < size; j++)
-                {  // do B row of U
-                    double sum = 0.0;
-                    for (int k = 0; k < i; k++)
-                        sum += B[i, k] * B[k, j];
-                    B[i, j] =
-                       (B[i, j] - sum) / B[i, i];
-                }
-            }
-            #endregion
+            var B = LUDecomposition(A);
             #region invert L
             for (int i = 0; i < size; i++)
                 for (int j = i; j < size; j++)
@@ -162,6 +130,63 @@ namespace StarMathLib
         }
 
         /// <summary>
+        /// Returns the LU decomposition of A in a new matrix.
+        /// </summary>
+        /// <param name="A">The matrix to invert. This matrix is unchanged by this function.</param>
+        /// <returns>A matrix of equal size to A that combines the L and U. Here the diagonals belongs to L and the U's diagonal elements are all 1.</returns>
+        public static double[,] LUDecomposition(double[,] A)
+        {
+            var size = A.GetLength(0);
+            if (size != A.GetLength(1)) throw new Exception("LU Decomposition can only be determined for square matrices.");
+            var B = (double[,])A.Clone();
+            // normalize row 0
+            for (int i = 1; i < size; i++) B[0, i] /= B[0, 0];
+
+            for (int i = 1; i < size; i++)
+            {
+                for (int j = i; j < size; j++)
+                { // do a column of L
+                    double sum = 0.0;
+                    for (int k = 0; k < i; k++)
+                        sum += B[j, k] * B[k, i];
+                    B[j, i] -= sum;
+                }
+                if (i == size - 1) continue;
+                for (int j = i + 1; j < size; j++)
+                {  // do a row of U
+                    double sum = 0.0;
+                    for (int k = 0; k < i; k++)
+                        sum += B[i, k] * B[k, j];
+                    B[i, j] =
+                       (B[i, j] - sum) / B[i, i];
+                }
+            }
+            return B;
+        }
+
+        /// <summary>
+        /// Returns the LU decomposition of A in a new matrix.
+        /// </summary>
+        /// <param name="A">The matrix to invert. This matrix is unchanged by this function.</param>
+        /// <param name="L">The L matrix is output where the diagonal elements are included and not (necessarily) equal to one.</param>
+        /// <param name="U">The U matrix is output where the diagonal elements are all equal to one.</param>
+        public static void LUDecomposition(double[,] A, out double[,] L, out double[,] U)
+        {
+            var size = A.GetLength(0);
+            L = LUDecomposition(A);
+            U = new double[size, size];
+            for (int i = 0; i < size; i++)
+            {
+                U[i, i] = 1.0;
+                for (int j = i + 1; j < size; j++)
+                {
+                    U[i, j] = L[i, j];
+                    L[i, j] = 0.0;
+                }
+            }
+        }
+
+        /// <summary>
         /// Transposes the matrix, A.
         /// </summary>
         /// <param name="A">The matrix to transpose. This matrix is unchanged by this function.</param>
@@ -170,8 +195,6 @@ namespace StarMathLib
         {
             int CRowSize = A.GetLength(1);
             int CColSize = A.GetLength(0);
-            //if ((CRowSize == 0) || (CColSize == 0))
-            //    return null;
 
             double[,] C = new double[CRowSize, CColSize];
 
@@ -179,6 +202,47 @@ namespace StarMathLib
                 for (int j = 0; j != CColSize; j++)
                     C[i, j] = A[j, i];
             return C;
+        }
+
+        /// <summary>
+        /// Returns the determinant of matrix, A.
+        /// </summary>
+        /// <param name="A">The input argument matrix. This matrix is unchanged by this function.</param>
+        /// <returns>a single value representing the matrix's determinant.</returns>
+        public static double determinant(double[,] A)
+        {
+            if ((A.GetLength(0) == 0) && (A.GetLength(1) == 0))
+                return 0.0;
+            if ((A.GetLength(0) == 1) && (A.GetLength(1) == 1))
+                return A[0, 0];
+            if ((A.GetLength(0) == 2) && (A.GetLength(1) == 2))
+                return (A[0, 0] * A[1, 1]) - (A[0, 1] * A[1, 0]);
+            if ((A.GetLength(0) == 3) && (A.GetLength(0) == 3))
+                return (A[0, 0] * A[1, 1] * A[2, 2])
+                    + (A[0, 1] * A[1, 2] * A[2, 0])
+                    + (A[0, 2] * A[1, 0] * A[2, 1])
+                    - (A[0, 0] * A[1, 2] * A[2, 1])
+                    - (A[0, 1] * A[1, 0] * A[2, 2])
+                    - (A[0, 2] * A[1, 1] * A[2, 0]);
+            if (A.GetLength(0) == A.GetLength(0))
+                return determinantsMoreThan3(A);
+            else throw new Exception("Cross product is only possible for vectors of length: 1, 3, or 7");
+        }
+
+        /// <summary>
+        /// Returns the determinant of matrix, A. Only used internally for matrices larger than 3.
+        /// </summary>
+        /// <param name="A">The input argument matrix. This matrix is unchanged by this function.</param>
+        /// <returns>a single value representing the matrix's determinant.</returns>
+        private static double determinantsMoreThan3(double[,] A)
+        {
+            int size = A.GetLength(0);
+            double[,] L, U;
+            LUDecomposition(A, out L, out U);
+            double result = 1.0;
+            for (int i = 0; i < size; i++)
+                result *= L[i, i];
+            return result;
         }
         #endregion
     }

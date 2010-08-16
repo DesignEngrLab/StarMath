@@ -171,7 +171,7 @@ namespace StarMathLib
         /// </summary>
         /// <param name="rowIndex">The index of the row, rowIndex.</param>
         /// <param name="A">The matrix, A.</param>
-        /// <param name="v">The vecvtor, v.</param>
+        /// <param name="v">The vector, v.</param>
         public static void SetRow(int rowIndex, double[,] A, double[] v)
         {
             int n = A.GetLength(0);

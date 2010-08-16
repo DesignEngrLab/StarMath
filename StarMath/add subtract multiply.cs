@@ -90,16 +90,58 @@ namespace StarMathLib
         /// <summary>
         /// The cross product of the two 1D double vectors A and B
         /// </summary>
-        /// <param name="a">1D double Array 1</param>
+        /// <param name="A">1D double Array 1</param>
         /// <param name="B">1D double Array 2</param>
         /// <returns>A double value that contains the dot product</returns>
         public static double[] multiplyCross(double[] A, double[] B)
         {
-            double[] solution = new double[3];
-            solution[0] = A[1] * B[2] - B[1] * A[2];
-            solution[1] = A[2] * B[0] - B[2] * A[0];
-            solution[2] = A[0] * B[1] - B[0] * A[1];
-            return solution;
+            if ((A.GetLength(0) == 1) && (B.GetLength(0) == 1))
+                return new double[] { 0.0 };
+            if ((A.GetLength(0) == 2) && (B.GetLength(0) == 2))
+                return new double[] { 0.0, 0.0, multiplyCross2D(A, B) };
+            if ((A.GetLength(0) == 3) && (B.GetLength(0) == 3))
+                return multiplyCross3(A, B);
+            if ((A.GetLength(0) == 7) && (B.GetLength(0) == 7))
+                return multiplyCross7(A, B);
+            else throw new Exception("Cross product is only possible for vectors of length: 1, 3, or 7");
+        }
+        /// <summary>
+        /// The cross product of the two 1D double vectors A and B whic are of length, 2.
+        /// </summary>
+        /// <param name="a">1D double Array 1</param>
+        /// <param name="B">1D double Array 2</param>
+        /// <returns></returns>
+        public static double multiplyCross2D(double[] A, double[] B)
+        {
+            if (((A.GetLength(0) == 2) && (B.GetLength(0) == 2))
+                || ((A.GetLength(0) == 3) && (B.GetLength(0) == 3) && A[2] == 0.0 && B[2] == 0.0))
+                return A[0] * B[1] - B[0] * A[1];
+            else throw new Exception("This cross product \"shortcut\" is only used with 2D vectors to get the single value in the,"
+                + "would be, Z-direction.");
+        }
+
+        private static double[] multiplyCross7(double[] A, double[] B)
+        {
+            return new double[]
+            {
+                 A[1]* B[3]- A[3]* B[1]+ A[2]* B[6]- A[6]* B[2]+ A[4]* B[5]- A[5]* B[4],
+                 A[2]* B[4]- A[4]* B[2]+ A[3]* B[0]- A[0]* B[3]+ A[5]* B[6]- A[6]* B[5],
+                 A[3]* B[5]- A[5]* B[3]+ A[4]* B[1]- A[1]* B[4]+ A[6]* B[0]- A[0]* B[6],
+                 A[4]* B[6]- A[6]* B[4]+ A[5]* B[2]- A[2]* B[5]+ A[0]* B[1]- A[1]* B[0],
+                 A[5]* B[0]- A[0]* B[5]+ A[6]* B[3]- A[3]* B[6]+ A[1]* B[2]- A[2]* B[1],
+                 A[6]* B[1]- A[1]* B[6]+ A[0]* B[4]- A[4]* B[0]+ A[2]* B[3]- A[3]* B[2],
+                 A[0]* B[2]- A[2]* B[0]+ A[1]* B[5]- A[5]* B[1]+ A[3]* B[4]- A[4]* B[3]
+            };
+        }
+
+        private static double[] multiplyCross3(double[] A, double[] B)
+        {
+            return new double[]
+              { 
+                  A[1] * B[2] - B[1] * A[2],
+                  A[2] * B[0] - B[2] * A[0],
+                  A[0] * B[1] - B[0] * A[1]
+              };
         }
         /// <summary>
         /// Product of each element of array-1 (1D double) with each element of array-2 (1D double)
@@ -224,7 +266,7 @@ namespace StarMathLib
             int CColSize = A.GetLength(1);
             if (CRowSize != B.GetLength(0))
                 throw new Exception("Matrix row count do not match");
-            if(CColSize != B.GetLength(1))
+            if (CColSize != B.GetLength(1))
                 throw new Exception("Matrix column count do not match");
 
             double[,] C = new double[CRowSize, CColSize];

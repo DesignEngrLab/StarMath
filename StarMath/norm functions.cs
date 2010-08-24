@@ -1,24 +1,8 @@
-﻿/*************************************************************************
- *     This file & class is part of the StarMath Project
- *     Copyright 2010 Matthew Ira Campbell, PhD.
- *
- *     StarMath is free software: you can redistribute it and/or modify
- *     it under the terms of the GNU General Public License as published by
- *     the Free Software Foundation, either version 3 of the License, or
- *     (at your option) any later version.
- *  
- *     StarMath is distributed in the hope that it will be useful,
- *     but WITHOUT ANY WARRANTY; without even the implied warranty of
- *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *     GNU General Public License for more details.
- *  
- *     You should have received a copy of the GNU General Public License
- *     along with StarMath.  If not, see <http://www.gnu.org/licenses/>.
- *     
- *     Please find further details and contact information on GraphSynth
- *     at http://starmath.codeplex.com/.
- *************************************************************************/
+﻿#region
+
 using System;
+
+#endregion
 
 namespace StarMathLib
 {
@@ -36,12 +20,12 @@ namespace StarMathLib
         public static double norm1(double[] x, double[] y)
         {
             if (x == null) throw new Exception("The vector, x, is null.");
-            else if (x == null) throw new Exception("The vector, y, is null.");
-            else if (x.GetLength(0) != y.GetLength(0)) throw new Exception("The vectors are not the same size.");
-            double norm = 0.0;
-            int maxlength = x.GetLength(0);
+            if (y == null) throw new Exception("The vector, y, is null.");
+            if (x.GetLength(0) != y.GetLength(0)) throw new Exception("The vectors are not the same size.");
+            var norm = 0.0;
+            var maxlength = x.GetLength(0);
 
-            for (int i = 0; i != maxlength; i++)
+            for (var i = 0; i != maxlength; i++)
             {
                 double xTerm;
                 if (i >= x.GetLength(0)) xTerm = 0.0;
@@ -63,9 +47,9 @@ namespace StarMathLib
         public static double norm1(double[] x)
         {
             if (x == null) throw new Exception("The vector, x, is null.");
-            double norm = 0.0;
-            int xlength = x.GetLength(0);
-            for (int i = 0; i != xlength; i++)
+            var norm = 0.0;
+            var xlength = x.GetLength(0);
+            for (var i = 0; i != xlength; i++)
                 norm += Math.Abs(x[i]);
             return norm;
         }
@@ -79,11 +63,11 @@ namespace StarMathLib
         public static double norm1(double[,] A)
         {
             if (A == null) throw new Exception("The matrix, A, is null.");
-            double norm = 0.0;
-            int rowlength = A.GetLength(0);
-            int collength = A.GetLength(0);
-            for (int i = 0; i != rowlength; i++)
-                for (int j = 0; j != collength; j++)
+            var norm = 0.0;
+            var rowlength = A.GetLength(0);
+            var collength = A.GetLength(0);
+            for (var i = 0; i != rowlength; i++)
+                for (var j = 0; j != collength; j++)
                     norm += Math.Abs(A[i, j]);
             return norm;
         }
@@ -98,13 +82,13 @@ namespace StarMathLib
         public static double norm2(double[] x, double[] y)
         {
             if (x == null) throw new Exception("The vector, x, is null.");
-            else if (x == null) throw new Exception("The vector, y, is null.");
-            else if (x.GetLength(0) != y.GetLength(0)) throw new Exception("The vectors are not the same size.");
-            double norm = 0.0;
-            int xlength = x.GetLength(0);
+            if (x == null) throw new Exception("The vector, y, is null.");
+            if (x.GetLength(0) != y.GetLength(0)) throw new Exception("The vectors are not the same size.");
+            var norm = 0.0;
+            var xlength = x.GetLength(0);
             if (xlength != y.GetLength(0)) return -1.0;
-            for (int i = 0; i != xlength; i++)
-                norm += (x[i] - y[i]) * (x[i] - y[i]);
+            for (var i = 0; i != xlength; i++)
+                norm += (x[i] - y[i])*(x[i] - y[i]);
             return Math.Sqrt(norm);
         }
 
@@ -117,10 +101,10 @@ namespace StarMathLib
         public static double norm2(double[] x)
         {
             if (x == null) throw new Exception("The vector, x, is null.");
-            double norm = 0.0;
-            int xlength = x.GetLength(0);
-            for (int i = 0; i != xlength; i++)
-                norm += (x[i] * x[i]);
+            var norm = 0.0;
+            var xlength = x.GetLength(0);
+            for (var i = 0; i != xlength; i++)
+                norm += (x[i]*x[i]);
             return Math.Sqrt(norm);
         }
 
@@ -133,12 +117,12 @@ namespace StarMathLib
         public static double norm2(double[,] A)
         {
             if (A == null) throw new Exception("The matrix, A, is null.");
-            double norm = 0.0;
-            int maxRow = A.GetLength(0);
-            int maxCol = A.GetLength(1);
-            for (int i = 0; i != maxRow; i++)
-                for (int j = 0; j != maxCol; j++)
-                    norm += (A[i, j] * A[i, j]);
+            var norm = 0.0;
+            var maxRow = A.GetLength(0);
+            var maxCol = A.GetLength(1);
+            for (var i = 0; i != maxRow; i++)
+                for (var j = 0; j != maxCol; j++)
+                    norm += (A[i, j]*A[i, j]);
             return Math.Sqrt(norm);
         }
 
@@ -151,18 +135,18 @@ namespace StarMathLib
         public static double norm2(int[,] A)
         {
             if (A == null) throw new Exception("The matrix, A, is null.");
-            double norm = 0.0;
-            int maxRow = A.GetLength(0);
-            int maxCol = A.GetLength(1);
-            for (int i = 0; i != maxRow; i++)
-                for (int j = 0; j != maxCol; j++)
-                    norm += (A[i, j] * A[i, j]);
+            var norm = 0.0;
+            var maxRow = A.GetLength(0);
+            var maxCol = A.GetLength(1);
+            for (var i = 0; i != maxRow; i++)
+                for (var j = 0; j != maxCol; j++)
+                    norm += (A[i, j]*A[i, j]);
             return Math.Sqrt(norm);
         }
+
         #endregion
 
         #region Normalize
-
 
         /// <summary>
         ///   Returns to normalized vector (has lenght or 2-norm of 1))
@@ -172,8 +156,9 @@ namespace StarMathLib
         /// <returns>unit vector.</returns>
         public static double[] normalize(double[] x)
         {
-            return multiply((1/norm2(x)),x);
+            return multiply((1/norm2(x)), x);
         }
+
         #endregion
     }
 }

@@ -59,6 +59,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="solve.cs" />
     <Compile Include="print functions.cs" />
     <Compile Include="min max.cs" />
     <Compile Include="make extract.cs" />

@@ -261,6 +261,25 @@ namespace StarMathLib
             return c;
         }
 
+        /// <summary>
+        /// Performs the dot-product on a vector of int and a vector of doubles.
+        /// </summary>
+        /// <param name = "A">1D int Array 1</param>
+        /// <param name = "B">1D double Array 2</param>
+        /// <returns></returns>
+        public static double multiplyDot(int[] A, double[] B)
+        {
+            // this is B dot term_i multiplication
+            var size = A.GetLength(0);
+            if (size != B.GetLength(0))
+                throw new Exception("Matrix sizes do not match");
+            var c = 0.0;
+            for (var i = 0; i != size; i++)
+                c += A[i] * B[i];
+            return c;
+        }
+
+
         #endregion
 
         #endregion

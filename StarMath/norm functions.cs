@@ -1,7 +1,8 @@
 ﻿#region
 
 using System;
-
+using System.Collections.Generic;
+using System.Linq;
 #endregion
 
 namespace StarMathLib
@@ -38,6 +39,22 @@ namespace StarMathLib
             return norm;
         }
 
+        /// <summary>
+        ///   Returns to 1-norm (sum of absolute values of all terms)
+        ///   of the vector, x.
+        /// </summary>
+        /// <param name = "x">The vector, x.</param>
+        /// <returns>Scalar value of 1-norm.</returns>
+        public static int norm1(IEnumerable<int> x)
+        {
+            if (x == null) throw new Exception("The vector, x, is null.");
+            return x.Sum(a => Math.Abs(a));
+            //var norm = 0;
+            //var xlength = x.GetLength(0);
+            //for (var i = 0; i != xlength; i++)
+            //    norm += Math.Abs(x[i]);
+            //return norm;
+        }
         /// <summary>
         ///   Returns to 1-norm (sum of absolute values of all terms)
         ///   of the vector, x.
@@ -88,7 +105,7 @@ namespace StarMathLib
             var xlength = x.GetLength(0);
             if (xlength != y.GetLength(0)) return -1.0;
             for (var i = 0; i != xlength; i++)
-                norm += (x[i] - y[i])*(x[i] - y[i]);
+                norm += (x[i] - y[i]) * (x[i] - y[i]);
             return Math.Sqrt(norm);
         }
 
@@ -104,7 +121,7 @@ namespace StarMathLib
             var norm = 0.0;
             var xlength = x.GetLength(0);
             for (var i = 0; i != xlength; i++)
-                norm += (x[i]*x[i]);
+                norm += (x[i] * x[i]);
             return Math.Sqrt(norm);
         }
 
@@ -122,7 +139,7 @@ namespace StarMathLib
             var maxCol = A.GetLength(1);
             for (var i = 0; i != maxRow; i++)
                 for (var j = 0; j != maxCol; j++)
-                    norm += (A[i, j]*A[i, j]);
+                    norm += (A[i, j] * A[i, j]);
             return Math.Sqrt(norm);
         }
 
@@ -140,7 +157,7 @@ namespace StarMathLib
             var maxCol = A.GetLength(1);
             for (var i = 0; i != maxRow; i++)
                 for (var j = 0; j != maxCol; j++)
-                    norm += (A[i, j]*A[i, j]);
+                    norm += (A[i, j] * A[i, j]);
             return Math.Sqrt(norm);
         }
 
@@ -156,7 +173,7 @@ namespace StarMathLib
         /// <returns>unit vector.</returns>
         public static double[] normalize(double[] x)
         {
-            return multiply((1/norm2(x)), x);
+            return multiply((1 / norm2(x)), x);
         }
 
         #endregion

@@ -80,5 +80,6 @@ namespace StarMathLib
         }
 
         #endregion
+
     }
 }

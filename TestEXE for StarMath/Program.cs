@@ -5,15 +5,15 @@ namespace TestEXE_for_StarMath
 {
     class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
-            //benchMarkMatrixInversion();
-           testLUfunctions();
+            benchMarkMatrixInversion();
+            testLUfunctions();
         }
 
         private static void testLUfunctions()
         {
-            int size = 4;
+            const int size = 14;
             Random r = new Random();
 
             double[,] A = new double[size, size];
@@ -21,31 +21,31 @@ namespace TestEXE_for_StarMath
                 for (int j = 0; j < size; j++)
                     A[i, j] = (200 * r.NextDouble()) - 100.0;
             Console.WriteLine("A =");
-            StarMath.ConsoleWrite(A);
+            Console.WriteLine(StarMath.MakePrintString(A));
 
             Console.WriteLine("Combined LU = ");
-            StarMath.ConsoleWrite(StarMath.LUDecomposition(A));
+            Console.WriteLine(StarMath.LUDecomposition(A));
 
             double[,] L, U;
             StarMath.LUDecomposition(A, out L, out U);
             Console.WriteLine(" L = ");
-            StarMath.ConsoleWrite(L);
+            Console.WriteLine(StarMath.MakePrintString(L));
             Console.WriteLine(" U = ");
-            StarMath.ConsoleWrite(U);
+            Console.WriteLine(StarMath.MakePrintString(U));
 
             Console.WriteLine("L * U =");
-            StarMath.ConsoleWrite(StarMath.multiply(L, U));
-            
+            Console.WriteLine(StarMath.MakePrintString(StarMath.multiply(L, U)));
+
             var E = StarMath.subtract(A, StarMath.multiply(L, U));
             var error = StarMath.norm2(E);
-            Console.WriteLine("error = " + error.ToString());
+            Console.WriteLine("error = " + error);
 
             Console.ReadLine();
         }
 
         private static void benchMarkMatrixInversion()
         {
-            int size = 100;
+            const int size = 100;
 
             DateTime now = DateTime.Now;
             Random r = new Random();
@@ -57,7 +57,7 @@ namespace TestEXE_for_StarMath
             double[,] B = StarMath.inverse(A);
             double[,] C = StarMath.subtract(StarMath.multiply(A, B), StarMath.makeIdentity(size));
             double error = StarMath.norm2(C);
-            TimeSpan interval = DateTime.Now - now;
+            var interval = DateTime.Now - now;
             Console.WriteLine("end invert, error = " + error);
             Console.WriteLine("time = " + interval);
             Console.ReadLine();

@@ -28,7 +28,7 @@ namespace StarMathLib
             var size = B.GetLength(0);
             var c = new double[size];
             for (var i = 0; i != size; i++)
-                c[i] = a*B[i];
+                c[i] = a * B[i];
             return c;
         }
 
@@ -40,7 +40,7 @@ namespace StarMathLib
         /// <returns>A 1D double array that contains the product</returns>
         public static double[] divide(double[] B, double a)
         {
-            return multiply((1/a), B);
+            return multiply((1 / a), B);
         }
 
         /// <summary>
@@ -51,10 +51,10 @@ namespace StarMathLib
         /// <returns>A 2D double array that contains the product</returns>
         public static double[,] multiply(double a, double[,] B)
         {
-            var c = new double[B.GetLength(0),B.GetLength(1)];
+            var c = new double[B.GetLength(0), B.GetLength(1)];
             for (var i = 0; i != B.GetLength(0); i++)
                 for (var j = 0; j != B.GetLength(1); j++)
-                    c[i, j] = a*B[i, j];
+                    c[i, j] = a * B[i, j];
             return c;
         }
 
@@ -66,7 +66,7 @@ namespace StarMathLib
         /// <returns>A 2D double array that contains the product</returns>
         public static double[,] divide(double[,] B, double a)
         {
-            return multiply((1/a), B);
+            return multiply((1 / a), B);
         }
 
 
@@ -84,7 +84,7 @@ namespace StarMathLib
                 throw new Exception("Matrix sizes do not match");
             var c = 0.0;
             for (var i = 0; i != size; i++)
-                c += A[i]*B[i];
+                c += A[i] * B[i];
             return c;
         }
 
@@ -97,9 +97,9 @@ namespace StarMathLib
         public static double[] multiplyCross(double[] A, double[] B)
         {
             if ((A.GetLength(0) == 1) && (B.GetLength(0) == 1))
-                return new[] {0.0};
+                return new[] { 0.0 };
             if ((A.GetLength(0) == 2) && (B.GetLength(0) == 2))
-                return new[] {0.0, 0.0, multiplyCross2D(A, B)};
+                return new[] { 0.0, 0.0, multiplyCross2D(A, B) };
             if ((A.GetLength(0) == 3) && (B.GetLength(0) == 3))
                 return multiplyCross3(A, B);
             if ((A.GetLength(0) == 7) && (B.GetLength(0) == 7))
@@ -117,7 +117,7 @@ namespace StarMathLib
         {
             if (((A.GetLength(0) == 2) && (B.GetLength(0) == 2))
                 || ((A.GetLength(0) == 3) && (B.GetLength(0) == 3) && A[2] == 0.0 && B[2] == 0.0))
-                return A[0]*B[1] - B[0]*A[1];
+                return A[0] * B[1] - B[0] * A[1];
             throw new Exception("This cross product \"shortcut\" is only used with 2D vectors to get the single value in the,"
                                 + "would be, Z-direction.");
         }
@@ -157,11 +157,11 @@ namespace StarMathLib
             var CRowSize = A.GetLength(0);
             var CColSize = B.GetLength(0);
 
-            var C = new double[CRowSize,CColSize];
+            var C = new double[CRowSize, CColSize];
 
             for (var i = 0; i != CRowSize; i++)
                 for (var j = 0; j != CColSize; j++)
-                    C[i, j] = A[i]*B[j];
+                    C[i, j] = A[i] * B[j];
             return C;
         }
 
@@ -180,14 +180,14 @@ namespace StarMathLib
             var CColSize = B.GetLength(1);
 
 
-            var C = new double[CRowSize,CColSize];
+            var C = new double[CRowSize, CColSize];
 
             for (var i = 0; i != CRowSize; i++)
                 for (var j = 0; j != CColSize; j++)
                 {
                     C[i, j] = 0.0;
                     for (var k = 0; k != A.GetLength(1); k++)
-                        C[i, j] += A[i, k]*B[k, j];
+                        C[i, j] += A[i, k] * B[k, j];
                 }
             return C;
         }
@@ -212,7 +212,7 @@ namespace StarMathLib
             {
                 C[i] = 0.0;
                 for (var j = 0; j != AColSize; j++)
-                    C[i] += A[i, j]*B[j];
+                    C[i] += A[i, j] * B[j];
             }
             return C;
         }
@@ -237,7 +237,7 @@ namespace StarMathLib
             {
                 C[i] = 0.0;
                 for (var j = 0; j != CRowSize; j++)
-                    C[i] += B[j]*A[j, i];
+                    C[i] += B[j] * A[j, i];
             }
             return C;
         }
@@ -254,10 +254,10 @@ namespace StarMathLib
         /// <returns>A 2D double array that contains the product</returns>
         public static double[,] multiply(double a, int[,] B)
         {
-            var c = new double[B.GetLength(0),B.GetLength(1)];
+            var c = new double[B.GetLength(0), B.GetLength(1)];
             for (var i = 0; i != B.GetLength(0); i++)
                 for (var j = 0; j != B.GetLength(1); j++)
-                    c[i, j] = a*B[i, j];
+                    c[i, j] = a * B[i, j];
             return c;
         }
 
@@ -318,7 +318,7 @@ namespace StarMathLib
             if (CColSize != B.GetLength(1))
                 throw new Exception("Matrix column count do not match");
 
-            var C = new double[CRowSize,CColSize];
+            var C = new double[CRowSize, CColSize];
 
             for (var i = 0; i != CRowSize; i++)
                 for (var j = 0; j != CColSize; j++)
@@ -341,7 +341,7 @@ namespace StarMathLib
             if (CColSize != B.GetLength(1))
                 throw new Exception("Matrix column count do not match");
 
-            var C = new double[CRowSize,CColSize];
+            var C = new double[CRowSize, CColSize];
 
             for (var i = 0; i != CRowSize; i++)
                 for (var j = 0; j != CColSize; j++)
@@ -364,7 +364,7 @@ namespace StarMathLib
             if (CColSize != B.GetLength(1))
                 throw new Exception("Matrix column count do not match");
 
-            var C = new int[CRowSize,CColSize];
+            var C = new int[CRowSize, CColSize];
 
             for (var i = 0; i != CRowSize; i++)
                 for (var j = 0; j != CColSize; j++)
@@ -409,7 +409,7 @@ namespace StarMathLib
             if (CColSize != B.GetLength(1))
                 throw new Exception("Matrix column count do not match");
 
-            var C = new double[CRowSize,CColSize];
+            var C = new double[CRowSize, CColSize];
 
             for (var i = 0; i != CRowSize; i++)
                 for (var j = 0; j != CColSize; j++)
@@ -432,7 +432,7 @@ namespace StarMathLib
             if (CColSize != B.GetLength(1))
                 throw new Exception("Matrix column count do not match");
 
-            var C = new int[CRowSize,CColSize];
+            var C = new int[CRowSize, CColSize];
 
             for (var i = 0; i != CRowSize; i++)
                 for (var j = 0; j != CColSize; j++)
@@ -489,7 +489,6 @@ namespace StarMathLib
                 sum = sum + element;
             return sum;
         }
-
         #endregion
 
         #endregion

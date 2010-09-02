@@ -1,4 +1,8 @@
-﻿namespace StarMathLib
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace StarMathLib
 {
     public static partial class StarMath
     {
@@ -14,6 +18,26 @@
             var maxRow = A.GetLength(0);
             var maxCol = A.GetLength(1);
             var Min = double.MaxValue;
+            for (var i = 0; i != maxRow; i++)
+            {
+                for (var j = 0; j != maxCol; j++)
+                {
+                    if (A[i, j] < Min)
+                        Min = A[i, j];
+                }
+            }
+            return Min;
+        }
+        /// <summary>
+        ///   Finds the minimum value in the given 2D integer array
+        /// </summary>
+        /// <param name = "A">The array to be searched for</param>
+        /// <returns>An integer value that is the minimum of A</returns>
+        public static int Min(int[,] A)
+        {
+            var maxRow = A.GetLength(0);
+            var maxCol = A.GetLength(1);
+            var Min = int.MaxValue;
             for (var i = 0; i != maxRow; i++)
             {
                 for (var j = 0; j != maxCol; j++)
@@ -47,51 +71,6 @@
         }
 
         /// <summary>
-        ///   Finds the minimum and maximum value in the given 2D double array
-        /// </summary>
-        /// <param name = "A">The array to be searched for</param>
-        /// <returns>A 1 x 2 double array that contains the minimum and maximum value in A</returns>
-        public static double[] MinMax(double[,] A)
-        {
-            var maxRow = A.GetLength(0);
-            var maxCol = A.GetLength(1);
-            var Max = double.MinValue;
-            var Min = double.MaxValue;
-            for (var i = 0; i != maxRow; i++)
-            {
-                for (var j = 0; j != maxCol; j++)
-                {
-                    if (A[i, j] > Max)
-                        Max = A[i, j];
-                    if (A[i, j] < Min)
-                        Min = A[i, j];
-                }
-            }
-            return (new[] {Min, Max});
-        }
-
-        /// <summary>
-        ///   Finds the minimum value in the given 2D integer array
-        /// </summary>
-        /// <param name = "A">The array to be searched for</param>
-        /// <returns>An integer value that is the minimum of A</returns>
-        public static int Min(int[,] A)
-        {
-            var maxRow = A.GetLength(0);
-            var maxCol = A.GetLength(1);
-            var Min = int.MaxValue;
-            for (var i = 0; i != maxRow; i++)
-            {
-                for (var j = 0; j != maxCol; j++)
-                {
-                    if (A[i, j] < Min)
-                        Min = A[i, j];
-                }
-            }
-            return Min;
-        }
-
-        /// <summary>
         ///   Finds the maximum value in the given 2D integer array
         /// </summary>
         /// <param name = "A">The array to be searched for</param>
@@ -117,17 +96,62 @@
         /// </summary>
         /// <param name = "A">The array to be searched for</param>
         /// <returns>An integer value that is the maximum of A</returns>
-        public static int Max(int[] A)
+        public static int Max(IList<int> A)
+        {
+            return A.Max();
+        }
+        /// <summary>
+        ///   Finds the minimum value in the given 1D integer array
+        /// </summary>
+        /// <param name = "A">The array to be searched for</param>
+        /// <returns>An integer value that is the minimum of A</returns>
+        public static int Min(IList<int> A)
+        {
+            return A.Min();
+        }
+        /// <summary>
+        ///   Finds the maximum value in the given 1D double array
+        /// </summary>
+        /// <param name = "A">The array to be searched for</param>
+        /// <returns>An double value that is the maximum of A</returns>
+        public static double Max(IList<double> A)
+        {
+            return A.Max();
+        }
+        /// <summary>
+        ///   Finds the minimum value in the given 1D double array
+        /// </summary>
+        /// <param name = "A">The array to be searched for</param>
+        /// <returns>An double value that is the minimum of A</returns>
+        public static double Min(IList<double> A)
+        {
+            return A.Min();
+        }
+
+        /// <summary>
+        ///   Finds the minimum and maximum value in the given 2D double array
+        /// </summary>
+        /// <param name = "A">The array to be searched for</param>
+        /// <returns>A 1 x 2 double array that contains the minimum and maximum value in A</returns>
+        public static Tuple<double,double> MinMax(double[,] A)
         {
             var maxRow = A.GetLength(0);
-            var Max = int.MinValue;
+            var maxCol = A.GetLength(1);
+            var Max = double.MinValue;
+            var Min = double.MaxValue;
             for (var i = 0; i != maxRow; i++)
             {
-                if (A[i] > Max)
-                    Max = A[i];
+                for (var j = 0; j != maxCol; j++)
+                {
+                    if (A[i, j] > Max)
+                        Max = A[i, j];
+                    if (A[i, j] < Min)
+                        Min = A[i, j];
+                }
             }
-            return Max;
+            return Tuple.Create(Min, Max);
         }
+
 
         /// <summary>
         ///   Finds the minimum and maximum value in the given 2D double array

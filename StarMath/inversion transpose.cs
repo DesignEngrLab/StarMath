@@ -56,6 +56,17 @@ namespace StarMathLib
             }
             return B;
         }
+        /// <summary>
+        ///   Inverses the matrix A only if the matrix has already been
+        ///   "triangularized" - meaning there are no elements in the bottom
+        ///   triangle - A[i,j]=0.0 where j>i
+        /// </summary>
+        /// <param name = "A">The matrix to invert. This matrix is unchanged by this function.</param>
+        /// <returns>The inverted matrix, A^-1.</returns>
+        public static double[,] inverseUpper(int[,] A)
+        {
+            return inverseUpper(castIntArrayToDouble(A));
+        }
 
         /// <summary>
         ///   Inverses the matrix A only if the diagonal is all non-zero.
@@ -123,6 +134,17 @@ namespace StarMathLib
 
             return B;
         }
+        /// <summary>
+        ///   Inverses the matrix A only if the diagonal is all non-zero.
+        ///   A[i,i] != 0.0
+        /// </summary>
+        /// <param name = "A">The matrix to invert. This matrix is unchanged by this function.</param>
+        /// <returns>The inverted matrix, A^-1.</returns>
+        public static double[,] inverse(int[,] A)
+        {
+            return inverse(castIntArrayToDouble(A));
+        }
+
 
         /// <summary>
         ///   Returns the LU decomposition of A in a new matrix.
@@ -161,6 +183,15 @@ namespace StarMathLib
             }
             return B;
         }
+        /// <summary>
+        ///   Returns the LU decomposition of A in a new matrix.
+        /// </summary>
+        /// <param name = "A">The matrix to invert. This matrix is unchanged by this function.</param>
+        /// <returns>A matrix of equal size to A that combines the L and U. Here the diagonals belongs to L and the U's diagonal elements are all 1.</returns>
+        public static double[,] LUDecomposition(int[,] A)
+        {
+            return LUDecomposition(castIntArrayToDouble(A));
+        }
 
         /// <summary>
         ///   Returns the LU decomposition of A in a new matrix.
@@ -183,6 +214,16 @@ namespace StarMathLib
                 }
             }
         }
+        /// <summary>
+        ///   Returns the LU decomposition of A in a new matrix.
+        /// </summary>
+        /// <param name = "A">The matrix to invert. This matrix is unchanged by this function.</param>
+        /// <param name = "L">The L matrix is output where the diagonal elements are included and not (necessarily) equal to one.</param>
+        /// <param name = "U">The U matrix is output where the diagonal elements are all equal to one.</param>
+        public static void LUDecomposition(int[,] A, out double[,] L, out double[,] U)
+        {
+            LUDecomposition(castIntArrayToDouble(A), out L, out U);
+        }
 
         /// <summary>
         ///   Transposes the matrix, A.
@@ -194,7 +235,24 @@ namespace StarMathLib
             var CRowSize = A.GetLength(1);
             var CColSize = A.GetLength(0);
 
-            var C = new double[CRowSize,CColSize];
+            var C = new double[CRowSize, CColSize];
+
+            for (var i = 0; i != CRowSize; i++)
+                for (var j = 0; j != CColSize; j++)
+                    C[i, j] = A[j, i];
+            return C;
+        }
+        /// <summary>
+        ///   Transposes the matrix, A.
+        /// </summary>
+        /// <param name = "A">The matrix to transpose. This matrix is unchanged by this function.</param>
+        /// <returns>The transponse of A.</returns>
+        public static int[,] transpose(int[,] A)
+        {
+            var CRowSize = A.GetLength(1);
+            var CColSize = A.GetLength(0);
+
+            var C = new int[CRowSize, CColSize];
 
             for (var i = 0; i != CRowSize; i++)
                 for (var j = 0; j != CColSize; j++)
@@ -226,6 +284,16 @@ namespace StarMathLib
                        - (A[0, 1]*A[1, 0]*A[2, 2])
                        - (A[0, 2]*A[1, 1]*A[2, 0]);
             return determinantsMoreThan3(A);
+        }
+        /// <summary>
+        ///   Returns the determinant of matrix, A.
+        /// </summary>
+        /// <param name = "A">The input argument matrix. This matrix is unchanged by this function.</param>
+        /// <exception cref = "Exception"></exception>
+        /// <returns>a single value representing the matrix's determinant.</returns>
+        public static double determinant(int[,] A)
+        {
+            return determinant(castIntArrayToDouble(A));
         }
 
         /// <summary>

@@ -19,6 +19,7 @@
  *     at http://starmath.codeplex.com/.
  *************************************************************************/
 using System;
+using System.Collections.Generic;
 
 namespace StarMathLib
 {
@@ -30,11 +31,62 @@ namespace StarMathLib
         /// <param name="A">The A.</param>
         /// <param name="b">The b.</param>
         /// <returns></returns>
-        public static double[] solve(double[,] A, double[] b)
+        public static double[] solve(double[,] A, IList<double> b)
         {
             if (A.GetLength(0) != A.GetLength(1))
                 throw new Exception("Matrix, A, must be square.");
-            if (A.GetLength(0) != b.GetLength(0))
+            if (A.GetLength(0) != b.Count)
+                throw new Exception("Matrix, A, must be have the same number of rows as the vector, b.");
+
+            /****** need code to determine when to switch between *****
+             ****** this analytical approach and the SOR approach *****/
+            return multiply(inverse(A), b);
+        }
+        /// <summary>
+        /// Solves the specified A.
+        /// </summary>
+        /// <param name="A">The A.</param>
+        /// <param name="b">The b.</param>
+        /// <returns></returns>
+        public static double[] solve(int[,] A, IList<double> b)
+        {
+            if (A.GetLength(0) != A.GetLength(1))
+                throw new Exception("Matrix, A, must be square.");
+            if (A.GetLength(0) != b.Count)
+                throw new Exception("Matrix, A, must be have the same number of rows as the vector, b.");
+
+            /****** need code to determine when to switch between *****
+             ****** this analytical approach and the SOR approach *****/
+            return multiply(inverse(A), b);
+        }
+        /// <summary>
+        /// Solves the specified A.
+        /// </summary>
+        /// <param name="A">The A.</param>
+        /// <param name="b">The b.</param>
+        /// <returns></returns>
+        public static double[] solve(double[,] A, IList<int> b)
+        {
+            if (A.GetLength(0) != A.GetLength(1))
+                throw new Exception("Matrix, A, must be square.");
+            if (A.GetLength(0) != b.Count)
+                throw new Exception("Matrix, A, must be have the same number of rows as the vector, b.");
+
+            /****** need code to determine when to switch between *****
+             ****** this analytical approach and the SOR approach *****/
+            return multiply(inverse(A), b);
+        }
+        /// <summary>
+        /// Solves the specified A.
+        /// </summary>
+        /// <param name="A">The A.</param>
+        /// <param name="b">The b.</param>
+        /// <returns></returns>
+        public static double[] solve(int[,] A, IList<int> b)
+        {
+            if (A.GetLength(0) != A.GetLength(1))
+                throw new Exception("Matrix, A, must be square.");
+            if (A.GetLength(0) != b.Count)
                 throw new Exception("Matrix, A, must be have the same number of rows as the vector, b.");
 
             /****** need code to determine when to switch between *****

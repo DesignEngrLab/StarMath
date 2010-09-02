@@ -1,6 +1,7 @@
 ﻿#region
 
 using System;
+using System.Collections.Generic;
 
 #endregion
 
@@ -12,6 +13,21 @@ namespace StarMathLib
     /// </summary>
     public static partial class StarMath
     {
+        /// <summary>
+        /// Casts the int matrix to double matrix.
+        /// </summary>
+        /// <param name="A">The A.</param>
+        /// <returns></returns>
+        private static double[,] castIntArrayToDouble(int[,] A)
+        {
+            var B = new double[A.GetLength(0), A.GetLength(1)];
+            for (int i = 0; i < A.GetLength(0); i++)
+                for (int j = 0; j < A.GetLength(1); j++)
+                    B[i, i] = (double)A[i, j];
+            return B;
+        }
+
+
         #region Make simple Matrices functions
 
         /// <summary>
@@ -76,7 +92,21 @@ namespace StarMathLib
         {
             if (numRows <= 0) throw new Exception("The number of rows, numRows, must be a positive integer.");
             if (numCols <= 0) throw new Exception("The number of columns, numCols, must be a positive integer.");
-            var I = new double[numRows,numCols];
+            var I = new double[numRows, numCols];
+            I.Initialize();
+            return I;
+        }
+        /// <summary>
+        ///   Makes a matrix of size numRows by numCols of all zeroes.
+        /// </summary>
+        /// <param name = "numRows">The number of rows.</param>
+        /// <param name = "numCols">The number of columns.</param>
+        /// <returns>an empty (all zeroes) matrix.</returns>
+        public static int[,] makeZeroInt(int numRows, int numCols)
+        {
+            if (numRows <= 0) throw new Exception("The number of rows, numRows, must be a positive integer.");
+            if (numCols <= 0) throw new Exception("The number of columns, numCols, must be a positive integer.");
+            var I = new int[numRows, numCols];
             I.Initialize();
             return I;
         }
@@ -89,10 +119,24 @@ namespace StarMathLib
         public static double[,] makeIdentity(int p)
         {
             if (p <= 0) throw new Exception("The size, p, must be a positive integer.");
-            var I = new double[p,p];
+            var I = new double[p, p];
             I.Initialize();
             for (var i = 0; i != p; i++)
                 I[i, i] = 1.0;
+            return I;
+        }
+        /// <summary>
+        ///   Makes an identity matrix of size p by p.
+        /// </summary>
+        /// <param name = "p">The size (number of both rows and columns).</param>
+        /// <returns>the identity matrix, I.</returns>
+        public static int[,] makeIdentityInt(int p)
+        {
+            if (p <= 0) throw new Exception("The size, p, must be a positive integer.");
+            var I = new int[p, p];
+            I.Initialize();
+            for (var i = 0; i != p; i++)
+                I[i, i] = 1;
             return I;
         }
 
@@ -191,7 +235,7 @@ namespace StarMathLib
         /// <param name = "rowIndex">The index of the row, rowIndex.</param>
         /// <param name = "A">The matrix, A.</param>
         /// <param name = "v">The vector, v.</param>
-        public static void SetRow(int rowIndex, double[,] A, double[] v)
+        public static void SetRow(int rowIndex, double[,] A, IList<double> v)
         {
             var n = A.GetLength(0);
             if ((rowIndex < 0) || (rowIndex >= n))
@@ -209,7 +253,7 @@ namespace StarMathLib
         /// <param name = "colIndex">Index of the col.</param>
         /// <param name = "A">The A.</param>
         /// <param name = "v">The v.</param>
-        public static void SetColumn(int colIndex, double[,] A, double[] v)
+        public static void SetColumn(int colIndex, double[,] A, IList<double> v)
         {
             var n = A.GetLength(1);
             if ((colIndex < 0) || (colIndex >= n))
@@ -255,13 +299,13 @@ namespace StarMathLib
         /// <param name = "ColumnList">The column list indices.</param>
         /// <param name = "A">1D double array from which columns (elements) need to be extracted</param>
         /// <returns>A single 1D double array that contains all the requested columns (elements)</returns>
-        public static double[] GetColumns(int[] ColumnList, double[] A)
+        public static double[] GetColumns(int[] ColumnList, IList<double> A)
         {
             var NumberOfValidColumns = 0;
             var ValidColumns = new int[ColumnList.GetLength(0)];
             for (var k = 0; k < ColumnList.GetLength(0); k++)
             {
-                if (ColumnList[k] < 0 || ColumnList[k] >= A.GetLength(0)) continue;
+                if (ColumnList[k] < 0 || ColumnList[k] >= A.Count) continue;
                 ValidColumns[NumberOfValidColumns] = ColumnList[k];
                 NumberOfValidColumns++;
             }
@@ -402,10 +446,10 @@ namespace StarMathLib
         /// <param name = "Array1">Array that comes to the left.</param>
         /// <param name = "Array2">Array that is appended to the end of the first array</param>
         /// <returns>A double array that has Array1 and Array2 side by side</returns>
-        public static double[] JoinArr(double[] Array1, double[] Array2)
+        public static double[] JoinArr(IList<double> Array1, IList<double> Array2)
         {
-            var Mat1Elements = Array1.GetLength(0);
-            var Mat2Elements = Array2.GetLength(0);
+            var Mat1Elements = Array1.Count;
+            var Mat2Elements = Array2.Count;
             var NumElements = Mat1Elements + Mat2Elements;
             var JointArray = new double[NumElements];
 

@@ -305,7 +305,7 @@ namespace StarMathLib
         /// <returns>unit vector.</returns>
         public static double[] normalize(double[] x)
         {
-            return multiply((1 / norm2(x)), x);
+            return divide(x, norm2(x));
         }
 
         #endregion

@@ -21,9 +21,9 @@ namespace StarMathLib
         private static double[,] castIntArrayToDouble(int[,] A)
         {
             var B = new double[A.GetLength(0), A.GetLength(1)];
-            for (int i = 0; i < A.GetLength(0); i++)
-                for (int j = 0; j < A.GetLength(1); j++)
-                    B[i, i] = (double)A[i, j];
+            for (var i = 0; i < A.GetLength(0); i++)
+                for (var j = 0; j < A.GetLength(1); j++)
+                    B[i, i] = A[i, j];
             return B;
         }
 

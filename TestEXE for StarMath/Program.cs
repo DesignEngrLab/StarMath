@@ -8,7 +8,9 @@ namespace TestEXE_for_StarMath
         static void Main()
         {
             benchMarkMatrixInversion();
-            testLUfunctions();
+           // testLUfunctions();
+            Console.WriteLine("Press any key to close.");
+            Console.ReadLine();
         }
 
         private static void testLUfunctions()
@@ -40,12 +42,11 @@ namespace TestEXE_for_StarMath
             var error = StarMath.norm2(E);
             Console.WriteLine("error = " + error);
 
-            Console.ReadLine();
         }
 
         private static void benchMarkMatrixInversion()
         {
-            const int size = 100;
+            const int size = 500;
 
             DateTime now = DateTime.Now;
             Random r = new Random();
@@ -53,14 +54,13 @@ namespace TestEXE_for_StarMath
             for (int i = 0; i < size; i++)
                 for (int j = 0; j < size; j++)
                     A[i, j] = (200 * r.NextDouble()) - 100.0;
-            Console.WriteLine("start invert check");
+            Console.WriteLine("start invert check for matrix of size: " + size);
             double[,] B = StarMath.inverse(A);
             double[,] C = StarMath.subtract(StarMath.multiply(A, B), StarMath.makeIdentity(size));
             double error = StarMath.norm2(C);
             var interval = DateTime.Now - now;
             Console.WriteLine("end invert, error = " + error);
             Console.WriteLine("time = " + interval);
-            Console.ReadLine();
         }
     }
 }

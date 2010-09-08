@@ -20,20 +20,31 @@ namespace StarMathLib
         ///   Multiplies all elements of a 1D double array with the double value.
         /// </summary>
         /// <param name = "a">The double value to be multiplied</param>
-        /// <param name = "B">The matrix to be multiplied with</param>
+        /// <param name = "B">The double vector to be multiplied with</param>
         /// <returns>A 1D double array that contains the product</returns>
         public static double[] multiply(double a, IList<double> B)
         {
-            // scale vector B by the amount of scalar B
+            // scale vector B by the amount of scalar a
             var size = B.Count();
             var c = new double[size];
             for (var i = 0; i != size; i++)
                 c[i] = a * B[i];
             return c;
         }
+        /// <summary>
+        ///   Multiplies all elements of a 1D integer array with the double value.
+        /// </summary>
+        /// <param name = "a">The double value to be multiplied</param>
+        /// <param name = "B">The integer vector to be multiplied with</param>
+        /// <returns>A 1D double array that contains the product</returns>
         public static double[] multiply(double a, IList<int> B)
         {
-            throw new NotImplementedException();
+            // scale vector B by the amount of scalar a
+            var size = B.Count();
+            var c = new double[size];
+            for (var i = 0; i != size; i++)
+                c[i] = a * B[i];
+            return c;
         }
 
         /// <summary>
@@ -46,8 +57,16 @@ namespace StarMathLib
         {
             return multiply((1 / a), B);
         }
+        /// <summary>
+        ///   Divides all elements of a 1D integer array by the double value.
+        /// </summary>
+        /// <param name = "B">The vector to be divided</param>
+        /// <param name = "a">The double value to be divided by, the divisor.</param>
+        /// <returns>A 1D double array that contains the product</returns>
          public static double[] divide(IList<int> B, double a)
-        { throw new NotImplementedException(); }
+        {
+            return multiply((1 / a), B);
+        }
 
         /// <summary>
         ///   Multiplies all elements of a 2D double array with a double value.
@@ -88,8 +107,16 @@ namespace StarMathLib
         {
             return multiply((1 / a), B);
         }
+        /// <summary>
+        ///   Divides all elements of a 2D integer array by the double value.
+        /// </summary>
+        /// <param name = "B">The matrix to be divided</param>
+        /// <param name = "a">The double value to be divided by, the divisor.</param>
+        /// <returns>A 2D double array that contains the product</returns>
         public static double[,] divide(int[,] B, double a)
-        { throw new NotImplementedException(); }
+        {
+            return multiply((1 / a), B);
+        }
 
 
 
@@ -171,7 +198,7 @@ namespace StarMathLib
         { throw new NotImplementedException(); }
 
         /// <summary>
-        ///   The cross product of the two 1D double vectors A and B whic are of length, 2.
+        ///   The cross product of the two 1D double vectors A and B which are of length, 2.
         /// </summary>
         /// <param name = "A">1D double Array 1</param>
         /// <param name = "B">1D double Array 2</param>
@@ -184,10 +211,34 @@ namespace StarMathLib
             throw new Exception("This cross product \"shortcut\" is only used with 2D vectors to get the single value in the,"
                                 + "would be, Z-direction.");
         }
+        /// <summary>
+        ///   The cross product of a 1D integer vector, A, and a 1D double vector, B, which are both of length, 2.
+        /// </summary>
+        /// <param name = "A">1D integer Array 1</param>
+        /// <param name = "B">1D double Array 2</param>
+        /// <returns></returns>
         public static double multiplyCross2D(IList<int> A, IList<double> B)
-        { throw new NotImplementedException(); }
+        {
+            if (((A.Count() == 2) && (B.Count() == 2))
+                || ((A.Count() == 3) && (B.Count() == 3) && A[2] == 0.0 && B[2] == 0.0))
+                return A[0] * B[1] - B[0] * A[1];
+            throw new Exception("This cross product \"shortcut\" is only used with 2D vectors to get the single value in the,"
+                                + "would be, Z-direction.");
+        }
+        /// <summary>
+        ///   The cross product of the two 1D integer vectors A and B which are of length, 2.
+        /// </summary>
+        /// <param name = "A">1D integer Array 1</param>
+        /// <param name = "B">1D integer Array 2</param>
+        /// <returns></returns>
         public static int multiplyCross2D(IList<int> A, IList<int> B)
-        { throw new NotImplementedException(); }
+        {
+            if (((A.Count() == 2) && (B.Count() == 2))
+                || ((A.Count() == 3) && (B.Count() == 3) && A[2] == 0.0 && B[2] == 0.0))
+                return A[0] * B[1] - B[0] * A[1];
+            throw new Exception("This cross product \"shortcut\" is only used with 2D vectors to get the single value in the,"
+                                + "would be, Z-direction.");
+        }
 
         private static double[] multiplyCross7(IList<double> A, IList<double> B)
         {
@@ -231,10 +282,42 @@ namespace StarMathLib
                     C[i, j] = A[i] * B[j];
             return C;
         }
+        /// <summary>
+        ///   Product of each element of array-1 (1D int) with each element of array-2 (1D double)
+        /// </summary>
+        /// <param name = "A">1D integer array - column vector (1 element per row)</param>
+        /// <param name = "B">1D double array - row vector (1 element column)</param>
+        /// <returns>2D double array product matrix, value of element [i,j] = A[i] * B[j]</returns>
         public static double[,] multiplyVectorsIntoAMatrix(IList<int> A, IList<double> B)
-        { throw new NotImplementedException(); }
+        {
+            var CRowSize = A.Count();
+            var CColSize = B.Count();
+
+            var C = new double[CRowSize, CColSize];
+
+            for (var i = 0; i != CRowSize; i++)
+                for (var j = 0; j != CColSize; j++)
+                    C[i, j] = A[i] * B[j];
+            return C;
+        }
+        /// <summary>
+        ///   Product of each element of array-1 (1D int) with each element of array-2 (1D int)
+        /// </summary>
+        /// <param name = "A">1D integer array - column vector (1 element per row)</param>
+        /// <param name = "B">1D integer array - row vector (1 element column)</param>
+        /// <returns>2D double array product matrix, value of element [i,j] = A[i] * B[j]</returns>
         public static int[,] multiplyVectorsIntoAMatrix(IList<int> A, IList<int> B)
-        { throw new NotImplementedException(); }
+        {
+            var CRowSize = A.Count();
+            var CColSize = B.Count();
+
+            var C = new int[CRowSize, CColSize];
+
+            for (var i = 0; i != CRowSize; i++)
+                for (var j = 0; j != CColSize; j++)
+                    C[i, j] = A[i] * B[j];
+            return C;
+        }
         
 
         /// <summary>

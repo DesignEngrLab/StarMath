@@ -9,7 +9,7 @@ namespace StarMathLib
 {
     public static partial class StarMath
     {
-        private const int cellWidth = 16;
+        private const int cellWidth = 10;
         private const int numDecimals = 3;
 
         /// <summary>
@@ -24,18 +24,23 @@ namespace StarMathLib
             {
                 p += "| ";
                 for (var j = 0; j < A.GetLength(1); j++)
-                {
-                    var numStr = string.Format(format, A[i, j]);
-                    numStr = numStr.TrimEnd('0');
-                    numStr = numStr.TrimEnd('.');
-                    var padAmt = ((double)(cellWidth - numStr.Length)) / 2;
-                    numStr = numStr.PadLeft((int)Math.Floor(padAmt + numStr.Length));
-                    numStr = numStr.PadRight(cellWidth);
-                    p += numStr + " |";
-                }
-                p += "\n";
+                    p += formatCell(format, A[i, j]) + ",";
+                p = p.Remove(p.Length - 1);
+                p += " |\n";
             }
+            p = p.Remove(p.Length - 1);
             return p;
+        }
+
+        private static object formatCell(string format, double p)
+        {
+            var numStr = string.Format(format, p);
+            numStr = numStr.TrimEnd('0');
+            numStr = numStr.TrimEnd('.');
+            var padAmt = ((double)(cellWidth - numStr.Length)) / 2;
+            numStr = numStr.PadLeft((int)Math.Floor(padAmt + numStr.Length));
+            numStr = numStr.PadRight(cellWidth);
+            return numStr;
         }
 
         /// <summary>
@@ -45,18 +50,11 @@ namespace StarMathLib
         public static string MakePrintString(IList<double> A)
         {
             var format = "{0:F" + numDecimals + "}";
-            var p = "";
+            var p = "{ ";
             for (var i = 0; i < A.Count; i++)
-            {
-                p += "| ";
-                var numStr = string.Format(format, A[i]);
-                numStr = numStr.TrimEnd('0');
-                numStr = numStr.TrimEnd('.');
-                var padAmt = ((double)(cellWidth - numStr.Length)) / 2;
-                numStr = numStr.PadLeft((int)Math.Floor(padAmt));
-                numStr = numStr.PadRight((int)Math.Ceiling(padAmt));
-                p += numStr + " |";
-            }
+                p += formatCell(format, A[i]) + ",";
+            p = p.Remove(p.Length - 1);
+            p += " }";
             return p;
         }
 
@@ -66,23 +64,17 @@ namespace StarMathLib
         /// <param name = "A">The A.</param>
         public static string MakePrintString(int[,] A)
         {
-            var format = "{0}";
+            const string format = "{0}";
             var p = "";
             for (var i = 0; i < A.GetLength(0); i++)
             {
                 p += "| ";
                 for (var j = 0; j < A.GetLength(1); j++)
-                {
-                    var numStr = string.Format(format, A[i, j]);
-                    numStr = numStr.TrimEnd('0');
-                    numStr = numStr.TrimEnd('.');
-                    var padAmt = ((double)(cellWidth - numStr.Length)) / 2;
-                    numStr = numStr.PadLeft((int)Math.Floor(padAmt + numStr.Length));
-                    numStr = numStr.PadRight(cellWidth);
-                    p += numStr + " |";
-                }
-                p += "\n";
+                    p += formatCell(format, A[i, j]) + ",";
+                p = p.Remove(p.Length - 1);
+                p += " |\n";
             }
+            p = p.Remove(p.Length - 1);
             return p;
         }
 
@@ -92,19 +84,12 @@ namespace StarMathLib
         /// <param name = "A">The A.</param>
         public static string MakePrintString(IList<int> A)
         {
-            var format = "{0}";
-            var p = "";
+            const string format = "{0}";
+            var p = "{ ";
             for (var i = 0; i < A.Count; i++)
-            {
-                p += "| ";
-                var numStr = string.Format(format, A[i]);
-                numStr = numStr.TrimEnd('0');
-                numStr = numStr.TrimEnd('.');
-                var padAmt = ((double)(cellWidth - numStr.Length)) / 2;
-                numStr = numStr.PadLeft((int)Math.Floor(padAmt));
-                numStr = numStr.PadRight((int)Math.Ceiling(padAmt));
-                p += numStr + " |";
-            }
+                p += formatCell(format, A[i]) + ",";
+            p = p.Remove(p.Length - 1);
+            p += " }";
             return p;
         }
     }

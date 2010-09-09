@@ -26,7 +26,7 @@ namespace StarMathLib
     public static partial class StarMath
     {
         /// <summary>
-        /// Solves the specified A.
+        /// Solves the specified A matrix.
         /// </summary>
         /// <param name="A">The A.</param>
         /// <param name="b">The b.</param>

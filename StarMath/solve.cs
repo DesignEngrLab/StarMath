@@ -21,7 +21,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace StarMathLib
+namespace StarMath
 {
     public static partial class StarMath
     {

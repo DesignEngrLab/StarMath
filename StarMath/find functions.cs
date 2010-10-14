@@ -1,13 +1,94 @@
-﻿using System;
+﻿/*************************************************************************
+ *     This file & class is part of the StarMath Project
+ *     Copyright 2010 Matthew Ira Campbell, PhD.
+ *
+ *     StarMath is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *  
+ *     StarMath is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *  
+ *     You should have received a copy of the GNU General Public License
+ *     along with StarMath.  If not, see <http://www.gnu.org/licenses/>.
+ *     
+ *     Please find further details and contact information on StarMath
+ *     at http://starmath.codeplex.com/.
+ *************************************************************************/
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace StarMathLib
+namespace StarMath
 {
     public static partial class StarMath
     {
-        #region Min max functions etc..
-
+        #region Min max functions.
+        /// <summary>
+        ///   Finds the maximum value in the given 2D double array
+        /// </summary>
+        /// <param name = "A">The array to be searched for</param>
+        /// <returns>A double value that is the maximum of A</returns>
+        public static double Max(double[,] A)
+        {
+            return JoinMatrixColumnsIntoVector(A).Max();
+        }
+        /// <summary>
+        /// Finds the maximum value in the given 2D double array and returns the row and column indices along with it.
+        /// </summary>
+        /// <param name="A">The array to be searched for</param>
+        /// <param name="rowIndex">Index of the row.</param>
+        /// <param name="colIndex">Index of the col.</param>
+        /// <returns>
+        /// the maximum value 
+        /// </returns>
+        public static double Max(double[,] A, out int rowIndex, out int colIndex)
+        {
+            var max = Max(A);
+            rowIndex = A.GetLength(0);
+            colIndex = -1;
+            while (--rowIndex >= 0)
+                if (GetRow(rowIndex, A).Contains(max))
+                {
+                    colIndex = Array.IndexOf(GetRow(rowIndex, A), max);
+                    return max;
+                }
+            return double.NegativeInfinity;
+        }
+        /// <summary>
+        ///   Finds the maximum value in the given 2D integer array
+        /// </summary>
+        /// <param name = "A">The array to be searched for</param>
+        /// <returns>An integer value that is the maximum of A</returns>
+        public static int Max(int[,] A)
+        {
+            return JoinMatrixColumnsIntoVector(A).Max();
+        }
+        /// <summary>
+        /// Finds the maximum value in the given 2D double array and returns the row and column indices along with it.
+        /// </summary>
+        /// <param name="A">The array to be searched for</param>
+        /// <param name="rowIndex">Index of the row.</param>
+        /// <param name="colIndex">Index of the col.</param>
+        /// <returns>
+        /// the maximum value 
+        /// </returns>
+        public static int Max(int[,] A, out int rowIndex, out int colIndex)
+        {
+            var max = Max(A);
+            rowIndex = A.GetLength(0);
+            colIndex = -1;
+            while (--rowIndex >= 0)
+                if (GetRow(rowIndex, A).Contains(max))
+                {
+                    colIndex = Array.IndexOf(GetRow(rowIndex, A), max);
+                    return max;
+                }
+            return int.MinValue;
+        }
         /// <summary>
         ///   Finds the minimum value in the given 2D double array
         /// </summary>
@@ -18,6 +99,28 @@ namespace StarMathLib
             return JoinMatrixColumnsIntoVector(A).Min();
         }
         /// <summary>
+        /// Finds the minimum value in the given 2D double array and returns the row and column indices along with it.
+        /// </summary>
+        /// <param name="A">The array to be searched for</param>
+        /// <param name="rowIndex">Index of the row.</param>
+        /// <param name="colIndex">Index of the col.</param>
+        /// <returns>
+        /// the minimum value.
+        /// </returns>
+        public static double Min(double[,] A, out int rowIndex, out int colIndex)
+        {
+            var min = Min(A);
+            rowIndex = A.GetLength(0);
+            colIndex = -1;
+            while (--rowIndex >= 0)
+                if (GetRow(rowIndex, A).Contains(min))
+                {
+                    colIndex = Array.IndexOf(GetRow(rowIndex, A), min);
+                    return min;
+                }
+            return double.PositiveInfinity;
+        }
+        /// <summary>
         ///   Finds the minimum value in the given 2D integer array
         /// </summary>
         /// <param name = "A">The array to be searched for</param>
@@ -26,27 +129,30 @@ namespace StarMathLib
         {
             return JoinMatrixColumnsIntoVector(A).Min();
         }
-
         /// <summary>
-        ///   Finds the maximum value in the given 2D double array
+        /// Finds the minimum value in the given 2D double array and returns the row and column indices along with it.
         /// </summary>
-        /// <param name = "A">The array to be searched for</param>
-        /// <returns>A double value that is the maximum of A</returns>
-        public static double Max(double[,] A)
+        /// <param name="A">The array to be searched for</param>
+        /// <param name="rowIndex">Index of the row.</param>
+        /// <param name="colIndex">Index of the col.</param>
+        /// <returns>
+        /// the minimum value.
+        /// </returns>
+        public static int Min(int[,] A, out int rowIndex, out int colIndex)
         {
-            return JoinMatrixColumnsIntoVector(A).Max();
+            var min = Min(A);
+            rowIndex = A.GetLength(0);
+            colIndex = -1;
+            while (--rowIndex >= 0)
+                if (GetRow(rowIndex, A).Contains(min))
+                {
+                    colIndex = Array.IndexOf(GetRow(rowIndex, A), min);
+                    return min;
+                }
+            return int.MaxValue;
         }
 
-        /// <summary>
-        ///   Finds the maximum value in the given 2D integer array
-        /// </summary>
-        /// <param name = "A">The array to be searched for</param>
-        /// <returns>An integer value that is the maximum of A</returns>
-        public static int Max(int[,] A)
-        {
-            return JoinMatrixColumnsIntoVector(A).Max();
-        }
-
+        
         /// <summary>
         ///   Finds the maximum value in the given 1D integer array
         /// </summary>
@@ -85,111 +191,6 @@ namespace StarMathLib
         }
 
         /// <summary>
-        /// Finds the minimum and maximum value in the given 2D double array
-        /// </summary>
-        /// <param name="A">The array to be searched for</param>
-        /// <param name="max">The max.</param>
-        /// <param name="min">The min.</param>
-        public static void MinMax(double[,] A, out double max, out double min)
-        {
-            max = Max(A);
-            min = Min(A);
-        }
-
-
-        /// <summary>
-        /// Finds the minimum and maximum value in the given 2D double array
-        /// </summary>
-        /// <param name="A">The array to be searched for</param>
-        /// <param name="max">The max.</param>
-        /// <param name="min">The min.</param>
-        public static void MinMax(int[,] A, out int max, out int min)
-        {
-            max = Max(A);
-            min = Min(A);
-        }
-
-        /// <summary>
-        /// Finds the minimum value in the given 2D double array and returns the row and column indices along with it.
-        /// </summary>
-        /// <param name="A">The array to be searched for</param>
-        /// <param name="rowIndex">Index of the row.</param>
-        /// <param name="colIndex">Index of the col.</param>
-        /// <returns>
-        /// the minimum value.
-        /// </returns>
-        public static double Min(double[,] A, out int rowIndex, out int colIndex)
-        {
-            var min = Min(A);
-            rowIndex = A.GetLength(0);
-            colIndex = -1;
-            while (--rowIndex >= 0)
-                if (GetRow(rowIndex, A).Contains(min))
-                {
-                    colIndex = Array.IndexOf(GetRow(rowIndex, A), min);
-                    return min;
-                }
-            return double.PositiveInfinity;
-        }
-
-        /// <summary>
-        /// Finds the maximum value in the given 2D double array and returns the row and column indices along with it.
-        /// </summary>
-        /// <param name="A">The array to be searched for</param>
-        /// <param name="rowIndex">Index of the row.</param>
-        /// <param name="colIndex">Index of the col.</param>
-        /// <returns>
-        /// the maximum value 
-        /// </returns>
-        public static double Max(double[,] A, out int rowIndex, out int colIndex)
-        {
-            var max = Max(A);
-            rowIndex = A.GetLength(0);
-            colIndex = -1;
-            while (--rowIndex >= 0)
-                if (GetRow(rowIndex, A).Contains(max))
-                {
-                    colIndex = Array.IndexOf(GetRow(rowIndex, A), max);
-                    return max;
-                }
-            return double.NegativeInfinity;
-        }
-
-        /// <summary>
-        ///   Finds the minimum and maximum value in the given 2D double array and returns the row and column indices
-        /// </summary>
-        /// <param name = "A">The array to be searched for</param>
-        /// <returns>A 1 x 6 double array that contains the min value and its row and col index and the max value and its row and col index in A</returns>
-        public static double[] MinMaxRC(double[,] A)
-        {
-            var MinDim1 = 0; //Dim1 = rows
-            var MinDim2 = 0; //Dim2 = columns
-            var MaxDim1 = 0; //Dim1 = rows
-            var MaxDim2 = 0; //Dim2 = columns
-            var maxRow = A.GetLength(0);
-            var maxCol = A.GetLength(1);
-            var Max = double.MinValue;
-            var Min = double.MaxValue;
-            for (var i = 0; i != maxRow; i++)
-            {
-                for (var j = 0; j != maxCol; j++)
-                {
-                    if (A[i, j] > Max)
-                    {
-                        MaxDim1 = i;
-                        MaxDim2 = j;
-                        Max = A[i, j];
-                    }
-                    if (A[i, j] >= Min) continue;
-                    MinDim1 = i;
-                    MinDim2 = j;
-                    Min = A[i, j];
-                }
-            }
-            return (new[] { Min, MinDim1, MinDim2, Max, MaxDim1, MaxDim2 });
-        }
-
-        /// <summary>
         /// Finds the minimum value in the given 1D double array and returns its index along with it.
         /// </summary>
         /// <param name="A">The array to be searched for</param>
@@ -212,6 +213,34 @@ namespace StarMathLib
         /// the maximum value
         /// </returns>
         public static double Max(IList<double> A, out int index)
+        {
+            var max = A.Max();
+            index = A.IndexOf(max);
+            return max;
+        }
+        /// <summary>
+        /// Finds the minimum value in the given 1D double array and returns its index along with it.
+        /// </summary>
+        /// <param name="A">The array to be searched for</param>
+        /// <param name="index">The index.</param>
+        /// <returns>
+        /// the minimum value 
+        /// </returns>
+        public static int Min(IList<int> A, out int index)
+        {
+            var min = A.Min();
+            index = A.IndexOf(min);
+            return min;
+        }
+        /// <summary>
+        /// Finds the minimum value in the given 1D double array and returns its index along with it.
+        /// </summary>
+        /// <param name="A">The array to be searched for</param>
+        /// <param name="index">The index.</param>
+        /// <returns>
+        /// the maximum value
+        /// </returns>
+        public static int Max(IList<int> A, out int index)
         {
             var max = A.Max();
             index = A.IndexOf(max);

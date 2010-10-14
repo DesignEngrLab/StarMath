@@ -18,6 +18,7 @@ namespace StarMathLib
         /// <param name = "A">The A.</param>
         public static string MakePrintString(double[,] A)
         {
+            if (A == null) return "<null>";
             var format = "{0:F" + numDecimals + "}";
             var p = "";
             for (var i = 0; i < A.GetLength(0); i++)
@@ -49,6 +50,7 @@ namespace StarMathLib
         /// <param name = "A">The A.</param>
         public static string MakePrintString(IList<double> A)
         {
+            if (A == null) return "<null>";
             var format = "{0:F" + numDecimals + "}";
             var p = "{ ";
             for (var i = 0; i < A.Count; i++)
@@ -64,6 +66,7 @@ namespace StarMathLib
         /// <param name = "A">The A.</param>
         public static string MakePrintString(int[,] A)
         {
+            if (A == null) return "<null>";
             const string format = "{0}";
             var p = "";
             for (var i = 0; i < A.GetLength(0); i++)
@@ -84,6 +87,7 @@ namespace StarMathLib
         /// <param name = "A">The A.</param>
         public static string MakePrintString(IList<int> A)
         {
+            if (A == null) return "<null>";
             const string format = "{0}";
             var p = "{ ";
             for (var i = 0; i < A.Count; i++)

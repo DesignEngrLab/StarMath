@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>StarMath</RootNamespace>
     <AssemblyName>StarMath</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
@@ -49,7 +49,8 @@
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
+    <DefineConstants>
+    </DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>bin\Release\StarMath.XML</DocumentationFile>
@@ -70,7 +71,7 @@
   <ItemGroup>
     <Compile Include="solve.cs" />
     <Compile Include="print functions.cs" />
-    <Compile Include="min max.cs" />
+    <Compile Include="find functions.cs" />
     <Compile Include="make extract.cs" />
     <Compile Include="add subtract multiply.cs" />
     <Compile Include="3D transforms.cs" />

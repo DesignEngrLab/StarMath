@@ -15,7 +15,7 @@
  *     You should have received a copy of the GNU General Public License
  *     along with StarMath.  If not, see <http://www.gnu.org/licenses/>.
  *     
- *     Please find further details and contact information on GraphSynth
+ *     Please find further details and contact information on StarMath
  *     at http://starmath.codeplex.com/.
  *************************************************************************/
 using System;

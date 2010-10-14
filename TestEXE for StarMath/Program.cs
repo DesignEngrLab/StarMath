@@ -7,10 +7,19 @@ namespace TestEXE_for_StarMath
     {
         static void Main()
         {
-            benchMarkMatrixInversion();
+            //benchMarkMatrixInversion();
+            testStackFunctions();
            // testLUfunctions();
             Console.WriteLine("Press any key to close.");
             Console.ReadLine();
+        }
+
+        private static void testStackFunctions()
+        {
+            var A = new[,] {{0.1, 0.2, 0.3}, {1, 2, 3}, {10, 20, 30}, {100, 200, 300}};
+            int i, j;
+            StarMath.Max(A, out i, out j);
+            Console.WriteLine(StarMath.MakePrintString(StarMath.JoinMatrixColumnsIntoVector(A)));
         }
 
         private static void testLUfunctions()

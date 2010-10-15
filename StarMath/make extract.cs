@@ -21,7 +21,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace StarMath
+namespace StarMathLib
 {
     /// <summary>
     ///   The one and only class in the StarMathLib. All functions are static

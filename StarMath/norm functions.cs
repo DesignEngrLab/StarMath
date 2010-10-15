@@ -22,7 +22,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace StarMath
+namespace StarMathLib
 {
     public static partial class StarMath
     {

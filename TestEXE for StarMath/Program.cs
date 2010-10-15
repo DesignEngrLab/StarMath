@@ -17,8 +17,8 @@ namespace TestEXE_for_StarMath
         {
             var A = new[,] {{0.1, 0.2, 0.3}, {1, 2, 3}, {10, 20, 30}, {100, 200, 300}};
             int i, j;
-            StarMath.StarMath.Max(A, out i, out j);
-            Console.WriteLine(StarMath.StarMath.MakePrintString(StarMath.StarMath.JoinMatrixColumnsIntoVector(A)));
+            StarMathLib.StarMath.Max(A, out i, out j);
+            Console.WriteLine(StarMathLib.StarMath.MakePrintString(StarMathLib.StarMath.JoinMatrixColumnsIntoVector(A)));
         }
 
         private static void testLUfunctions()
@@ -31,23 +31,23 @@ namespace TestEXE_for_StarMath
                 for (int j = 0; j < size; j++)
                     A[i, j] = (200 * r.NextDouble()) - 100.0;
             Console.WriteLine("A =");
-            Console.WriteLine(StarMath.StarMath.MakePrintString(A));
+            Console.WriteLine(StarMathLib.StarMath.MakePrintString(A));
 
             Console.WriteLine("Combined LU = ");
-            Console.WriteLine(StarMath.StarMath.LUDecomposition(A));
+            Console.WriteLine(StarMathLib.StarMath.LUDecomposition(A));
 
             double[,] L, U;
-            StarMath.StarMath.LUDecomposition(A, out L, out U);
+            StarMathLib.StarMath.LUDecomposition(A, out L, out U);
             Console.WriteLine(" L = ");
-            Console.WriteLine(StarMath.StarMath.MakePrintString(L));
+            Console.WriteLine(StarMathLib.StarMath.MakePrintString(L));
             Console.WriteLine(" U = ");
-            Console.WriteLine(StarMath.StarMath.MakePrintString(U));
+            Console.WriteLine(StarMathLib.StarMath.MakePrintString(U));
 
             Console.WriteLine("L * U =");
-            Console.WriteLine(StarMath.StarMath.MakePrintString(StarMath.StarMath.multiply(L, U)));
+            Console.WriteLine(StarMathLib.StarMath.MakePrintString(StarMathLib.StarMath.multiply(L, U)));
 
-            var E = StarMath.StarMath.subtract(A, StarMath.StarMath.multiply(L, U));
-            var error = StarMath.StarMath.norm2(E);
+            var E = StarMathLib.StarMath.subtract(A, StarMathLib.StarMath.multiply(L, U));
+            var error = StarMathLib.StarMath.norm2(E);
             Console.WriteLine("error = " + error);
 
         }
@@ -63,9 +63,9 @@ namespace TestEXE_for_StarMath
                 for (int j = 0; j < size; j++)
                     A[i, j] = (200 * r.NextDouble()) - 100.0;
             Console.WriteLine("start invert check for matrix of size: " + size);
-            double[,] B = StarMath.StarMath.inverse(A);
-            double[,] C = StarMath.StarMath.subtract(StarMath.StarMath.multiply(A, B), StarMath.StarMath.makeIdentity(size));
-            double error = StarMath.StarMath.norm2(C);
+            double[,] B = StarMathLib.StarMath.inverse(A);
+            double[,] C = StarMathLib.StarMath.subtract(StarMathLib.StarMath.multiply(A, B), StarMathLib.StarMath.makeIdentity(size));
+            double error = StarMathLib.StarMath.norm2(C);
             var interval = DateTime.Now - now;
             Console.WriteLine("end invert, error = " + error);
             Console.WriteLine("time = " + interval);

@@ -8,7 +8,7 @@
     <ProjectGuid>{8B37DF1E-A3C9-42B6-BF1F-D65180FF556E}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>StarMath</RootNamespace>
+    <RootNamespace>StarMathLib</RootNamespace>
     <AssemblyName>StarMath</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

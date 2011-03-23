@@ -7,9 +7,9 @@ namespace TestEXE_for_StarMath
     {
         private static void Main()
         {
-            //benchMarkMatrixInversion();
+            benchMarkMatrixInversion();
             //testStackFunctions();
-            testLUfunctions();
+            //testLUfunctions();
             Console.WriteLine("Press any key to close.");
             Console.ReadLine();
         }

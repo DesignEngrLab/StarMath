@@ -29,8 +29,8 @@ namespace StarMathLib
         #region Norm Functions
         #region 1-norm (Manhattan Distance)
         /// <summary>
-        ///   Returns to 1-norm (sum of absolute values of all terms)
-        ///   of the difference between x and y.
+        /// Returns to 1-norm (sum of absolute values of all terms)
+        /// of the difference between x and y.
         /// </summary>
         /// <param name = "x">The vector, x.</param>
         /// <param name = "y">The vector, y.</param>
@@ -50,8 +50,8 @@ namespace StarMathLib
         }
 
         /// <summary>
-        ///   Returns to 1-norm (sum of absolute values of all terms)
-        ///   of the difference between x and y.
+        /// Returns to 1-norm (sum of absolute values of all terms)
+        /// of the difference between x and y.
         /// </summary>
         /// <param name = "x">The vector, x.</param>
         /// <param name = "y">The vector, y.</param>
@@ -71,8 +71,8 @@ namespace StarMathLib
         }
 
         /// <summary>
-        ///   Returns to 1-norm (sum of absolute values of all terms)
-        ///   of the vector, x.
+        /// Returns to 1-norm (sum of absolute values of all terms)
+        /// of the vector, x.
         /// </summary>
         /// <param name = "x">The vector, x.</param>
         /// <returns>Scalar value of 1-norm.</returns>
@@ -82,8 +82,8 @@ namespace StarMathLib
             return x.Sum(a => Math.Abs(a));
         }
         /// <summary>
-        ///   Returns to 1-norm (sum of absolute values of all terms)
-        ///   of the vector, x.
+        /// Returns to 1-norm (sum of absolute values of all terms)
+        /// of the vector, x.
         /// </summary>
         /// <param name = "x">The vector, x.</param>
         /// <returns>Scalar value of 1-norm.</returns>
@@ -94,8 +94,8 @@ namespace StarMathLib
         }
 
         /// <summary>
-        ///   Returns to 1-norm (sum of absolute values of all terms)
-        ///   of the matrix, A.
+        /// Returns to 1-norm (sum of absolute values of all terms)
+        /// of the matrix, A.
         /// </summary>
         /// <param name = "A">The matrix, A.</param>
         /// <returns>Scalar value of 1-norm.</returns>
@@ -113,8 +113,8 @@ namespace StarMathLib
 
 
         /// <summary>
-        ///   Returns to 1-norm (sum of absolute values of all terms)
-        ///   of the matrix, A.
+        /// Returns to 1-norm (sum of absolute values of all terms)
+        /// of the matrix, A.
         /// </summary>
         /// <param name = "A">The matrix, A.</param>
         /// <returns>Scalar value of 1-norm.</returns>
@@ -315,8 +315,8 @@ namespace StarMathLib
         #region Normalize
 
         /// <summary>
-        ///   Returns to normalized vector (has lenght or 2-norm of 1))
-        ///   of the vector, x.
+        /// Returns to normalized vector (has lenght or 2-norm of 1))
+        /// of the vector, x.
         /// </summary>
         /// <param name = "x">The vector, x.</param>
         /// <returns>unit vector.</returns>

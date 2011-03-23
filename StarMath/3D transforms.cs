@@ -27,7 +27,7 @@ namespace StarMathLib
         #region 3D Coordinate Transforms
 
         /// <summary>
-        ///   Creates a translated coordinate frame.
+        /// Creates a translated coordinate frame.
         /// </summary>
         /// <param name = "Tx">Amount of translation in x.</param>
         /// <param name = "Ty">Amount of translation in y.</param>
@@ -45,7 +45,7 @@ namespace StarMathLib
         }
 
         /// <summary>
-        ///   Creates a rotation matrix about the X-axis.
+        /// Creates a rotation matrix about the X-axis.
         /// </summary>
         /// <param name = "xdeg">The amount of angle in degrees (positive is counter-clockwise).</param>
         /// <returns>4-by-4 matrix rotated by the amount specified.</returns>
@@ -62,7 +62,7 @@ namespace StarMathLib
         }
 
         /// <summary>
-        ///   Creates a rotation matrix about the Y-axis.
+        /// Creates a rotation matrix about the Y-axis.
         /// </summary>
         /// <param name = "ydeg">The amount of angle in degrees (positive is counter-clockwise).</param>
         /// <returns>4-by-4 matrix rotated by the amount specified.</returns>
@@ -79,7 +79,7 @@ namespace StarMathLib
         }
 
         /// <summary>
-        ///   Creates a rotation matrix about the Z-axis.
+        /// Creates a rotation matrix about the Z-axis.
         /// </summary>
         /// <param name = "zdeg">The amount of angle in degrees (positive is counter-clockwise).</param>
         /// <returns>4-by-4 matrix rotated by the amount specified.</returns>

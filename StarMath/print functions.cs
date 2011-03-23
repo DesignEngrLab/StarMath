@@ -30,7 +30,7 @@ namespace StarMathLib
         private const int numDecimals = 3;
 
         /// <summary>
-        ///   Makes the print string.
+        /// Makes the print string.
         /// </summary>
         /// <param name = "A">The A.</param>
         public static string MakePrintString(double[,] A)
@@ -62,7 +62,7 @@ namespace StarMathLib
         }
 
         /// <summary>
-        ///   Makes the print string.
+        /// Makes the print string.
         /// </summary>
         /// <param name = "A">The A.</param>
         public static string MakePrintString(IList<double> A)
@@ -78,7 +78,7 @@ namespace StarMathLib
         }
 
         /// <summary>
-        ///   Makes the print string.
+        /// Makes the print string.
         /// </summary>
         /// <param name = "A">The A.</param>
         public static string MakePrintString(int[,] A)
@@ -99,7 +99,7 @@ namespace StarMathLib
         }
 
         /// <summary>
-        ///   Makes the print string.
+        /// Makes the print string.
         /// </summary>
         /// <param name = "A">The A.</param>
         public static string MakePrintString(IList<int> A)

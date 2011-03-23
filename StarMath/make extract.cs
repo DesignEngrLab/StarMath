@@ -24,8 +24,8 @@ using System.Collections.Generic;
 namespace StarMathLib
 {
     /// <summary>
-    ///   The one and only class in the StarMathLib. All functions are static
-    ///   functions located here.
+    /// The one and only class in the StarMathLib. All functions are static
+    /// functions located here.
     /// </summary>
     public static partial class StarMath
     {
@@ -47,7 +47,7 @@ namespace StarMathLib
         #region Make simple Matrices functions
 
         /// <summary>
-        ///   Makes a sqare matrix of size p by p of all zeroes.
+        /// Makes a sqare matrix of size p by p of all zeroes.
         /// </summary>
         /// <param name = "p">The size (number of both rows and columns).</param>
         /// <returns>an empty (all zeroes) square matrix (2D double).</returns>
@@ -60,7 +60,7 @@ namespace StarMathLib
         }
 
         /// <summary>
-        ///   Makes a sqare matrix of size p by p of all zeroes.
+        /// Makes a sqare matrix of size p by p of all zeroes.
         /// </summary>
         /// <param name = "p">The size (number of both rows and columns).</param>
         /// <returns>an empty (all zeroes) square matrix (2D int).</returns>
@@ -73,7 +73,7 @@ namespace StarMathLib
         }
 
         /// <summary>
-        ///   Makes the zero vector.
+        /// Makes the zero vector.
         /// </summary>
         /// <param name = "p">The p.</param>
         /// <returns></returns>
@@ -86,7 +86,7 @@ namespace StarMathLib
         }
 
         /// <summary>
-        ///   Makes the zero int vector.
+        /// Makes the zero int vector.
         /// </summary>
         /// <param name = "p">The p.</param>
         /// <returns></returns>
@@ -99,7 +99,7 @@ namespace StarMathLib
         }
 
         /// <summary>
-        ///   Makes a matrix of size numRows by numCols of all zeroes.
+        /// Makes a matrix of size numRows by numCols of all zeroes.
         /// </summary>
         /// <param name = "numRows">The number of rows.</param>
         /// <param name = "numCols">The number of columns.</param>
@@ -113,7 +113,7 @@ namespace StarMathLib
             return I;
         }
         /// <summary>
-        ///   Makes a matrix of size numRows by numCols of all zeroes.
+        /// Makes a matrix of size numRows by numCols of all zeroes.
         /// </summary>
         /// <param name = "numRows">The number of rows.</param>
         /// <param name = "numCols">The number of columns.</param>
@@ -128,7 +128,7 @@ namespace StarMathLib
         }
 
         /// <summary>
-        ///   Makes an identity matrix of size p by p.
+        /// Makes an identity matrix of size p by p.
         /// </summary>
         /// <param name = "p">The size (number of both rows and columns).</param>
         /// <returns>the identity matrix, I.</returns>
@@ -142,7 +142,7 @@ namespace StarMathLib
             return I;
         }
         /// <summary>
-        ///   Makes an identity matrix of size p by p.
+        /// Makes an identity matrix of size p by p.
         /// </summary>
         /// <param name = "p">The size (number of both rows and columns).</param>
         /// <returns>the identity matrix, I.</returns>
@@ -161,7 +161,7 @@ namespace StarMathLib
         #region Make Progression
 
         /// <summary>
-        ///   Makes the linear progression.
+        /// Makes the linear progression.
         /// </summary>
         /// <param name = "Start">The start.</param>
         /// <param name = "CommonDifference">The common difference.</param>
@@ -180,13 +180,13 @@ namespace StarMathLib
         }
 
         /// <summary>
-        ///   Makes the linear progression.
+        /// Makes the linear progression.
         /// </summary>
         /// <param name = "Start">The start.</param>
         /// <param name = "CommonDifference">The common difference.</param>
         /// <param name = "End">The end.</param>
         /// <returns>
-        ///   Returns an double array with a series of numbers starting from Start till End with a distance of CommonDifference between two numbers
+        /// Returns an double array with a series of numbers starting from Start till End with a distance of CommonDifference between two numbers
         /// </returns>
         public static int[] makeLinearProgression(int Start, int CommonDifference, int End)
         {
@@ -205,7 +205,7 @@ namespace StarMathLib
         #region Get/Set parts of a matrix
 
         /// <summary>
-        ///   Gets a column of matrix, A.
+        /// Gets a column of matrix, A.
         /// </summary>
         /// <param name = "colIndex">The column index.</param>
         /// <param name = "A">The matrix, A.</param>
@@ -226,7 +226,7 @@ namespace StarMathLib
         }
 
         /// <summary>
-        ///   Gets a column of matrix, A.
+        /// Gets a column of matrix, A.
         /// </summary>
         /// <param name = "colIndex">The column index.</param>
         /// <param name = "A">The matrix, A.</param>
@@ -247,7 +247,7 @@ namespace StarMathLib
         }
 
         /// <summary>
-        ///   Gets a row of matrix, A.
+        /// Gets a row of matrix, A.
         /// </summary>
         /// <param name = "rowIndex">The row index.</param>
         /// <param name = "A">The matrix, A.</param>
@@ -267,7 +267,7 @@ namespace StarMathLib
             return v;
         }
         /// <summary>
-        ///   Gets a row of matrix, A.
+        /// Gets a row of matrix, A.
         /// </summary>
         /// <param name = "rowIndex">The row index.</param>
         /// <param name = "A">The matrix, A.</param>
@@ -288,7 +288,7 @@ namespace StarMathLib
         }
 
         /// <summary>
-        ///   Sets/Replaces the given row of matrix A with the vector v.
+        /// Sets/Replaces the given row of matrix A with the vector v.
         /// </summary>
         /// <param name = "rowIndex">The index of the row, rowIndex.</param>
         /// <param name = "A">The matrix, A.</param>
@@ -306,7 +306,7 @@ namespace StarMathLib
                 A[rowIndex, i] = v[i];
         }
         /// <summary>
-        ///   Sets/Replaces the given row of matrix A with the vector v.
+        /// Sets/Replaces the given row of matrix A with the vector v.
         /// </summary>
         /// <param name = "rowIndex">The index of the row, rowIndex.</param>
         /// <param name = "A">The matrix, A.</param>
@@ -325,7 +325,7 @@ namespace StarMathLib
         }
 
         /// <summary>
-        ///   Sets/Replaces the given column of matrix A with the vector v.
+        /// Sets/Replaces the given column of matrix A with the vector v.
         /// </summary>
         /// <param name = "colIndex">Index of the col.</param>
         /// <param name = "A">The A.</param>
@@ -344,7 +344,7 @@ namespace StarMathLib
         }
 
         /// <summary>
-        ///   Sets/Replaces the given column of matrix A with the vector v.
+        /// Sets/Replaces the given column of matrix A with the vector v.
         /// </summary>
         /// <param name = "colIndex">Index of the col.</param>
         /// <param name = "A">The A.</param>
@@ -363,7 +363,7 @@ namespace StarMathLib
         }
 
         /// <summary>
-        ///   Get more than one column from a given 2D double array. 
+        /// Get more than one column from a given 2D double array. 
         /// </summary>
         /// <param name = "ColumnList">The column list indices.</param>
         /// <param name = "A">2D double array from which columns need to be extracted</param>
@@ -377,7 +377,7 @@ namespace StarMathLib
             return Columns;
         }
         /// <summary>
-        ///   Get more than one column from a given 2D double array. 
+        /// Get more than one column from a given 2D double array. 
         /// </summary>
         /// <param name = "ColumnList">The column list indices.</param>
         /// <param name = "A">2D int array from which columns need to be extracted</param>
@@ -393,7 +393,7 @@ namespace StarMathLib
 
 
         /// <summary>
-        ///   Get more than one row from a given 2D double array.  
+        /// Get more than one row from a given 2D double array.  
         /// </summary>
         /// <param name = "RowList">The row list indices.</param>
         /// <param name = "A">2D double array from which rows need to be extracted</param>
@@ -407,7 +407,7 @@ namespace StarMathLib
             return Rows;
         }
         /// <summary>
-        ///   Get more than one row from a given 2D double array.  
+        /// Get more than one row from a given 2D double array.  
         /// </summary>
         /// <param name = "RowList">The row list indices.</param>
         /// <param name = "A">2D int array from which rows need to be extracted</param>
@@ -424,7 +424,7 @@ namespace StarMathLib
 
 
         /// <summary>
-        ///   Generalization (overload) of the GetColumns function to be extended to a single row array. Invalid Column indices are ignored
+        /// Generalization (overload) of the GetColumns function to be extended to a single row array. Invalid Column indices are ignored
         /// </summary>
         /// <param name = "ColumnList">The column list indices.</param>
         /// <param name = "A">1D double array from which columns (elements) need to be extracted</param>
@@ -438,7 +438,7 @@ namespace StarMathLib
         }
 
         /// <summary>
-        ///   Generalization (overload) of the GetColumns function to be extended to a single row array. Invalid Column indices are ignored
+        /// Generalization (overload) of the GetColumns function to be extended to a single row array. Invalid Column indices are ignored
         /// </summary>
         /// <param name = "ColumnList">The column list indices.</param>
         /// <param name = "A">1D int array from which columns (elements) need to be extracted</param>
@@ -455,7 +455,7 @@ namespace StarMathLib
 
         #region Join Functions
         /// <summary>
-        ///   Jions two 2D double arrays side by side and returns the results. The given variables remain unchanged
+        /// Jions two 2D double arrays side by side and returns the results. The given variables remain unchanged
         /// </summary>
         /// <param name = "Matrix1">The Matrix that comes on the left.</param>
         /// <param name = "Matrix2">Matrix that is attached to the right</param>
@@ -490,7 +490,7 @@ namespace StarMathLib
         }
 
         /// <summary>
-        ///   Jions two 2D double arrays one under the other and returns the results. The given variables remain unchanged
+        /// Jions two 2D double arrays one under the other and returns the results. The given variables remain unchanged
         /// </summary>
         /// <param name = "Matrix1">The Matrix that comes on the top.</param>
         /// <param name = "Matrix2">Matrix that is attached to the bottom</param>
@@ -524,7 +524,7 @@ namespace StarMathLib
         }
 
         /// <summary>
-        ///   Concatenates two 1D double arrays and returns the result. The given variables remain unchanged
+        /// Concatenates two 1D double arrays and returns the result. The given variables remain unchanged
         /// </summary>
         /// <param name = "Array1">Array that comes to the left.</param>
         /// <param name = "Array2">Array that is appended to the end of the first array</param>
@@ -546,7 +546,7 @@ namespace StarMathLib
         }
 
         /// <summary>
-        ///   Concatenates two 1D integer arrays and returns the result. The given variables remain unchanged
+        /// Concatenates two 1D integer arrays and returns the result. The given variables remain unchanged
         /// </summary>
         /// <param name = "Array1">Array that comes to the left.</param>
         /// <param name = "Array2">Array that is appended to the end of the first array</param>

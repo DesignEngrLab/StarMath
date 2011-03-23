@@ -28,7 +28,7 @@ namespace StarMathLib
     {
         #region Min max functions.
         /// <summary>
-        ///   Finds the maximum value in the given 2D double array
+        /// Finds the maximum value in the given 2D double array
         /// </summary>
         /// <param name = "A">The array to be searched for</param>
         /// <returns>A double value that is the maximum of A</returns>
@@ -59,7 +59,7 @@ namespace StarMathLib
             return double.NegativeInfinity;
         }
         /// <summary>
-        ///   Finds the maximum value in the given 2D integer array
+        /// Finds the maximum value in the given 2D integer array
         /// </summary>
         /// <param name = "A">The array to be searched for</param>
         /// <returns>An integer value that is the maximum of A</returns>
@@ -90,7 +90,7 @@ namespace StarMathLib
             return int.MinValue;
         }
         /// <summary>
-        ///   Finds the minimum value in the given 2D double array
+        /// Finds the minimum value in the given 2D double array
         /// </summary>
         /// <param name = "A">The array to be searched for</param>
         /// <returns>A double value that is the minimum of A</returns>
@@ -121,7 +121,7 @@ namespace StarMathLib
             return double.PositiveInfinity;
         }
         /// <summary>
-        ///   Finds the minimum value in the given 2D integer array
+        /// Finds the minimum value in the given 2D integer array
         /// </summary>
         /// <param name = "A">The array to be searched for</param>
         /// <returns>An integer value that is the minimum of A</returns>
@@ -154,7 +154,7 @@ namespace StarMathLib
 
         
         /// <summary>
-        ///   Finds the maximum value in the given 1D integer array
+        /// Finds the maximum value in the given 1D integer array
         /// </summary>
         /// <param name = "A">The array to be searched for</param>
         /// <returns>An integer value that is the maximum of A</returns>
@@ -163,7 +163,7 @@ namespace StarMathLib
             return A.Max();
         }
         /// <summary>
-        ///   Finds the minimum value in the given 1D integer array
+        /// Finds the minimum value in the given 1D integer array
         /// </summary>
         /// <param name = "A">The array to be searched for</param>
         /// <returns>An integer value that is the minimum of A</returns>
@@ -172,7 +172,7 @@ namespace StarMathLib
             return A.Min();
         }
         /// <summary>
-        ///   Finds the maximum value in the given 1D double array
+        /// Finds the maximum value in the given 1D double array
         /// </summary>
         /// <param name = "A">The array to be searched for</param>
         /// <returns>An double value that is the maximum of A</returns>
@@ -181,7 +181,7 @@ namespace StarMathLib
             return A.Max();
         }
         /// <summary>
-        ///   Finds the minimum value in the given 1D double array
+        /// Finds the minimum value in the given 1D double array
         /// </summary>
         /// <param name = "A">The array to be searched for</param>
         /// <returns>An double value that is the minimum of A</returns>
@@ -248,7 +248,7 @@ namespace StarMathLib
         }
 
         /// <summary>
-        ///   Finds all the indices for the specified find value.
+        /// Finds all the indices for the specified find value.
         /// </summary>
         /// <param name = "FindVal">The find value.</param>
         /// <param name = "A">The A.</param>
@@ -260,7 +260,7 @@ namespace StarMathLib
         }
 
         /// <summary>
-        ///   Finds all the indices for the specified find value.
+        /// Finds all the indices for the specified find value.
         /// </summary>
         /// <param name = "FindVal">The find value.</param>
         /// <param name = "A">The A.</param>

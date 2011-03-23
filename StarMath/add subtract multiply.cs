@@ -30,10 +30,9 @@ namespace StarMathLib
 
         #region Multiplication of Scalars, Vectors, and Matrices
 
-        #region Doubles-by-doubles
-
+        #region Scalars multiplying vectors
         /// <summary>
-        ///   Multiplies all elements of a 1D double array with the double value.
+        /// Multiplies all elements of a 1D double array with the double value.
         /// </summary>
         /// <param name = "a">The double value to be multiplied</param>
         /// <param name = "B">The double vector to be multiplied with</param>
@@ -62,7 +61,7 @@ namespace StarMathLib
             return c;
         }
         /// <summary>
-        ///   Multiplies all elements of a 1D integer array with the double value.
+        /// Multiplies all elements of a 1D integer array with the double value.
         /// </summary>
         /// <param name = "a">The double value to be multiplied</param>
         /// <param name = "B">The integer vector to be multiplied with</param>
@@ -92,7 +91,7 @@ namespace StarMathLib
         }
 
         /// <summary>
-        ///   Divides all elements of a 1D double array by the double value.
+        /// Divides all elements of a 1D double array by the double value.
         /// </summary>
         /// <param name = "B">The vector to be divided</param>
         /// <param name = "a">The double value to be divided by, the divisor.</param>
@@ -116,7 +115,7 @@ namespace StarMathLib
             return multiply((1 / a), B, length);
         }
         /// <summary>
-        ///   Divides all elements of a 1D integer array by the double value.
+        /// Divides all elements of a 1D integer array by the double value.
         /// </summary>
         /// <param name = "B">The vector to be divided</param>
         /// <param name = "a">The double value to be divided by, the divisor.</param>
@@ -141,7 +140,7 @@ namespace StarMathLib
         }
 
         /// <summary>
-        ///   Multiplies all elements of a 2D double array with a double value.
+        /// Multiplies all elements of a 2D double array with a double value.
         /// </summary>
         /// <param name = "a">The double value to be multiplied</param>
         /// <param name = "B">The matrix to be multiplied with</param>
@@ -172,7 +171,7 @@ namespace StarMathLib
             return c;
         }
         /// <summary>
-        ///   Multiplies all elements of a 2D int array with a double value.
+        /// Multiplies all elements of a 2D int array with a double value.
         /// </summary>
         /// <param name = "a">The double value to be multiplied</param>
         /// <param name = "B">The matrix to be multiplied with</param>
@@ -203,7 +202,7 @@ namespace StarMathLib
         }
 
         /// <summary>
-        ///   Divides all elements of a 2D double array by the double value.
+        /// Divides all elements of a 2D double array by the double value.
         /// </summary>
         /// <param name = "B">The matrix to be divided</param>
         /// <param name = "a">The double value to be divided by, the divisor.</param>
@@ -229,7 +228,7 @@ namespace StarMathLib
             return multiply((1 / a), B, numRows, numCols);
         }
         /// <summary>
-        ///   Divides all elements of a 2D integer array by the double value.
+        /// Divides all elements of a 2D integer array by the double value.
         /// </summary>
         /// <param name = "B">The matrix to be divided</param>
         /// <param name = "a">The double value to be divided by, the divisor.</param>
@@ -253,16 +252,16 @@ namespace StarMathLib
         /// </returns>
         public static double[,] divide(int[,] B, double a, int numRows, int numCols)
         {
-            return multiply((1 / a), B,  numRows,  numCols);
+            return multiply((1 / a), B, numRows, numCols);
         }
+        #endregion
 
-
-
+        #region Dot-product of vectors to vectors
         /// <summary>
-        ///   The dot product of the two 1D double vectors A and B
+        /// The dot product of the two 1D double vectors A and B
         /// </summary>
-        /// <param name = "A">1D double Array 1</param>
-        /// <param name = "B">1D double Array 2</param>
+        /// <param name = "A">1D double Array, A</param>
+        /// <param name = "B">1D double Array, B</param>
         /// <returns>A double value that contains the dot product</returns>
         public static double multiplyDot(IList<double> A, IList<double> B)
         {
@@ -274,8 +273,8 @@ namespace StarMathLib
         /// <summary>
         /// The dot product of the two 1D double vectors A and B
         /// </summary>
-        /// <param name="A">1D double Array 1</param>
-        /// <param name="B">1D double Array 2</param>
+        /// <param name="A">1D double Array, A</param>
+        /// <param name="B">1D double Array, B</param>
         /// <param name="length">The length of both vectors A and B. This is an optional argument, but if it is already known 
         /// - there is a slight speed advantage to providing it.</param>
         /// <returns>
@@ -289,10 +288,10 @@ namespace StarMathLib
             return c;
         }
         /// <summary>
-        ///   The dot product of the one 1D int vector and one 1D double vector
+        /// The dot product of the one 1D int vector and one 1D double vector
         /// </summary>
-        /// <param name = "A">1D int Array 1</param>
-        /// <param name = "B">1D double Array 2</param>
+        /// <param name = "A">1D int Array, A</param>
+        /// <param name = "B">1D double Array, B</param>
         /// <returns>A double value that contains the dot product</returns>
         public static double multiplyDot(IList<int> A, IList<double> B)
         {
@@ -304,8 +303,8 @@ namespace StarMathLib
         /// <summary>
         /// The dot product of the one 1D int vector and one 1D double vector
         /// </summary>
-        /// <param name="A">1D int Array 1</param>
-        /// <param name="B">1D double Array 2</param>
+        /// <param name="A">1D int Array, A</param>
+        /// <param name="B">1D double Array, B</param>
         /// <param name="length">The length of both vectors A and B. This is an optional argument, but if it is already known 
         /// - there is a slight speed advantage to providing it.</param>
         /// <returns>
@@ -319,10 +318,10 @@ namespace StarMathLib
             return c;
         }
         /// <summary>
-        ///   The dot product of the two 1D int vectors A and B
+        /// The dot product of the two 1D int vectors A and B
         /// </summary>
-        /// <param name = "A">1D int Array 1</param>
-        /// <param name = "B">1D int Array 2</param>
+        /// <param name = "A">1D int Array, A</param>
+        /// <param name = "B">1D int Array, B</param>
         /// <returns>A double value that contains the dot product</returns>
         public static int multiplyDot(IList<int> A, IList<int> B)
         {
@@ -335,8 +334,8 @@ namespace StarMathLib
         /// <summary>
         /// The dot product of the two 1D int vectors A and B
         /// </summary>
-        /// <param name="A">1D int Array 1</param>
-        /// <param name="B">1D int Array 2</param>
+        /// <param name="A">1D int Array, A</param>
+        /// <param name="B">1D int Array, B</param>
         /// <param name="length">The length of both vectors A and B. This is an optional argument, but if it is already known 
         /// - there is a slight speed advantage to providing it.</param>
         /// <returns>
@@ -349,21 +348,21 @@ namespace StarMathLib
                 c += A[i] * B[i];
             return c;
         }
-
         #endregion
 
+        #region Cross-product of vectors to vectors
         /// <summary>
-        ///   The cross product of the two 1D double vectors A and B
+        /// The cross product of two double-precision vectors, A and B,
         /// </summary>
-        /// <param name = "A">1D double Array 1</param>
-        /// <param name = "B">1D double Array 2</param>
+        /// <param name = "A">1D double Array, A</param>
+        /// <param name = "B">1D double Array, B</param>
         /// <returns>A double value that contains the dot product</returns>
         public static double[] multiplyCross(IList<double> A, IList<double> B)
         {
             if ((A.Count() == 1) && (B.Count() == 1))
                 return new[] { 0.0 };
             if ((A.Count() == 2) && (B.Count() == 2))
-                return new[] { 0.0, 0.0, multiplyCross2D(A, B) };
+                return new[] { 0.0, 0.0, multiplyCross2(A, B) };
             if ((A.Count() == 3) && (B.Count() == 3))
                 return multiplyCross3(A, B);
             if ((A.Count() == 7) && (B.Count() == 7))
@@ -372,17 +371,17 @@ namespace StarMathLib
         }
 
         /// <summary>
-        ///   The cross product of the two 1D double vectors A and B
+        /// The cross product of an integer vector, A, and a double vector, B.
         /// </summary>
-        /// <param name = "A">1D integer Array 1</param>
-        /// <param name = "B">1D double Array 2</param>
+        /// <param name = "A">1D integer Array, A</param>
+        /// <param name = "B">1D double Array, B</param>
         /// <returns>A double value that contains the dot product</returns>
         public static double[] multiplyCross(IList<int> A, IList<double> B)
         {
             if ((A.Count() == 1) && (B.Count() == 1))
                 return new[] { 0.0 };
             if ((A.Count() == 2) && (B.Count() == 2))
-                return new[] { 0.0, 0.0, multiplyCross2D(A, B) };
+                return new[] { 0.0, 0.0, multiplyCross2(A, B) };
             if ((A.Count() == 3) && (B.Count() == 3))
                 return multiplyCross3(A, B);
             if ((A.Count() == 7) && (B.Count() == 7))
@@ -391,17 +390,17 @@ namespace StarMathLib
         }
 
         /// <summary>
-        ///   The cross product of the two 1D double vectors A and B
+        /// The cross product of two integer vectors, A and B.
         /// </summary>
-        /// <param name = "A">1D integer Array 1</param>
-        /// <param name = "B">1D integer Array 2</param>
+        /// <param name = "A">1D integer Array, A</param>
+        /// <param name = "B">1D integer Array, B</param>
         /// <returns>A double value that contains the dot product</returns>
         public static int[] multiplyCross(IList<int> A, IList<int> B)
         {
             if ((A.Count() == 1) && (B.Count() == 1))
                 return new[] { 0 };
             if ((A.Count() == 2) && (B.Count() == 2))
-                return new[] { 0, 0, multiplyCross2D(A, B) };
+                return new[] { 0, 0, multiplyCross2(A, B) };
             if ((A.Count() == 3) && (B.Count() == 3))
                 return multiplyCross3(A, B);
             if ((A.Count() == 7) && (B.Count() == 7))
@@ -410,12 +409,15 @@ namespace StarMathLib
         }
 
         /// <summary>
-        ///   The cross product of the two 1D double vectors A and B which are of length, 2.
+        /// The cross product of two double vectors, A and B, which are of length, 2.
+        /// In actuality, there is no cross-product for 2D. This is shorthand for 2D systems 
+        /// that are really simplifications of 3D. The returned scalar is actually the value in 
+        /// the third (read: z) direction.
         /// </summary>
-        /// <param name = "A">1D double Array 1</param>
-        /// <param name = "B">1D double Array 2</param>
+        /// <param name = "A">1D double Array, A</param>
+        /// <param name = "B">1D double Array, B</param>
         /// <returns></returns>
-        public static double multiplyCross2D(IList<double> A, IList<double> B)
+        public static double multiplyCross2(IList<double> A, IList<double> B)
         {
             if (((A.Count() == 2) && (B.Count() == 2))
                 || ((A.Count() == 3) && (B.Count() == 3) && A[2] == 0.0 && B[2] == 0.0))
@@ -424,12 +426,15 @@ namespace StarMathLib
                                 + "would be, Z-direction.");
         }
         /// <summary>
-        ///   The cross product of a 1D integer vector, A, and a 1D double vector, B, which are both of length, 2.
+        ///  The cross product of an integer vector, A, and a double vector, B, which are of length, 2.
+        /// In actuality, there is no cross-product for 2D. This is shorthand for 2D systems 
+        /// that are really simplifications of 3D. The returned scalar is actually the value in 
+        /// the third (read: z) direction.
         /// </summary>
-        /// <param name = "A">1D integer Array 1</param>
-        /// <param name = "B">1D double Array 2</param>
+        /// <param name = "A">1D integer Array, A</param>
+        /// <param name = "B">1D double Array, B</param>
         /// <returns></returns>
-        public static double multiplyCross2D(IList<int> A, IList<double> B)
+        public static double multiplyCross2(IList<int> A, IList<double> B)
         {
             if (((A.Count() == 2) && (B.Count() == 2))
                 || ((A.Count() == 3) && (B.Count() == 3) && A[2] == 0.0 && B[2] == 0.0))
@@ -438,12 +443,15 @@ namespace StarMathLib
                                 + "would be, Z-direction.");
         }
         /// <summary>
-        ///   The cross product of the two 1D integer vectors A and B which are of length, 2.
+        /// The cross product of two integer vectors, A and B, which are of length, 2.
+        /// In actuality, there is no cross-product for 2D. This is shorthand for 2D systems 
+        /// that are really simplifications of 3D. The returned scalar is actually the value in 
+        /// the third (read: z) direction.
         /// </summary>
-        /// <param name = "A">1D integer Array 1</param>
-        /// <param name = "B">1D integer Array 2</param>
+        /// <param name = "A">1D integer Array, A</param>
+        /// <param name = "B">1D integer Array, B</param>
         /// <returns></returns>
-        public static int multiplyCross2D(IList<int> A, IList<int> B)
+        public static int multiplyCross2(IList<int> A, IList<int> B)
         {
             if (((A.Count() == 2) && (B.Count() == 2))
                 || ((A.Count() == 3) && (B.Count() == 3) && A[2] == 0.0 && B[2] == 0.0))
@@ -452,7 +460,15 @@ namespace StarMathLib
                                 + "would be, Z-direction.");
         }
 
-        private static double[] multiplyCross7(IList<double> A, IList<double> B)
+        /// <summary>
+        /// The cross product of two double vectors, A and B, which are of length, 7.
+        /// This is equivalent to calling multiplyCross, but a slight speed advantage
+        /// may exist in skipping directly to this sub-function.
+        /// </summary>
+        /// <param name = "A">1D double Array, A</param>
+        /// <param name = "B">1D double Array, B</param>
+        /// <returns></returns>
+        public static double[] multiplyCross7(IList<double> A, IList<double> B)
         {
             return new[]
                        {
@@ -465,7 +481,15 @@ namespace StarMathLib
                            A[0]*B[2] - A[2]*B[0] + A[1]*B[5] - A[5]*B[1] + A[3]*B[4] - A[4]*B[3]
                        };
         }
-        private static double[] multiplyCross7(IList<int> A, IList<double> B)
+        /// <summary>
+        /// The cross product of an integer vector, A, and a double vector, B, which are of length, 7.
+        /// This is equivalent to calling multiplyCross, but a slight speed advantage
+        /// may exist in skipping directly to this sub-function.
+        /// </summary>
+        /// <param name = "A">1D integer Array, A</param>
+        /// <param name = "B">1D double Array, B</param>
+        /// <returns></returns>
+        public static double[] multiplyCross7(IList<int> A, IList<double> B)
         {
             return new[]
                        {
@@ -476,52 +500,89 @@ namespace StarMathLib
                            A[5]*B[0] - A[0]*B[5] + A[6]*B[3] - A[3]*B[6] + A[1]*B[2] - A[2]*B[1],
                            A[6]*B[1] - A[1]*B[6] + A[0]*B[4] - A[4]*B[0] + A[2]*B[3] - A[3]*B[2],
                            A[0]*B[2] - A[2]*B[0] + A[1]*B[5] - A[5]*B[1] + A[3]*B[4] - A[4]*B[3]
-                       };
-        }
-        private static int[] multiplyCross7(IList<int> A, IList<int> B)
-        {
-            return new[]
-                       {
-                           A[1]*B[3] - A[3]*B[1] + A[2]*B[6] - A[6]*B[2] + A[4]*B[5] - A[5]*B[4],
-                           A[2]*B[4] - A[4]*B[2] + A[3]*B[0] - A[0]*B[3] + A[5]*B[6] - A[6]*B[5],
-                           A[3]*B[5] - A[5]*B[3] + A[4]*B[1] - A[1]*B[4] + A[6]*B[0] - A[0]*B[6],
-                           A[4]*B[6] - A[6]*B[4] + A[5]*B[2] - A[2]*B[5] + A[0]*B[1] - A[1]*B[0],
-                           A[5]*B[0] - A[0]*B[5] + A[6]*B[3] - A[3]*B[6] + A[1]*B[2] - A[2]*B[1],
-                           A[6]*B[1] - A[1]*B[6] + A[0]*B[4] - A[4]*B[0] + A[2]*B[3] - A[3]*B[2],
-                           A[0]*B[2] - A[2]*B[0] + A[1]*B[5] - A[5]*B[1] + A[3]*B[4] - A[4]*B[3]
-                       };
-        }
-
-        private static double[] multiplyCross3(IList<double> A, IList<double> B)
-        {
-            return new[]
-                       {
-                           A[1]*B[2] - B[1]*A[2],
-                           A[2]*B[0] - B[2]*A[0],
-                           A[0]*B[1] - B[0]*A[1]
-                       };
-        }
-        private static double[] multiplyCross3(IList<int> A, IList<double> B)
-        {
-            return new[]
-                       {
-                           A[1]*B[2] - B[1]*A[2],
-                           A[2]*B[0] - B[2]*A[0],
-                           A[0]*B[1] - B[0]*A[1]
-                       };
-        }
-        private static int[] multiplyCross3(IList<int> A, IList<int> B)
-        {
-            return new[]
-                       {
-                           A[1]*B[2] - B[1]*A[2],
-                           A[2]*B[0] - B[2]*A[0],
-                           A[0]*B[1] - B[0]*A[1]
                        };
         }
 
         /// <summary>
-        ///   Product of each element of array-1 (1D double) with each element of array-2 (1D double)
+        /// The cross product of two integer vectors, A and B, which are of length, 7.
+        /// This is equivalent to calling multiplyCross, but a slight speed advantage
+        /// may exist in skipping directly to this sub-function.
+        /// </summary>
+        /// <param name = "A">1D integer Array, A</param>
+        /// <param name = "B">1D integer Array, B</param>
+        /// <returns></returns>
+        public static int[] multiplyCross7(IList<int> A, IList<int> B)
+        {
+            return new[]
+                       {
+                           A[1]*B[3] - A[3]*B[1] + A[2]*B[6] - A[6]*B[2] + A[4]*B[5] - A[5]*B[4],
+                           A[2]*B[4] - A[4]*B[2] + A[3]*B[0] - A[0]*B[3] + A[5]*B[6] - A[6]*B[5],
+                           A[3]*B[5] - A[5]*B[3] + A[4]*B[1] - A[1]*B[4] + A[6]*B[0] - A[0]*B[6],
+                           A[4]*B[6] - A[6]*B[4] + A[5]*B[2] - A[2]*B[5] + A[0]*B[1] - A[1]*B[0],
+                           A[5]*B[0] - A[0]*B[5] + A[6]*B[3] - A[3]*B[6] + A[1]*B[2] - A[2]*B[1],
+                           A[6]*B[1] - A[1]*B[6] + A[0]*B[4] - A[4]*B[0] + A[2]*B[3] - A[3]*B[2],
+                           A[0]*B[2] - A[2]*B[0] + A[1]*B[5] - A[5]*B[1] + A[3]*B[4] - A[4]*B[3]
+                       };
+        }
+
+        /// <summary>
+        /// The cross product of two double vectors, A and B, which are of length, 3.
+        /// This is equivalent to calling multiplyCross, but a slight speed advantage
+        /// may exist in skipping directly to this sub-function.
+        /// </summary>
+        /// <param name = "A">1D double Array, A</param>
+        /// <param name = "B">1D double Array, B</param>
+        /// <returns></returns>
+        public static double[] multiplyCross3(IList<double> A, IList<double> B)
+        {
+            return new[]
+                       {
+                           A[1]*B[2] - B[1]*A[2],
+                           A[2]*B[0] - B[2]*A[0],
+                           A[0]*B[1] - B[0]*A[1]
+                       };
+        }
+        /// <summary>
+        /// The cross product of an integer vector, A, and a double vector, B, which are of length, 7.
+        /// This is equivalent to calling multiplyCross, but a slight speed advantage
+        /// may exist in skipping directly to this sub-function.
+        /// </summary>
+        /// <param name = "A">1D integer Array, A</param>
+        /// <param name = "B">1D double Array, B</param>
+        /// <returns></returns>
+        public static double[] multiplyCross3(IList<int> A, IList<double> B)
+        {
+            return new[]
+                       {
+                           A[1]*B[2] - B[1]*A[2],
+                           A[2]*B[0] - B[2]*A[0],
+                           A[0]*B[1] - B[0]*A[1]
+                       };
+        }
+        /// <summary>
+        /// The cross product of two integer vectors, A and B, which are of length, 3.
+        /// This is equivalent to calling multiplyCross, but a slight speed advantage
+        /// may exist in skipping directly to this sub-function.
+        /// </summary>
+        /// <param name = "A">1D integer Array, A</param>
+        /// <param name = "B">1D integer Array, B</param>
+        /// <returns></returns>
+        public static int[] multiplyCross3(IList<int> A, IList<int> B)
+        {
+            return new[]
+                       {
+                           A[1]*B[2] - B[1]*A[2],
+                           A[2]*B[0] - B[2]*A[0],
+                           A[0]*B[1] - B[0]*A[1]
+                       };
+        }
+        #endregion
+
+        #region Multiply vector by transpose of another vector.
+        /// <summary>
+        /// Multiply vector by transpose of another vector to create a matrix.
+        /// Product of each element of array-1 (1D double) with each element of array-2 (1D double)
+        /// C[i,j] = A[i] * B[j]
         /// </summary>
         /// <param name = "A">1D double array - column vector (1 element per row)</param>
         /// <param name = "B">1D double array - row vector (1 element column)</param>
@@ -539,7 +600,9 @@ namespace StarMathLib
             return C;
         }
         /// <summary>
-        ///   Product of each element of array-1 (1D int) with each element of array-2 (1D double)
+        /// Multiply vector by transpose of another vector to create a matrix.
+        /// Product of each element of array-1 (1D int) with each element of array-2 (1D double)
+        /// C[i,j] = A[i] * B[j]
         /// </summary>
         /// <param name = "A">1D integer array - column vector (1 element per row)</param>
         /// <param name = "B">1D double array - row vector (1 element column)</param>
@@ -557,7 +620,9 @@ namespace StarMathLib
             return C;
         }
         /// <summary>
-        ///   Product of each element of array-1 (1D int) with each element of array-2 (1D int)
+        /// Multiply vector by transpose of another vector to create a matrix.
+        /// Product of each element of array-1 (1D int) with each element of array-2 (1D int)
+        /// C[i,j] = A[i] * B[j]
         /// </summary>
         /// <param name = "A">1D integer array - column vector (1 element per row)</param>
         /// <param name = "B">1D integer array - row vector (1 element column)</param>
@@ -574,13 +639,14 @@ namespace StarMathLib
                     C[i, j] = A[i] * B[j];
             return C;
         }
+        #endregion
 
-
+        #region Matrix(2D) to matrix(2D) multiplication
         /// <summary>
-        ///   Product of two matrices (2D double)
+        /// Product of two matrices (2D double)
         /// </summary>
-        /// <param name = "A">2D double Array 1</param>
-        /// <param name = "B">2D double Array 1</param>
+        /// <param name = "A">2D double Array, A</param>
+        /// <param name = "B">2D double Array, A</param>
         /// <returns>A 2D double array that is the product of the two matrices A and B</returns>
         public static double[,] multiply(double[,] A, double[,] B)
         {
@@ -604,10 +670,10 @@ namespace StarMathLib
         }
 
         /// <summary>
-        ///   Product of two matrices (2D double)
+        /// Product of two matrices (2D double)
         /// </summary>
-        /// <param name = "A">2D int Array 1</param>
-        /// <param name = "B">2D double Array 1</param>
+        /// <param name = "A">2D int Array, A</param>
+        /// <param name = "B">2D double Array, A</param>
         /// <returns>A 2D double array that is the product of the two matrices A and B</returns>
         public static double[,] multiply(int[,] A, double[,] B)
         {
@@ -630,10 +696,10 @@ namespace StarMathLib
             return C;
         }
         /// <summary>
-        ///   Product of two matrices (2D double)
+        /// Product of two matrices (2D double)
         /// </summary>
-        /// <param name = "A">2D double Array 1</param>
-        /// <param name = "B">2D int Array 1</param>
+        /// <param name = "A">2D double Array, A</param>
+        /// <param name = "B">2D int Array, A</param>
         /// <returns>A 2D double array that is the product of the two matrices A and B</returns>
         public static double[,] multiply(double[,] A, int[,] B)
         {
@@ -657,10 +723,10 @@ namespace StarMathLib
         }
 
         /// <summary>
-        ///   Product of two matrices (2D double)
+        /// Product of two matrices (2D double)
         /// </summary>
-        /// <param name = "A">2D int Array 1</param>
-        /// <param name = "B">2D int Array 1</param>
+        /// <param name = "A">2D int Array, A</param>
+        /// <param name = "B">2D int Array, A</param>
         /// <returns>A 2D int array that is the product of the two matrices A and B</returns>
         public static int[,] multiply(int[,] A, int[,] B)
         {
@@ -682,9 +748,11 @@ namespace StarMathLib
                 }
             return C;
         }
+        #endregion
 
+        #region Multiply matrix to a vector (and vice versa)
         /// <summary>
-        ///   Product of two matrices (2D double and 1D double)
+        /// Product of a matrix and a vector (2D double and 1D double)
         /// </summary>
         /// <param name = "A">2D double Array</param>
         /// <param name = "B">1D double array - column vector (1 element row)</param>
@@ -709,7 +777,7 @@ namespace StarMathLib
         }
 
         /// <summary>
-        ///   Product of two matrices (2D double and 1D double)
+        /// Product of a matrix and a vector (2D double and 1D double)
         /// </summary>
         /// <param name = "A">2D int Array</param>
         /// <param name = "B">1D double array - column vector (1 element row)</param>
@@ -734,7 +802,7 @@ namespace StarMathLib
         }
 
         /// <summary>
-        ///   Product of two matrices (2D double and 1D double)
+        /// Product of two matrices (2D double and 1D double)
         /// </summary>
         /// <param name = "A">2D double Array</param>
         /// <param name = "B">1D int array - column vector (1 element row)</param>
@@ -759,7 +827,7 @@ namespace StarMathLib
         }
 
         /// <summary>
-        ///   Product of two matrices (2D double and 1D double)
+        /// Product of two matrices (2D double and 1D double)
         /// </summary>
         /// <param name = "A">2D int Array</param>
         /// <param name = "B">1D int array - column vector (1 element row)</param>
@@ -784,7 +852,7 @@ namespace StarMathLib
         }
 
         /// <summary>
-        ///   Product of two matrices (1D double and 2D double)
+        /// Product of two matrices (1D double and 2D double)
         /// </summary>
         /// <param name = "A">1D double array - row vector (1 element column)</param>
         /// <param name = "B">2D double Array</param>
@@ -808,7 +876,7 @@ namespace StarMathLib
             return C;
         }
         /// <summary>
-        ///   Product of two matrices (1D double and 2D double)
+        /// Product of two matrices (1D double and 2D double)
         /// </summary>
         /// <param name = "A">1D double array - row vector (1 element column)</param>
         /// <param name = "B">2D int Array</param>
@@ -832,7 +900,7 @@ namespace StarMathLib
             return C;
         }
         /// <summary>
-        ///   Product of two matrices (1D double and 2D double)
+        /// Product of two matrices (1D double and 2D double)
         /// </summary>
         /// <param name = "A">1D int array - row vector (1 element column)</param>
         /// <param name = "B">2D double Array</param>
@@ -856,7 +924,7 @@ namespace StarMathLib
             return C;
         }
         /// <summary>
-        ///   Product of two matrices (1D double and 2D double)
+        /// Product of two matrices (1D double and 2D double)
         /// </summary>
         /// <param name = "A">1D int array - row vector (1 element column)</param>
         /// <param name = "B">2D int Array</param>
@@ -881,11 +949,12 @@ namespace StarMathLib
         }
 
         #endregion
+        #endregion
 
         #region Add Vector-to-Vector and Matrix-to-Matrix
 
         /// <summary>
-        ///   Adds arrays A and B
+        /// Adds arrays A and B
         /// </summary>
         /// <param name = "A">1D double array 1</param>
         /// <param name = "B">1D double array 2</param>
@@ -901,7 +970,7 @@ namespace StarMathLib
             return c;
         }
         /// <summary>
-        ///   Adds arrays A and B
+        /// Adds arrays A and B
         /// </summary>
         /// <param name = "A">1D int array 1</param>
         /// <param name = "B">1D double array 2</param>
@@ -917,7 +986,7 @@ namespace StarMathLib
             return c;
         }
         /// <summary>
-        ///   Adds arrays A and B
+        /// Adds arrays A and B
         /// </summary>
         /// <param name = "A">1D int array 1</param>
         /// <param name = "B">1D int array 2</param>
@@ -934,7 +1003,7 @@ namespace StarMathLib
         }
 
         /// <summary>
-        ///   Adds arrays A and B
+        /// Adds arrays A and B
         /// </summary>
         /// <param name = "A">2D double array 1</param>
         /// <param name = "B">2D double array 2</param>
@@ -957,7 +1026,7 @@ namespace StarMathLib
         }
 
         /// <summary>
-        ///   Adds arrays A and B
+        /// Adds arrays A and B
         /// </summary>
         /// <param name = "A">2D double array 1</param>
         /// <param name = "B">2D int array 2</param>
@@ -980,7 +1049,7 @@ namespace StarMathLib
         }
 
         /// <summary>
-        ///   Adds arrays A and B
+        /// Adds arrays A and B
         /// </summary>
         /// <param name = "A">2D integer array 1</param>
         /// <param name = "B">2D integer array 2</param>
@@ -1007,7 +1076,7 @@ namespace StarMathLib
         #region Subtract Vector-to-Vector and Matrix-to-Matrix
 
         /// <summary>
-        ///   Subtracts one vector (B) from the other (A). C = A - B.
+        /// Subtracts one vector (B) from the other (A). C = A - B.
         /// </summary>
         /// <param name = "A">The minuend vector, A (1D double)</param>
         /// <param name = "B">The subtrahend vector, B (1D double)</param>
@@ -1024,7 +1093,7 @@ namespace StarMathLib
             return c;
         }
         /// <summary>
-        ///   Subtracts one vector (B) from the other (A). C = A - B.
+        /// Subtracts one vector (B) from the other (A). C = A - B.
         /// </summary>
         /// <param name = "A">The minuend vector, A (1D int)</param>
         /// <param name = "B">The subtrahend vector, B (1D double)</param>
@@ -1041,7 +1110,7 @@ namespace StarMathLib
             return c;
         }
         /// <summary>
-        ///   Subtracts one vector (B) from the other (A). C = A - B.
+        /// Subtracts one vector (B) from the other (A). C = A - B.
         /// </summary>
         /// <param name = "A">The minuend vector, A (1D double)</param>
         /// <param name = "B">The subtrahend vector, B (1D int)</param>
@@ -1058,7 +1127,7 @@ namespace StarMathLib
             return c;
         }
         /// <summary>
-        ///   Subtracts one vector (B) from the other (A). C = A - B.
+        /// Subtracts one vector (B) from the other (A). C = A - B.
         /// </summary>
         /// <param name = "A">The minuend vector, A (1D int)</param>
         /// <param name = "B">The subtrahend vector, B (1D int)</param>
@@ -1076,7 +1145,7 @@ namespace StarMathLib
         }
 
         /// <summary>
-        ///   Subtracts one matrix (B) from the other (A). C = A - B.
+        /// Subtracts one matrix (B) from the other (A). C = A - B.
         /// </summary>
         /// <param name = "A">The minuend matrix, A (2D double).</param>
         /// <param name = "B">The subtrahend matrix, B (2D double).</param>
@@ -1098,7 +1167,7 @@ namespace StarMathLib
             return C;
         }
         /// <summary>
-        ///   Subtracts one matrix (B) from the other (A). C = A - B.
+        /// Subtracts one matrix (B) from the other (A). C = A - B.
         /// </summary>
         /// <param name = "A">The minuend matrix, A (2D int).</param>
         /// <param name = "B">The subtrahend matrix, B (2D double).</param>
@@ -1120,7 +1189,7 @@ namespace StarMathLib
             return C;
         }
         /// <summary>
-        ///   Subtracts one matrix (B) from the other (A). C = A - B.
+        /// Subtracts one matrix (B) from the other (A). C = A - B.
         /// </summary>
         /// <param name = "A">The minuend matrix, A (2D double).</param>
         /// <param name = "B">The subtrahend matrix, B (2D int).</param>
@@ -1143,7 +1212,7 @@ namespace StarMathLib
         }
 
         /// <summary>
-        ///   Subtracts one matrix (B) from the other (A). C = A - B.
+        /// Subtracts one matrix (B) from the other (A). C = A - B.
         /// </summary>
         /// <param name = "A">The minuend matrix, A (2D integer).</param>
         /// <param name = "B">The subtrahend matrix, B (2D integer).</param>
@@ -1170,7 +1239,7 @@ namespace StarMathLib
         #region Sum
 
         /// <summary>
-        ///   Sum up all the elements of a given matrix
+        /// Sum up all the elements of a given matrix
         /// </summary>
         /// <param name = "B">Matrix (1D double) whose parameters need to be summed up</param>
         /// <returns>Returns the total (double) </returns>
@@ -1180,7 +1249,7 @@ namespace StarMathLib
         }
 
         /// <summary>
-        ///   Sum up all the elements of a given matrix
+        /// Sum up all the elements of a given matrix
         /// </summary>
         /// <param name = "B">Matrix (1D int) whose parameters need to be summed up</param>
         /// <returns>Returns the total (int) </returns>
@@ -1190,7 +1259,7 @@ namespace StarMathLib
         }
 
         /// <summary>
-        ///   Sum up all the elements of a given matrix
+        /// Sum up all the elements of a given matrix
         /// </summary>
         /// <param name = "B">Matrix (2D double) whose parameters need to be summed up</param>
         /// <returns>Returns the total (double) </returns>
@@ -1200,7 +1269,7 @@ namespace StarMathLib
         }
 
         /// <summary>
-        ///   Sum up all the elements of a given matrix
+        /// Sum up all the elements of a given matrix
         /// </summary>
         /// <param name = "B">Matrix (2D double) whose parameters need to be summed up</param>
         /// <returns>Returns the total (int) </returns>

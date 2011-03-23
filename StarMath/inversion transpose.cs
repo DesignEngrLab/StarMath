@@ -27,9 +27,9 @@ namespace StarMathLib
         #region Matrix Inversion & Transpose
 
         /// <summary>
-        ///   Inverses the matrix A only if the matrix has already been
-        ///   "triangularized" - meaning there are no elements in the bottom
-        ///   triangle - A[i,j]=0.0 where j>i
+        /// Inverses the matrix A only if the matrix has already been
+        /// "triangularized" - meaning there are no elements in the bottom
+        /// triangle - A[i,j]=0.0 where j>i
         /// </summary>
         /// <param name = "A">The matrix to invert. This matrix is unchanged by this function.</param>
         /// <returns>The inverted matrix, A^-1.</returns>
@@ -73,9 +73,9 @@ namespace StarMathLib
             return B;
         }
         /// <summary>
-        ///   Inverses the matrix A only if the matrix has already been
-        ///   "triangularized" - meaning there are no elements in the bottom
-        ///   triangle - A[i,j]=0.0 where j>i
+        /// Inverses the matrix A only if the matrix has already been
+        /// "triangularized" - meaning there are no elements in the bottom
+        /// triangle - A[i,j]=0.0 where j>i
         /// </summary>
         /// <param name = "A">The matrix to invert. This matrix is unchanged by this function.</param>
         /// <returns>The inverted matrix, A^-1.</returns>
@@ -85,8 +85,8 @@ namespace StarMathLib
         }
 
         /// <summary>
-        ///   Inverses the matrix A only if the diagonal is all non-zero.
-        ///   A[i,i] != 0.0
+        /// Inverses the matrix A only if the diagonal is all non-zero.
+        /// A[i,i] != 0.0
         /// </summary>
         /// <param name = "A">The matrix to invert. This matrix is unchanged by this function.</param>
         /// <returns>The inverted matrix, A^-1.</returns>
@@ -151,8 +151,8 @@ namespace StarMathLib
             return B;
         }
         /// <summary>
-        ///   Inverses the matrix A only if the diagonal is all non-zero.
-        ///   A[i,i] != 0.0
+        /// Inverses the matrix A only if the diagonal is all non-zero.
+        /// A[i,i] != 0.0
         /// </summary>
         /// <param name = "A">The matrix to invert. This matrix is unchanged by this function.</param>
         /// <returns>The inverted matrix, A^-1.</returns>
@@ -163,7 +163,7 @@ namespace StarMathLib
 
 
         /// <summary>
-        ///   Returns the LU decomposition of A in a new matrix.
+        /// Returns the LU decomposition of A in a new matrix.
         /// </summary>
         /// <param name = "A">The matrix to invert. This matrix is unchanged by this function.</param>
         /// <returns>A matrix of equal size to A that combines the L and U. Here the diagonals belongs to L and the U's diagonal elements are all 1.</returns>
@@ -200,7 +200,7 @@ namespace StarMathLib
             return B;
         }
         /// <summary>
-        ///   Returns the LU decomposition of A in a new matrix.
+        /// Returns the LU decomposition of A in a new matrix.
         /// </summary>
         /// <param name = "A">The matrix to invert. This matrix is unchanged by this function.</param>
         /// <returns>A matrix of equal size to A that combines the L and U. Here the diagonals belongs to L and the U's diagonal elements are all 1.</returns>
@@ -210,7 +210,7 @@ namespace StarMathLib
         }
 
         /// <summary>
-        ///   Returns the LU decomposition of A in a new matrix.
+        /// Returns the LU decomposition of A in a new matrix.
         /// </summary>
         /// <param name = "A">The matrix to invert. This matrix is unchanged by this function.</param>
         /// <param name = "L">The L matrix is output where the diagonal elements are included and not (necessarily) equal to one.</param>
@@ -231,7 +231,7 @@ namespace StarMathLib
             }
         }
         /// <summary>
-        ///   Returns the LU decomposition of A in a new matrix.
+        /// Returns the LU decomposition of A in a new matrix.
         /// </summary>
         /// <param name = "A">The matrix to invert. This matrix is unchanged by this function.</param>
         /// <param name = "L">The L matrix is output where the diagonal elements are included and not (necessarily) equal to one.</param>
@@ -242,7 +242,7 @@ namespace StarMathLib
         }
 
         /// <summary>
-        ///   Transposes the matrix, A.
+        /// Transposes the matrix, A.
         /// </summary>
         /// <param name = "A">The matrix to transpose. This matrix is unchanged by this function.</param>
         /// <returns>The transponse of A.</returns>
@@ -259,7 +259,7 @@ namespace StarMathLib
             return C;
         }
         /// <summary>
-        ///   Transposes the matrix, A.
+        /// Transposes the matrix, A.
         /// </summary>
         /// <param name = "A">The matrix to transpose. This matrix is unchanged by this function.</param>
         /// <returns>The transponse of A.</returns>
@@ -277,7 +277,7 @@ namespace StarMathLib
         }
 
         /// <summary>
-        ///   Returns the determinant of matrix, A.
+        /// Returns the determinant of matrix, A.
         /// </summary>
         /// <param name = "A">The input argument matrix. This matrix is unchanged by this function.</param>
         /// <exception cref = "Exception"></exception>
@@ -302,7 +302,7 @@ namespace StarMathLib
             return determinantsMoreThan3(A);
         }
         /// <summary>
-        ///   Returns the determinant of matrix, A.
+        /// Returns the determinant of matrix, A.
         /// </summary>
         /// <param name = "A">The input argument matrix. This matrix is unchanged by this function.</param>
         /// <exception cref = "Exception"></exception>
@@ -313,7 +313,7 @@ namespace StarMathLib
         }
 
         /// <summary>
-        ///   Returns the determinant of matrix, A. Only used internally for matrices larger than 3.
+        /// Returns the determinant of matrix, A. Only used internally for matrices larger than 3.
         /// </summary>
         /// <param name = "A">The input argument matrix. This matrix is unchanged by this function.</param>
         /// <returns>a single value representing the matrix's determinant.</returns>

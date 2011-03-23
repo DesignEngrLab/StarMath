@@ -1234,6 +1234,32 @@ namespace StarMathLib
             return C;
         }
 
+
+        /// <summary>
+        /// Subtracts one matrix (B) from the other (A). C = A - B.
+        /// </summary>
+        /// <param name = "A">The minuend matrix, A (2D integer).</param>
+        /// <param name = "B">The subtrahend matrix, B (2D integer).</param>
+        /// <returns>Returns the difference matrix, C (2D integer)</returns>
+        public static int[,] subtract(int[,] A, int[,] B, int numRows, int numCols)
+        {
+            var CRowSize = A.GetLength(0);
+            var CColSize = A.GetLength(1);
+            if (CRowSize != B.GetLength(0))
+                throw new Exception("Matrix row count do not match");
+            if (CColSize != B.GetLength(1))
+                throw new Exception("Matrix column count do not match");
+
+            var C = new int[CRowSize, CColSize];
+
+            for (var i = 0; i != CRowSize; i++)
+                for (var j = 0; j != CColSize; j++)
+                    C[i, j] = A[i, j] - B[i, j];
+            return C;
+        }
+
+     
+
         #endregion
 
         #region Sum

@@ -152,7 +152,7 @@ namespace StarMathLib
             return int.MaxValue;
         }
 
-        
+
         /// <summary>
         /// Finds the maximum value in the given 1D integer array
         /// </summary>
@@ -336,24 +336,14 @@ namespace StarMathLib
         /// <param name="A">A matrix in integers, A.</param>
         /// <returns></returns>
         public static double standardDeviation(int[,] A)
-        {
-            var vectA = JoinMatrixColumnsIntoVector(A);
-            var mean = vectA.Average();
-            var variance = vectA.Sum(a => (a - mean) * (a - mean));
-            return Math.Sqrt(variance / vectA.Count());
-        }
+        { return standardDeviation(JoinMatrixColumnsIntoVector(A)); }
         /// <summary>
         /// Calculates the standard deviation assuming the whole population is provided (not sample st. dev.).
         /// </summary>
         /// <param name="A">A matrix in doubles, A.</param>
         /// <returns></returns>
         public static double standardDeviation(double[,] A)
-        {
-            var vectA = JoinMatrixColumnsIntoVector(A);
-            var mean = vectA.Average();
-            var variance = vectA.Sum(a => (a - mean) * (a - mean));
-            return Math.Sqrt(variance / vectA.Count());
-        }
+        { return standardDeviation(JoinMatrixColumnsIntoVector(A)); }
 
         #endregion
     }

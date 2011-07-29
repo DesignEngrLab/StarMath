@@ -26,8 +26,6 @@ namespace StarMathLib
 {
     public static partial class StarMath
     {
-        #region Add, Subtract, and Multiply functions
-
         #region Multiplication of Scalars, Vectors, and Matrices
 
         #region Scalars multiplying vectors
@@ -38,10 +36,7 @@ namespace StarMathLib
         /// <param name = "B">The double vector to be multiplied with</param>
         /// <returns>A 1D double array that contains the product</returns>
         public static double[] multiply(double a, IList<double> B)
-        {
-            // scale vector B by the amount of scalar a
-            return multiply(a, B, B.Count());
-        }
+        { return multiply(a, B, B.Count()); }
         /// <summary>
         /// Multiplies all elements of a 1D double array with the double value.
         /// </summary>
@@ -60,6 +55,10 @@ namespace StarMathLib
                 c[i] = a * B[i];
             return c;
         }
+        /* Note: We do not need need a scalar integer multiplied by a double vector
+         * because the scalar integer can be automatically cast to a double and use 
+         * the two functions above. */
+
         /// <summary>
         /// Multiplies all elements of a 1D integer array with the double value.
         /// </summary>
@@ -67,10 +66,7 @@ namespace StarMathLib
         /// <param name = "B">The integer vector to be multiplied with</param>
         /// <returns>A 1D double array that contains the product</returns>
         public static double[] multiply(double a, IList<int> B)
-        {
-            // scale vector B by the amount of scalar a
-            return multiply(a, B, B.Count());
-        }
+        { return multiply(a, B, B.Count()); }
         /// <summary>
         /// Multiplies all elements of a 1D integer array with the double value.
         /// </summary>
@@ -89,6 +85,32 @@ namespace StarMathLib
                 c[i] = a * B[i];
             return c;
         }
+        /// <summary>
+        /// Multiplies all elements of a 1D integer array with the integer value.
+        /// </summary>
+        /// <param name = "a">The integer value to be multiplied</param>
+        /// <param name = "B">The integer vector to be multiplied with</param>
+        /// <returns>A 1D integer array that contains the product</returns>
+        public static int[] multiply(int a, IList<int> B)
+        { return multiply(a, B, B.Count()); }
+        /// <summary>
+        /// Multiplies all elements of a 1D integer array with the integer value.
+        /// </summary>
+        /// <param name="a">The integer value to be multiplied</param>
+        /// <param name="B">The integer vector to be multiplied with</param>
+        /// <param name="length">The length of the vector B. This is an optional argument, but if it is already known 
+        /// - there is a slight speed advantage to providing it.</param>
+        /// <returns>
+        /// A 1D integer array that contains the product
+        /// </returns>
+        public static int[] multiply(int a, IList<int> B, int length)
+        {
+            // scale vector B by the amount of scalar a
+            var c = new int[length];
+            for (var i = 0; i != length; i++)
+                c[i] = a * B[i];
+            return c;
+        }
 
         /// <summary>
         /// Divides all elements of a 1D double array by the double value.
@@ -97,9 +119,7 @@ namespace StarMathLib
         /// <param name = "a">The double value to be divided by, the divisor.</param>
         /// <returns>A 1D double array that contains the product</returns>
         public static double[] divide(IList<double> B, double a)
-        {
-            return multiply((1 / a), B);
-        }
+        { return multiply((1 / a), B); }
         /// <summary>
         /// Divides all elements of a 1D double array by the double value.
         /// </summary>
@@ -111,9 +131,7 @@ namespace StarMathLib
         /// A 1D double array that contains the product
         /// </returns>
         public static double[] divide(IList<double> B, double a, int length)
-        {
-            return multiply((1 / a), B, length);
-        }
+        { return multiply((1 / a), B, length); }
         /// <summary>
         /// Divides all elements of a 1D integer array by the double value.
         /// </summary>
@@ -121,9 +139,7 @@ namespace StarMathLib
         /// <param name = "a">The double value to be divided by, the divisor.</param>
         /// <returns>A 1D double array that contains the product</returns>
         public static double[] divide(IList<int> B, double a)
-        {
-            return multiply((1 / a), B);
-        }
+        { return multiply((1 / a), B); }
         /// <summary>
         /// Divides all elements of a 1D integer array by the double value.
         /// </summary>
@@ -135,10 +151,10 @@ namespace StarMathLib
         /// A 1D double array that contains the product
         /// </returns>
         public static double[] divide(IList<int> B, double a, int length)
-        {
-            return multiply((1 / a), B, length);
-        }
+        { return multiply((1 / a), B, length); }
+        #endregion
 
+        #region Scalars multiplying matrices
         /// <summary>
         /// Multiplies all elements of a 2D double array with a double value.
         /// </summary>
@@ -146,10 +162,7 @@ namespace StarMathLib
         /// <param name = "B">The matrix to be multiplied with</param>
         /// <returns>A 2D double array that contains the product</returns>
         public static double[,] multiply(double a, double[,] B)
-        {
-            return multiply(a, B, B.GetLength(0), B.GetLength(1));
-        }
-
+        { return multiply(a, B, B.GetLength(0), B.GetLength(1)); }
         /// <summary>
         /// Multiplies all elements of a 2D double array with a double value.
         /// </summary>
@@ -177,9 +190,7 @@ namespace StarMathLib
         /// <param name = "B">The matrix to be multiplied with</param>
         /// <returns>A 2D double array that contains the product</returns>
         public static double[,] multiply(double a, int[,] B)
-        {
-            return multiply(a, B, B.GetLength(0), B.GetLength(1));
-        }
+        { return multiply(a, B, B.GetLength(0), B.GetLength(1)); }
         /// <summary>
         /// Multiplies all elements of a 2D int array with a double value.
         /// </summary>
@@ -200,6 +211,34 @@ namespace StarMathLib
                     c[i, j] = a * B[i, j];
             return c;
         }
+        /// <summary>
+        /// Multiplies all elements of a 2D integer array with a integer value.
+        /// </summary>
+        /// <param name = "a">The integer value to be multiplied</param>
+        /// <param name = "B">The matrix to be multiplied with</param>
+        /// <returns>A 2D integer array that contains the product</returns>
+        public static int[,] multiply(int a, int[,] B)
+        { return multiply(a, B, B.GetLength(0), B.GetLength(1)); }
+        /// <summary>
+        /// Multiplies all elements of a 2D integer array with a integer value.
+        /// </summary>
+        /// <param name="a">The integer value to be multiplied</param>
+        /// <param name="B">The matrix to be multiplied with</param>
+        /// <param name="numRows">The number of rows. This is an optional argument, but if it is already known 
+        /// - there is a slight speed advantage to providing it.</param>
+        /// <param name="numCols">The number of cols. This is an optional argument, but if it is already known 
+        /// - there is a slight speed advantage to providing it.</param>
+        /// <returns>
+        /// A 2D integer array that contains the product
+        /// </returns>
+        public static int[,] multiply(int a, int[,] B, int numRows, int numCols)
+        {
+            var c = new int[numRows, numCols];
+            for (var i = 0; i != numRows; i++)
+                for (var j = 0; j != numCols; j++)
+                    c[i, j] = a * B[i, j];
+            return c;
+        }
 
         /// <summary>
         /// Divides all elements of a 2D double array by the double value.
@@ -208,9 +247,7 @@ namespace StarMathLib
         /// <param name = "a">The double value to be divided by, the divisor.</param>
         /// <returns>A 2D double array that contains the product</returns>
         public static double[,] divide(double[,] B, double a)
-        {
-            return multiply((1 / a), B);
-        }
+        { return multiply((1 / a), B); }
         /// <summary>
         /// Divides all elements of a 2D double array by the double value.
         /// </summary>
@@ -224,9 +261,7 @@ namespace StarMathLib
         /// A 2D double array that contains the product
         /// </returns>
         public static double[,] divide(double[,] B, double a, int numRows, int numCols)
-        {
-            return multiply((1 / a), B, numRows, numCols);
-        }
+        { return multiply((1 / a), B, numRows, numCols); }
         /// <summary>
         /// Divides all elements of a 2D integer array by the double value.
         /// </summary>
@@ -234,9 +269,7 @@ namespace StarMathLib
         /// <param name = "a">The double value to be divided by, the divisor.</param>
         /// <returns>A 2D double array that contains the product</returns>
         public static double[,] divide(int[,] B, double a)
-        {
-            return multiply((1 / a), B);
-        }
+        { return multiply((1 / a), B); }
 
         /// <summary>
         /// Divides all elements of a 2D integer array by the double value.
@@ -251,9 +284,7 @@ namespace StarMathLib
         /// A 2D double array that contains the product
         /// </returns>
         public static double[,] divide(int[,] B, double a, int numRows, int numCols)
-        {
-            return multiply((1 / a), B, numRows, numCols);
-        }
+        { return multiply((1 / a), B, numRows, numCols); }
         #endregion
 
         #region Dot-product of vectors to vectors
@@ -263,12 +294,12 @@ namespace StarMathLib
         /// <param name = "A">1D double Array, A</param>
         /// <param name = "B">1D double Array, B</param>
         /// <returns>A double value that contains the dot product</returns>
-        public static double multiplyDot(IList<double> A, IList<double> B)
+        public static double dotProduct(IList<double> A, IList<double> B)
         {
             var length = A.Count();
             if (length != B.Count())
                 throw new Exception("Matrix sizes do not match");
-            return multiplyDot(A, B, length);
+            return dotProduct(A, B, length);
         }
         /// <summary>
         /// The dot product of the two 1D double vectors A and B
@@ -280,7 +311,7 @@ namespace StarMathLib
         /// <returns>
         /// A double value that contains the dot product
         /// </returns>
-        public static double multiplyDot(IList<double> A, IList<double> B, int length)
+        public static double dotProduct(IList<double> A, IList<double> B, int length)
         {
             var c = 0.0;
             for (var i = 0; i != length; i++)
@@ -293,12 +324,12 @@ namespace StarMathLib
         /// <param name = "A">1D int Array, A</param>
         /// <param name = "B">1D double Array, B</param>
         /// <returns>A double value that contains the dot product</returns>
-        public static double multiplyDot(IList<int> A, IList<double> B)
+        public static double dotProduct(IList<int> A, IList<double> B)
         {
             var length = A.Count();
             if (length != B.Count())
                 throw new Exception("Matrix sizes do not match");
-            return multiplyDot(A, B, length);
+            return dotProduct(A, B, length);
         }
         /// <summary>
         /// The dot product of the one 1D int vector and one 1D double vector
@@ -310,7 +341,7 @@ namespace StarMathLib
         /// <returns>
         /// A double value that contains the dot product
         /// </returns>
-        public static double multiplyDot(IList<int> A, IList<double> B, int length)
+        public static double dotProduct(IList<int> A, IList<double> B, int length)
         {
             var c = 0.0;
             for (var i = 0; i != length; i++)
@@ -323,13 +354,13 @@ namespace StarMathLib
         /// <param name = "A">1D int Array, A</param>
         /// <param name = "B">1D int Array, B</param>
         /// <returns>A double value that contains the dot product</returns>
-        public static int multiplyDot(IList<int> A, IList<int> B)
+        public static int dotProduct(IList<int> A, IList<int> B)
         {
             // this is B dot term_i multiplication
             var length = A.Count();
             if (length != B.Count())
                 throw new Exception("Matrix sizes do not match");
-            return multiplyDot(A, B, length);
+            return dotProduct(A, B, length);
         }
         /// <summary>
         /// The dot product of the two 1D int vectors A and B
@@ -341,7 +372,7 @@ namespace StarMathLib
         /// <returns>
         /// A double value that contains the dot product
         /// </returns>
-        public static int multiplyDot(IList<int> A, IList<int> B, int length)
+        public static int dotProduct(IList<int> A, IList<int> B, int length)
         {
             var c = 0;
             for (var i = 0; i != length; i++)
@@ -357,16 +388,18 @@ namespace StarMathLib
         /// <param name = "A">1D double Array, A</param>
         /// <param name = "B">1D double Array, B</param>
         /// <returns>A double value that contains the dot product</returns>
-        public static double[] multiplyCross(IList<double> A, IList<double> B)
+        public static double[] crossProduct(IList<double> A, IList<double> B)
         {
-            if ((A.Count() == 1) && (B.Count() == 1))
+            var Alength = A.Count();
+            var Blength = B.Count();
+            if ((Alength == 1) && (Blength == 1))
                 return new[] { 0.0 };
-            if ((A.Count() == 2) && (B.Count() == 2))
-                return new[] { 0.0, 0.0, multiplyCross2(A, B) };
-            if ((A.Count() == 3) && (B.Count() == 3))
-                return multiplyCross3(A, B);
-            if ((A.Count() == 7) && (B.Count() == 7))
-                return multiplyCross7(A, B);
+            if ((Alength == 2) && (Blength == 2))
+                return new[] { 0.0, 0.0, crossProduct2(A, B) };
+            if ((Alength == 3) && (Blength == 3))
+                return crossProduct3(A, B);
+            if ((Alength == 7) && (Blength == 7))
+                return crossProduct7(A, B);
             throw new Exception("Cross product is only possible for vectors of length: 1, 3, or 7");
         }
 
@@ -376,16 +409,38 @@ namespace StarMathLib
         /// <param name = "A">1D integer Array, A</param>
         /// <param name = "B">1D double Array, B</param>
         /// <returns>A double value that contains the dot product</returns>
-        public static double[] multiplyCross(IList<int> A, IList<double> B)
+        public static double[] crossProduct(IList<int> A, IList<double> B)
         {
-            if ((A.Count() == 1) && (B.Count() == 1))
+            var Alength = A.Count();
+            var Blength = B.Count();
+            if ((Alength == 1) && (Blength == 1))
                 return new[] { 0.0 };
-            if ((A.Count() == 2) && (B.Count() == 2))
-                return new[] { 0.0, 0.0, multiplyCross2(A, B) };
-            if ((A.Count() == 3) && (B.Count() == 3))
-                return multiplyCross3(A, B);
-            if ((A.Count() == 7) && (B.Count() == 7))
-                return multiplyCross7(A, B);
+            if ((Alength == 2) && (Blength == 2))
+                return new[] { 0.0, 0.0, crossProduct2(A, B) };
+            if ((Alength == 3) && (Blength == 3))
+                return crossProduct3(A, B);
+            if ((Alength == 7) && (Blength == 7))
+                return crossProduct7(A, B);
+            throw new Exception("Cross product is only possible for vectors of length: 1, 3, or 7");
+        }
+        /// <summary>
+        /// The cross product of an double vector, A, and a integer vector, B.
+        /// </summary>
+        /// <param name = "A">1D double Array, A</param>
+        /// <param name = "B">1D integer Array, B</param>
+        /// <returns>A double value that contains the dot product</returns>
+        public static double[] crossProduct(IList<double> A, IList<int> B)
+        {
+            var Alength = A.Count();
+            var Blength = B.Count();
+            if ((Alength == 1) && (Blength == 1))
+                return new[] { 0.0 };
+            if ((Alength == 2) && (Blength == 2))
+                return new[] { 0.0, 0.0, crossProduct2(A, B) };
+            if ((Alength == 3) && (Blength == 3))
+                return crossProduct3(A, B);
+            if ((Alength == 7) && (Blength == 7))
+                return crossProduct7(A, B);
             throw new Exception("Cross product is only possible for vectors of length: 1, 3, or 7");
         }
 
@@ -395,16 +450,18 @@ namespace StarMathLib
         /// <param name = "A">1D integer Array, A</param>
         /// <param name = "B">1D integer Array, B</param>
         /// <returns>A double value that contains the dot product</returns>
-        public static int[] multiplyCross(IList<int> A, IList<int> B)
+        public static int[] crossProduct(IList<int> A, IList<int> B)
         {
-            if ((A.Count() == 1) && (B.Count() == 1))
+            var Alength = A.Count();
+            var Blength = B.Count();
+            if ((Alength == 1) && (Blength == 1))
                 return new[] { 0 };
-            if ((A.Count() == 2) && (B.Count() == 2))
-                return new[] { 0, 0, multiplyCross2(A, B) };
-            if ((A.Count() == 3) && (B.Count() == 3))
-                return multiplyCross3(A, B);
-            if ((A.Count() == 7) && (B.Count() == 7))
-                return multiplyCross7(A, B);
+            if ((Alength == 2) && (Blength == 2))
+                return new[] { 0, 0, crossProduct2(A, B) };
+            if ((Alength == 3) && (Blength == 3))
+                return crossProduct3(A, B);
+            if ((Alength == 7) && (Blength == 7))
+                return crossProduct7(A, B);
             throw new Exception("Cross product is only possible for vectors of length: 1, 3, or 7");
         }
 
@@ -417,7 +474,7 @@ namespace StarMathLib
         /// <param name = "A">1D double Array, A</param>
         /// <param name = "B">1D double Array, B</param>
         /// <returns></returns>
-        public static double multiplyCross2(IList<double> A, IList<double> B)
+        public static double crossProduct2(IList<double> A, IList<double> B)
         {
             if (((A.Count() == 2) && (B.Count() == 2))
                 || ((A.Count() == 3) && (B.Count() == 3) && A[2] == 0.0 && B[2] == 0.0))
@@ -434,7 +491,24 @@ namespace StarMathLib
         /// <param name = "A">1D integer Array, A</param>
         /// <param name = "B">1D double Array, B</param>
         /// <returns></returns>
-        public static double multiplyCross2(IList<int> A, IList<double> B)
+        public static double crossProduct2(IList<int> A, IList<double> B)
+        {
+            if (((A.Count() == 2) && (B.Count() == 2))
+                || ((A.Count() == 3) && (B.Count() == 3) && A[2] == 0.0 && B[2] == 0.0))
+                return A[0] * B[1] - B[0] * A[1];
+            throw new Exception("This cross product \"shortcut\" is only used with 2D vectors to get the single value in the,"
+                                + "would be, Z-direction.");
+        }
+        /// <summary>
+        ///  The cross product of an double vector, A, and a integer vector, B, which are of length, 2.
+        /// In actuality, there is no cross-product for 2D. This is shorthand for 2D systems 
+        /// that are really simplifications of 3D. The returned scalar is actually the value in 
+        /// the third (read: z) direction.
+        /// </summary>
+        /// <param name = "A">1D double Array, A</param>
+        /// <param name = "B">1D integer Array, B</param>
+        /// <returns></returns>
+        public static double crossProduct2(IList<double> A, IList<int> B)
         {
             if (((A.Count() == 2) && (B.Count() == 2))
                 || ((A.Count() == 3) && (B.Count() == 3) && A[2] == 0.0 && B[2] == 0.0))
@@ -451,7 +525,7 @@ namespace StarMathLib
         /// <param name = "A">1D integer Array, A</param>
         /// <param name = "B">1D integer Array, B</param>
         /// <returns></returns>
-        public static int multiplyCross2(IList<int> A, IList<int> B)
+        public static int crossProduct2(IList<int> A, IList<int> B)
         {
             if (((A.Count() == 2) && (B.Count() == 2))
                 || ((A.Count() == 3) && (B.Count() == 3) && A[2] == 0.0 && B[2] == 0.0))
@@ -462,13 +536,13 @@ namespace StarMathLib
 
         /// <summary>
         /// The cross product of two double vectors, A and B, which are of length, 7.
-        /// This is equivalent to calling multiplyCross, but a slight speed advantage
+        /// This is equivalent to calling crossProduct, but a slight speed advantage
         /// may exist in skipping directly to this sub-function.
         /// </summary>
         /// <param name = "A">1D double Array, A</param>
         /// <param name = "B">1D double Array, B</param>
         /// <returns></returns>
-        public static double[] multiplyCross7(IList<double> A, IList<double> B)
+        public static double[] crossProduct7(IList<double> A, IList<double> B)
         {
             return new[]
                        {
@@ -483,13 +557,34 @@ namespace StarMathLib
         }
         /// <summary>
         /// The cross product of an integer vector, A, and a double vector, B, which are of length, 7.
-        /// This is equivalent to calling multiplyCross, but a slight speed advantage
+        /// This is equivalent to calling crossProduct, but a slight speed advantage
         /// may exist in skipping directly to this sub-function.
         /// </summary>
         /// <param name = "A">1D integer Array, A</param>
         /// <param name = "B">1D double Array, B</param>
         /// <returns></returns>
-        public static double[] multiplyCross7(IList<int> A, IList<double> B)
+        public static double[] crossProduct7(IList<int> A, IList<double> B)
+        {
+            return new[]
+                       {
+                           A[1]*B[3] - A[3]*B[1] + A[2]*B[6] - A[6]*B[2] + A[4]*B[5] - A[5]*B[4],
+                           A[2]*B[4] - A[4]*B[2] + A[3]*B[0] - A[0]*B[3] + A[5]*B[6] - A[6]*B[5],
+                           A[3]*B[5] - A[5]*B[3] + A[4]*B[1] - A[1]*B[4] + A[6]*B[0] - A[0]*B[6],
+                           A[4]*B[6] - A[6]*B[4] + A[5]*B[2] - A[2]*B[5] + A[0]*B[1] - A[1]*B[0],
+                           A[5]*B[0] - A[0]*B[5] + A[6]*B[3] - A[3]*B[6] + A[1]*B[2] - A[2]*B[1],
+                           A[6]*B[1] - A[1]*B[6] + A[0]*B[4] - A[4]*B[0] + A[2]*B[3] - A[3]*B[2],
+                           A[0]*B[2] - A[2]*B[0] + A[1]*B[5] - A[5]*B[1] + A[3]*B[4] - A[4]*B[3]
+                       };
+        }
+        /// <summary>
+        /// The cross product of an double vector, A, and a integer vector, B, which are of length, 7.
+        /// This is equivalent to calling crossProduct, but a slight speed advantage
+        /// may exist in skipping directly to this sub-function.
+        /// </summary>
+        /// <param name = "A">1D double Array, A</param>
+        /// <param name = "B">1D integer Array, B</param>
+        /// <returns></returns>
+        public static double[] crossProduct7(IList<double> A, IList<int> B)
         {
             return new[]
                        {
@@ -505,13 +600,13 @@ namespace StarMathLib
 
         /// <summary>
         /// The cross product of two integer vectors, A and B, which are of length, 7.
-        /// This is equivalent to calling multiplyCross, but a slight speed advantage
+        /// This is equivalent to calling crossProduct, but a slight speed advantage
         /// may exist in skipping directly to this sub-function.
         /// </summary>
         /// <param name = "A">1D integer Array, A</param>
         /// <param name = "B">1D integer Array, B</param>
         /// <returns></returns>
-        public static int[] multiplyCross7(IList<int> A, IList<int> B)
+        public static int[] crossProduct7(IList<int> A, IList<int> B)
         {
             return new[]
                        {
@@ -527,13 +622,13 @@ namespace StarMathLib
 
         /// <summary>
         /// The cross product of two double vectors, A and B, which are of length, 3.
-        /// This is equivalent to calling multiplyCross, but a slight speed advantage
+        /// This is equivalent to calling crossProduct, but a slight speed advantage
         /// may exist in skipping directly to this sub-function.
         /// </summary>
         /// <param name = "A">1D double Array, A</param>
         /// <param name = "B">1D double Array, B</param>
         /// <returns></returns>
-        public static double[] multiplyCross3(IList<double> A, IList<double> B)
+        public static double[] crossProduct3(IList<double> A, IList<double> B)
         {
             return new[]
                        {
@@ -543,14 +638,31 @@ namespace StarMathLib
                        };
         }
         /// <summary>
-        /// The cross product of an integer vector, A, and a double vector, B, which are of length, 7.
-        /// This is equivalent to calling multiplyCross, but a slight speed advantage
+        /// The cross product of an integer vector, A, and a double vector, B, which are of length, 3.
+        /// This is equivalent to calling crossProduct, but a slight speed advantage
         /// may exist in skipping directly to this sub-function.
         /// </summary>
         /// <param name = "A">1D integer Array, A</param>
         /// <param name = "B">1D double Array, B</param>
         /// <returns></returns>
-        public static double[] multiplyCross3(IList<int> A, IList<double> B)
+        public static double[] crossProduct3(IList<int> A, IList<double> B)
+        {
+            return new[]
+                       {
+                           A[1]*B[2] - B[1]*A[2],
+                           A[2]*B[0] - B[2]*A[0],
+                           A[0]*B[1] - B[0]*A[1]
+                       };
+        }
+        /// <summary>
+        /// The cross product of an double vector, A, and a integer vector, B, which are of length, 3.
+        /// This is equivalent to calling crossProduct, but a slight speed advantage
+        /// may exist in skipping directly to this sub-function.
+        /// </summary>
+        /// <param name = "A">1D double Array, A</param>
+        /// <param name = "B">1D integer Array, B</param>
+        /// <returns></returns>
+        public static double[] crossProduct3(IList<double> A, IList<int> B)
         {
             return new[]
                        {
@@ -561,13 +673,13 @@ namespace StarMathLib
         }
         /// <summary>
         /// The cross product of two integer vectors, A and B, which are of length, 3.
-        /// This is equivalent to calling multiplyCross, but a slight speed advantage
+        /// This is equivalent to calling crossProduct, but a slight speed advantage
         /// may exist in skipping directly to this sub-function.
         /// </summary>
         /// <param name = "A">1D integer Array, A</param>
         /// <param name = "B">1D integer Array, B</param>
         /// <returns></returns>
-        public static int[] multiplyCross3(IList<int> A, IList<int> B)
+        public static int[] crossProduct3(IList<int> A, IList<int> B)
         {
             return new[]
                        {
@@ -588,14 +700,54 @@ namespace StarMathLib
         /// <param name = "B">1D double array - row vector (1 element column)</param>
         /// <returns>2D double array product matrix, value of element [i,j] = A[i] * B[j]</returns>
         public static double[,] multiplyVectorsIntoAMatrix(IList<double> A, IList<double> B)
+        { return multiplyVectorsIntoAMatrix(A, B, A.Count(), B.Count()); }
+        /// <summary>
+        /// Multiply vector by transpose of another vector to create a matrix.
+        /// Product of each element of array-1 (1D int) with each element of array-2 (1D double)
+        /// C[i,j] = A[i] * B[j]
+        /// </summary>
+        /// <param name = "A">1D integer array - column vector (1 element per row)</param>
+        /// <param name = "B">1D double array - row vector (1 element column)</param>
+        /// <returns>2D double array product matrix, value of element [i,j] = A[i] * B[j]</returns>
+        public static double[,] multiplyVectorsIntoAMatrix(IList<int> A, IList<double> B)
+        { return multiplyVectorsIntoAMatrix(A, B, A.Count(), B.Count()); }
+        /// <summary>
+        /// Multiply vector by transpose of another vector to create a matrix.
+        /// Product of each element of array-1 (1D int) with each element of array-2 (1D double)
+        /// C[i,j] = A[i] * B[j]
+        /// </summary>
+        /// <param name = "A">1D double array - column vector (1 element per row)</param>
+        /// <param name = "B">1D integer array - row vector (1 element column)</param>
+        /// <returns>2D double array product matrix, value of element [i,j] = A[i] * B[j]</returns>
+        public static double[,] multiplyVectorsIntoAMatrix(IList<double> A, IList<int> B)
+        { return multiplyVectorsIntoAMatrix(A, B, A.Count(), B.Count()); }
+        /// <summary>
+        /// Multiply vector by transpose of another vector to create a matrix.
+        /// Product of each element of array-1 (1D int) with each element of array-2 (1D int)
+        /// C[i,j] = A[i] * B[j]
+        /// </summary>
+        /// <param name = "A">1D integer array - column vector (1 element per row)</param>
+        /// <param name = "B">1D integer array - row vector (1 element column)</param>
+        /// <returns>2D double array product matrix, value of element [i,j] = A[i] * B[j]</returns>
+        public static int[,] multiplyVectorsIntoAMatrix(IList<int> A, IList<int> B)
+        { return multiplyVectorsIntoAMatrix(A, B, A.Count(), B.Count()); }
+        /// <summary>
+        /// Multiply vector by transpose of another vector to create a matrix.
+        /// Product of each element of array-1 (1D double) with each element of array-2 (1D double)
+        /// C[i,j] = A[i] * B[j]
+        /// </summary>
+        /// <param name = "A">1D double array - column vector (1 element per row)</param>
+        /// <param name = "B">1D double array - row vector (1 element column)</param>
+        /// <param name="numRows">The number of rows.</param>
+        /// <param name="numCols">The number of colimns.</param>
+        /// <returns>2D double array product matrix, value of element [i,j] = A[i] * B[j]</returns>
+        public static double[,] multiplyVectorsIntoAMatrix(IList<double> A, IList<double> B,
+            int numRows, int numCols)
         {
-            var CRowSize = A.Count();
-            var CColSize = B.Count();
+            var C = new double[numRows, numCols];
 
-            var C = new double[CRowSize, CColSize];
-
-            for (var i = 0; i != CRowSize; i++)
-                for (var j = 0; j != CColSize; j++)
+            for (var i = 0; i != numRows; i++)
+                for (var j = 0; j != numCols; j++)
                     C[i, j] = A[i] * B[j];
             return C;
         }
@@ -606,16 +758,36 @@ namespace StarMathLib
         /// </summary>
         /// <param name = "A">1D integer array - column vector (1 element per row)</param>
         /// <param name = "B">1D double array - row vector (1 element column)</param>
+        /// <param name="numRows">The number of rows.</param>
+        /// <param name="numCols">The number of colimns.</param>
         /// <returns>2D double array product matrix, value of element [i,j] = A[i] * B[j]</returns>
-        public static double[,] multiplyVectorsIntoAMatrix(IList<int> A, IList<double> B)
+        public static double[,] multiplyVectorsIntoAMatrix(IList<int> A, IList<double> B,
+            int numRows, int numCols)
         {
-            var CRowSize = A.Count();
-            var CColSize = B.Count();
+            var C = new double[numRows, numCols];
 
-            var C = new double[CRowSize, CColSize];
+            for (var i = 0; i != numRows; i++)
+                for (var j = 0; j != numCols; j++)
+                    C[i, j] = A[i] * B[j];
+            return C;
+        }
+        /// <summary>
+        /// Multiply vector by transpose of another vector to create a matrix.
+        /// Product of each element of array-1 (1D int) with each element of array-2 (1D double)
+        /// C[i,j] = A[i] * B[j]
+        /// </summary>
+        /// <param name = "A">1D double array - column vector (1 element per row)</param>
+        /// <param name = "B">1D integer array - row vector (1 element column)</param>
+        /// <param name="numRows">The number of rows.</param>
+        /// <param name="numCols">The number of colimns.</param>
+        /// <returns>2D double array product matrix, value of element [i,j] = A[i] * B[j]</returns>
+        public static double[,] multiplyVectorsIntoAMatrix(IList<double> A, IList<int> B,
+            int numRows, int numCols)
+        {
+            var C = new double[numRows, numCols];
 
-            for (var i = 0; i != CRowSize; i++)
-                for (var j = 0; j != CColSize; j++)
+            for (var i = 0; i != numRows; i++)
+                for (var j = 0; j != numCols; j++)
                     C[i, j] = A[i] * B[j];
             return C;
         }
@@ -624,18 +796,20 @@ namespace StarMathLib
         /// Product of each element of array-1 (1D int) with each element of array-2 (1D int)
         /// C[i,j] = A[i] * B[j]
         /// </summary>
-        /// <param name = "A">1D integer array - column vector (1 element per row)</param>
-        /// <param name = "B">1D integer array - row vector (1 element column)</param>
-        /// <returns>2D double array product matrix, value of element [i,j] = A[i] * B[j]</returns>
-        public static int[,] multiplyVectorsIntoAMatrix(IList<int> A, IList<int> B)
+        /// <param name="A">1D integer array - column vector (1 element per row)</param>
+        /// <param name="B">1D integer array - row vector (1 element column)</param>
+        /// <param name="numRows">The number of rows.</param>
+        /// <param name="numCols">The number of colimns.</param>
+        /// <returns>
+        /// 2D double array product matrix, value of element [i,j] = A[i] * B[j]
+        /// </returns>
+        public static int[,] multiplyVectorsIntoAMatrix(IList<int> A, IList<int> B,
+            int numRows, int numCols)
         {
-            var CRowSize = A.Count();
-            var CColSize = B.Count();
+            var C = new int[numRows, numCols];
 
-            var C = new int[CRowSize, CColSize];
-
-            for (var i = 0; i != CRowSize; i++)
-                for (var j = 0; j != CColSize; j++)
+            for (var i = 0; i != numRows; i++)
+                for (var j = 0; j != numCols; j++)
                     C[i, j] = A[i] * B[j];
             return C;
         }
@@ -652,15 +826,63 @@ namespace StarMathLib
         {
             if (A.GetLength(1) != B.GetLength(0))
                 throw new Exception("Column count in first matrix must be equal to row count in second matrix");
-            // this is B dot term_i multiplication
-            var CRowSize = A.GetLength(0);
-            var CColSize = B.GetLength(1);
+            return multiply(A, B, A.GetLength(0), B.GetLength(1));
+        }
+
+        /// <summary>
+        /// Product of two matrices (2D double)
+        /// </summary>
+        /// <param name = "A">2D int Array, A</param>
+        /// <param name = "B">2D double Array, A</param>
+        /// <returns>A 2D double array that is the product of the two matrices A and B</returns>
+        public static double[,] multiply(int[,] A, double[,] B)
+        {
+            if (A.GetLength(1) != B.GetLength(0))
+                throw new Exception("Column count in first matrix must be equal to row count in second matrix");
+            return multiply(A, B, A.GetLength(0), B.GetLength(1));
+        }
+
+        /// <summary>
+        /// Product of two matrices (2D double)
+        /// </summary>
+        /// <param name = "A">2D double Array, A</param>
+        /// <param name = "B">2D int Array, A</param>
+        /// <returns>A 2D double array that is the product of the two matrices A and B</returns>
+        public static double[,] multiply(double[,] A, int[,] B)
+        {
+            if (A.GetLength(1) != B.GetLength(0))
+                throw new Exception("Column count in first matrix must be equal to row count in second matrix");
+            return multiply(A, B, A.GetLength(0), B.GetLength(1));
+        }
 
 
-            var C = new double[CRowSize, CColSize];
+        /// <summary>
+        /// Product of two matrices (2D double)
+        /// </summary>
+        /// <param name = "A">2D int Array, A</param>
+        /// <param name = "B">2D int Array, A</param>
+        /// <returns>A 2D int array that is the product of the two matrices A and B</returns>
+        public static int[,] multiply(int[,] A, int[,] B)
+        {
+            if (A.GetLength(1) != B.GetLength(0))
+                throw new Exception("Column count in first matrix must be equal to row count in second matrix");
+            return multiply(A, B, A.GetLength(0), B.GetLength(1));
+        }
 
-            for (var i = 0; i != CRowSize; i++)
-                for (var j = 0; j != CColSize; j++)
+        /// <summary>
+        /// Product of two matrices (2D double)
+        /// </summary>
+        /// <param name = "A">2D double Array, A</param>
+        /// <param name = "B">2D double Array, A</param>
+        /// <param name="numRows">The number of rows.</param>
+        /// <param name="numCols">The number of columns.</param>
+        /// <returns>A 2D double array that is the product of the two matrices A and B</returns>
+        public static double[,] multiply(double[,] A, double[,] B, int numRows, int numCols)
+        {
+            var C = new double[numRows, numCols];
+
+            for (var i = 0; i != numRows; i++)
+                for (var j = 0; j != numCols; j++)
                 {
                     C[i, j] = 0.0;
                     for (var k = 0; k != A.GetLength(1); k++)
@@ -674,20 +896,15 @@ namespace StarMathLib
         /// </summary>
         /// <param name = "A">2D int Array, A</param>
         /// <param name = "B">2D double Array, A</param>
+        /// <param name="numRows">The number of rows.</param>
+        /// <param name="numCols">The number of columns.</param>
         /// <returns>A 2D double array that is the product of the two matrices A and B</returns>
-        public static double[,] multiply(int[,] A, double[,] B)
+        public static double[,] multiply(int[,] A, double[,] B, int numRows, int numCols)
         {
-            if (A.GetLength(1) != B.GetLength(0))
-                throw new Exception("Column count in first matrix must be equal to row count in second matrix");
-            // this is B dot term_i multiplication
-            var CRowSize = A.GetLength(0);
-            var CColSize = B.GetLength(1);
+            var C = new double[numRows, numCols];
 
-
-            var C = new double[CRowSize, CColSize];
-
-            for (var i = 0; i != CRowSize; i++)
-                for (var j = 0; j != CColSize; j++)
+            for (var i = 0; i != numRows; i++)
+                for (var j = 0; j != numCols; j++)
                 {
                     C[i, j] = 0.0;
                     for (var k = 0; k != A.GetLength(1); k++)
@@ -700,20 +917,15 @@ namespace StarMathLib
         /// </summary>
         /// <param name = "A">2D double Array, A</param>
         /// <param name = "B">2D int Array, A</param>
+        /// <param name="numRows">The number of rows.</param>
+        /// <param name="numCols">The number of columns.</param>
         /// <returns>A 2D double array that is the product of the two matrices A and B</returns>
-        public static double[,] multiply(double[,] A, int[,] B)
+        public static double[,] multiply(double[,] A, int[,] B, int numRows, int numCols)
         {
-            if (A.GetLength(1) != B.GetLength(0))
-                throw new Exception("Column count in first matrix must be equal to row count in second matrix");
-            // this is B dot term_i multiplication
-            var CRowSize = A.GetLength(0);
-            var CColSize = B.GetLength(1);
+            var C = new double[numRows, numCols];
 
-
-            var C = new double[CRowSize, CColSize];
-
-            for (var i = 0; i != CRowSize; i++)
-                for (var j = 0; j != CColSize; j++)
+            for (var i = 0; i != numRows; i++)
+                for (var j = 0; j != numCols; j++)
                 {
                     C[i, j] = 0.0;
                     for (var k = 0; k != A.GetLength(1); k++)
@@ -725,22 +937,19 @@ namespace StarMathLib
         /// <summary>
         /// Product of two matrices (2D double)
         /// </summary>
-        /// <param name = "A">2D int Array, A</param>
-        /// <param name = "B">2D int Array, A</param>
-        /// <returns>A 2D int array that is the product of the two matrices A and B</returns>
-        public static int[,] multiply(int[,] A, int[,] B)
+        /// <param name="A">2D int Array, A</param>
+        /// <param name="B">2D int Array, A</param>
+        /// <param name="numRows">The number of rows.</param>
+        /// <param name="numCols">The number of columns.</param>
+        /// <returns>
+        /// A 2D int array that is the product of the two matrices A and B
+        /// </returns>
+        public static int[,] multiply(int[,] A, int[,] B, int numRows, int numCols)
         {
-            if (A.GetLength(1) != B.GetLength(0))
-                throw new Exception("Column count in first matrix must be equal to row count in second matrix");
-            // this is B dot term_i multiplication
-            var CRowSize = A.GetLength(0);
-            var CColSize = B.GetLength(1);
+            var C = new int[numRows, numCols];
 
-
-            var C = new int[CRowSize, CColSize];
-
-            for (var i = 0; i != CRowSize; i++)
-                for (var j = 0; j != CColSize; j++)
+            for (var i = 0; i != numRows; i++)
+                for (var j = 0; j != numCols; j++)
                 {
                     C[i, j] = 0;
                     for (var k = 0; k != A.GetLength(1); k++)
@@ -760,20 +969,11 @@ namespace StarMathLib
         public static double[] multiply(double[,] A, IList<double> B)
         {
             // this is B dot term_i multiplication
-            var ARowSize = A.GetLength(0);
-            var AColSize = A.GetLength(1);
-            if (AColSize != B.Count())
+            var numRows = A.GetLength(0);
+            var numCols = A.GetLength(1);
+            if (numCols != B.Count())
                 throw new Exception("Column count in first matrix must be equal to row count in second matrix");
-
-            var C = new double[ARowSize];
-
-            for (var i = 0; i != ARowSize; i++)
-            {
-                C[i] = 0.0;
-                for (var j = 0; j != AColSize; j++)
-                    C[i] += A[i, j] * B[j];
-            }
-            return C;
+            return multiply(A, B, numRows, numCols);
         }
 
         /// <summary>
@@ -785,20 +985,11 @@ namespace StarMathLib
         public static double[] multiply(int[,] A, IList<double> B)
         {
             // this is B dot term_i multiplication
-            var ARowSize = A.GetLength(0);
-            var AColSize = A.GetLength(1);
-            if (AColSize != B.Count())
+            var numRows = A.GetLength(0);
+            var numCols = A.GetLength(1);
+            if (numCols != B.Count())
                 throw new Exception("Column count in first matrix must be equal to row count in second matrix");
-
-            var C = new double[ARowSize];
-
-            for (var i = 0; i != ARowSize; i++)
-            {
-                C[i] = 0.0;
-                for (var j = 0; j != AColSize; j++)
-                    C[i] += A[i, j] * B[j];
-            }
-            return C;
+            return multiply(A, B, numRows, numCols);
         }
 
         /// <summary>
@@ -810,20 +1001,11 @@ namespace StarMathLib
         public static double[] multiply(double[,] A, IList<int> B)
         {
             // this is B dot term_i multiplication
-            var ARowSize = A.GetLength(0);
-            var AColSize = A.GetLength(1);
-            if (AColSize != B.Count())
+            var numRows = A.GetLength(0);
+            var numCols = A.GetLength(1);
+            if (numCols != B.Count())
                 throw new Exception("Column count in first matrix must be equal to row count in second matrix");
-
-            var C = new double[ARowSize];
-
-            for (var i = 0; i != ARowSize; i++)
-            {
-                C[i] = 0.0;
-                for (var j = 0; j != AColSize; j++)
-                    C[i] += A[i, j] * B[j];
-            }
-            return C;
+            return multiply(A, B, numRows, numCols);
         }
 
         /// <summary>
@@ -835,20 +1017,11 @@ namespace StarMathLib
         public static int[] multiply(int[,] A, IList<int> B)
         {
             // this is B dot term_i multiplication
-            var ARowSize = A.GetLength(0);
-            var AColSize = A.GetLength(1);
-            if (AColSize != B.Count())
+            var numRows = A.GetLength(0);
+            var numCols = A.GetLength(1);
+            if (numCols != B.Count())
                 throw new Exception("Column count in first matrix must be equal to row count in second matrix");
-
-            var C = new int[ARowSize];
-
-            for (var i = 0; i != ARowSize; i++)
-            {
-                C[i] = 0;
-                for (var j = 0; j != AColSize; j++)
-                    C[i] += A[i, j] * B[j];
-            }
-            return C;
+            return multiply(A, B, numRows, numCols);
         }
 
         /// <summary>
@@ -860,21 +1033,13 @@ namespace StarMathLib
         public static double[] multiply(IList<double> B, double[,] A)
         {
             // this is B dot term_i multiplication
-            var CRowSize = A.GetLength(0);
-            var CColSize = A.GetLength(1);
-            if (CRowSize != B.Count())
+            var numRows = A.GetLength(0);
+            var numCols = A.GetLength(1);
+            if (numRows != B.Count())
                 throw new Exception("Column count in first matrix must be equal to row count in second matrix");
-
-            var C = new double[CColSize];
-
-            for (var i = 0; i != CColSize; i++)
-            {
-                C[i] = 0.0;
-                for (var j = 0; j != CRowSize; j++)
-                    C[i] += B[j] * A[j, i];
-            }
-            return C;
+            return multiply(B, A, numRows, numCols);
         }
+
         /// <summary>
         /// Product of two matrices (1D double and 2D double)
         /// </summary>
@@ -884,21 +1049,13 @@ namespace StarMathLib
         public static double[] multiply(IList<double> B, int[,] A)
         {
             // this is B dot term_i multiplication
-            var CRowSize = A.GetLength(0);
-            var CColSize = A.GetLength(1);
-            if (CRowSize != B.Count())
+            var numRows = A.GetLength(0);
+            var numCols = A.GetLength(1);
+            if (numRows != B.Count())
                 throw new Exception("Column count in first matrix must be equal to row count in second matrix");
-
-            var C = new double[CColSize];
-
-            for (var i = 0; i != CColSize; i++)
-            {
-                C[i] = 0.0;
-                for (var j = 0; j != CRowSize; j++)
-                    C[i] += B[j] * A[j, i];
-            }
-            return C;
+            return multiply(B, A, numRows, numCols);
         }
+
         /// <summary>
         /// Product of two matrices (1D double and 2D double)
         /// </summary>
@@ -908,21 +1065,13 @@ namespace StarMathLib
         public static double[] multiply(IList<int> B, double[,] A)
         {
             // this is B dot term_i multiplication
-            var CRowSize = A.GetLength(0);
-            var CColSize = A.GetLength(1);
-            if (CRowSize != B.Count())
+            var numRows = A.GetLength(0);
+            var numCols = A.GetLength(1);
+            if (numRows != B.Count())
                 throw new Exception("Column count in first matrix must be equal to row count in second matrix");
-
-            var C = new double[CColSize];
-
-            for (var i = 0; i != CColSize; i++)
-            {
-                C[i] = 0.0;
-                for (var j = 0; j != CRowSize; j++)
-                    C[i] += B[j] * A[j, i];
-            }
-            return C;
+            return multiply(B, A, numRows, numCols);
         }
+
         /// <summary>
         /// Product of two matrices (1D double and 2D double)
         /// </summary>
@@ -932,17 +1081,175 @@ namespace StarMathLib
         public static int[] multiply(IList<int> B, int[,] A)
         {
             // this is B dot term_i multiplication
-            var CRowSize = A.GetLength(0);
-            var CColSize = A.GetLength(1);
-            if (CRowSize != B.Count())
+            var numRows = A.GetLength(0);
+            var numCols = A.GetLength(1);
+            if (numRows != B.Count())
                 throw new Exception("Column count in first matrix must be equal to row count in second matrix");
+            return multiply(B, A, numRows, numCols);
+        }
 
-            var C = new int[CColSize];
+        /// <summary>
+        /// Product of a matrix and a vector (2D double and 1D double)
+        /// </summary>
+        /// <param name = "A">2D double Array</param>
+        /// <param name = "B">1D double array - column vector (1 element row)</param>
+        /// <param name="numRows">The number of rows.</param>
+        /// <param name="numCols">The number of columns.</param>
+        /// <returns>A 1D double array that is the product of the two matrices A and B</returns>
+        public static double[] multiply(double[,] A, IList<double> B, int numRows, int numCols)
+        {
+            var C = new double[numRows];
 
-            for (var i = 0; i != CColSize; i++)
+            for (var i = 0; i != numRows; i++)
+            {
+                C[i] = 0.0;
+                for (var j = 0; j != numCols; j++)
+                    C[i] += A[i, j] * B[j];
+            }
+            return C;
+        }
+
+        /// <summary>
+        /// Product of a matrix and a vector (2D double and 1D double)
+        /// </summary>
+        /// <param name = "A">2D int Array</param>
+        /// <param name = "B">1D double array - column vector (1 element row)</param>
+        /// <param name="numRows">The number of rows.</param>
+        /// <param name="numCols">The number of columns.</param>
+        /// <returns>A 1D double array that is the product of the two matrices A and B</returns>
+        public static double[] multiply(int[,] A, IList<double> B, int numRows, int numCols)
+        {
+            var C = new double[numRows];
+
+            for (var i = 0; i != numRows; i++)
+            {
+                C[i] = 0.0;
+                for (var j = 0; j != numCols; j++)
+                    C[i] += A[i, j] * B[j];
+            }
+            return C;
+        }
+
+        /// <summary>
+        /// Product of two matrices (2D double and 1D double)
+        /// </summary>
+        /// <param name = "A">2D double Array</param>
+        /// <param name = "B">1D int array - column vector (1 element row)</param>
+        /// <param name="numRows">The number of rows.</param>
+        /// <param name="numCols">The number of columns.</param>
+        /// <returns>A 1D double array that is the product of the two matrices A and B</returns>
+        public static double[] multiply(double[,] A, IList<int> B, int numRows, int numCols)
+        {
+            var C = new double[numRows];
+
+            for (var i = 0; i != numRows; i++)
+            {
+                C[i] = 0.0;
+                for (var j = 0; j != numCols; j++)
+                    C[i] += A[i, j] * B[j];
+            }
+            return C;
+        }
+
+        /// <summary>
+        /// Product of two matrices (2D double and 1D double)
+        /// </summary>
+        /// <param name = "A">2D int Array</param>
+        /// <param name = "B">1D int array - column vector (1 element row)</param>
+        /// <param name="numRows">The number of rows.</param>
+        /// <param name="numCols">The number of columns.</param>
+        /// <returns>A 1D int array that is the product of the two matrices A and B</returns>
+        public static int[] multiply(int[,] A, IList<int> B, int numRows, int numCols)
+        {
+            var C = new int[numRows];
+
+            for (var i = 0; i != numRows; i++)
             {
                 C[i] = 0;
-                for (var j = 0; j != CRowSize; j++)
+                for (var j = 0; j != numCols; j++)
+                    C[i] += A[i, j] * B[j];
+            }
+            return C;
+        }
+
+        /// <summary>
+        /// Product of two matrices (1D double and 2D double)
+        /// </summary>
+        /// <param name = "A">1D double array - row vector (1 element column)</param>
+        /// <param name = "B">2D double Array</param>
+        /// <param name="numRows">The number of rows.</param>
+        /// <param name="numCols">The number of columns.</param>
+        /// <returns>A 1D double array that is the product of the two matrices A and B</returns>
+        public static double[] multiply(IList<double> B, double[,] A, int numRows, int numCols)
+        {
+            var C = new double[numCols];
+
+            for (var i = 0; i != numCols; i++)
+            {
+                C[i] = 0.0;
+                for (var j = 0; j != numRows; j++)
+                    C[i] += B[j] * A[j, i];
+            }
+            return C;
+        }
+        /// <summary>
+        /// Product of two matrices (1D double and 2D double)
+        /// </summary>
+        /// <param name = "A">1D double array - row vector (1 element column)</param>
+        /// <param name = "B">2D int Array</param>
+        /// <param name="numRows">The number of rows.</param>
+        /// <param name="numCols">The number of columns.</param>
+        /// <returns>A 1D double array that is the product of the two matrices A and B</returns>
+        public static double[] multiply(IList<double> B, int[,] A, int numRows, int numCols)
+        {
+            var C = new double[numCols];
+
+            for (var i = 0; i != numCols; i++)
+            {
+                C[i] = 0.0;
+                for (var j = 0; j != numRows; j++)
+                    C[i] += B[j] * A[j, i];
+            }
+            return C;
+        }
+        /// <summary>
+        /// Product of two matrices (1D double and 2D double)
+        /// </summary>
+        /// <param name = "A">1D int array - row vector (1 element column)</param>
+        /// <param name = "B">2D double Array</param>
+        /// <param name="numRows">The number of rows.</param>
+        /// <param name="numCols">The number of columns.</param>
+        /// <returns>A 1D double array that is the product of the two matrices A and B</returns>
+        public static double[] multiply(IList<int> B, double[,] A, int numRows, int numCols)
+        {
+            var C = new double[numCols];
+
+            for (var i = 0; i != numCols; i++)
+            {
+                C[i] = 0.0;
+                for (var j = 0; j != numRows; j++)
+                    C[i] += B[j] * A[j, i];
+            }
+            return C;
+        }
+        /// <summary>
+        /// Product of two matrices (1D double and 2D double)
+        /// </summary>
+        /// <param name="B">2D int Array</param>
+        /// <param name="A">1D int array - row vector (1 element column)</param>
+        /// <param name="numRows">The number of rows.</param>
+        /// <param name="numCols">The number of columns.</param>
+        /// <returns>
+        /// A 1D int array that is the product of the two matrices A and B
+        /// </returns>
+        public static int[] multiply(IList<int> B, int[,] A, int numRows, int numCols)
+        {
+            var C = new int[numCols];
+
+            for (var i = 0; i != numCols; i++)
+            {
+                C[i] = 0;
+                for (var j = 0; j != numRows; j++)
                     C[i] += B[j] * A[j, i];
             }
             return C;
@@ -961,13 +1268,9 @@ namespace StarMathLib
         /// <returns>1D double array that contains sum of vectros A and B</returns>
         public static double[] add(IList<double> A, IList<double> B)
         {
-            // add vector A to vector B
-            var size = A.Count();
-            if (size != B.Count()) throw new Exception("Matrix sizes do not match");
-            var c = new double[size];
-            for (var i = 0; i != size; i++)
-                c[i] = A[i] + B[i];
-            return c;
+            var length = A.Count();
+            if (length != B.Count()) throw new Exception("Matrix sizes do not match");
+            return add(A, B, length);
         }
         /// <summary>
         /// Adds arrays A and B
@@ -977,13 +1280,9 @@ namespace StarMathLib
         /// <returns>1D double array that contains sum of vectros A and B</returns>
         public static double[] add(IList<int> A, IList<double> B)
         {
-            // add vector A to vector B
-            var size = A.Count();
-            if (size != B.Count()) throw new Exception("Matrix sizes do not match");
-            var c = new double[size];
-            for (var i = 0; i != size; i++)
-                c[i] = A[i] + B[i];
-            return c;
+            var length = A.Count();
+            if (length != B.Count()) throw new Exception("Matrix sizes do not match");
+            return add(A, B, length);
         }
         /// <summary>
         /// Adds arrays A and B
@@ -993,13 +1292,9 @@ namespace StarMathLib
         /// <returns>1D integer array that contains sum of vectros A and B</returns>
         public static int[] add(IList<int> A, IList<int> B)
         {
-            // add vector A to vector B
-            var size = A.Count();
-            if (size != B.Count()) throw new Exception("Matrix sizes do not match");
-            var c = new int[size];
-            for (var i = 0; i != size; i++)
-                c[i] = A[i] + B[i];
-            return c;
+            var length = A.Count();
+            if (length != B.Count()) throw new Exception("Matrix sizes do not match");
+            return add(A, B, length);
         }
 
         /// <summary>
@@ -1010,19 +1305,14 @@ namespace StarMathLib
         /// <returns>2D double array that contains sum of vectros A and B</returns>
         public static double[,] add(double[,] A, double[,] B)
         {
-            var CRowSize = A.GetLength(0);
-            var CColSize = A.GetLength(1);
-            if (CRowSize != B.GetLength(0))
+            var numRows = A.GetLength(0);
+            var numCols = A.GetLength(1);
+            if (numRows != B.GetLength(0))
                 throw new Exception("Matrix row count do not match");
-            if (CColSize != B.GetLength(1))
+            if (numCols != B.GetLength(1))
                 throw new Exception("Matrix column count do not match");
 
-            var C = new double[CRowSize, CColSize];
-
-            for (var i = 0; i != CRowSize; i++)
-                for (var j = 0; j != CColSize; j++)
-                    C[i, j] = A[i, j] + B[i, j];
-            return C;
+            return add(A, B, numRows, numCols);
         }
 
         /// <summary>
@@ -1033,19 +1323,14 @@ namespace StarMathLib
         /// <returns>2D double array that contains sum of vectros A and B</returns>
         public static double[,] add(int[,] A, double[,] B)
         {
-            var CRowSize = A.GetLength(0);
-            var CColSize = A.GetLength(1);
-            if (CRowSize != B.GetLength(0))
+            var numRows = A.GetLength(0);
+            var numCols = A.GetLength(1);
+            if (numRows != B.GetLength(0))
                 throw new Exception("Matrix row count do not match");
-            if (CColSize != B.GetLength(1))
+            if (numCols != B.GetLength(1))
                 throw new Exception("Matrix column count do not match");
 
-            var C = new double[CRowSize, CColSize];
-
-            for (var i = 0; i != CRowSize; i++)
-                for (var j = 0; j != CColSize; j++)
-                    C[i, j] = A[i, j] + B[i, j];
-            return C;
+            return add(A, B, numRows, numCols);
         }
 
         /// <summary>
@@ -1056,17 +1341,114 @@ namespace StarMathLib
         /// <returns>2D integer array that contains sum of vectros A and B</returns>
         public static int[,] add(int[,] A, int[,] B)
         {
-            var CRowSize = A.GetLength(0);
-            var CColSize = A.GetLength(1);
-            if (CRowSize != B.GetLength(0))
+            var numRows = A.GetLength(0);
+            var numCols = A.GetLength(1);
+            if (numRows != B.GetLength(0))
                 throw new Exception("Matrix row count do not match");
-            if (CColSize != B.GetLength(1))
+            if (numCols != B.GetLength(1))
                 throw new Exception("Matrix column count do not match");
 
-            var C = new int[CRowSize, CColSize];
+            return add(A, B, numRows, numCols);
+        }
 
-            for (var i = 0; i != CRowSize; i++)
-                for (var j = 0; j != CColSize; j++)
+
+        /// <summary>
+        /// Adds arrays A and B
+        /// </summary>
+        /// <param name = "A">1D double array 1</param>
+        /// <param name = "B">1D double array 2</param>
+        /// <param name="length">The length of the array.</param>
+        /// <returns>1D double array that contains sum of vectros A and B</returns>
+        public static double[] add(IList<double> A, IList<double> B, int length)
+        {
+            var c = new double[length];
+            for (var i = 0; i != length; i++)
+                c[i] = A[i] + B[i];
+            return c;
+        }
+        /// <summary>
+        /// Adds arrays A and B
+        /// </summary>
+        /// <param name = "A">1D int array 1</param>
+        /// <param name = "B">1D double array 2</param>
+        /// <param name="length">The length of the array.</param>
+        /// <returns>1D double array that contains sum of vectros A and B</returns>
+        public static double[] add(IList<int> A, IList<double> B, int length)
+        {
+            var c = new double[length];
+            for (var i = 0; i != length; i++)
+                c[i] = A[i] + B[i];
+            return c;
+        }
+        /// <summary>
+        /// Adds arrays A and B
+        /// </summary>
+        /// <param name="A">1D int array 1</param>
+        /// <param name="B">1D int array 2</param>
+        /// <param name="length">The length of the array.</param>
+        /// <returns>
+        /// 1D integer array that contains sum of vectros A and B
+        /// </returns>
+        public static int[] add(IList<int> A, IList<int> B, int length)
+        {
+            var c = new int[length];
+            for (var i = 0; i != length; i++)
+                c[i] = A[i] + B[i];
+            return c;
+        }
+
+        /// <summary>
+        /// Adds arrays A and B
+        /// </summary>
+        /// <param name = "A">2D double array 1</param>
+        /// <param name = "B">2D double array 2</param>
+        /// <param name="numRows">The number of rows.</param>
+        /// <param name="numCols">The number of columns.</param>
+        /// <returns>2D double array that contains sum of vectros A and B</returns>
+        public static double[,] add(double[,] A, double[,] B, int numRows, int numCols)
+        {
+            var C = new double[numRows, numCols];
+
+            for (var i = 0; i != numRows; i++)
+                for (var j = 0; j != numCols; j++)
+                    C[i, j] = A[i, j] + B[i, j];
+            return C;
+        }
+
+        /// <summary>
+        /// Adds arrays A and B
+        /// </summary>
+        /// <param name = "A">2D double array 1</param>
+        /// <param name = "B">2D int array 2</param>
+        /// <param name="numRows">The number of rows.</param>
+        /// <param name="numCols">The number of columns.</param>
+        /// <returns>2D double array that contains sum of vectros A and B</returns>
+        public static double[,] add(int[,] A, double[,] B, int numRows, int numCols)
+        {
+            var C = new double[numRows, numCols];
+
+            for (var i = 0; i != numRows; i++)
+                for (var j = 0; j != numCols; j++)
+                    C[i, j] = A[i, j] + B[i, j];
+            return C;
+        }
+
+        /// <summary>
+        /// Adds arrays A and B
+        /// </summary>
+        /// <param name="A">2D integer array 1</param>
+        /// <param name="B">2D integer array 2</param>
+        /// <param name="numRows">The number of rows.</param>
+        /// <param name="numCols">The number of columns.</param>
+        /// <returns>
+        /// 2D integer array that contains sum of vectros A and B
+        /// </returns>
+        public static int[,] add(int[,] A, int[,] B, int numRows, int numCols)
+        {
+            var C = new int[numRows, numCols];
+
+            for (var i = 0; i != numRows; i++)
+                for (var j = 0; j != numCols; j++)
                     C[i, j] = A[i, j] + B[i, j];
             return C;
         }
@@ -1083,14 +1465,10 @@ namespace StarMathLib
         /// <returns>Returns the difference vector, C (1D double)</returns>
         public static double[] subtract(IList<double> A, IList<double> B)
         {
-            // add vector A to vector B
-            var size = A.Count();
-            if (size != B.Count())
+            var length = A.Count();
+            if (length != B.Count())
                 throw new Exception("Matrix sizes do not match");
-            var c = new double[size];
-            for (var i = 0; i != size; i++)
-                c[i] = A[i] - B[i];
-            return c;
+            return subtract(A, B, length);
         }
         /// <summary>
         /// Subtracts one vector (B) from the other (A). C = A - B.
@@ -1100,14 +1478,10 @@ namespace StarMathLib
         /// <returns>Returns the difference vector, C (1D double)</returns>
         public static double[] subtract(IList<int> A, IList<double> B)
         {
-            // add vector A to vector B
-            var size = A.Count();
-            if (size != B.Count())
+            var length = A.Count();
+            if (length != B.Count())
                 throw new Exception("Matrix sizes do not match");
-            var c = new double[size];
-            for (var i = 0; i != size; i++)
-                c[i] = A[i] - B[i];
-            return c;
+            return subtract(A, B, length);
         }
         /// <summary>
         /// Subtracts one vector (B) from the other (A). C = A - B.
@@ -1117,14 +1491,10 @@ namespace StarMathLib
         /// <returns>Returns the difference vector, C (1D double)</returns>
         public static double[] subtract(IList<double> A, IList<int> B)
         {
-            // add vector A to vector B
-            var size = A.Count();
-            if (size != B.Count())
+            var length = A.Count();
+            if (length != B.Count())
                 throw new Exception("Matrix sizes do not match");
-            var c = new double[size];
-            for (var i = 0; i != size; i++)
-                c[i] = A[i] - B[i];
-            return c;
+            return subtract(A, B, length);
         }
         /// <summary>
         /// Subtracts one vector (B) from the other (A). C = A - B.
@@ -1134,14 +1504,10 @@ namespace StarMathLib
         /// <returns>Returns the difference vector, C (1D int)</returns>
         public static int[] subtract(IList<int> A, IList<int> B)
         {
-            // add vector A to vector B
-            var size = A.Count();
-            if (size != B.Count())
+            var length = A.Count();
+            if (length != B.Count())
                 throw new Exception("Matrix sizes do not match");
-            var c = new int[size];
-            for (var i = 0; i != size; i++)
-                c[i] = A[i] - B[i];
-            return c;
+            return subtract(A, B, length);
         }
 
         /// <summary>
@@ -1152,19 +1518,14 @@ namespace StarMathLib
         /// <returns>Returns the difference matrix, C (2D double)</returns>
         public static double[,] subtract(double[,] A, double[,] B)
         {
-            var CRowSize = A.GetLength(0);
-            var CColSize = A.GetLength(1);
-            if (CRowSize != B.GetLength(0))
+            var numRows = A.GetLength(0);
+            var numCols = A.GetLength(1);
+            if (numRows != B.GetLength(0))
                 throw new Exception("Matrix row count do not match");
-            if (CColSize != B.GetLength(1))
+            if (numCols != B.GetLength(1))
                 throw new Exception("Matrix column count do not match");
 
-            var C = new double[CRowSize, CColSize];
-
-            for (var i = 0; i != CRowSize; i++)
-                for (var j = 0; j != CColSize; j++)
-                    C[i, j] = A[i, j] - B[i, j];
-            return C;
+            return subtract(A, B, numRows, numCols);
         }
         /// <summary>
         /// Subtracts one matrix (B) from the other (A). C = A - B.
@@ -1174,19 +1535,14 @@ namespace StarMathLib
         /// <returns>Returns the difference matrix, C (2D double)</returns>
         public static double[,] subtract(int[,] A, double[,] B)
         {
-            var CRowSize = A.GetLength(0);
-            var CColSize = A.GetLength(1);
-            if (CRowSize != B.GetLength(0))
+            var numRows = A.GetLength(0);
+            var numCols = A.GetLength(1);
+            if (numRows != B.GetLength(0))
                 throw new Exception("Matrix row count do not match");
-            if (CColSize != B.GetLength(1))
+            if (numCols != B.GetLength(1))
                 throw new Exception("Matrix column count do not match");
 
-            var C = new double[CRowSize, CColSize];
-
-            for (var i = 0; i != CRowSize; i++)
-                for (var j = 0; j != CColSize; j++)
-                    C[i, j] = A[i, j] - B[i, j];
-            return C;
+            return subtract(A, B, numRows, numCols);
         }
         /// <summary>
         /// Subtracts one matrix (B) from the other (A). C = A - B.
@@ -1196,19 +1552,14 @@ namespace StarMathLib
         /// <returns>Returns the difference matrix, C (2D double)</returns>
         public static double[,] subtract(double[,] A, int[,] B)
         {
-            var CRowSize = A.GetLength(0);
-            var CColSize = A.GetLength(1);
-            if (CRowSize != B.GetLength(0))
+            var numRows = A.GetLength(0);
+            var numCols = A.GetLength(1);
+            if (numRows != B.GetLength(0))
                 throw new Exception("Matrix row count do not match");
-            if (CColSize != B.GetLength(1))
+            if (numCols != B.GetLength(1))
                 throw new Exception("Matrix column count do not match");
 
-            var C = new double[CRowSize, CColSize];
-
-            for (var i = 0; i != CRowSize; i++)
-                for (var j = 0; j != CColSize; j++)
-                    C[i, j] = A[i, j] - B[i, j];
-            return C;
+            return subtract(A, B, numRows, numCols);
         }
 
         /// <summary>
@@ -1219,46 +1570,149 @@ namespace StarMathLib
         /// <returns>Returns the difference matrix, C (2D integer)</returns>
         public static int[,] subtract(int[,] A, int[,] B)
         {
-            var CRowSize = A.GetLength(0);
-            var CColSize = A.GetLength(1);
-            if (CRowSize != B.GetLength(0))
+            var numRows = A.GetLength(0);
+            var numCols = A.GetLength(1);
+            if (numRows != B.GetLength(0))
                 throw new Exception("Matrix row count do not match");
-            if (CColSize != B.GetLength(1))
+            if (numCols != B.GetLength(1))
                 throw new Exception("Matrix column count do not match");
 
-            var C = new int[CRowSize, CColSize];
-
-            for (var i = 0; i != CRowSize; i++)
-                for (var j = 0; j != CColSize; j++)
-                    C[i, j] = A[i, j] - B[i, j];
-            return C;
+            return subtract(A, B, numRows, numCols);
         }
 
 
         /// <summary>
+        /// Subtracts one vector (B) from the other (A). C = A - B.
+        /// </summary>
+        /// <param name = "A">The minuend vector, A (1D double)</param>
+        /// <param name = "B">The subtrahend vector, B (1D double)</param>
+        /// <param name="length">The length of the vectors.</param>
+        /// <returns>Returns the difference vector, C (1D double)</returns>
+        public static double[] subtract(IList<double> A, IList<double> B, int length)
+        {
+            var c = new double[length];
+            for (var i = 0; i != length; i++)
+                c[i] = A[i] - B[i];
+            return c;
+        }
+        /// <summary>
+        /// Subtracts one vector (B) from the other (A). C = A - B.
+        /// </summary>
+        /// <param name = "A">The minuend vector, A (1D int)</param>
+        /// <param name = "B">The subtrahend vector, B (1D double)</param>
+        /// <param name="length">The length of the vectors.</param>
+        /// <returns>Returns the difference vector, C (1D double)</returns>
+        public static double[] subtract(IList<int> A, IList<double> B, int length)
+        {
+            var c = new double[length];
+            for (var i = 0; i != length; i++)
+                c[i] = A[i] - B[i];
+            return c;
+        }
+        /// <summary>
+        /// Subtracts one vector (B) from the other (A). C = A - B.
+        /// </summary>
+        /// <param name = "A">The minuend vector, A (1D double)</param>
+        /// <param name = "B">The subtrahend vector, B (1D int)</param>
+        /// <param name="length">The length of the vectors.</param>
+        /// <returns>Returns the difference vector, C (1D double)</returns>
+        public static double[] subtract(IList<double> A, IList<int> B, int length)
+        {
+            var c = new double[length];
+            for (var i = 0; i != length; i++)
+                c[i] = A[i] - B[i];
+            return c;
+        }
+        /// <summary>
+        /// Subtracts one vector (B) from the other (A). C = A - B.
+        /// </summary>
+        /// <param name="A">The minuend vector, A (1D int)</param>
+        /// <param name="B">The subtrahend vector, B (1D int)</param>
+        /// <param name="length">The length of the vectors.</param>
+        /// <returns>
+        /// Returns the difference vector, C (1D int)
+        /// </returns>
+        public static int[] subtract(IList<int> A, IList<int> B, int length)
+        {
+            var c = new int[length];
+            for (var i = 0; i != length; i++)
+                c[i] = A[i] - B[i];
+            return c;
+        }
+
+        /// <summary>
         /// Subtracts one matrix (B) from the other (A). C = A - B.
         /// </summary>
-        /// <param name = "A">The minuend matrix, A (2D integer).</param>
-        /// <param name = "B">The subtrahend matrix, B (2D integer).</param>
-        /// <returns>Returns the difference matrix, C (2D integer)</returns>
-        public static int[,] subtract(int[,] A, int[,] B, int numRows, int numCols)
+        /// <param name = "A">The minuend matrix, A (2D double).</param>
+        /// <param name = "B">The subtrahend matrix, B (2D double).</param>
+        /// <param name="numRows">The number of rows.</param>
+        /// <param name="numCols">The number of columns.</param>
+        /// <returns>Returns the difference matrix, C (2D double)</returns>
+        public static double[,] subtract(double[,] A, double[,] B, int numRows, int numCols)
         {
-            var CRowSize = A.GetLength(0);
-            var CColSize = A.GetLength(1);
-            if (CRowSize != B.GetLength(0))
-                throw new Exception("Matrix row count do not match");
-            if (CColSize != B.GetLength(1))
-                throw new Exception("Matrix column count do not match");
+            var C = new double[numRows, numCols];
 
-            var C = new int[CRowSize, CColSize];
+            for (var i = 0; i != numRows; i++)
+                for (var j = 0; j != numCols; j++)
+                    C[i, j] = A[i, j] - B[i, j];
+            return C;
+        }
+        /// <summary>
+        /// Subtracts one matrix (B) from the other (A). C = A - B.
+        /// </summary>
+        /// <param name = "A">The minuend matrix, A (2D int).</param>
+        /// <param name = "B">The subtrahend matrix, B (2D double).</param>
+        /// <param name="numRows">The number of rows.</param>
+        /// <param name="numCols">The number of columns.</param>
+        /// <returns>Returns the difference matrix, C (2D double)</returns>
+        public static double[,] subtract(int[,] A, double[,] B, int numRows, int numCols)
+        {
+            var C = new double[numRows, numCols];
 
-            for (var i = 0; i != CRowSize; i++)
-                for (var j = 0; j != CColSize; j++)
+            for (var i = 0; i != numRows; i++)
+                for (var j = 0; j != numCols; j++)
+                    C[i, j] = A[i, j] - B[i, j];
+            return C;
+        }
+        /// <summary>
+        /// Subtracts one matrix (B) from the other (A). C = A - B.
+        /// </summary>
+        /// <param name = "A">The minuend matrix, A (2D double).</param>
+        /// <param name = "B">The subtrahend matrix, B (2D int).</param>
+        /// <param name="numRows">The number of rows.</param>
+        /// <param name="numCols">The number of columns.</param>
+        /// <returns>Returns the difference matrix, C (2D double)</returns>
+        public static double[,] subtract(double[,] A, int[,] B, int numRows, int numCols)
+        {
+            var C = new double[numRows, numCols];
+
+            for (var i = 0; i != numRows; i++)
+                for (var j = 0; j != numCols; j++)
                     C[i, j] = A[i, j] - B[i, j];
             return C;
         }
 
-     
+        /// <summary>
+        /// Subtracts one matrix (B) from the other (A). C = A - B.
+        /// </summary>
+        /// <param name="A">The minuend matrix, A (2D integer).</param>
+        /// <param name="B">The subtrahend matrix, B (2D integer).</param>
+        /// <param name="numRows">The number of rows.</param>
+        /// <param name="numCols">The number of columns.</param>
+        /// <returns>
+        /// Returns the difference matrix, C (2D integer)
+        /// </returns>
+        public static int[,] subtract(int[,] A, int[,] B, int numRows, int numCols)
+        {
+            var C = new int[numRows, numCols];
+
+            for (var i = 0; i != numRows; i++)
+                for (var j = 0; j != numCols; j++)
+                    C[i, j] = A[i, j] - B[i, j];
+            return C;
+        }
+
+
 
         #endregion
 
@@ -1303,8 +1757,6 @@ namespace StarMathLib
         {
             return JoinMatrixColumnsIntoVector(B).Sum();
         }
-        #endregion
-
         #endregion
     }
 }

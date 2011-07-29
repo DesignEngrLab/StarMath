@@ -30,48 +30,6 @@ namespace StarMathLib
         #region 1-norm (Manhattan Distance)
         /// <summary>
         /// Returns to 1-norm (sum of absolute values of all terms)
-        /// of the difference between x and y.
-        /// </summary>
-        /// <param name = "x">The vector, x.</param>
-        /// <param name = "y">The vector, y.</param>
-        /// <returns>Scalar value of 1-norm.</returns>
-        public static double norm1(IList<double> x, IList<double> y)
-        {
-            if (x == null) throw new Exception("The vector, x, is null.");
-            if (y == null) throw new Exception("The vector, y, is null.");
-            if (x.Count() != y.Count()) throw new Exception("The vectors are not the same size.");
-            var norm = 0.0;
-            var maxlength = x.Count();
-
-            for (var i = 0; i != maxlength; i++)
-                norm += Math.Abs(x[i] - y[i]);
-
-            return norm;
-        }
-
-        /// <summary>
-        /// Returns to 1-norm (sum of absolute values of all terms)
-        /// of the difference between x and y.
-        /// </summary>
-        /// <param name = "x">The vector, x.</param>
-        /// <param name = "y">The vector, y.</param>
-        /// <returns>Scalar value of 1-norm.</returns>
-        public static int norm1(IList<int> x, IList<int> y)
-        {
-            if (x == null) throw new Exception("The vector, x, is null.");
-            if (y == null) throw new Exception("The vector, y, is null.");
-            if (x.Count() != y.Count()) throw new Exception("The vectors are not the same size.");
-            var norm = 0;
-            var maxlength = x.Count();
-
-            for (var i = 0; i != maxlength; i++)
-                norm += Math.Abs(x[i] - y[i]);
-
-            return norm;
-        }
-
-        /// <summary>
-        /// Returns to 1-norm (sum of absolute values of all terms)
         /// of the vector, x.
         /// </summary>
         /// <param name = "x">The vector, x.</param>
@@ -95,6 +53,68 @@ namespace StarMathLib
 
         /// <summary>
         /// Returns to 1-norm (sum of absolute values of all terms)
+        /// of the difference between x and y.
+        /// </summary>
+        /// <param name = "x">The vector, x.</param>
+        /// <param name = "y">The vector, y.</param>
+        /// <returns>Scalar value of 1-norm.</returns>
+        public static double norm1(IList<double> x, IList<double> y)
+        {
+            var xlength = x.Count();
+            if (x == null) throw new Exception("The vector, x, is null.");
+            if (y == null) throw new Exception("The vector, y, is null.");
+            if (xlength != y.Count()) throw new Exception("The vectors are not the same size.");
+            return norm1(x, y, xlength);
+        }
+        /// <summary>
+        /// Returns to 1-norm (sum of absolute values of all terms)
+        /// of the difference between x and y.
+        /// </summary>
+        /// <param name="x">The vector, x.</param>
+        /// <param name="y">The vector, y.</param>
+        /// <param name="length">The length of the vector.</param>
+        /// <returns>Scalar value of 1-norm.</returns>
+        public static double norm1(IList<double> x, IList<double> y, int length)
+        {
+            var norm = 0.0;
+            for (var i = 0; i != length; i++)
+                norm += Math.Abs(x[i] - y[i]);
+            return norm;
+        }
+
+        /// <summary>
+        /// Returns to 1-norm (sum of absolute values of all terms)
+        /// of the difference between x and y.
+        /// </summary>
+        /// <param name = "x">The vector, x.</param>
+        /// <param name = "y">The vector, y.</param>
+        /// <returns>Scalar value of 1-norm.</returns>
+        public static int norm1(IList<int> x, IList<int> y)
+        {
+            var xlength = x.Count();
+            if (x == null) throw new Exception("The vector, x, is null.");
+            if (y == null) throw new Exception("The vector, y, is null.");
+            if (xlength != y.Count()) throw new Exception("The vectors are not the same size.");
+            return norm1(x, y, xlength);
+        }
+        /// <summary>
+        /// Returns to 1-norm (sum of absolute values of all terms)
+        /// of the difference between x and y.
+        /// </summary>
+        /// <param name = "x">The vector, x.</param>
+        /// <param name = "y">The vector, y.</param>
+        /// <param name="length">The length of the vector.</param>
+        /// <returns>Scalar value of 1-norm.</returns>
+        public static int norm1(IList<int> x, IList<int> y, int length)
+        {
+            var norm = 0;
+            for (var i = 0; i != length; i++)
+                norm += Math.Abs(x[i] - y[i]);
+            return norm;
+        }
+
+        /// <summary>
+        /// Returns to 1-norm (sum of absolute values of all terms)
         /// of the matrix, A.
         /// </summary>
         /// <param name = "A">The matrix, A.</param>
@@ -102,11 +122,21 @@ namespace StarMathLib
         public static double norm1(double[,] A)
         {
             if (A == null) throw new Exception("The matrix, A, is null.");
+            return norm1(A, A.GetLength(0), A.GetLength(1));
+        }
+        /// <summary>
+        /// Returns to 1-norm (sum of absolute values of all terms)
+        /// of the matrix, A.
+        /// </summary>
+        /// <param name = "A">The matrix, A.</param>
+        /// <param name="numRows">The number of rows.</param>
+        /// <param name="numCols">The number of columns.</param>
+        /// <returns>Scalar value of 1-norm.</returns>
+        public static double norm1(double[,] A, int numRows, int numCols)
+        {
             var norm = 0.0;
-            var rowlength = A.GetLength(0);
-            var collength = A.GetLength(0);
-            for (var i = 0; i != rowlength; i++)
-                for (var j = 0; j != collength; j++)
+            for (var i = 0; i != numRows; i++)
+                for (var j = 0; j != numCols; j++)
                     norm += Math.Abs(A[i, j]);
             return norm;
         }
@@ -121,11 +151,21 @@ namespace StarMathLib
         public static int norm1(int[,] A)
         {
             if (A == null) throw new Exception("The matrix, A, is null.");
+            return norm1(A, A.GetLength(0), A.GetLength(1));
+        }
+        /// <summary>
+        /// Returns to 1-norm (sum of absolute values of all terms)
+        /// of the matrix, A.
+        /// </summary>
+        /// <param name="A">The matrix, A.</param>
+        /// <param name="numRows">The number of rows.</param>
+        /// <param name="numCols">The number of columns.</param>
+        /// <returns>Scalar value of 1-norm.</returns>
+        public static int norm1(int[,] A, int numRows, int numCols)
+        {
             var norm = 0;
-            var rowlength = A.GetLength(0);
-            var collength = A.GetLength(0);
-            for (var i = 0; i != rowlength; i++)
-                for (var j = 0; j != collength; j++)
+            for (var i = 0; i != numRows; i++)
+                for (var j = 0; j != numCols; j++)
                     norm += Math.Abs(A[i, j]);
             return norm;
         }
@@ -143,13 +183,25 @@ namespace StarMathLib
         /// <returns>Scalar value of 2-norm.</returns>
         public static double norm2(IList<double> x, IList<double> y, Boolean dontDoSqrt = false)
         {
+            var xlength = x.Count();
             if (x == null) throw new Exception("The vector, x, is null.");
             if (y == null) throw new Exception("The vector, y, is null.");
-            if (x.Count() != y.Count()) throw new Exception("The vectors are not the same size.");
+            if (xlength != y.Count()) throw new Exception("The vectors are not the same size.");
+            return norm2(x, y, xlength, dontDoSqrt);
+        }
+        /// <summary>
+        /// Returns to 2-norm (square root of the sum of squares of all terms)
+        /// of the difference between x and y.
+        /// </summary>
+        /// <param name="x">The vector, x.</param>
+        /// <param name="y">The vector, y.</param>
+        /// <param name="length">The length of the vectors.</param>
+        /// <param name="dontDoSqrt">if set to <c>true</c> [don't take the square root].</param>
+        /// <returns>Scalar value of 2-norm.</returns>
+        public static double norm2(IList<double> x, IList<double> y, int length, Boolean dontDoSqrt = false)
+        {
             var norm = 0.0;
-            var maxlength = x.Count();
-
-            for (var i = 0; i != maxlength; i++)
+            for (var i = 0; i != length; i++)
                 norm += (x[i] - y[i]) * (x[i] - y[i]);
             return dontDoSqrt ? norm : Math.Sqrt(norm);
         }
@@ -165,13 +217,25 @@ namespace StarMathLib
         /// <returns>Scalar value of 2-norm.</returns>
         public static double norm2(IList<int> x, IList<int> y, Boolean dontDoSqrt = false)
         {
+            var xlength = x.Count();
             if (x == null) throw new Exception("The vector, x, is null.");
             if (y == null) throw new Exception("The vector, y, is null.");
-            if (x.Count() != y.Count()) throw new Exception("The vectors are not the same size.");
+            if (xlength != y.Count()) throw new Exception("The vectors are not the same size.");
+            return norm2(x, y, xlength, dontDoSqrt);
+        }
+        /// <summary>
+        /// Returns to 2-norm (square root of the sum of squares of all terms)
+        /// of the difference between x and y.
+        /// </summary>
+        /// <param name="x">The vector, x.</param>
+        /// <param name="y">The vector, y.</param>
+        /// <param name="length">The length of the vectors.</param>
+        /// <param name="dontDoSqrt">if set to <c>true</c> [don't take the square root].</param>
+        /// <returns>Scalar value of 2-norm.</returns>
+        public static double norm2(IList<int> x, IList<int> y, int length, Boolean dontDoSqrt = false)
+        {
             var norm = 0.0;
-            var maxlength = x.Count();
-
-            for (var i = 0; i != maxlength; i++)
+            for (var i = 0; i != length; i++)
                 norm += (x[i] - y[i]) * (x[i] - y[i]);
             return dontDoSqrt ? norm : Math.Sqrt(norm);
         }
@@ -213,11 +277,22 @@ namespace StarMathLib
         public static double norm2(double[,] A, Boolean dontDoSqrt = false)
         {
             if (A == null) throw new Exception("The matrix, A, is null.");
+            return norm2(A, A.GetLength(0), A.GetLength(1), dontDoSqrt);
+        }
+        /// <summary>
+        /// Returns to 2-norm (square root of the sum of squares of all terms)
+        /// of the matrix, A.
+        /// </summary>
+        /// <param name="A">The matrix, A.</param>
+        /// <param name="numRows">The number of rows.</param>
+        /// <param name="numCols">The number of columns.</param>
+        /// <param name="dontDoSqrt">if set to <c>true</c> [don't take the square root].</param>
+        /// <returns>Scalar value of 2-norm.</returns>
+        public static double norm2(double[,] A, int numRows, int numCols, Boolean dontDoSqrt = false)
+        {
             var norm = 0.0;
-            var maxRow = A.GetLength(0);
-            var maxCol = A.GetLength(1);
-            for (var i = 0; i != maxRow; i++)
-                for (var j = 0; j != maxCol; j++)
+            for (var i = 0; i != numRows; i++)
+                for (var j = 0; j != numCols; j++)
                     norm += (A[i, j] * A[i, j]);
             return dontDoSqrt ? norm : Math.Sqrt(norm);
         }
@@ -232,11 +307,22 @@ namespace StarMathLib
         public static double norm2(int[,] A, Boolean dontDoSqrt = false)
         {
             if (A == null) throw new Exception("The matrix, A, is null.");
+            return norm2(A, A.GetLength(0), A.GetLength(1), dontDoSqrt);
+        }
+        /// <summary>
+        /// Returns to 2-norm (square root of the sum of squares of all terms)
+        /// of the matrix, A.
+        /// </summary>
+        /// <param name="A">The matrix, A.</param>
+        /// <param name="numRows">The number of rows.</param>
+        /// <param name="numCols">The number of columns.</param>
+        /// <param name="dontDoSqrt">if set to <c>true</c> [don't take the square root].</param>
+        /// <returns>Scalar value of 2-norm.</returns>
+        public static double norm2(int[,] A, int numRows, int numCols, Boolean dontDoSqrt = false)
+        {
             var norm = 0.0;
-            var maxRow = A.GetLength(0);
-            var maxCol = A.GetLength(1);
-            for (var i = 0; i != maxRow; i++)
-                for (var j = 0; j != maxCol; j++)
+            for (var i = 0; i != numRows; i++)
+                for (var j = 0; j != numCols; j++)
                     norm += (A[i, j] * A[i, j]);
             return dontDoSqrt ? norm : Math.Sqrt(norm);
         }
@@ -280,11 +366,22 @@ namespace StarMathLib
         public static double normP(double[,] A, double p, Boolean dontDoPRoot = false)
         {
             if (A == null) throw new Exception("The matrix, A, is null.");
+            return normP(A, p, A.GetLength(0), A.GetLength(1), dontDoPRoot);
+        }
+        /// <summary>
+        /// Returns to p-norm (p-root of the sum of each term raised to the p power)
+        /// </summary>
+        /// <param name="A">The matrix, A.</param>
+        /// <param name="p">The power, p.</param>
+        /// <param name="numRows">The number of rows.</param>
+        /// <param name="numCols">The number of columns.</param>
+        /// <param name="dontDoPRoot">if set to <c>true</c> [don't take the P-root].</param>
+        /// <returns>Scalar value of P-norm.</returns>
+        public static double normP(double[,] A, double p, int numRows, int numCols, Boolean dontDoPRoot = false)
+        {
             var norm = 0.0;
-            var maxRow = A.GetLength(0);
-            var maxCol = A.GetLength(1);
-            for (var i = 0; i != maxRow; i++)
-                for (var j = 0; j != maxCol; j++)
+            for (var i = 0; i != numRows; i++)
+                for (var j = 0; j != numCols; j++)
                     norm += Math.Pow(A[i, j], p);
             return dontDoPRoot ? norm : Math.Pow(norm, 1 / p);
         }
@@ -300,11 +397,23 @@ namespace StarMathLib
         public static double normP(int[,] A, double p, Boolean dontDoPRoot = false)
         {
             if (A == null) throw new Exception("The matrix, A, is null.");
+            return normP(A, p, A.GetLength(0), A.GetLength(1), dontDoPRoot);
+        }
+        /// <summary>
+        /// Returns to 2-norm (square root of the sum of squares of all terms)
+        /// of the matrix, A.
+        /// </summary>
+        /// <param name="A">The matrix, A.</param>
+        /// <param name="p">The power, p.</param>
+        /// <param name="numRows">The number of rows.</param>
+        /// <param name="numCols">The number of columns.</param>
+        /// <param name="dontDoPRoot">if set to <c>true</c> [don't take the P-root].</param>
+        /// <returns>Scalar value of 2-norm.</returns>
+        public static double normP(int[,] A, double p, int numRows, int numCols, Boolean dontDoPRoot = false)
+        {
             var norm = 0.0;
-            var maxRow = A.GetLength(0);
-            var maxCol = A.GetLength(1);
-            for (var i = 0; i != maxRow; i++)
-                for (var j = 0; j != maxCol; j++)
+            for (var i = 0; i != numRows; i++)
+                for (var j = 0; j != numCols; j++)
                     norm += Math.Pow(A[i, j], p);
             return dontDoPRoot ? norm : Math.Pow(norm, 1 / p);
         }
@@ -320,9 +429,21 @@ namespace StarMathLib
         /// </summary>
         /// <param name = "x">The vector, x.</param>
         /// <returns>unit vector.</returns>
-        public static double[] normalize(double[] x)
+        public static double[] normalize(IList<double> x)
         {
-            return divide(x, norm2(x));
+            return normalize(x, x.Count());
+        }
+
+        /// <summary>
+        /// Returns to normalized vector (has lenght or 2-norm of 1))
+        /// of the vector, x.
+        /// </summary>
+        /// <param name="x">The vector, x.</param>
+        /// <param name="length">The length of the vector.</param>
+        /// <returns>unit vector.</returns>
+        public static double[] normalize(IList<double> x, int length)
+        {
+            return divide(x, norm2(x), length);
         }
 
         #endregion

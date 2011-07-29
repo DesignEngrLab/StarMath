@@ -1,6 +1,6 @@
 ﻿/*************************************************************************
  *     This file & class is part of the StarMath Project
- *     Copyright 2010 Matthew Ira Campbell, PhD.
+ *     Copyright 2010, 2011 Matthew Ira Campbell, PhD.
  *
  *     StarMath is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by

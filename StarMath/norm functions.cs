@@ -1,6 +1,6 @@
 ﻿/*************************************************************************
  *     This file & class is part of the StarMath Project
- *     Copyright 2010 Matthew Ira Campbell, PhD.
+ *     Copyright 2010, 2011 Matthew Ira Campbell, PhD.
  *
  *     StarMath is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -445,6 +445,90 @@ namespace StarMathLib
         {
             return divide(x, norm2(x), length);
         }
+
+        #endregion
+
+        #region Sum
+
+        /// <summary>
+        /// Sum up all the elements of a given matrix
+        /// </summary>
+        /// <param name = "B">Matrix (1D double) whose parameters need to be summed up</param>
+        /// <returns>Returns the total (double) </returns>
+        public static double sum(IEnumerable<double> B)
+        {
+            return B.Sum();
+        }
+
+        /// <summary>
+        /// Sum up all the elements of a given matrix
+        /// </summary>
+        /// <param name = "B">Matrix (1D int) whose parameters need to be summed up</param>
+        /// <returns>Returns the total (int) </returns>
+        public static double sum(IEnumerable<int> B)
+        {
+            return B.Sum();
+        }
+
+        /// <summary>
+        /// Sum up all the elements of a given matrix
+        /// </summary>
+        /// <param name = "B">Matrix (2D double) whose parameters need to be summed up</param>
+        /// <returns>Returns the total (double) </returns>
+        public static double sum(double[,] B)
+        {
+            return JoinMatrixColumnsIntoVector(B).Sum();
+        }
+
+        /// <summary>
+        /// Sum up all the elements of a given matrix
+        /// </summary>
+        /// <param name = "B">Matrix (2D double) whose parameters need to be summed up</param>
+        /// <returns>Returns the total (int) </returns>
+        public static double sum(int[,] B)
+        {
+            return JoinMatrixColumnsIntoVector(B).Sum();
+        }
+        #endregion
+
+        #region Standard Deviation
+        /// <summary>
+        /// Calculates the standard deviation assuming the whole population is provided (not sample st. dev.).
+        /// </summary>
+        /// <param name="A">An vector of integers, A.</param>
+        /// <returns></returns>
+        public static double standardDeviation(IList<int> A)
+        {
+            var mean = A.Average();
+            var variance = A.Sum(a => (a - mean) * (a - mean));
+            return Math.Sqrt(variance / A.Count);
+        }
+        /// <summary>
+        /// Calculates the standard deviation assuming the whole population is provided (not sample st. dev.).
+        /// </summary>
+        /// <param name="A">An vector of doubles, A.</param>
+        /// <returns></returns>
+        public static double standardDeviation(IList<double> A)
+        {
+            var mean = A.Average();
+            var variance = A.Sum(a => (a - mean) * (a - mean));
+            return Math.Sqrt(variance / A.Count);
+        }
+
+        /// <summary>
+        /// Calculates the standard deviation assuming the whole population is provided (not sample st. dev.).
+        /// </summary>
+        /// <param name="A">A matrix in integers, A.</param>
+        /// <returns></returns>
+        public static double standardDeviation(int[,] A)
+        { return standardDeviation(JoinMatrixColumnsIntoVector(A)); }
+        /// <summary>
+        /// Calculates the standard deviation assuming the whole population is provided (not sample st. dev.).
+        /// </summary>
+        /// <param name="A">A matrix in doubles, A.</param>
+        /// <returns></returns>
+        public static double standardDeviation(double[,] A)
+        { return standardDeviation(JoinMatrixColumnsIntoVector(A)); }
 
         #endregion
     }

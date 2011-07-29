@@ -7,16 +7,16 @@ namespace TestEXE_for_StarMath
     {
         private static void Main()
         {
+            testStackFunctions();
+            testLUfunctions();
             benchMarkMatrixInversion();
-            //testStackFunctions();
-            //testLUfunctions();
             Console.WriteLine("Press any key to close.");
             Console.ReadLine();
         }
 
         private static void testStackFunctions()
         {
-            var A = new[,] {{0.1, 0.2, 0.3}, {1, 2, 3}, {10, 20, 30}, {100, 200, 300}};
+            var A = new[,] { { 0.1, 0.2, 0.3 }, { 1, 2, 3 }, { 10, 20, 30 }, { 100, 200, 300 } };
             int i, j;
             StarMath.Max(A, out i, out j);
             Console.WriteLine(StarMath.MakePrintString(StarMath.JoinMatrixColumnsIntoVector(A)));
@@ -27,10 +27,10 @@ namespace TestEXE_for_StarMath
             const int size = 14;
             var r = new Random();
 
-            var A = new double[size,size];
+            var A = new double[size, size];
             for (var i = 0; i < size; i++)
                 for (var j = 0; j < size; j++)
-                    A[i, j] = (200*r.NextDouble()) - 100.0;
+                    A[i, j] = (200 * r.NextDouble()) - 100.0;
             Console.WriteLine("A =");
             Console.WriteLine(StarMath.MakePrintString(A));
 
@@ -57,10 +57,10 @@ namespace TestEXE_for_StarMath
             const int size = 500;
             var now = DateTime.Now;
             var r = new Random();
-            var A = new double[size,size];
+            var A = new double[size, size];
             for (var i = 0; i < size; i++)
                 for (var j = 0; j < size; j++)
-                    A[i, j] = (200*r.NextDouble()) - 100.0;
+                    A[i, j] = (200 * r.NextDouble()) - 100.0;
             Console.WriteLine("start invert check for matrix of size: " + size);
             var B = StarMath.inverse(A);
             var C = StarMath.subtract(StarMath.multiply(A, B), StarMath.makeIdentity(size));

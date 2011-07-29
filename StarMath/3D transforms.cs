@@ -1,6 +1,6 @@
 ﻿/*************************************************************************
  *     This file & class is part of the StarMath Project
- *     Copyright 2010 Matthew Ira Campbell, PhD.
+ *     Copyright 2010, 2011 Matthew Ira Campbell, PhD.
  *
  *     StarMath is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -52,7 +52,7 @@ namespace StarMathLib
         public static double[,] RotationX(double xdeg)
         {
             var ROTX = makeIdentity(4);
-            var xrad = (Math.PI*xdeg)/180;
+            var xrad = (Math.PI * xdeg) / 180;
 
             ROTX[1, 1] = ROTX[2, 2] = Math.Cos(xrad);
             ROTX[1, 2] = -Math.Sin(xrad);
@@ -69,7 +69,7 @@ namespace StarMathLib
         public static double[,] RotationY(double ydeg)
         {
             var ROTY = makeIdentity(4);
-            var yrad = (Math.PI*ydeg)/180;
+            var yrad = (Math.PI * ydeg) / 180;
 
             ROTY[0, 0] = ROTY[2, 2] = Math.Cos(yrad);
             ROTY[2, 0] = -Math.Sin(yrad);
@@ -86,7 +86,7 @@ namespace StarMathLib
         public static double[,] RotationZ(double zdeg)
         {
             var ROTZ = makeIdentity(4);
-            var zrad = (Math.PI*zdeg)/180;
+            var zrad = (Math.PI * zdeg) / 180;
 
             ROTZ[0, 0] = ROTZ[1, 1] = Math.Cos(zrad);
             ROTZ[1, 0] = Math.Sin(zrad);

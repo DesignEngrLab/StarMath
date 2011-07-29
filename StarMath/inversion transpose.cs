@@ -1,6 +1,6 @@
 ﻿/*************************************************************************
  *     This file & class is part of the StarMath Project
- *     Copyright 2010 Matthew Ira Campbell, PhD.
+ *     Copyright 2010, 2011 Matthew Ira Campbell, PhD.
  *
  *     StarMath is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -24,8 +24,7 @@ namespace StarMathLib
 {
     public static partial class StarMath
     {
-        #region Matrix Inversion & Transpose
-
+        #region Matrix Inversion
         /// <summary>
         /// Inverses the matrix A only if the matrix has already been
         /// "triangularized" - meaning there are no elements in the bottom
@@ -242,8 +241,9 @@ namespace StarMathLib
 
             return B;
         }
+        #endregion
 
-
+        #region LU Decomposition
         /// <summary>
         /// Returns the LU decomposition of A in a new matrix.
         /// </summary>
@@ -381,10 +381,15 @@ namespace StarMathLib
         /// <returns>A matrix of equal size to A that combines the L and U. Here the diagonals belongs to L and the U's diagonal elements are all 1.</returns>
         public static double[,] LUDecomposition(int[,] A, int length)
         {
-            // BUG? is this a bug to clone an integer matrix and cast to a double matrix?
-            var B = (double[,])A.Clone();
+            var B = new double[length, length];
+            B[0, 0] = A[0, 0];
             // normalize row 0
-            for (var i = 1; i < length; i++) B[0, i] /= B[0, 0];
+            for (var i = 1; i < length; i++) B[0, i] = A[0, i] / B[0, 0];
+
+            for (var i = 1; i < length; i++)
+                for (var j = 0; j < length; j++)
+                    B[i, j] = A[i, j];
+
 
             for (var i = 1; i < length; i++)
             {
@@ -409,7 +414,9 @@ namespace StarMathLib
             }
             return B;
         }
+        #endregion
 
+        #region Transpose
         /// <summary>
         /// Transposes the matrix, A.
         /// </summary>
@@ -463,7 +470,9 @@ namespace StarMathLib
                     C[i, j] = A[j, i];
             return C;
         }
+        #endregion
 
+        #region Determinant
         /// <summary>
         /// Returns the determinant of matrix, A.
         /// </summary>
@@ -502,7 +511,9 @@ namespace StarMathLib
             LUDecomposition(A, out L, out U, length);
             var result = 1.0;
             for (var i = 0; i < length; i++)
-                result *= L[i, i];
+                if (double.IsNaN(L[i, i]))
+                    return 0;
+                else result *= L[i, i];
             return result;
         }
         /// <summary>
@@ -543,9 +554,9 @@ namespace StarMathLib
             LUDecomposition(A, out L, out U, length);
             var result = 1.0;
             for (var i = 0; i < length; i++)
-                result *= L[i, i];
-
-            // BUG? is this allowed? it would seem that the determinat of an integer matrix is also an integer.
+                if (double.IsNaN(L[i, i]))
+                    return 0;
+                else result *= L[i, i];
             return (int)result;
         }
         #endregion

@@ -1,6 +1,6 @@
 ﻿/*************************************************************************
  *     This file & class is part of the StarMath Project
- *     Copyright 2010 Matthew Ira Campbell, PhD.
+ *     Copyright 2010, 2011 Matthew Ira Campbell, PhD.
  *
  *     StarMath is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -26,8 +26,6 @@ namespace StarMathLib
 {
     public static partial class StarMath
     {
-        #region Multiplication of Scalars, Vectors, and Matrices
-
         #region Scalars multiplying vectors
         /// <summary>
         /// Multiplies all elements of a 1D double array with the double value.
@@ -1256,7 +1254,6 @@ namespace StarMathLib
         }
 
         #endregion
-        #endregion
 
         #region Add Vector-to-Vector and Matrix-to-Matrix
 
@@ -1714,49 +1711,6 @@ namespace StarMathLib
 
 
 
-        #endregion
-
-        #region Sum
-
-        /// <summary>
-        /// Sum up all the elements of a given matrix
-        /// </summary>
-        /// <param name = "B">Matrix (1D double) whose parameters need to be summed up</param>
-        /// <returns>Returns the total (double) </returns>
-        public static double sum(IEnumerable<double> B)
-        {
-            return B.Sum();
-        }
-
-        /// <summary>
-        /// Sum up all the elements of a given matrix
-        /// </summary>
-        /// <param name = "B">Matrix (1D int) whose parameters need to be summed up</param>
-        /// <returns>Returns the total (int) </returns>
-        public static double sum(IEnumerable<int> B)
-        {
-            return B.Sum();
-        }
-
-        /// <summary>
-        /// Sum up all the elements of a given matrix
-        /// </summary>
-        /// <param name = "B">Matrix (2D double) whose parameters need to be summed up</param>
-        /// <returns>Returns the total (double) </returns>
-        public static double sum(double[,] B)
-        {
-            return JoinMatrixColumnsIntoVector(B).Sum();
-        }
-
-        /// <summary>
-        /// Sum up all the elements of a given matrix
-        /// </summary>
-        /// <param name = "B">Matrix (2D double) whose parameters need to be summed up</param>
-        /// <returns>Returns the total (int) </returns>
-        public static double sum(int[,] B)
-        {
-            return JoinMatrixColumnsIntoVector(B).Sum();
-        }
         #endregion
     }
 }

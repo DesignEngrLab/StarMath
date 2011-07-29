@@ -1,6 +1,6 @@
 ﻿/*************************************************************************
  *     This file & class is part of the StarMath Project
- *     Copyright 2010 Matthew Ira Campbell, PhD.
+ *     Copyright 2010, 2011 Matthew Ira Campbell, PhD.
  *
  *     StarMath is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -186,7 +186,7 @@ namespace StarMathLib
         public static double[] makeLinearProgression(double end, int numElements, double start = 0.0)
         {
             var prog = new double[numElements];
-            double interval = (end - start) / (double)numElements;
+            var interval = (end - start) / numElements;
             for (var i = 0; i < numElements; i++)
                 prog[i] = start + interval * i;
             return prog;
@@ -501,6 +501,7 @@ namespace StarMathLib
             return JointMatrix;
         }
         #endregion
+
         #region Join Vectors into one long Vector
         /// <summary>
         /// Concatenates two 1D double arrays and returns the result. The given variables remain unchanged
@@ -567,6 +568,7 @@ namespace StarMathLib
             return JointArray;
         }
         #endregion
+
         #region Join/Flatten Matrix into one long vector
         /// <summary>
         /// Joins the matrix columns into vector.

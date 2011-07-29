@@ -1,6 +1,6 @@
 ﻿/*************************************************************************
  *     This file & class is part of the StarMath Project
- *     Copyright 2010 Matthew Ira Campbell, PhD.
+ *     Copyright 2010, 2011 Matthew Ira Campbell, PhD.
  *
  *     StarMath is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -246,7 +246,9 @@ namespace StarMathLib
             index = A.IndexOf(max);
             return max;
         }
+        #endregion
 
+        #region Find where a particular value is in a vector or matrix.
         /// <summary>
         /// Finds all the indices for the specified find value.
         /// </summary>
@@ -306,45 +308,6 @@ namespace StarMathLib
                 }
             return null;
         }
-
-        /// <summary>
-        /// Calculates the standard deviation assuming the whole population is provided (not sample st. dev.).
-        /// </summary>
-        /// <param name="A">An vector of integers, A.</param>
-        /// <returns></returns>
-        public static double standardDeviation(IList<int> A)
-        {
-            var mean = A.Average();
-            var variance = A.Sum(a => (a - mean) * (a - mean));
-            return Math.Sqrt(variance / A.Count);
-        }
-        /// <summary>
-        /// Calculates the standard deviation assuming the whole population is provided (not sample st. dev.).
-        /// </summary>
-        /// <param name="A">An vector of doubles, A.</param>
-        /// <returns></returns>
-        public static double standardDeviation(IList<double> A)
-        {
-            var mean = A.Average();
-            var variance = A.Sum(a => (a - mean) * (a - mean));
-            return Math.Sqrt(variance / A.Count);
-        }
-
-        /// <summary>
-        /// Calculates the standard deviation assuming the whole population is provided (not sample st. dev.).
-        /// </summary>
-        /// <param name="A">A matrix in integers, A.</param>
-        /// <returns></returns>
-        public static double standardDeviation(int[,] A)
-        { return standardDeviation(JoinMatrixColumnsIntoVector(A)); }
-        /// <summary>
-        /// Calculates the standard deviation assuming the whole population is provided (not sample st. dev.).
-        /// </summary>
-        /// <param name="A">A matrix in doubles, A.</param>
-        /// <returns></returns>
-        public static double standardDeviation(double[,] A)
-        { return standardDeviation(JoinMatrixColumnsIntoVector(A)); }
-
         #endregion
     }
 }

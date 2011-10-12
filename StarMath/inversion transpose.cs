@@ -190,7 +190,6 @@ namespace StarMathLib
         }
         private static double[,] inverseWithLUResult(double[,] B, int length)
         {
-            // this code is adapted from http://users.erols.com/mdinolfo/matrix.htm
             // one constraint/caveat in this function is that the diagonal elts. cannot
             // be zero.
             // if the matrix is not square or is less than B 2x2, 
@@ -198,30 +197,29 @@ namespace StarMathLib
             #region invert L
 
             for (var i = 0; i < length; i++)
-                for (var j = i; j < length; j++)
+            {
+                B[i, i] = 1.0 / B[i, i];
+                for (var j = i + 1; j < length; j++)
                 {
-                    var x = 1.0;
-                    if (i != j)
-                    {
-                        x = 0.0;
-                        for (var k = i; k < j; k++)
-                            x -= B[j, k] * B[k, i];
-                    }
-                    B[j, i] = x / B[j, j];
+                    var sum = 0.0;
+                    for (var k = i; k < j; k++)
+                        sum -= B[j, k] * B[k, i];
+                    B[j, i] = sum / B[j, j];
                 }
+            }
+
 
             #endregion
 
             #region invert U
 
             for (var i = 0; i < length; i++)
-                for (var j = i; j < length; j++)
+                for (var j = i + 1; j < length; j++)
                 {
-                    if (i == j) continue;
-                    var sum = 0.0;
-                    for (var k = i; k < j; k++)
-                        sum += B[k, j] * ((i == k) ? 1.0 : B[i, k]);
-                    B[i, j] = -sum;
+                    var sum = -B[i, j];
+                    for (var k = i + 1; k < j; k++)
+                        sum -= B[k, j] * B[i, k];
+                    B[i, j] = sum;
                 }
 
             #endregion
@@ -231,10 +229,27 @@ namespace StarMathLib
             for (var i = 0; i < length; i++)
                 for (var j = 0; j < length; j++)
                 {
-                    var sum = 0.0;
-                    for (var k = ((i > j) ? i : j); k < length; k++)
-                        sum += ((j == k) ? 1.0 : B[j, k]) * B[k, i];
-                    B[j, i] = sum;
+                    if (j == i)
+                    {
+                        var sum = B[i, i];
+                        for (var k = i + 1; k < length; k++)
+                            sum += B[i, k] * B[k, i];
+                        B[i, i] = sum;
+                    }
+                    else if (j < i)
+                    {
+                        var sum = 0.0;
+                        for (var k = i; k < length; k++)
+                            sum += B[j, k] * B[k, i];
+                        B[j, i] = sum;
+                    }
+                    else // then i<j
+                    {
+                        var sum = B[j, i];
+                        for (var k = j + 1; k < length; k++)
+                            sum += B[j, k] * B[k, i];
+                        B[j, i] = sum;
+                    }
                 }
 
             #endregion
@@ -308,20 +323,17 @@ namespace StarMathLib
                 for (var j = i; j < length; j++)
                 {
                     // do a column of L
-                    var sum = 0.0;
                     for (var k = 0; k < i; k++)
-                        sum += B[j, k] * B[k, i];
-                    B[j, i] -= sum;
+                        B[j, i] -= B[j, k] * B[k, i];
                 }
                 if (i == length - 1) continue;
                 for (var j = i + 1; j < length; j++)
                 {
                     // do a row of U
-                    var sum = 0.0;
+                    var sum = B[i, j];
                     for (var k = 0; k < i; k++)
-                        sum += B[i, k] * B[k, j];
-                    B[i, j] =
-                        (B[i, j] - sum) / B[i, i];
+                        sum -= B[i, k] * B[k, j];
+                    B[i, j] = sum / B[i, i];
                 }
             }
             return B;
@@ -390,26 +402,22 @@ namespace StarMathLib
                 for (var j = 0; j < length; j++)
                     B[i, j] = A[i, j];
 
-
             for (var i = 1; i < length; i++)
             {
                 for (var j = i; j < length; j++)
                 {
                     // do a column of L
-                    var sum = 0.0;
                     for (var k = 0; k < i; k++)
-                        sum += B[j, k] * B[k, i];
-                    B[j, i] -= sum;
+                        B[j, i] -= B[j, k] * B[k, i];
                 }
                 if (i == length - 1) continue;
                 for (var j = i + 1; j < length; j++)
                 {
                     // do a row of U
-                    var sum = 0.0;
+                    var sum = B[i, j];
                     for (var k = 0; k < i; k++)
-                        sum += B[i, k] * B[k, j];
-                    B[i, j] =
-                        (B[i, j] - sum) / B[i, i];
+                        sum -= B[i, k] * B[k, j];
+                    B[i, j] = sum / B[i, i];
                 }
             }
             return B;

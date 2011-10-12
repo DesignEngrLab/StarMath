@@ -5,6 +5,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestEXE for StarMath", "Tes
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StarMath", "StarMath\StarMath.csproj", "{8B37DF1E-A3C9-42B6-BF1F-D65180FF556E}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Similar Libraries", "Similar Libraries", "{6FD5EEA9-2047-4E54-BD75-DB9BCCFB948A}"
+	ProjectSection(SolutionItems) = preProject
+		Similar Libraries\ALGLib.dll = Similar Libraries\ALGLib.dll
+		Similar Libraries\DotNumerics.dll = Similar Libraries\DotNumerics.dll
+		Similar Libraries\MathNet.Iridium.dll = Similar Libraries\MathNet.Iridium.dll
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

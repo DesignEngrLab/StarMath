@@ -204,7 +204,7 @@ namespace StarMathLib
                     var sum = 0.0;
                     for (var k = i; k < j; k++)
                         sum -= B[j, k] * B[k, i];
-                    B[j, i] = sum / B[j, j];
+                    B[j, i] = (sum == 0) ? 0.0 : sum / B[j, j];
                 }
             }
 
@@ -333,7 +333,7 @@ namespace StarMathLib
                     var sum = B[i, j];
                     for (var k = 0; k < i; k++)
                         sum -= B[i, k] * B[k, j];
-                    B[i, j] = sum / B[i, i];
+                    B[i, j] = (sum == 0.0) ? 0.0 : sum / B[i, i];
                 }
             }
             return B;

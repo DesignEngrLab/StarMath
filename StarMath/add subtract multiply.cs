@@ -1255,6 +1255,233 @@ namespace StarMathLib
 
         #endregion
 
+        #region Hadamard Multiplication
+        /* http://en.wikipedia.org/wiki/Hadamard_product_(matrices) */
+
+        /// <summary>
+        /// The element-by-element of the two 1D double vectors A and B
+        /// </summary>
+        /// <param name = "A">1D double Array, A</param>
+        /// <param name = "B">1D double Array, B</param>
+        /// <returns>A double value that contains the element-by-element</returns>
+        public static double[] EltMultiply(IList<double> A, IList<double> B)
+        {
+            var length = A.Count();
+            if (length != B.Count())
+                throw new Exception("Matrix sizes do not match");
+            return EltMultiply(A, B, length);
+        }
+        /// <summary>
+        /// The element-by-element of the two 1D double vectors A and B
+        /// </summary>
+        /// <param name="A">1D double Array, A</param>
+        /// <param name="B">1D double Array, B</param>
+        /// <param name="length">The length of both vectors A and B. This is an optional argument, but if it is already known 
+        /// - there is a slight speed advantage to providing it.</param>
+        /// <returns>
+        /// A double value that contains the element-by-element
+        /// </returns>
+        public static double[] EltMultiply(IList<double> A, IList<double> B, int length)
+        {
+            var C = new double[length];
+            for (var i = 0; i != length; i++)
+                C[i] += A[i] * B[i];
+            return C;
+        }
+        /// <summary>
+        /// The element-by-element of the one 1D int vector and one 1D double vector
+        /// </summary>
+        /// <param name = "A">1D int Array, A</param>
+        /// <param name = "B">1D double Array, B</param>
+        /// <returns>A double value that contains the element-by-element</returns>
+        public static double[] EltMultiply(IList<int> A, IList<double> B)
+        {
+            var length = A.Count();
+            if (length != B.Count())
+                throw new Exception("Matrix sizes do not match");
+            return EltMultiply(A, B, length);
+        }
+        /// <summary>
+        /// The element-by-element of the one 1D int vector and one 1D double vector
+        /// </summary>
+        /// <param name="A">1D int Array, A</param>
+        /// <param name="B">1D double Array, B</param>
+        /// <param name="length">The length of both vectors A and B. This is an optional argument, but if it is already known 
+        /// - there is a slight speed advantage to providing it.</param>
+        /// <returns>
+        /// A double value that contains the element-by-element
+        /// </returns>
+        public static double[] EltMultiply(IList<int> A, IList<double> B, int length)
+        {
+            var C = new double[length];
+            for (var i = 0; i != length; i++)
+                C[i] += A[i] * B[i];
+            return C;
+        }
+        /// <summary>
+        /// The element-by-element of the two 1D int vectors A and B
+        /// </summary>
+        /// <param name = "A">1D int Array, A</param>
+        /// <param name = "B">1D int Array, B</param>
+        /// <returns>A double value that contains the element-by-element</returns>
+        public static int[] EltMultiply(IList<int> A, IList<int> B)
+        {
+            // this is B dot term_i multiplication
+            var length = A.Count();
+            if (length != B.Count())
+                throw new Exception("Matrix sizes do not match");
+            return EltMultiply(A, B, length);
+        }
+        /// <summary>
+        /// The element-by-element of the two 1D int vectors A and B
+        /// </summary>
+        /// <param name="A">1D int Array, A</param>
+        /// <param name="B">1D int Array, B</param>
+        /// <param name="length">The length of both vectors A and B. This is an optional argument, but if it is already known 
+        /// - there is a slight speed advantage to providing it.</param>
+        /// <returns>
+        /// A double value that contains the element-by-element
+        /// </returns>
+        public static int[] EltMultiply(IList<int> A, IList<int> B, int length)
+        {
+            var C = new int[length];
+            for (var i = 0; i != length; i++)
+                C[i] += A[i] * B[i];
+            return C;
+        }
+
+
+        /// <summary>
+        /// Product of two matrices (2D double)
+        /// </summary>
+        /// <param name = "A">2D double Array, A</param>
+        /// <param name = "B">2D double Array, A</param>
+        /// <returns>A 2D double array that is the product of the two matrices A and B</returns>
+        public static double[,] EltMultiply(double[,] A, double[,] B)
+        {
+            if (A.GetLength(0) != B.GetLength(0) && A.GetLength(1) != B.GetLength(1))
+                throw new Exception("Column count in first matrix must be equal to row count in second matrix");
+            return EltMultiply(A, B, A.GetLength(0), B.GetLength(1));
+        }
+
+        /// <summary>
+        /// Product of two matrices (2D double)
+        /// </summary>
+        /// <param name = "A">2D int Array, A</param>
+        /// <param name = "B">2D double Array, A</param>
+        /// <returns>A 2D double array that is the product of the two matrices A and B</returns>
+        public static double[,] EltMultiply(int[,] A, double[,] B)
+        {
+            if (A.GetLength(0) != B.GetLength(0) && A.GetLength(1) != B.GetLength(1))
+                throw new Exception("Column count in first matrix must be equal to row count in second matrix");
+            return EltMultiply(A, B, A.GetLength(0), B.GetLength(1));
+        }
+
+        /// <summary>
+        /// Product of two matrices (2D double)
+        /// </summary>
+        /// <param name = "A">2D double Array, A</param>
+        /// <param name = "B">2D int Array, A</param>
+        /// <returns>A 2D double array that is the product of the two matrices A and B</returns>
+        public static double[,] EltMultiply(double[,] A, int[,] B)
+        {
+            if (A.GetLength(0) != B.GetLength(0) && A.GetLength(1) != B.GetLength(1))
+                throw new Exception("Column count in first matrix must be equal to row count in second matrix");
+            return EltMultiply(A, B, A.GetLength(0), B.GetLength(1));
+        }
+
+
+        /// <summary>
+        /// Product of two matrices (2D double)
+        /// </summary>
+        /// <param name = "A">2D int Array, A</param>
+        /// <param name = "B">2D int Array, A</param>
+        /// <returns>A 2D int array that is the product of the two matrices A and B</returns>
+        public static int[,] EltMultiply(int[,] A, int[,] B)
+        {
+            if (A.GetLength(0) != B.GetLength(0) && A.GetLength(1) != B.GetLength(1))
+                throw new Exception("Column count in first matrix must be equal to row count in second matrix");
+            return EltMultiply(A, B, A.GetLength(0), B.GetLength(1));
+        }
+
+        /// <summary>
+        /// Product of two matrices (2D double)
+        /// </summary>
+        /// <param name = "A">2D double Array, A</param>
+        /// <param name = "B">2D double Array, A</param>
+        /// <param name="numRows">The number of rows.</param>
+        /// <param name="numCols">The number of columns.</param>
+        /// <returns>A 2D double array that is the product of the two matrices A and B</returns>
+        public static double[,] EltMultiply(double[,] A, double[,] B, int numRows, int numCols)
+        {
+            var C = new double[numRows, numCols];
+
+            for (var i = 0; i != numRows; i++)
+                for (var j = 0; j != numCols; j++)
+                    C[i, j] = A[i, j] * B[i, j];
+
+            return C;
+        }
+
+        /// <summary>
+        /// Product of two matrices (2D double)
+        /// </summary>
+        /// <param name = "A">2D int Array, A</param>
+        /// <param name = "B">2D double Array, A</param>
+        /// <param name="numRows">The number of rows.</param>
+        /// <param name="numCols">The number of columns.</param>
+        /// <returns>A 2D double array that is the product of the two matrices A and B</returns>
+        public static double[,] EltMultiply(int[,] A, double[,] B, int numRows, int numCols)
+        {
+            var C = new double[numRows, numCols];
+
+            for (var i = 0; i != numRows; i++)
+                for (var j = 0; j != numCols; j++)
+                    C[i, j] = A[i, j] * B[i, j];
+
+            return C;
+        }
+        /// <summary>
+        /// Product of two matrices (2D double)
+        /// </summary>
+        /// <param name = "A">2D double Array, A</param>
+        /// <param name = "B">2D int Array, A</param>
+        /// <param name="numRows">The number of rows.</param>
+        /// <param name="numCols">The number of columns.</param>
+        /// <returns>A 2D double array that is the product of the two matrices A and B</returns>
+        public static double[,] EltMultiply(double[,] A, int[,] B, int numRows, int numCols)
+        {
+            var C = new double[numRows, numCols];
+
+            for (var i = 0; i != numRows; i++)
+                for (var j = 0; j != numCols; j++)
+                    C[i, j] = A[i, j] * B[i, j];
+
+            return C;
+        }
+
+        /// <summary>
+        /// Product of two matrices (2D double)
+        /// </summary>
+        /// <param name="A">2D int Array, A</param>
+        /// <param name="B">2D int Array, A</param>
+        /// <param name="numRows">The number of rows.</param>
+        /// <param name="numCols">The number of columns.</param>
+        /// <returns>
+        /// A 2D int array that is the product of the two matrices A and B
+        /// </returns>
+        public static int[,] EltMultiply(int[,] A, int[,] B, int numRows, int numCols)
+        {
+            var C = new int[numRows, numCols];
+
+            for (var i = 0; i != numRows; i++)
+                for (var j = 0; j != numCols; j++)
+                    C[i, j] = A[i, j] * B[i, j];
+
+            return C;
+        }
+        #endregion
+
         #region Add Vector-to-Vector and Matrix-to-Matrix
 
         /// <summary>

@@ -253,6 +253,7 @@ namespace StarMathLib
             return dontDoSqrt ? x.Sum(a => a * a) : Math.Sqrt(x.Sum(a => a * a));
         }
 
+
         /// <summary>
         /// Returns to 2-norm (square root of the sum of squares of all terms)
         /// of the vector, x.
@@ -445,6 +446,31 @@ namespace StarMathLib
         {
             return divide(x, norm2(x), length);
         }
+
+
+        /// <summary>
+        /// Destructively normalize the vector x.
+        /// </summary>
+        /// <param name="x">The vector x.</param>
+        /// <returns></returns>
+        public static IList<double> normalizeInPlace(double[] x)
+        {
+            return normalizeInPlace(x, x.GetLength(0));
+        }
+
+        /// <summary>
+        /// Normalizes the in place.
+        /// </summary>
+        /// <param name="x">The x.</param>
+        /// <param name="length">The length.</param>
+        /// <returns></returns>
+        public static IList<double> normalizeInPlace(IList<double> x, int length)
+        {
+            double f = 1.0 / norm2(x);
+            for (int i = 0; i < length; i++) x[i] *= f;
+            return x;
+        }
+
 
         #endregion
 

@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+    <metadata>
+        <id>StarMath</id>
+        <version>1.0.14.0531</version>
+        <title>StarMath: Static Array Math Library</title>
+        <authors>Matt Campbell</authors>
+        <owners>Matt Campbell</owners>
+        <licenseUrl>http://starmath.codeplex.com/license</licenseUrl>
+        <projectUrl>http://starmath.codeplex.com/</projectUrl>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>While there are already countless math libraries for performing common matrix/array functions, StarMath is distinguished by its simplicity and flexbility. There is no need to declare vectors and matrices in a specific library format. It works simliar to Math.function calls in C#. 
+The library is small and compatible with .Net 3.5 and later. It takes advantage of many of the new Linq functions in order to be more general and capable of speed advantages such as easy parallel-processing (although not currently included in this release).</description>
+        <summary>A small library for performing matrix math. The functions are static and use simple arrays (e.g. double[,]) making it easy to use in other projects.</summary>
+        <copyright>2014</copyright>
+        <tags>matrix, array, math, portable class library</tags>
+    </metadata>
+    <files>
+        <file src="content\StarMath.XML" target="content\StarMath.XML" />
+        <file src="lib\portable-net45+sl5+wp8+win8\StarMath.dll" target="lib\portable-net45+sl5+wp8+win8\StarMath.dll" />
+        <file src="lib\portable-net45+sl5+wp8+win8\StarMath.pdb" target="lib\portable-net45+sl5+wp8+win8\StarMath.pdb" />
+    </files>
+</package>

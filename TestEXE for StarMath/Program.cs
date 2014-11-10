@@ -14,7 +14,8 @@ namespace TestEXE_for_StarMath
         {
             // testStackFunctions();
             // testLUfunctions();
-            benchMarkMatrixInversion();
+            //benchMarkMatrixInversion();
+            compareSolvers_Inversion_to_GaussSeidel();
             Console.WriteLine("Press any key to close.");
             Console.ReadLine();
         }
@@ -172,6 +173,60 @@ namespace TestEXE_for_StarMath
             SaveResultsToCSV("results.csv", results);
 
 
+        }
+
+        private static void compareSolvers_Inversion_to_GaussSeidel()
+        {
+            var watch = new Stopwatch();
+            double error;
+            var results = new List<List<string>>();
+
+            var r = new Random();
+            var fractionZeros = new double[] {0.0,  0.3, 0.5, 0.8, 0.9, 0.95 };
+            var matrixSize = new int[] { 10, 30, 100, 300, 800 };
+            for (var i = 0; i < matrixSize.GetLength(0); i++)
+            {
+                for (int j = 0; j < fractionZeros.GetLength(0); j++)
+                {
+                    int size = matrixSize[i];
+                    int numTrials = 10;
+                    int numZeros = (int)(size * size * fractionZeros[j]);
+                    for (var k = 0; k <= numTrials; k++)
+                    {
+                        var A = new double[size, size];
+                        var b = new double[size];
+                        for (var ii = 0; ii < size; ii++)
+                        {
+                            b[ii] = (200 * r.NextDouble()) - 100.0;
+                            for (var jj = 0; jj < size; jj++)
+                                A[ii, jj] = (200 * r.NextDouble()) - 100.0;
+                        }
+                        for (int l = 0; l < numZeros; l++)
+                            A[r.Next(size), r.Next(size)] = 0.0;
+                        var result = new List<string> { k.ToString(), size.ToString(), numZeros.ToString() };
+
+                        watch.Restart();
+                        var x = StarMath.solveByInverse(A, b);
+                        watch.Stop();
+                        recordResults(result, A, x, b, watch);
+                        watch.Restart();
+                        x = StarMath.solveGaussSeidel(A, b);
+                        watch.Stop();
+                        recordResults(result, A, x, b, watch);
+
+
+                        results.Add(result);
+                    }
+                }
+            }
+            SaveResultsToCSV("results.csv", results);
+        }
+
+        private static void recordResults(List<string> result, double[,] A, double[] x, double[] b, Stopwatch watch)
+        {
+            var error = StarMath.norm1(StarMath.subtract(b, StarMath.multiply(A, x))) / StarMath.norm1(b);
+            result.Add(error.ToString());
+            result.Add(watch.Elapsed.TotalMilliseconds.ToString());
         }
 
         private static void recordResults(List<string> result, double[,] A, double[,] invA, Stopwatch watch, int k)

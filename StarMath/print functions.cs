@@ -65,13 +65,13 @@ namespace StarMathLib
         /// Makes the print string.
         /// </summary>
         /// <param name = "A">The A.</param>
-        public static string MakePrintString(IList<double> A)
+        public static string MakePrintString(IEnumerable<double> A)
         {
             if (A == null) return "<null>";
             var format = "{0:F" + numDecimals + "}";
             var p = "{ ";
-            for (var i = 0; i < A.Count; i++)
-                p += formatCell(format, A[i]) + ",";
+            foreach (var d in A)
+                p += formatCell(format, d) + ",";
             p = p.Remove(p.Length - 1);
             p += " }";
             return p;

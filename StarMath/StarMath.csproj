@@ -42,6 +42,7 @@
   <ItemGroup>
     <Compile Include="3D transforms.cs" />
     <Compile Include="add subtract multiply.cs" />
+    <Compile Include="eigen.cs" />
     <Compile Include="find functions.cs" />
     <Compile Include="inversion transpose.cs" />
     <Compile Include="make extract.cs" />

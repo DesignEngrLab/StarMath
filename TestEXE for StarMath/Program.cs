@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
+using DotNumerics;
 using StarMathLib;
 using DotNum = DotNumerics.LinearAlgebra;
 using MathDot = MathNet.Numerics.LinearAlgebra;
@@ -15,7 +17,8 @@ namespace TestEXE_for_StarMath
             // testStackFunctions();
             // testLUfunctions();
             //benchMarkMatrixInversion();
-            compareSolvers_Inversion_to_GaussSeidel();
+            //compareSolvers_Inversion_to_GaussSeidel();
+            checkEigen();
             Console.WriteLine("Press any key to close.");
             Console.ReadLine();
         }
@@ -175,6 +178,25 @@ namespace TestEXE_for_StarMath
 
         }
 
+
+        private static void checkEigen()
+        {
+            var r = new Random();
+            var size = 44;
+            var A = new double[size, size];
+            for (var i = 0; i < size; i++)
+                for (var j = i; j < size; j++)
+                    A[i, j] = A[j, i] = (200 * r.NextDouble()) - 100.0;
+            var eigenVectors = new double[size][];
+            var λ = StarMath.GetEigenValuesAndVectors(A, out eigenVectors);
+            //Console.WriteLine(StarMath.MakePrintString(ans[0]));
+            for (int i = 0; i < size; i++)
+            {
+                var lhs = StarMath.multiply(A, eigenVectors[i]);
+                var rhs = StarMath.multiply(λ[0][i], eigenVectors[i]);
+                Console.WriteLine(StarMath.norm1(StarMath.subtract(lhs, rhs)));
+            }
+        }
         private static void compareSolvers_Inversion_to_GaussSeidel()
         {
             var watch = new Stopwatch();
@@ -182,7 +204,7 @@ namespace TestEXE_for_StarMath
             var results = new List<List<string>>();
 
             var r = new Random();
-            var fractionZeros = new double[] {0.0,  0.3, 0.5, 0.8, 0.9, 0.95 };
+            var fractionZeros = new double[] { 0.0, 0.3, 0.5, 0.8, 0.9, 0.95 };
             var matrixSize = new int[] { 10, 30, 100, 300, 800 };
             for (var i = 0; i < matrixSize.GetLength(0); i++)
             {
@@ -206,6 +228,7 @@ namespace TestEXE_for_StarMath
                         var result = new List<string> { k.ToString(), size.ToString(), numZeros.ToString() };
 
                         watch.Restart();
+                        /*
                         var x = StarMath.solveByInverse(A, b);
                         watch.Stop();
                         recordResults(result, A, x, b, watch);
@@ -216,6 +239,7 @@ namespace TestEXE_for_StarMath
 
 
                         results.Add(result);
+                         */
                     }
                 }
             }

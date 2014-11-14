@@ -29,19 +29,21 @@ namespace StarMathLib
         /// Gets the eigenvalues for matrix, A.
         /// </summary>
         /// <param name="A">the matrix in question, A.</param>
-        /// <returns></returns>
-        public static double[][] GetEigenValues(double[,] A)
+        /// <returns>The eigenvalues as two arrays of same length/order as A 
+        /// (the first is the real component, the second is the imaginary component).</returns>
+        public static double[][] GetEigenValues(this double[,] A)
         {
             return GetEigenValues(A, A.GetLength(0));
         }
 
-        /// <summary>                   
+        /// <summary>
         /// Gets the eigenvalues for matrix, A.
         /// </summary>
         /// <param name="A">the matrix in question, A.</param>
-        /// <param name="length">The length.</param>
-        /// <returns></returns>
-        public static double[][] GetEigenValues(double[,] A, int length)
+        /// <param name="length">The length is the number of rows or columns.</param>   
+        /// <returns>The eigenvalues as two arrays of same length/order as A 
+        /// (the first is the real component, the second is the imaginary component).</returns>
+        public static double[][] GetEigenValues(this double[,] A, int length)
         {
             double[][] eigenVectors;
             return GetEigenValuesAndVectors(A, out eigenVectors, length);
@@ -51,9 +53,9 @@ namespace StarMathLib
         /// Gets the eigenvalues and eigenvectors for matrix, A.
         /// </summary>
         /// <param name="A">the matrix in question, A.</param>
-        /// <param name="eigenVectors">The eigen vectors.</param>
+        /// <param name="eigenVectors">The eigenvectors as an array of arrays/vectors.</param>
         /// <returns></returns>
-        public static double[][] GetEigenValuesAndVectors(double[,] A, out double[][] eigenVectors)
+        public static double[][] GetEigenValuesAndVectors(this double[,] A, out double[][] eigenVectors)
         {
             return GetEigenValuesAndVectors(A, out eigenVectors, A.GetLength(0));
         }
@@ -62,10 +64,11 @@ namespace StarMathLib
         /// Gets the eigenvalues and eigenvectors for matrix, A.
         /// </summary>
         /// <param name="A">the matrix in question, A.</param>
-        /// <param name="eigenVectors">The eigen vectors.</param>
-        /// <param name="length">The length.</param>
-        /// <returns></returns>
-        public static double[][] GetEigenValuesAndVectors(double[,] A, out double[][] eigenVectors, int length)
+        /// <param name="eigenVectors">The eigenvectors as an array of arrays/vectors.</param>
+        /// <param name="length">The length is the number of rows or columns.</param>   
+        /// <returns>The eigenvalues as two arrays of same length/order as A 
+        /// (the first is the real component, the second is the imaginary component).</returns>
+        public static double[][] GetEigenValuesAndVectors(this double[,] A, out double[][] eigenVectors, int length)
         {
             if (length != A.GetLength(0) || length != A.GetLength(1))
                 throw new Exception("Matrix, A, must be square.");

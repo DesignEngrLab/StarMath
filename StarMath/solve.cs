@@ -26,6 +26,7 @@ namespace StarMathLib
 {
     public static partial class StarMath
     {
+        private const double EqualityTolerance = 1e-15;
         private const double MaxErrorForUsingGaussSeidel = 0.5;
         private const double MaxFractionOfZeroesForGaussSeidel = 0.7;
         private const double GaussSeidelMaxError = 1e-10;

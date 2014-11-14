@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using DotNumerics;
 using StarMathLib;
 using DotNum = DotNumerics.LinearAlgebra;
 using MathDot = MathNet.Numerics.LinearAlgebra;
@@ -27,7 +25,7 @@ namespace TestEXE_for_StarMath
         {
             var A = new[,] { { 0.1, 0.2, 0.3 }, { 1, 2, 3 }, { 10, 20, 30 }, { 100, 200, 300 } };
             int i, j;
-            StarMath.Max(A, out i, out j);
+            A.Max(out i, out j);
             Console.WriteLine(StarMath.MakePrintString(StarMath.JoinMatrixColumnsIntoVector(A)));
         }
 
@@ -54,9 +52,9 @@ namespace TestEXE_for_StarMath
             Console.WriteLine(StarMath.MakePrintString(U));
 
             Console.WriteLine("L * U =");
-            Console.WriteLine(StarMath.MakePrintString(StarMath.multiply(L, U)));
+            Console.WriteLine(StarMath.MakePrintString(L.multiply(U)));
 
-            var E = StarMath.subtract(A, StarMath.multiply(L, U));
+            var E = A.subtract(L.multiply(U));
             var error = StarMath.norm2(E);
             Console.WriteLine("error = " + error);
         }
@@ -65,23 +63,26 @@ namespace TestEXE_for_StarMath
         {
             var watch = new Stopwatch();
             double error;
-            var results = new List<List<string>>();
-            results.Add(new List<string>
-                            {
-                                "","",
-                                "ALGlib Err",
-                                "ALGlib Time",
-                                "Dot Numerics Err",
-                                "Dot Numerics Time",
-                                "Dot NumericsClass Err",
-                                "Dot NumericsClass Time",
-                                "Math.Net Err",
-                                "Math.Net Numerics Time",
-                                "Math.NetClass Err",
-                                "Math.NetClass Time",
-                                "StArMath Err",
-                                "StArMath Time"
-                            });
+            var results = new List<List<string>>
+            {
+                new List<string>
+                {
+                    "",
+                    "",
+                    "ALGlib Err",
+                    "ALGlib Time",
+                    "Dot Numerics Err",
+                    "Dot Numerics Time",
+                    "Dot NumericsClass Err",
+                    "Dot NumericsClass Time",
+                    "Math.Net Err",
+                    "Math.Net Numerics Time",
+                    "Math.NetClass Err",
+                    "Math.NetClass Time",
+                    "StArMath Err",
+                    "StArMath Time"
+                }
+            };
             var r = new Random();
 
             var limits = new int[,] {{3,10,30,100,300,1000,3000},
@@ -188,13 +189,13 @@ namespace TestEXE_for_StarMath
                 for (var j = i; j < size; j++)
                     A[i, j] = A[j, i] = (200 * r.NextDouble()) - 100.0;
             var eigenVectors = new double[size][];
-            var λ = StarMath.GetEigenValuesAndVectors(A, out eigenVectors);
+            var λ = A.GetEigenValuesAndVectors(out eigenVectors);
             //Console.WriteLine(StarMath.MakePrintString(ans[0]));
             for (int i = 0; i < size; i++)
             {
-                var lhs = StarMath.multiply(A, eigenVectors[i]);
+                var lhs = A.multiply(eigenVectors[i]);
                 var rhs = StarMath.multiply(λ[0][i], eigenVectors[i]);
-                Console.WriteLine(StarMath.norm1(StarMath.subtract(lhs, rhs)));
+                Console.WriteLine(StarMath.norm1(lhs.subtract(rhs)));
             }
         }
         private static void compareSolvers_Inversion_to_GaussSeidel()
@@ -248,7 +249,7 @@ namespace TestEXE_for_StarMath
 
         private static void recordResults(List<string> result, double[,] A, double[] x, double[] b, Stopwatch watch)
         {
-            var error = StarMath.norm1(StarMath.subtract(b, StarMath.multiply(A, x))) / StarMath.norm1(b);
+            var error = StarMath.norm1(b.subtract(A.multiply(x))) / StarMath.norm1(b);
             result.Add(error.ToString());
             result.Add(watch.Elapsed.TotalMilliseconds.ToString());
         }
@@ -257,7 +258,7 @@ namespace TestEXE_for_StarMath
         {
             if (k == 0) return; //it seems that the first time you call a new function there may be a delay. This is especially
             // true if the function is in another dll.
-            var C = StarMath.subtract(StarMath.multiply(A, invA), StarMath.makeIdentity(A.GetLength(0)));
+            var C = A.multiply(invA).subtract(StarMath.makeIdentity(A.GetLength(0)));
             var error = StarMath.norm2(C);
             Console.WriteLine("end invert, error = " + error);
             Console.WriteLine("time = " + watch.Elapsed);

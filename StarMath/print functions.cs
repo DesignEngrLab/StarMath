@@ -26,14 +26,12 @@ namespace StarMathLib
 {
     public static partial class StarMath
     {
-        private const int cellWidth = 10;
-        private const int numDecimals = 3;
-
         /// <summary>
         /// Makes the print string.
         /// </summary>
-        /// <param name = "A">The A.</param>
-        public static string MakePrintString(double[,] A)
+        /// <param name="A">The matrix, A.</param>
+        /// <returns></returns>
+        public static string MakePrintString(this double[,] A)
         {
             if (A == null) return "<null>";
             var format = "{0:F" + numDecimals + "}";
@@ -50,22 +48,13 @@ namespace StarMathLib
             return p;
         }
 
-        private static object formatCell(string format, double p)
-        {
-            var numStr = string.Format(format, p);
-            numStr = numStr.TrimEnd('0');
-            numStr = numStr.TrimEnd('.');
-            var padAmt = ((double)(cellWidth - numStr.Length)) / 2;
-            numStr = numStr.PadLeft((int)Math.Floor(padAmt + numStr.Length));
-            numStr = numStr.PadRight(cellWidth);
-            return numStr;
-        }
 
         /// <summary>
         /// Makes the print string.
         /// </summary>
-        /// <param name = "A">The A.</param>
-        public static string MakePrintString(IEnumerable<double> A)
+        /// <param name="A">The A.</param>
+        /// <returns></returns>
+        public static string MakePrintString(this IEnumerable<double> A)
         {
             if (A == null) return "<null>";
             var format = "{0:F" + numDecimals + "}";
@@ -80,8 +69,9 @@ namespace StarMathLib
         /// <summary>
         /// Makes the print string.
         /// </summary>
-        /// <param name = "A">The A.</param>
-        public static string MakePrintString(int[,] A)
+        /// <param name="A">The A.</param>
+        /// <returns></returns>
+        public static string MakePrintString(this int[,] A)
         {
             if (A == null) return "<null>";
             const string format = "{0}";
@@ -101,17 +91,30 @@ namespace StarMathLib
         /// <summary>
         /// Makes the print string.
         /// </summary>
-        /// <param name = "A">The A.</param>
-        public static string MakePrintString(IList<int> A)
+        /// <param name="A">The A.</param>
+        /// <returns></returns>
+        public static string MakePrintString(this IEnumerable<int> A)
         {
             if (A == null) return "<null>";
-            const string format = "{0}";
+            var format = "{0:F" + numDecimals + "}";
             var p = "{ ";
-            for (var i = 0; i < A.Count; i++)
-                p += formatCell(format, A[i]) + ",";
+            foreach (var d in A)
+                p += formatCell(format, d) + ",";
             p = p.Remove(p.Length - 1);
             p += " }";
             return p;
+        }
+
+
+        private static object formatCell(string format, double p)
+        {
+            var numStr = string.Format(format, p);
+            numStr = numStr.TrimEnd('0');
+            numStr = numStr.TrimEnd('.');
+            var padAmt = ((double)(cellWidth - numStr.Length)) / 2;
+            numStr = numStr.PadLeft((int)Math.Floor(padAmt + numStr.Length));
+            numStr = numStr.PadRight(cellWidth);
+            return numStr;
         }
     }
 }

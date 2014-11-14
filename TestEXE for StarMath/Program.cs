@@ -26,7 +26,7 @@ namespace TestEXE_for_StarMath
             var A = new[,] { { 0.1, 0.2, 0.3 }, { 1, 2, 3 }, { 10, 20, 30 }, { 100, 200, 300 } };
             int i, j;
             A.Max(out i, out j);
-            Console.WriteLine(StarMath.MakePrintString(StarMath.JoinMatrixColumnsIntoVector(A)));
+            Console.WriteLine(A.JoinMatrixColumnsIntoVector().MakePrintString());
         }
 
         private static void testLUfunctions()
@@ -39,23 +39,21 @@ namespace TestEXE_for_StarMath
                 for (var j = 0; j < size; j++)
                     A[i, j] = (200 * r.NextDouble()) - 100.0;
             Console.WriteLine("A =");
-            Console.WriteLine(StarMath.MakePrintString(A));
+            Console.WriteLine(A.MakePrintString());
 
-            Console.WriteLine("Combined LU = ");
-            Console.WriteLine(StarMath.LUDecomposition(A));
 
             double[,] L, U;
             StarMath.LUDecomposition(A, out L, out U);
             Console.WriteLine(" L = ");
-            Console.WriteLine(StarMath.MakePrintString(L));
+            Console.WriteLine(L.MakePrintString());
             Console.WriteLine(" U = ");
-            Console.WriteLine(StarMath.MakePrintString(U));
+            Console.WriteLine(U.MakePrintString());
 
             Console.WriteLine("L * U =");
-            Console.WriteLine(StarMath.MakePrintString(L.multiply(U)));
+            Console.WriteLine(L.multiply(U).MakePrintString());
 
             var E = A.subtract(L.multiply(U));
-            var error = StarMath.norm2(E);
+            var error = E.norm2();
             Console.WriteLine("error = " + error);
         }
 
@@ -167,7 +165,7 @@ namespace TestEXE_for_StarMath
                     Console.WriteLine("\n\n\nSTARMATH: start invert check for matrix of size: " + size);
 
                     watch.Restart();
-                    B = StarMath.inverse(A);
+                    B = A.inverse();
                     watch.Stop();
                     recordResults(result, A, B, watch, k);
                     #endregion
@@ -183,7 +181,7 @@ namespace TestEXE_for_StarMath
         private static void checkEigen()
         {
             var r = new Random();
-            var size = 44;
+            const int size = 44;
             var A = new double[size, size];
             for (var i = 0; i < size; i++)
                 for (var j = i; j < size; j++)
@@ -195,7 +193,7 @@ namespace TestEXE_for_StarMath
             {
                 var lhs = A.multiply(eigenVectors[i]);
                 var rhs = StarMath.multiply(λ[0][i], eigenVectors[i]);
-                Console.WriteLine(StarMath.norm1(lhs.subtract(rhs)));
+                Console.WriteLine(lhs.subtract(rhs).norm1());
             }
         }
         private static void compareSolvers_Inversion_to_GaussSeidel()
@@ -212,8 +210,8 @@ namespace TestEXE_for_StarMath
                 for (int j = 0; j < fractionZeros.GetLength(0); j++)
                 {
                     int size = matrixSize[i];
-                    int numTrials = 10;
-                    int numZeros = (int)(size * size * fractionZeros[j]);
+                    const int numTrials = 10;
+                    var numZeros = (int)(size * size * fractionZeros[j]);
                     for (var k = 0; k <= numTrials; k++)
                     {
                         var A = new double[size, size];
@@ -249,7 +247,7 @@ namespace TestEXE_for_StarMath
 
         private static void recordResults(List<string> result, double[,] A, double[] x, double[] b, Stopwatch watch)
         {
-            var error = StarMath.norm1(b.subtract(A.multiply(x))) / StarMath.norm1(b);
+            var error = b.subtract(A.multiply(x)).norm1() / b.norm1();
             result.Add(error.ToString());
             result.Add(watch.Elapsed.TotalMilliseconds.ToString());
         }
@@ -259,14 +257,14 @@ namespace TestEXE_for_StarMath
             if (k == 0) return; //it seems that the first time you call a new function there may be a delay. This is especially
             // true if the function is in another dll.
             var C = A.multiply(invA).subtract(StarMath.makeIdentity(A.GetLength(0)));
-            var error = StarMath.norm2(C);
+            var error = C.norm2();
             Console.WriteLine("end invert, error = " + error);
             Console.WriteLine("time = " + watch.Elapsed);
             result.Add(error.ToString());
             result.Add(watch.Elapsed.TotalMilliseconds.ToString());
         }
 
-        private static void SaveResultsToCSV(string path, List<List<string>> results)
+        private static void SaveResultsToCSV(string path, IEnumerable<List<string>> results)
         {
             var fs = new FileStream(path, FileMode.Create);
             var r = new StreamWriter(fs);

@@ -26,13 +26,6 @@ namespace StarMathLib
 {
     public static partial class StarMath
     {
-        private const double EqualityTolerance = 1e-15;
-        private const double MaxErrorForUsingGaussSeidel = 0.5;
-        private const double MaxFractionOfZeroesForGaussSeidel = 0.7;
-        private const double GaussSeidelMaxError = 1e-10;
-        private const double GaussSeidelDiagonalDominanceRatio = 0.5;
-        private const int GaussSeidelMaxIterationFactor = 1;
-        private const double GaussSeidelRelaxationOmega = 1.0;
         /// <summary>
         /// Solves the specified A matrix.
         /// </summary>
@@ -40,11 +33,9 @@ namespace StarMathLib
         /// <param name="b">The b.</param>
         /// <param name="initialGuess">The initial guess.</param>
         /// <returns></returns>
-        /// <exception cref="System.Exception">
-        /// Matrix, A, must be square.
+        /// <exception cref="System.Exception">Matrix, A, must be square.
         /// or
-        /// Matrix, A, must be have the same number of rows as the vector, b.
-        /// </exception>
+        /// Matrix, A, must be have the same number of rows as the vector, b.</exception>
         public static double[] solve(double[,] A, IList<double> b, IList<double> initialGuess = null)
         {
             var length = A.GetLength(0);

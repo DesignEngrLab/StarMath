@@ -28,27 +28,19 @@ namespace StarMathLib
         /// <summary>
         /// Inverses the matrix A only if the matrix has already been
         /// "triangularized" - meaning there are no elements in the bottom
-        /// triangle - A[i,j]=0.0 where j>i
+        /// triangle - A[i,j]=0.0 where j&gt;i
         /// </summary>
-        /// <param name = "A">The matrix to invert. This matrix is unchanged by this function.</param>
-        /// <returns>The inverted matrix, A^-1.</returns>
+        /// <param name="A">The matrix to invert. This matrix is unchanged by this function.</param>
+        /// <returns>
+        /// The inverted matrix, A^-1.
+        /// </returns>
+        /// <exception cref="System.Exception">Matrix cannnot be inverted. Can only invert sqare matrices.</exception>
         public static double[,] inverseUpper(double[,] A)
         {
             var length = A.GetLength(0);
             if (length != A.GetLength(1))
                 throw new Exception("Matrix cannnot be inverted. Can only invert sqare matrices.");
-            return inverseUpper(A, length);
-        }
-        /// <summary>
-        /// Inverses the matrix A only if the matrix has already been
-        /// "triangularized" - meaning there are no elements in the bottom
-        /// triangle - A[i,j]=0.0 where j&gt;i
-        /// </summary>
-        /// <param name="A">The matrix to invert. This matrix is unchanged by this function.</param>
-        /// <param name="length">The length of the number of rows/columns in the square matrix,A.</param>
-        /// <returns>The inverted matrix, A^-1.</returns>
-        public static double[,] inverseUpper(double[,] A, int length)
-        {
+
             var B = new double[length, length];
             var t = new double[length];
 
@@ -83,28 +75,18 @@ namespace StarMathLib
         /// <summary>
         /// Inverses the matrix A only if the matrix has already been
         /// "triangularized" - meaning there are no elements in the bottom
-        /// triangle - A[i,j]=0.0 where j>i
+        /// triangle - A[i,j]=0.0 where j&gt;i
         /// </summary>
-        /// <param name = "A">The matrix to invert. This matrix is unchanged by this function.</param>
-        /// <returns>The inverted matrix, A^-1.</returns>
+        /// <param name="A">The matrix to invert. This matrix is unchanged by this function.</param>
+        /// <returns>
+        /// The inverted matrix, A^-1.
+        /// </returns>
+        /// <exception cref="System.Exception">Matrix cannnot be inverted. Can only invert sqare matrices.</exception>
         public static double[,] inverseUpper(int[,] A)
         {
             var length = A.GetLength(0);
             if (length != A.GetLength(1))
                 throw new Exception("Matrix cannnot be inverted. Can only invert sqare matrices.");
-            return inverseUpper(A, length);
-        }
-
-        /// <summary>
-        /// Inverses the matrix A only if the matrix has already been
-        /// "triangularized" - meaning there are no elements in the bottom
-        /// triangle - A[i,j]=0.0 where j&gt;i
-        /// </summary>
-        /// <param name="A">The matrix to invert. This matrix is unchanged by this function.</param>
-        /// <param name="length">The length of the number of rows/columns in the square matrix, A.</param>
-        /// <returns>The inverted matrix, A^-1.</returns>
-        public static double[,] inverseUpper(int[,] A, int length)
-        {
             var B = new double[length, length];
             var t = new double[length];
 
@@ -140,53 +122,35 @@ namespace StarMathLib
         /// Inverses the matrix A only if the diagonal is all non-zero.
         /// A[i,i] != 0.0
         /// </summary>
-        /// <param name = "A">The matrix to invert. This matrix is unchanged by this function.</param>
-        /// <returns>The inverted matrix, A^-1.</returns>
-        public static double[,] inverse(double[,] A)
+        /// <param name="A">The matrix to invert. This matrix is unchanged by this function.</param>
+        /// <returns>
+        /// The inverted matrix, A^-1.
+        /// </returns>
+        /// <exception cref="System.Exception">Matrix cannnot be inverted. Can only invert sqare matrices.</exception>
+        public static double[,] inverse(this double[,] A)
         {
             var length = A.GetLength(0);
             if (length != A.GetLength(1))
                 throw new Exception("Matrix cannnot be inverted. Can only invert sqare matrices.");
             if (length == 1) return new[,] { { 1 / A[0, 0] } };
-            return inverseWithLUResult(LUDecomposition(A), length);
+            return inverseWithLUResult(LUDecomposition(A, length), length);
         }
         /// <summary>
         /// Inverses the matrix A only if the diagonal is all non-zero.
         /// A[i,i] != 0.0
         /// </summary>
-        /// <param name = "A">The matrix to invert. This matrix is unchanged by this function.</param>
-        /// <returns>The inverted matrix, A^-1.</returns>
-        public static double[,] inverse(int[,] A)
+        /// <param name="A">The matrix to invert. This matrix is unchanged by this function.</param>
+        /// <returns>
+        /// The inverted matrix, A^-1.
+        /// </returns>
+        /// <exception cref="System.Exception">Matrix cannnot be inverted. Can only invert sqare matrices.</exception>
+        public static double[,] inverse(this int[,] A)
         {
             var length = A.GetLength(0);
             if (length != A.GetLength(1))
                 throw new Exception("Matrix cannnot be inverted. Can only invert sqare matrices.");
             if (length == 1) return new[,] { { 1 / (double)A[0, 0] } };
-            return inverseWithLUResult(LUDecomposition(A), length);
-        }
-        /// <summary>
-        /// Inverses the matrix A only if the diagonal is all non-zero.
-        /// A[i,i] != 0.0
-        /// </summary>
-        /// <param name = "A">The matrix to invert. This matrix is unchanged by this function.</param>
-        /// <param name="length">The length of the number of rows/columns in the square matrix, A.</param>
-        /// <returns>The inverted matrix, A^-1.</returns>
-        public static double[,] inverse(double[,] A, int length)
-        {
-            if (length == 1) return new[,] { { 1 / A[0, 0] } };
-            return inverseWithLUResult(LUDecomposition(A), length);
-        }
-        /// <summary>
-        /// Inverses the matrix A only if the diagonal is all non-zero.
-        /// A[i,i] != 0.0
-        /// </summary>
-        /// <param name = "A">The matrix to invert. This matrix is unchanged by this function.</param>
-        /// <param name="length">The length of the number of rows/columns in the square matrix, A.</param>
-        /// <returns>The inverted matrix, A^-1.</returns>
-        public static double[,] inverse(int[,] A, int length)
-        {
-            if (length == 1) return new[,] { { 1 / (double)A[0, 0] } };
-            return inverseWithLUResult(LUDecomposition(A), length);
+            return inverseWithLUResult(LUDecomposition(A, length), length);
         }
         private static double[,] inverseWithLUResult(double[,] B, int length)
         {
@@ -262,25 +226,15 @@ namespace StarMathLib
         /// <summary>
         /// Returns the LU decomposition of A in a new matrix.
         /// </summary>
-        /// <param name = "A">The matrix to invert. This matrix is unchanged by this function.</param>
-        /// <param name = "L">The L matrix is output where the diagonal elements are included and not (necessarily) equal to one.</param>
-        /// <param name = "U">The U matrix is output where the diagonal elements are all equal to one.</param>
+        /// <param name="A">The matrix to invert. This matrix is unchanged by this function.</param>
+        /// <param name="L">The L matrix is output where the diagonal elements are included and not (necessarily) equal to one.</param>
+        /// <param name="U">The U matrix is output where the diagonal elements are all equal to one.</param>
+        /// <exception cref="System.Exception">Matrix cannnot be inverted. Can only invert sqare matrices.</exception>
         public static void LUDecomposition(double[,] A, out double[,] L, out double[,] U)
         {
             var length = A.GetLength(0);
             if (length != A.GetLength(1))
-                throw new Exception("Matrix cannnot be inverted. Can only invert sqare matrices.");
-            LUDecomposition(A, out L, out U, length);
-        }
-        /// <summary>
-        /// Returns the LU decomposition of A in a new matrix.
-        /// </summary>
-        /// <param name = "A">The matrix to invert. This matrix is unchanged by this function.</param>
-        /// <param name = "L">The L matrix is output where the diagonal elements are included and not (necessarily) equal to one.</param>
-        /// <param name = "U">The U matrix is output where the diagonal elements are all equal to one.</param>
-        /// <param name="length">The length of the number of rows/columns in the square matrix, A.</param>
-        public static void LUDecomposition(double[,] A, out double[,] L, out double[,] U, int length)
-        {
+                throw new Exception("LU Decomposition can only be determined for square matrices.");
             L = LUDecomposition(A, length);
             U = new double[length, length];
             for (var i = 0; i < length; i++)
@@ -297,22 +251,13 @@ namespace StarMathLib
         /// <summary>
         /// Returns the LU decomposition of A in a new matrix.
         /// </summary>
-        /// <param name = "A">The matrix to invert. This matrix is unchanged by this function.</param>
-        /// <returns>A matrix of equal size to A that combines the L and U. Here the diagonals belongs to L and the U's diagonal elements are all 1.</returns>
-        public static double[,] LUDecomposition(double[,] A)
-        {
-            var size = A.GetLength(0);
-            if (size != A.GetLength(1))
-                throw new Exception("LU Decomposition can only be determined for square matrices.");
-            return LUDecomposition(A, size);
-        }
-        /// <summary>
-        /// Returns the LU decomposition of A in a new matrix.
-        /// </summary>
-        /// <param name = "A">The matrix to invert. This matrix is unchanged by this function.</param>
-        /// <param name="length">The length of the number of rows/columns in the square matrix, A.</param>
-        /// <returns>A matrix of equal size to A that combines the L and U. Here the diagonals belongs to L and the U's diagonal elements are all 1.</returns>
-        public static double[,] LUDecomposition(double[,] A, int length)
+        /// <param name="A">The matrix to invert. This matrix is unchanged by this function.</param>
+        /// <param name="length">The length/order/number of rows of matrix, A.</param>
+        /// <returns>
+        /// A matrix of equal size to A that combines the L and U. Here the diagonals belongs to L and the U's diagonal elements are all 1.
+        /// </returns>
+        /// <exception cref="System.Exception">LU Decomposition can only be determined for square matrices.</exception>
+        private static double[,] LUDecomposition(double[,] A, int length)
         {
             var B = (double[,])A.Clone();
             // normalize row 0
@@ -341,25 +286,15 @@ namespace StarMathLib
         /// <summary>
         /// Returns the LU decomposition of A in a new matrix.
         /// </summary>
-        /// <param name = "A">The matrix to invert. This matrix is unchanged by this function.</param>
-        /// <param name = "L">The L matrix is output where the diagonal elements are included and not (necessarily) equal to one.</param>
-        /// <param name = "U">The U matrix is output where the diagonal elements are all equal to one.</param>
+        /// <param name="A">The matrix to invert. This matrix is unchanged by this function.</param>
+        /// <param name="L">The L matrix is output where the diagonal elements are included and not (necessarily) equal to one.</param>
+        /// <param name="U">The U matrix is output where the diagonal elements are all equal to one.</param>
+        /// <exception cref="System.Exception">LU Decomposition can only be determined for square matrices.</exception>
         public static void LUDecomposition(int[,] A, out double[,] L, out double[,] U)
         {
             var length = A.GetLength(0);
             if (length != A.GetLength(1))
-                throw new Exception("Matrix cannnot be inverted. Can only invert sqare matrices.");
-            LUDecomposition(A, out L, out U, length);
-        }
-        /// <summary>
-        /// Returns the LU decomposition of A in a new matrix.
-        /// </summary>
-        /// <param name = "A">The matrix to invert. This matrix is unchanged by this function.</param>
-        /// <param name = "L">The L matrix is output where the diagonal elements are included and not (necessarily) equal to one.</param>
-        /// <param name = "U">The U matrix is output where the diagonal elements are all equal to one.</param>
-        /// <param name="length">The length of the number of rows/columns in the square matrix, A.</param>
-        public static void LUDecomposition(int[,] A, out double[,] L, out double[,] U, int length)
-        {
+                throw new Exception("LU Decomposition can only be determined for square matrices.");
             L = LUDecomposition(A, length);
             U = new double[length, length];
             for (var i = 0; i < length; i++)
@@ -377,21 +312,9 @@ namespace StarMathLib
         /// Returns the LU decomposition of A in a new matrix.
         /// </summary>
         /// <param name = "A">The matrix to invert. This matrix is unchanged by this function.</param>
-        /// <returns>A matrix of equal size to A that combines the L and U. Here the diagonals belongs to L and the U's diagonal elements are all 1.</returns>
-        public static double[,] LUDecomposition(int[,] A)
-        {
-            var size = A.GetLength(0);
-            if (size != A.GetLength(1))
-                throw new Exception("LU Decomposition can only be determined for square matrices.");
-            return LUDecomposition(A, size);
-        }
-        /// <summary>
-        /// Returns the LU decomposition of A in a new matrix.
-        /// </summary>
-        /// <param name = "A">The matrix to invert. This matrix is unchanged by this function.</param>
         /// <param name="length">The length of the number of rows/columns in the square matrix, A.</param>
         /// <returns>A matrix of equal size to A that combines the L and U. Here the diagonals belongs to L and the U's diagonal elements are all 1.</returns>
-        public static double[,] LUDecomposition(int[,] A, int length)
+        private static double[,] LUDecomposition(int[,] A, int length)
         {
             var B = new double[length, length];
             B[0, 0] = A[0, 0];
@@ -428,22 +351,16 @@ namespace StarMathLib
         /// <summary>
         /// Transposes the matrix, A.
         /// </summary>
-        /// <param name = "A">The matrix to transpose. This matrix is unchanged by this function.</param>
-        /// <returns>The transponse of A.</returns>
-        public static double[,] transpose(double[,] A)
+        /// <param name="A">The matrix to transpose. This matrix is unchanged by this function.</param>
+        /// <returns>
+        /// The transponse of A.
+        /// </returns>
+        /// <exception cref="System.Exception">The matrix, A, is null.</exception>
+        public static double[,] transpose(this double[,] A)
         {
             if (A == null) throw new Exception("The matrix, A, is null.");
-            return transpose(A, A.GetLength(1), A.GetLength(0));
-        }
-        /// <summary>
-        /// Transposes the matrix, A.
-        /// </summary>
-        /// <param name = "A">The matrix to transpose. This matrix is unchanged by this function.</param>
-        /// <param name="numRows">The number of rows.</param>
-        /// <param name="numCols">The number of columns.</param>
-        /// <returns>The transponse of A.</returns>
-        public static double[,] transpose(double[,] A, int numRows, int numCols)
-        {
+            int numRows = A.GetLength(1); 
+            int numCols=A.GetLength(0);
             var C = new double[numRows, numCols];
 
             for (var i = 0; i != numRows; i++)
@@ -454,23 +371,17 @@ namespace StarMathLib
         /// <summary>
         /// Transposes the matrix, A.
         /// </summary>
-        /// <param name = "A">The matrix to transpose. This matrix is unchanged by this function.</param>
-        /// <returns>The transponse of A.</returns>
-        public static int[,] transpose(int[,] A)
+        /// <param name="A">The matrix to transpose. This matrix is unchanged by this function.</param>
+        /// <returns>
+        /// The transponse of A.
+        /// </returns>
+        /// <exception cref="System.Exception">The matrix, A, is null.</exception>
+        public static int[,] transpose(this int[,] A)
         {
             if (A == null) throw new Exception("The matrix, A, is null.");
-            return transpose(A, A.GetLength(1), A.GetLength(0));
-        }
+            int numRows = A.GetLength(1);
+            int numCols = A.GetLength(0);
 
-        /// <summary>
-        /// Transposes the matrix, A.
-        /// </summary>
-        /// <param name="A">The matrix to transpose. This matrix is unchanged by this function.</param>
-        /// <param name="numRows">The number of rows.</param>
-        /// <param name="numCols">The number of columns.</param>
-        /// <returns>The transponse of A.</returns>
-        public static int[,] transpose(int[,] A, int numRows, int numCols)
-        {
             var C = new int[numRows, numCols];
 
             for (var i = 0; i != numRows; i++)
@@ -484,10 +395,17 @@ namespace StarMathLib
         /// <summary>
         /// Returns the determinant of matrix, A.
         /// </summary>
-        /// <param name = "A">The input argument matrix. This matrix is unchanged by this function.</param>
-        /// <exception cref = "Exception"></exception>
-        /// <returns>a single value representing the matrix's determinant.</returns>
-        public static double determinant(double[,] A)
+        /// <param name="A">The input argument matrix. This matrix is unchanged by this function.</param>
+        /// <returns>
+        /// a single value representing the matrix's determinant.
+        /// </returns>
+        /// <exception cref="System.Exception">
+        /// The matrix, A, is null.
+        /// or
+        /// The determinant is only possible for square matrices.
+        /// </exception>
+        /// <exception cref="Exception"></exception>
+        public static double determinant(this double[,] A)
         {
             if (A == null) throw new Exception("The matrix, A, is null.");
             var length = A.GetLength(0);
@@ -505,18 +423,10 @@ namespace StarMathLib
                        - (A[0, 2] * A[1, 1] * A[2, 0]);
             return determinantBig(A, length);
         }
-        /// <summary>
-        /// Returns the determinant of matrix, A. Only used internally for matrices larger than 3.
-        /// </summary>
-        /// <param name="A">The input argument matrix. This matrix is unchanged by this function.</param>
-        /// <param name="length">The length of the side of the square matrix.</param>
-        /// <returns>
-        /// a single value representing the matrix's determinant.
-        /// </returns>
-        public static double determinantBig(double[,] A, int length)
+
+        private static double determinantBig(double[,] A, int length)
         {
-            double[,] L, U;
-            LUDecomposition(A, out L, out U, length);
+            var L = LUDecomposition(A, length);
             var result = 1.0;
             for (var i = 0; i < length; i++)
                 if (double.IsNaN(L[i, i]))
@@ -527,10 +437,17 @@ namespace StarMathLib
         /// <summary>
         /// Returns the determinant of matrix, A.
         /// </summary>
-        /// <param name = "A">The input argument matrix. This matrix is unchanged by this function.</param>
-        /// <exception cref = "Exception"></exception>
-        /// <returns>a single value representing the matrix's determinant.</returns>
-        public static int determinant(int[,] A)
+        /// <param name="A">The input argument matrix. This matrix is unchanged by this function.</param>
+        /// <returns>
+        /// a single value representing the matrix's determinant.
+        /// </returns>
+        /// <exception cref="System.Exception">
+        /// The matrix, A, is null.
+        /// or
+        /// The determinant is only possible for square matrices.
+        /// </exception>
+        /// <exception cref="Exception"></exception>
+        public static int determinant(this int[,] A)
         {
             if (A == null) throw new Exception("The matrix, A, is null.");
             var length = A.GetLength(0);
@@ -556,10 +473,9 @@ namespace StarMathLib
         /// <returns>
         /// a single value representing the matrix's determinant.
         /// </returns>
-        public static int determinantBig(int[,] A, int length)
+        private static int determinantBig(int[,] A, int length)
         {
-            double[,] L, U;
-            LUDecomposition(A, out L, out U, length);
+            var L = LUDecomposition(A, length);
             var result = 1.0;
             for (var i = 0; i < length; i++)
                 if (double.IsNaN(L[i, i]))

@@ -33,20 +33,8 @@ namespace StarMathLib
         /// (the first is the real component, the second is the imaginary component).</returns>
         public static double[][] GetEigenValues(this double[,] A)
         {
-            return GetEigenValues(A, A.GetLength(0));
-        }
-
-        /// <summary>
-        /// Gets the eigenvalues for matrix, A.
-        /// </summary>
-        /// <param name="A">the matrix in question, A.</param>
-        /// <param name="length">The length is the number of rows or columns.</param>   
-        /// <returns>The eigenvalues as two arrays of same length/order as A 
-        /// (the first is the real component, the second is the imaginary component).</returns>
-        public static double[][] GetEigenValues(this double[,] A, int length)
-        {
             double[][] eigenVectors;
-            return GetEigenValuesAndVectors(A, out eigenVectors, length);
+            return GetEigenValuesAndVectors(A, out eigenVectors);
         }
 
         /// <summary>
@@ -57,20 +45,8 @@ namespace StarMathLib
         /// <returns></returns>
         public static double[][] GetEigenValuesAndVectors(this double[,] A, out double[][] eigenVectors)
         {
-            return GetEigenValuesAndVectors(A, out eigenVectors, A.GetLength(0));
-        }
-
-        /// <summary>
-        /// Gets the eigenvalues and eigenvectors for matrix, A.
-        /// </summary>
-        /// <param name="A">the matrix in question, A.</param>
-        /// <param name="eigenVectors">The eigenvectors as an array of arrays/vectors.</param>
-        /// <param name="length">The length is the number of rows or columns.</param>   
-        /// <returns>The eigenvalues as two arrays of same length/order as A 
-        /// (the first is the real component, the second is the imaginary component).</returns>
-        public static double[][] GetEigenValuesAndVectors(this double[,] A, out double[][] eigenVectors, int length)
-        {
-            if (length != A.GetLength(0) || length != A.GetLength(1))
+            var length = A.GetLength(0);
+            if (length != A.GetLength(1))
                 throw new Exception("Matrix, A, must be square.");
             eigenVectors = new double[length][];
             /* start out with the eigenvectors assigned to unit vectors */

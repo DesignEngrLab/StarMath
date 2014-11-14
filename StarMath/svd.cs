@@ -24,39 +24,90 @@ namespace StarMathLib
 {
     public static partial class StarMath
     {
+        /// <summary>
+        /// Computes the singular value decomposition of A.
+        /// </summary>
+        /// <param name="A">The matrix in question, A can be rectangular m-by-n.</param>
+        /// <returns>The singular values of A in ascending value, often indicated as sigma (provided as a vector).</returns>
+        public static double[] SingularValueDecomposition(this double[,] A)
+        {
+            double[,] U, V;
+            return SingularValueDecomposition(false, A, out U, out V);
+        }
 
         /// <summary>
         /// Computes the singular value decomposition of A.
         /// </summary>
-        /// <param name="computeVectors">Compute the singular U and VT vectors or not.</param>
-        /// <param name="a">On entry, the M by N matrix to decompose. On exit, A may be overwritten.</param>
-        /// <param name="rowsA">The number of rows in the A matrix.</param>
-        /// <param name="columnsA">The number of columns in the A matrix.</param>
-        /// <param name="s">The singular values of A in ascending value.</param>
-        /// <param name="u">If <paramref name="computeVectors"/> is <c>true</c>, on exit U contains the left
-        /// singular vectors.</param>
-        /// <param name="vt">If <paramref name="computeVectors"/> is <c>true</c>, on exit VT contains the transposed
-        /// right singular vectors.</param>
-        /// <param name="work">The work array. Length should be at least <paramref name="rowsA"/>.</param>
-        /// <remarks>This is equivalent to the GESVD LAPACK routine.</remarks>
-        public static void SingularValueDecomposition(bool computeVectors, double[] a, int rowsA, int columnsA, double[] s, double[] u, double[] vt, double[] work)
-        {
-            const int maxiter = 1000;
+        /// <param name="A">The matrix in question, A can be rectangular [m, n]</param>
+        /// <param name="U">The m-by-m uitary matrix that pre-multiplies the singular values.</param>
+        /// <param name="V">The n-by-n conjugate transpose matrix of V that post-multiplies the singular values.</param>
+        /// <returns>
+        /// The singular values of A in ascending value, often indicated as sigma (provided as a vector).
+        /// </returns>
+        public static double[] SingularValueDecomposition(this double[,] A, out double[,] U, out double[,] V)
+        { return SingularValueDecomposition(true, A, out U, out V); }
 
-            var e = new double[columnsA];
-            var v = new double[vt.Length];
-            var stemp = new double[Math.Min(rowsA + 1, columnsA)];
+        /// <summary>
+        /// Computes the singular value decomposition of A.
+        /// </summary>
+        /// <param name="A">The matrix in question, A can be rectangular m-by-n.</param>
+        /// <returns>
+        /// The singular values of A in ascending value, often indicated as sigma (provided as a vector).
+        /// </returns>
+        public static double[] SingularValueDecomposition(this int[,] A)
+        {
+            double[,] U, V;
+            var B = new double[A.GetLength(0), A.GetLength(1)];
+            for (int i = 0; i < A.GetLength(0); i++)
+                for (int j = 0; j < A.GetLength(1); j++)
+                    B[i, j] = A[i, j];
+           return  SingularValueDecomposition(false, B, out U, out V);
+ 
+        }
+
+        /// <summary>
+        /// Computes the singular value decomposition of A.
+        /// </summary>
+        /// <param name="A">The matrix in question, A can be rectangular [m, n]</param>
+        /// <param name="U">The m-by-m uitary matrix that pre-multiplies the singular values.</param>
+        /// <param name="V">The n-by-n conjugate transpose matrix of V that post-multiplies the singular values.</param>
+        /// <returns>
+        /// The singular values of A in ascending value, often indicated as sigma (provided as a vector).
+        /// </returns>
+        public static double[] SingularValueDecomposition(this int[,] A, out double[,] U, out double[,] V)
+        {
+            var B = new double[A.GetLength(0), A.GetLength(1)];
+            for (int i = 0; i < A.GetLength(0); i++)
+                for (int j = 0; j < A.GetLength(1); j++)
+                    B[i, j] = A[i, j];
+            return SingularValueDecomposition(true, B, out U, out V);
+        }
+
+
+        //This is equivalent to the GESVD LAPACK routine.
+        private static double[] SingularValueDecomposition(bool computeVectors, double[,] A, out double[,] u, out  double[,] vt)
+        {
+            int numRow = A.GetLength(0);
+            int numCol = A.GetLength(1);
+            u = new double[numRow, numRow];
+            var v = new double[numCol, numCol];
+            vt = new double[numCol, numCol];
+            var sLength = Math.Min(numRow, numCol);
+            var s = new double[sLength];
+            var work = new double[numRow];
+            var e = new double[numCol];
+            var stemp = new double[Math.Min(numRow + 1, numCol)];
 
             int i, j, l, lp1;
 
             double t;
 
-            var ncu = rowsA;
+            var ncu = numRow;
 
             // Reduce matrix to bidiagonal form, storing the diagonal elements
             // in "s" and the super-diagonal elements in "e".
-            var nct = Math.Min(rowsA - 1, columnsA);
-            var nrt = Math.Max(0, Math.Min(columnsA - 2, rowsA));
+            var nct = Math.Min(numRow - 1, numCol);
+            var nrt = Math.Max(0, Math.Min(numCol - 2, numRow));
             var lu = Math.Max(nct, nrt);
 
             for (l = 0; l < lu; l++)
@@ -67,33 +118,23 @@ namespace StarMathLib
                     // Compute the transformation for the l-th column and
                     // place the l-th diagonal in vector s[l].
                     var sum = 0.0;
-                    for (var i1 = l; i1 < rowsA; i1++)
-                    {
-                        sum += a[(l * rowsA) + i1] * a[(l * rowsA) + i1];
-                    }
-
+                    for (var i1 = l; i1 < numRow; i1++)
+                        sum += A[l, i1] * A[l, i1];
                     stemp[l] = Math.Sqrt(sum);
-
                     if (stemp[l] != 0.0)
                     {
-                        if (a[(l * rowsA) + l] != 0.0)
-                        {
-                            stemp[l] = Math.Abs(stemp[l]) * (a[(l * rowsA) + l] / Math.Abs(a[(l * rowsA) + l]));
-                        }
-
+                        if (A[l, l] != 0.0)
+                            stemp[l] = Math.Abs(stemp[l]) * (A[l, l] / Math.Abs(A[l, l]));
                         // A part of column "l" of Matrix A from row "l" to end multiply by 1.0 / s[l]
-                        for (i = l; i < rowsA; i++)
-                        {
-                            a[(l * rowsA) + i] = a[(l * rowsA) + i] * (1.0 / stemp[l]);
-                        }
-
-                        a[(l * rowsA) + l] = 1.0 + a[(l * rowsA) + l];
+                        for (i = l; i < numRow; i++)
+                            A[l, i] = A[l, i] * (1.0 / stemp[l]);
+                        A[l, l] = 1.0 + A[l, l];
                     }
 
                     stemp[l] = -stemp[l];
                 }
 
-                for (j = lp1; j < columnsA; j++)
+                for (j = lp1; j < numCol; j++)
                 {
                     if (l < nct)
                     {
@@ -101,135 +142,91 @@ namespace StarMathLib
                         {
                             // Apply the transformation.
                             t = 0.0;
-                            for (i = l; i < rowsA; i++)
-                            {
-                                t += a[(j * rowsA) + i] * a[(l * rowsA) + i];
-                            }
-
-                            t = -t / a[(l * rowsA) + l];
-
-                            for (var ii = l; ii < rowsA; ii++)
-                            {
-                                a[(j * rowsA) + ii] += t * a[(l * rowsA) + ii];
-                            }
+                            for (i = l; i < numRow; i++)
+                                t += A[j, i] * A[l, i];
+                            t = -t / A[l, l];
+                            for (var ii = l; ii < numRow; ii++)
+                                A[j, ii] += t * A[l, ii];
                         }
                     }
-
                     // Place the l-th row of matrix into "e" for the
                     // subsequent calculation of the row transformation.
-                    e[j] = a[(j * rowsA) + l];
+                    e[j] = A[j, l];
                 }
 
                 if (computeVectors && l < nct)
-                {
                     // Place the transformation in "u" for subsequent back multiplication.
-                    for (i = l; i < rowsA; i++)
-                    {
-                        u[(l * rowsA) + i] = a[(l * rowsA) + i];
-                    }
-                }
+                    for (i = l; i < numRow; i++)
+                        u[l, i] = A[l, i];
 
-                if (l >= nrt)
-                {
-                    continue;
-                }
+                if (l >= nrt) continue;
 
                 // Compute the l-th row transformation and place the l-th super-diagonal in e(l).
                 var enorm = 0.0;
                 for (i = lp1; i < e.Length; i++)
-                {
                     enorm += e[i] * e[i];
-                }
 
                 e[l] = Math.Sqrt(enorm);
                 if (e[l] != 0.0)
                 {
                     if (e[lp1] != 0.0)
-                    {
                         e[l] = Math.Abs(e[l]) * (e[lp1] / Math.Abs(e[lp1]));
-                    }
 
                     // Scale vector "e" from "lp1" by 1.0 / e[l]
                     for (i = lp1; i < e.Length; i++)
-                    {
                         e[i] = e[i] * (1.0 / e[l]);
-                    }
 
                     e[lp1] = 1.0 + e[lp1];
                 }
-
                 e[l] = -e[l];
 
-                if (lp1 < rowsA && e[l] != 0.0)
+                if (lp1 < numRow && e[l] != 0.0)
                 {
                     // Apply the transformation.
-                    for (i = lp1; i < rowsA; i++)
-                    {
+                    for (i = lp1; i < numRow; i++)
                         work[i] = 0.0;
-                    }
 
-                    for (j = lp1; j < columnsA; j++)
+                    for (j = lp1; j < numCol; j++)
                     {
-                        for (var ii = lp1; ii < rowsA; ii++)
-                        {
-                            work[ii] += e[j] * a[(j * rowsA) + ii];
-                        }
+                        for (var ii = lp1; ii < numRow; ii++)
+                            work[ii] += e[j] * A[j, ii];
                     }
 
-                    for (j = lp1; j < columnsA; j++)
+                    for (j = lp1; j < numCol; j++)
                     {
                         var ww = -e[j] / e[lp1];
-                        for (var ii = lp1; ii < rowsA; ii++)
-                        {
-                            a[(j * rowsA) + ii] += ww * work[ii];
-                        }
+                        for (var ii = lp1; ii < numRow; ii++)
+                            A[j, ii] += ww * work[ii];
                     }
                 }
 
-                if (!computeVectors)
-                {
-                    continue;
-                }
-
+                if (!computeVectors) continue;
                 // Place the transformation in v for subsequent back multiplication.
-                for (i = lp1; i < columnsA; i++)
-                {
-                    v[(l * columnsA) + i] = e[i];
-                }
+                for (i = lp1; i < numCol; i++)
+                    v[l, i] = e[i];
             }
 
             // Set up the final bidiagonal matrix or order m.
-            var m = Math.Min(columnsA, rowsA + 1);
+            var m = Math.Min(numCol, numRow + 1);
             var nctp1 = nct + 1;
             var nrtp1 = nrt + 1;
-            if (nct < columnsA)
-            {
-                stemp[nctp1 - 1] = a[((nctp1 - 1) * rowsA) + (nctp1 - 1)];
-            }
+            if (nct < numCol)
+                stemp[nctp1 - 1] = A[nctp1 - 1, nctp1 - 1];
 
-            if (rowsA < m)
-            {
+            if (numRow < m)
                 stemp[m - 1] = 0.0;
-            }
 
             if (nrtp1 < m)
-            {
-                e[nrtp1 - 1] = a[((m - 1) * rowsA) + (nrtp1 - 1)];
-            }
+                e[nrtp1 - 1] = A[m - 1, nrtp1 - 1];
 
             e[m - 1] = 0.0;
-
             // If required, generate "u".
             if (computeVectors)
             {
                 for (j = nctp1 - 1; j < ncu; j++)
                 {
-                    for (i = 0; i < rowsA; i++)
-                    {
-                        u[(j * rowsA) + i] = 0.0;
-                    }
-
-                    u[(j * rowsA) + j] = 1.0;
+                    for (i = 0; i < numRow; i++) u[j, i] = 0.0;
+                    u[j, j] = 1.0;
                 }
 
                 for (l = nct - 1; l >= 0; l--)
@@ -239,39 +236,24 @@ namespace StarMathLib
                         for (j = l + 1; j < ncu; j++)
                         {
                             t = 0.0;
-                            for (i = l; i < rowsA; i++)
-                            {
-                                t += u[(j * rowsA) + i] * u[(l * rowsA) + i];
-                            }
-
-                            t = -t / u[(l * rowsA) + l];
-
-                            for (var ii = l; ii < rowsA; ii++)
-                            {
-                                u[(j * rowsA) + ii] += t * u[(l * rowsA) + ii];
-                            }
+                            for (i = l; i < numRow; i++)
+                                t += u[j, i] * u[l, i];
+                            t = -t / u[l, l];
+                            for (var ii = l; ii < numRow; ii++)
+                                u[j, ii] += t * u[l, ii];
                         }
-
                         // A part of column "l" of matrix A from row "l" to end multiply by -1.0
-                        for (i = l; i < rowsA; i++)
-                        {
-                            u[(l * rowsA) + i] = u[(l * rowsA) + i] * -1.0;
-                        }
-
-                        u[(l * rowsA) + l] = 1.0 + u[(l * rowsA) + l];
+                        for (i = l; i < numRow; i++)
+                            u[l, i] = u[l, i] * -1.0;
+                        u[l, l] = 1.0 + u[l, l];
                         for (i = 0; i < l; i++)
-                        {
-                            u[(l * rowsA) + i] = 0.0;
-                        }
+                            u[l, i] = 0.0;
                     }
                     else
                     {
-                        for (i = 0; i < rowsA; i++)
-                        {
-                            u[(l * rowsA) + i] = 0.0;
-                        }
-
-                        u[(l * rowsA) + l] = 1.0;
+                        for (i = 0; i < numRow; i++)
+                            u[l, i] = 0.0;
+                        u[l, l] = 1.0;
                     }
                 }
             }
@@ -279,36 +261,26 @@ namespace StarMathLib
             // If it is required, generate v.
             if (computeVectors)
             {
-                for (l = columnsA - 1; l >= 0; l--)
+                for (l = numCol - 1; l >= 0; l--)
                 {
                     lp1 = l + 1;
                     if (l < nrt)
                     {
                         if (e[l] != 0.0)
                         {
-                            for (j = lp1; j < columnsA; j++)
+                            for (j = lp1; j < numCol; j++)
                             {
                                 t = 0.0;
-                                for (i = lp1; i < columnsA; i++)
-                                {
-                                    t += v[(j * columnsA) + i] * v[(l * columnsA) + i];
-                                }
-
-                                t = -t / v[(l * columnsA) + lp1];
-                                for (var ii = l; ii < columnsA; ii++)
-                                {
-                                    v[(j * columnsA) + ii] += t * v[(l * columnsA) + ii];
-                                }
+                                for (i = lp1; i < numCol; i++)
+                                    t += v[j, i] * v[l, i];
+                                t = -t / v[l, lp1];
+                                for (var ii = l; ii < numCol; ii++)
+                                    v[j, ii] += t * v[l, ii];
                             }
                         }
                     }
-
-                    for (i = 0; i < columnsA; i++)
-                    {
-                        v[(l * columnsA) + i] = 0.0;
-                    }
-
-                    v[(l * columnsA) + l] = 1.0;
+                    for (i = 0; i < numCol; i++) v[l, i] = 0.0;
+                    v[l, l] = 1.0;
                 }
             }
 
@@ -321,46 +293,22 @@ namespace StarMathLib
                     t = stemp[i];
                     r = stemp[i] / t;
                     stemp[i] = t;
-                    if (i < m - 1)
-                    {
-                        e[i] = e[i] / r;
-                    }
-
+                    if (i < m - 1) e[i] = e[i] / r;
                     if (computeVectors)
-                    {
                         // A part of column "i" of matrix U from row 0 to end multiply by r
-                        for (j = 0; j < rowsA; j++)
-                        {
-                            u[(i * rowsA) + j] = u[(i * rowsA) + j] * r;
-                        }
-                    }
+                        for (j = 0; j < numRow; j++) u[i, j] = u[i, j] * r;
                 }
 
                 // Exit
-                if (i == m - 1)
-                {
-                    break;
-                }
-
-                if (e[i] == 0.0)
-                {
-                    continue;
-                }
-
+                if (i == m - 1) break;
+                if (e[i] == 0.0) continue;
                 t = e[i];
                 r = t / e[i];
                 e[i] = t;
                 stemp[i + 1] = stemp[i + 1] * r;
-                if (!computeVectors)
-                {
-                    continue;
-                }
-
+                if (!computeVectors) continue;
                 // A part of column "i+1" of matrix VT from row 0 to end multiply by r
-                for (j = 0; j < columnsA; j++)
-                {
-                    v[((i + 1) * columnsA) + j] = v[((i + 1) * columnsA) + j] * r;
-                }
+                for (j = 0; j < numCol; j++) v[i + 1, j] = v[i + 1, +j] * r;
             }
 
             // Main iteration loop for the singular values.
@@ -371,7 +319,7 @@ namespace StarMathLib
             {
                 // Quit if all the singular values have been found.
                 // If too many iterations have been performed throw exception.
-                if (iter >= maxiter)
+                if (iter >= maxSVDiter)
                 {
                     throw new Exception("SVD did not converge.");
                 }
@@ -388,7 +336,7 @@ namespace StarMathLib
                 {
                     test = Math.Abs(stemp[l]) + Math.Abs(stemp[l + 1]);
                     ztest = test + Math.Abs(e[l]);
-                    if (Math.Abs(ztest-test)<= EqualityTolerance)
+                    if (Math.Abs(ztest - test) <= EqualityTolerance)
                     {
                         e[l] = 0.0;
                         break;
@@ -396,26 +344,15 @@ namespace StarMathLib
                 }
 
                 int kase;
-                if (l == m - 2)
-                {
-                    kase = 4;
-                }
+                if (l == m - 2) kase = 4;
                 else
                 {
                     int ls;
                     for (ls = m - 1; ls > l; ls--)
                     {
                         test = 0.0;
-                        if (ls != m - 1)
-                        {
-                            test = test + Math.Abs(e[ls]);
-                        }
-
-                        if (ls != l + 1)
-                        {
-                            test = test + Math.Abs(e[ls - 1]);
-                        }
-
+                        if (ls != m - 1) test = test + Math.Abs(e[ls]);
+                        if (ls != l + 1) test = test + Math.Abs(e[ls - 1]);
                         ztest = test + Math.Abs(stemp[ls]);
                         if (Math.Abs(ztest - test) <= EqualityTolerance)
                         {
@@ -423,15 +360,8 @@ namespace StarMathLib
                             break;
                         }
                     }
-
-                    if (ls == l)
-                    {
-                        kase = 3;
-                    }
-                    else if (ls == m - 1)
-                    {
-                        kase = 1;
-                    }
+                    if (ls == l) kase = 3;
+                    else if (ls == m - 1) kase = 1;
                     else
                     {
                         kase = 2;
@@ -458,7 +388,7 @@ namespace StarMathLib
                             k = m - 2 - kk + l;
                             t1 = stemp[k];
 
-                            Drotg(ref t1, ref f, out cs, out sn);
+                            drotg(ref t1, ref f, out cs, out sn);
                             stemp[k] = t1;
                             if (k != l)
                             {
@@ -469,11 +399,11 @@ namespace StarMathLib
                             if (computeVectors)
                             {
                                 // Rotate
-                                for (i = 0; i < columnsA; i++)
+                                for (i = 0; i < numCol; i++)
                                 {
-                                    var z = (cs * v[(k * columnsA) + i]) + (sn * v[((m - 1) * columnsA) + i]);
-                                    v[((m - 1) * columnsA) + i] = (cs * v[((m - 1) * columnsA) + i]) - (sn * v[(k * columnsA) + i]);
-                                    v[(k * columnsA) + i] = z;
+                                    var z = (cs * v[k, i]) + (sn * v[m - 1, i]);
+                                    v[m - 1, i] = (cs * v[m - 1, i]) - (sn * v[k, i]);
+                                    v[k, i] = z;
                                 }
                             }
                         }
@@ -487,18 +417,18 @@ namespace StarMathLib
                         for (k = l; k < m; k++)
                         {
                             t1 = stemp[k];
-                            Drotg(ref t1, ref f, out cs, out sn);
+                            drotg(ref t1, ref f, out cs, out sn);
                             stemp[k] = t1;
                             f = -sn * e[k];
                             e[k] = cs * e[k];
                             if (computeVectors)
                             {
                                 // Rotate
-                                for (i = 0; i < rowsA; i++)
+                                for (i = 0; i < numRow; i++)
                                 {
-                                    var z = (cs * u[(k * rowsA) + i]) + (sn * u[((l - 1) * rowsA) + i]);
-                                    u[((l - 1) * rowsA) + i] = (cs * u[((l - 1) * rowsA) + i]) - (sn * u[(k * rowsA) + i]);
-                                    u[(k * rowsA) + i] = z;
+                                    var z = (cs * u[k, i]) + (sn * u[l - 1, i]);
+                                    u[l - 1, i] = (cs * u[l - 1, i]) - (sn * u[k, i]);
+                                    u[k, i] = z;
                                 }
                             }
                         }
@@ -527,10 +457,7 @@ namespace StarMathLib
                         {
                             shift = Math.Sqrt((b * b) + c);
                             if (b < 0.0)
-                            {
                                 shift = -shift;
-                            }
-
                             shift = c / (b + shift);
                         }
 
@@ -540,39 +467,35 @@ namespace StarMathLib
                         // Chase zeros
                         for (k = l; k < m - 1; k++)
                         {
-                            Drotg(ref f, ref g, out cs, out sn);
+                            drotg(ref f, ref g, out cs, out sn);
                             if (k != l)
-                            {
                                 e[k - 1] = f;
-                            }
-
                             f = (cs * stemp[k]) + (sn * e[k]);
                             e[k] = (cs * e[k]) - (sn * stemp[k]);
                             g = sn * stemp[k + 1];
                             stemp[k + 1] = cs * stemp[k + 1];
                             if (computeVectors)
                             {
-                                for (i = 0; i < columnsA; i++)
+                                for (i = 0; i < numCol; i++)
                                 {
-                                    var z = (cs * v[(k * columnsA) + i]) + (sn * v[((k + 1) * columnsA) + i]);
-                                    v[((k + 1) * columnsA) + i] = (cs * v[((k + 1) * columnsA) + i]) - (sn * v[(k * columnsA) + i]);
-                                    v[(k * columnsA) + i] = z;
+                                    var z = (cs * v[k, i]) + (sn * v[k + 1, i]);
+                                    v[k + 1, i] = (cs * v[k + 1, i]) - (sn * v[k, i]);
+                                    v[k, i] = z;
                                 }
                             }
-
-                            Drotg(ref f, ref g, out cs, out sn);
+                            drotg(ref f, ref g, out cs, out sn);
                             stemp[k] = f;
                             f = (cs * e[k]) + (sn * stemp[k + 1]);
                             stemp[k + 1] = -(sn * e[k]) + (cs * stemp[k + 1]);
                             g = sn * e[k + 1];
                             e[k + 1] = cs * e[k + 1];
-                            if (computeVectors && k < rowsA)
+                            if (computeVectors && k < numRow)
                             {
-                                for (i = 0; i < rowsA; i++)
+                                for (i = 0; i < numRow; i++)
                                 {
-                                    var z = (cs * u[(k * rowsA) + i]) + (sn * u[((k + 1) * rowsA) + i]);
-                                    u[((k + 1) * rowsA) + i] = (cs * u[((k + 1) * rowsA) + i]) - (sn * u[(k * rowsA) + i]);
-                                    u[(k * rowsA) + i] = z;
+                                    var z = (cs * u[k, i]) + (sn * u[k + 1, i]);
+                                    u[k + 1, i] = (cs * u[k + 1, i]) - (sn * u[k, i]);
+                                    u[k, i] = z;
                                 }
                             }
                         }
@@ -591,46 +514,39 @@ namespace StarMathLib
                             if (computeVectors)
                             {
                                 // A part of column "l" of matrix VT from row 0 to end multiply by -1
-                                for (i = 0; i < columnsA; i++)
-                                {
-                                    v[(l * columnsA) + i] = v[(l * columnsA) + i] * -1.0;
-                                }
+                                for (i = 0; i < numCol; i++)
+                                    v[l, i] = v[l, i] * -1.0;
                             }
                         }
 
                         // Order the singular value.
                         while (l != mn - 1)
                         {
-                            if (stemp[l] >= stemp[l + 1])
-                            {
-                                break;
-                            }
-
+                            if (stemp[l] >= stemp[l + 1]) break;
                             t = stemp[l];
                             stemp[l] = stemp[l + 1];
                             stemp[l + 1] = t;
-                            if (computeVectors && l < columnsA)
+                            if (computeVectors && l < numCol)
                             {
                                 // Swap columns l, l + 1
-                                for (i = 0; i < columnsA; i++)
+                                for (i = 0; i < numCol; i++)
                                 {
-                                    var z = v[(l * columnsA) + i];
-                                    v[(l * columnsA) + i] = v[((l + 1) * columnsA) + i];
-                                    v[((l + 1) * columnsA) + i] = z;
+                                    var z = v[l, i];
+                                    v[l, i] = v[l + 1, i];
+                                    v[l + 1, i] = z;
                                 }
                             }
 
-                            if (computeVectors && l < rowsA)
+                            if (computeVectors && l < numRow)
                             {
                                 // Swap columns l, l + 1
-                                for (i = 0; i < rowsA; i++)
+                                for (i = 0; i < numRow; i++)
                                 {
-                                    var z = u[(l * rowsA) + i];
-                                    u[(l * rowsA) + i] = u[((l + 1) * rowsA) + i];
-                                    u[((l + 1) * rowsA) + i] = z;
+                                    var z = u[l, i];
+                                    u[l, i] = u[l + 1, i];
+                                    u[l + 1, i] = z;
                                 }
                             }
-
                             l = l + 1;
                         }
 
@@ -639,27 +555,14 @@ namespace StarMathLib
                         break;
                 }
             }
-
             if (computeVectors)
             {
                 // Finally transpose "v" to get "vt" matrix
-                for (i = 0; i < columnsA; i++)
-                {
-                    for (j = 0; j < columnsA; j++)
-                    {
-                        vt[(j * columnsA) + i] = v[(i * columnsA) + j];
-                    }
-                }
+                for (i = 0; i < numCol; i++)
+                    for (j = 0; j < numCol; j++)
+                        vt[j, i] = v[i, j];
             }
-
-            // Copy stemp to s with size adjustment. We are using ported copy of linpack's svd code and it uses
-            // a singular vector of length rows+1 when rows < columns. The last element is not used and needs to be removed.
-            // We should port lapack's svd routine to remove this problem.
-           // Buffer.BlockCopy(stemp, 0, s, 0, Math.Min(rowsA, columnsA) * Constants.SizeOfDouble);
-
-            // On return the first element of the work array stores the min size of the work array could have been
-            // work[0] = Math.Max(3 * Math.Min(aRows, aColumns) + Math.Max(aRows, aColumns), 5 * Math.Min(aRows, aColumns));
-            work[0] = rowsA;
+            return s;
         }
 
         /// <summary>
@@ -671,7 +574,7 @@ namespace StarMathLib
         /// <param name="c">Contains the parameter c associated with the Givens rotation</param>
         /// <param name="s">Contains the parameter s associated with the Givens rotation</param>
         /// <remarks>This is equivalent to the DROTG LAPACK routine.</remarks>
-        static void Drotg(ref double da, ref double db, out double c, out double s)
+        static void drotg(ref double da, ref double db, out double c, out double s)
         {
             double r, z;
 

@@ -34,8 +34,11 @@ namespace StarMathLib
         /// <summary>
         /// Makes a sqare matrix of size p by p of all zeroes.
         /// </summary>
-        /// <param name = "p">The size (number of both rows and columns).</param>
-        /// <returns>an empty (all zeroes) square matrix (2D double).</returns>
+        /// <param name="p">The size (number of both rows and columns).</param>
+        /// <returns>
+        /// an empty (all zeroes) square matrix (2D double).
+        /// </returns>
+        /// <exception cref="System.Exception">The size, p, must be a positive integer.</exception>
         public static double[,] makeZero(int p)
         {
             if (p <= 0) throw new Exception("The size, p, must be a positive integer.");
@@ -45,8 +48,11 @@ namespace StarMathLib
         /// <summary>
         /// Makes a sqare matrix of size p by p of all zeroes.
         /// </summary>
-        /// <param name = "p">The size (number of both rows and columns).</param>
-        /// <returns>an empty (all zeroes) square matrix (2D int).</returns>
+        /// <param name="p">The size (number of both rows and columns).</param>
+        /// <returns>
+        /// an empty (all zeroes) square matrix (2D int).
+        /// </returns>
+        /// <exception cref="System.Exception">The size, p, must be a positive integer.</exception>
         public static int[,] makeZeroInt(int p)
         {
             if (p <= 0) throw new Exception("The size, p, must be a positive integer.");
@@ -56,8 +62,9 @@ namespace StarMathLib
         /// <summary>
         /// Makes the zero vector.
         /// </summary>
-        /// <param name = "p">The p.</param>
+        /// <param name="p">The p.</param>
         /// <returns></returns>
+        /// <exception cref="System.Exception">The size, p, must be a positive integer.</exception>
         public static double[] makeZeroVector(int p)
         {
             if (p <= 0) throw new Exception("The size, p, must be a positive integer.");
@@ -67,8 +74,9 @@ namespace StarMathLib
         /// <summary>
         /// Makes the zero int vector.
         /// </summary>
-        /// <param name = "p">The p.</param>
+        /// <param name="p">The p.</param>
         /// <returns></returns>
+        /// <exception cref="System.Exception">The size, p, must be a positive integer.</exception>
         public static int[] makeZeroIntVector(int p)
         {
             if (p <= 0) throw new Exception("The size, p, must be a positive integer.");
@@ -78,9 +86,16 @@ namespace StarMathLib
         /// <summary>
         /// Makes a matrix of size numRows by numCols of all zeroes.
         /// </summary>
-        /// <param name = "numRows">The number of rows.</param>
-        /// <param name = "numCols">The number of columns.</param>
-        /// <returns>an empty (all zeroes) matrix.</returns>
+        /// <param name="numRows">The number of rows.</param>
+        /// <param name="numCols">The number of columns.</param>
+        /// <returns>
+        /// an empty (all zeroes) matrix.
+        /// </returns>
+        /// <exception cref="System.Exception">
+        /// The number of rows, numRows, must be a positive integer.
+        /// or
+        /// The number of columns, numCols, must be a positive integer.
+        /// </exception>
         public static double[,] makeZero(int numRows, int numCols)
         {
             if (numRows <= 0) throw new Exception("The number of rows, numRows, must be a positive integer.");
@@ -90,9 +105,16 @@ namespace StarMathLib
         /// <summary>
         /// Makes a matrix of size numRows by numCols of all zeroes.
         /// </summary>
-        /// <param name = "numRows">The number of rows.</param>
-        /// <param name = "numCols">The number of columns.</param>
-        /// <returns>an empty (all zeroes) matrix.</returns>
+        /// <param name="numRows">The number of rows.</param>
+        /// <param name="numCols">The number of columns.</param>
+        /// <returns>
+        /// an empty (all zeroes) matrix.
+        /// </returns>
+        /// <exception cref="System.Exception">
+        /// The number of rows, numRows, must be a positive integer.
+        /// or
+        /// The number of columns, numCols, must be a positive integer.
+        /// </exception>
         public static int[,] makeZeroInt(int numRows, int numCols)
         {
             if (numRows <= 0) throw new Exception("The number of rows, numRows, must be a positive integer.");
@@ -103,8 +125,11 @@ namespace StarMathLib
         /// <summary>
         /// Makes an identity matrix of size p by p.
         /// </summary>
-        /// <param name = "p">The size (number of both rows and columns).</param>
-        /// <returns>the identity matrix, I.</returns>
+        /// <param name="p">The size (number of both rows and columns).</param>
+        /// <returns>
+        /// the identity matrix, I.
+        /// </returns>
+        /// <exception cref="System.Exception">The size, p, must be a positive integer.</exception>
         public static double[,] makeIdentity(int p)
         {
             if (p <= 0) throw new Exception("The size, p, must be a positive integer.");
@@ -116,8 +141,11 @@ namespace StarMathLib
         /// <summary>
         /// Makes an identity matrix of size p by p.
         /// </summary>
-        /// <param name = "p">The size (number of both rows and columns).</param>
-        /// <returns>the identity matrix, I.</returns>
+        /// <param name="p">The size (number of both rows and columns).</param>
+        /// <returns>
+        /// the identity matrix, I.
+        /// </returns>
+        /// <exception cref="System.Exception">The size, p, must be a positive integer.</exception>
         public static int[,] makeIdentityInt(int p)
         {
             if (p <= 0) throw new Exception("The size, p, must be a positive integer.");
@@ -196,6 +224,27 @@ namespace StarMathLib
         #region Get/Set parts of a matrix
 
         /// <summary>
+        /// Gets the column of matrix, A.
+        /// </summary>
+        /// <param name="A">The matrix, A.</param>
+        /// <param name="colIndex">The column index.</param>
+        /// <returns>
+        /// A double array that contains the requested column
+        /// </returns>
+        public static double[] GetColumn(this double[,] A, int colIndex)
+        { return GetColumn(colIndex, A); }
+        /// <summary>
+        /// Gets the column of matrix, A.
+        /// </summary>
+        /// <param name="A">The matrix, A.</param>
+        /// <param name="colIndex">The column index.</param>
+        /// <returns>
+        /// A double array that contains the requested column
+        /// </returns>
+        public static int[] GetColumn(this int[,] A, int colIndex)
+        { return GetColumn(colIndex, A); }
+
+        /// <summary>
         /// Gets a column of matrix, A.
         /// </summary>
         /// <param name = "colIndex">The column index.</param>
@@ -243,6 +292,25 @@ namespace StarMathLib
         /// <param name = "rowIndex">The row index.</param>
         /// <param name = "A">The matrix, A.</param>
         /// <returns>A double array that contains the requested row</returns>
+        public static double[] GetRow(this double[,] A, int rowIndex)
+        { return GetRow(rowIndex, A); }
+        /// <summary>
+        /// Gets a row of matrix, A.
+        /// </summary>
+        /// <param name="A">The matrix, A.</param>
+        /// <param name="rowIndex">The row index.</param>
+        /// <returns>
+        /// A double array that contains the requested row
+        /// </returns>
+        public static int[] GetRow(this int[,] A, int rowIndex)
+        { return GetRow(rowIndex, A); }
+
+        /// <summary>
+        /// Gets a row of matrix, A.
+        /// </summary>
+        /// <param name = "rowIndex">The row index.</param>
+        /// <param name = "A">The matrix, A.</param>
+        /// <returns>A double array that contains the requested row</returns>
         public static double[] GetRow(int rowIndex, double[,] A)
         {
             var numRows = A.GetLength(0);
@@ -277,6 +345,23 @@ namespace StarMathLib
                 v[i] = A[rowIndex, i];
             return v;
         }
+
+        /// <summary>
+        /// Sets/Replaces the given row of matrix A with the vector v.
+        /// </summary>
+        /// <param name="A">The matrix, A.</param>
+        /// <param name="rowIndex">The index of the row, rowIndex.</param>
+        /// <param name="v">The vector, v.</param>
+        public static void SetRow(this double[,] A, int rowIndex, IList<double> v)
+        { SetRow(rowIndex, A, v); }
+        /// <summary>
+        /// Sets/Replaces the given row of matrix A with the vector v.
+        /// </summary>
+        /// <param name="A">The matrix, A.</param>
+        /// <param name="rowIndex">The index of the row, rowIndex.</param>
+        /// <param name="v">The vector, v.</param>
+        public static void SetRow(this int[,] A, int rowIndex, IList<int> v)
+        { SetRow(rowIndex, A, v); }
 
         /// <summary>
         /// Sets/Replaces the given row of matrix A with the vector v.
@@ -318,6 +403,22 @@ namespace StarMathLib
         /// <summary>
         /// Sets/Replaces the given column of matrix A with the vector v.
         /// </summary>
+        /// <param name="A">The matrix, A.</param>
+        /// <param name="colIndex">The index of the column, rowIndex.</param>
+        /// <param name="v">The vector, v.</param>
+        public static void SetColumn(this double[,] A, int colIndex, IList<double> v)
+        { SetRow(colIndex, A, v); }
+        /// <summary>
+        /// Sets/Replaces the given column of matrix A with the vector v.
+        /// </summary>
+        /// <param name="A">The matrix, A.</param>
+        /// <param name="colIndex">The index of the column, rowIndex.</param>
+        /// <param name="v">The vector, v.</param>
+        public static void SetColumn(this int[,] A, int colIndex, IList<int> v)
+        { SetRow(colIndex, A, v); }
+        /// <summary>
+        /// Sets/Replaces the given column of matrix A with the vector v.
+        /// </summary>
         /// <param name = "colIndex">Index of the col.</param>
         /// <param name = "A">The A.</param>
         /// <param name = "v">The v.</param>
@@ -354,11 +455,34 @@ namespace StarMathLib
         }
 
         /// <summary>
-        /// Get more than one column from a given 2D double array. 
+        /// Get more than one column from a given 2D double array.
         /// </summary>
-        /// <param name = "ColumnList">The column list indices.</param>
-        /// <param name = "A">2D double array from which columns need to be extracted</param>
-        /// <returns>A  2D double array that contains all the requested columns</returns>
+        /// <param name="A">2D double array from which columns need to be extracted</param>
+        /// <param name="ColumnList">The column list indices.</param>
+        /// <returns>
+        /// A  2D double array that contains all the requested columns
+        /// </returns>
+        public static double[,] GetColumns(this double[,] A, IList<int> ColumnList)
+        { return GetColumns(ColumnList, A); }
+        /// <summary>
+        /// Get more than one column from a given 2D int array.
+        /// </summary>
+        /// <param name="A">2D int array from which columns need to be extracted</param>
+        /// <param name="ColumnList">The column list indices.</param>
+        /// <returns>
+        /// A  2D int array that contains all the requested columns
+        /// </returns>
+        public static int[,] GetColumns(this int[,] A, IList<int> ColumnList)
+        { return GetColumns(ColumnList, A); }
+
+        /// <summary>
+        /// Get more than one column from a given 2D double array.
+        /// </summary>
+        /// <param name="ColumnList">The column list indices.</param>
+        /// <param name="A">2D double array from which columns need to be extracted</param>
+        /// <returns>
+        /// A  2D double array that contains all the requested columns
+        /// </returns>
         public static double[,] GetColumns(IList<int> ColumnList, double[,] A)
         {
             var Columns = new double[A.GetLength(0), ColumnList.Count];
@@ -368,11 +492,13 @@ namespace StarMathLib
             return Columns;
         }
         /// <summary>
-        /// Get more than one column from a given 2D double array. 
+        /// Get more than one column from a given 2D double array.
         /// </summary>
-        /// <param name = "ColumnList">The column list indices.</param>
-        /// <param name = "A">2D int array from which columns need to be extracted</param>
-        /// <returns>A  2D int array that contains all the requested columns</returns>
+        /// <param name="ColumnList">The column list indices.</param>
+        /// <param name="A">2D int array from which columns need to be extracted</param>
+        /// <returns>
+        /// A  2D int array that contains all the requested columns
+        /// </returns>
         public static int[,] GetColumns(IList<int> ColumnList, int[,] A)
         {
             var Columns = new int[A.GetLength(0), ColumnList.Count];
@@ -383,6 +509,26 @@ namespace StarMathLib
         }
 
 
+        /// <summary>
+        /// Get more than one row from a given 2D double array.
+        /// </summary>
+        /// <param name="A">2D double array from which rows need to be extracted</param>
+        /// <param name="RowList">The row list indices.</param>
+        /// <returns>
+        /// A  2D double array that contains all the requested rows
+        /// </returns>
+        public static double[,] GetRows(this double[,] A, IList<int> RowList)
+        { return GetRows(RowList, A); }
+        /// <summary>
+        /// Get more than one row from a given 2D int array.
+        /// </summary>
+        /// <param name="A">2D int array from which rows need to be extracted</param>
+        /// <param name="RowList">The row list indices.</param>
+        /// <returns>
+        /// A  2D int array that contains all the requested rows
+        /// </returns>
+        public static int[,] GetRows(this int[,] A, IList<int> RowList)
+        { return GetRows(RowList, A); }
         /// <summary>
         /// Get more than one row from a given 2D double array.  
         /// </summary>
@@ -413,14 +559,15 @@ namespace StarMathLib
         }
 
 
-
         /// <summary>
-        /// Generalization (overload) of the GetColumns function to be extended to a single row array. Invalid Column indices are ignored
+        /// Get some portion of a vector and put in a new vector.  
         /// </summary>
-        /// <param name = "ColumnList">The column list indices.</param>
-        /// <param name = "A">1D double array from which columns (elements) need to be extracted</param>
-        /// <returns>A single 1D double array that contains all the requested columns (elements)</returns>
-        public static double[] GetColumns(IList<int> ColumnList, IList<double> A)
+        /// <param name="A">1D double array from which elements need to be extracted</param>
+        /// <param name="ColumnList">The indices of the elements.</param>
+        /// <returns>
+        /// A single 1D double array that contains all the requested elements.
+        /// </returns>
+        public static double[] GetPartialVector(this IList<double> A, IList<int> ColumnList)
         {
             var result = new double[ColumnList.Count];
             for (var i = 0; i < ColumnList.Count; i++)
@@ -429,12 +576,14 @@ namespace StarMathLib
         }
 
         /// <summary>
-        /// Generalization (overload) of the GetColumns function to be extended to a single row array. Invalid Column indices are ignored
+        /// Get some portion of a vector and put in a new vector.
         /// </summary>
-        /// <param name = "ColumnList">The column list indices.</param>
-        /// <param name = "A">1D int array from which columns (elements) need to be extracted</param>
-        /// <returns>A single 1D int array that contains all the requested columns (elements)</returns>
-        public static int[] GetColumns(IList<int> ColumnList, IList<int> A)
+        /// <param name="A">1D double array from which elements need to be extracted</param>
+        /// <param name="ColumnList">The indices of the elements.</param>
+        /// <returns>
+        /// A single 1D double array that contains all the requested elements.
+        /// </returns>
+        public static int[] GetPartialVector(this IList<int> A, IList<int> ColumnList)
         {
             var result = new int[ColumnList.Count];
             for (var i = 0; i < ColumnList.Count; i++)
@@ -451,7 +600,7 @@ namespace StarMathLib
         /// <param name = "Matrix1">The Matrix that comes on the left.</param>
         /// <param name = "Matrix2">Matrix that is attached to the right</param>
         /// <returns>A 2D double array that has Matrix1 and Matrix2 side by side</returns>
-        public static double[,] JoinCol(double[,] Matrix1, double[,] Matrix2)
+        public static double[,] JoinCol(this double[,] Matrix1, double[,] Matrix2)
         {
             if (Matrix1.GetLength(0) != Matrix2.GetLength(0))
                 throw new Exception("MatrixMath Size Error: Row dimensions do not match for matrix1 and matrix2");
@@ -475,12 +624,15 @@ namespace StarMathLib
         }
 
         /// <summary>
-        /// Jions two 2D double arrays one under the other and returns the results. The given variables remain unchanged
+        /// Joins two 2D double arrays one under the other and returns the results. The given variables remain unchanged
         /// </summary>
-        /// <param name = "Matrix1">The Matrix that comes on the top.</param>
-        /// <param name = "Matrix2">Matrix that is attached to the bottom</param>
-        /// <returns>A 2D double array that has Matrix1 and Matrix2 one below the other</returns>
-        public static double[,] JoinRow(double[,] Matrix1, double[,] Matrix2)
+        /// <param name="Matrix1">The Matrix that comes on the top.</param>
+        /// <param name="Matrix2">Matrix that is attached to the bottom</param>
+        /// <returns>
+        /// A 2D double array that has Matrix1 and Matrix2 one below the other
+        /// </returns>
+        /// <exception cref="System.Exception">MatrixMath Size Error: Column dimensions do not match for matrix1 and matrix2</exception>
+        public static double[,] JoinRow(this double[,] Matrix1, double[,] Matrix2)
         {
             if (Matrix1.GetLength(1) != Matrix2.GetLength(1))
                 throw new Exception("MatrixMath Size Error: Column dimensions do not match for matrix1 and matrix2");
@@ -500,39 +652,86 @@ namespace StarMathLib
 
             return JointMatrix;
         }
+        /// <summary>
+        /// Jions two 2D int arrays side by side and returns the results. The given variables remain unchanged
+        /// </summary>
+        /// <param name = "Matrix1">The Matrix that comes on the left.</param>
+        /// <param name = "Matrix2">Matrix that is attached to the right</param>
+        /// <returns>A 2D int array that has Matrix1 and Matrix2 side by side</returns>
+        public static int[,] JoinCol(this int[,] Matrix1, int[,] Matrix2)
+        {
+            if (Matrix1.GetLength(0) != Matrix2.GetLength(0))
+                throw new Exception("MatrixMath Size Error: Row dimensions do not match for matrix1 and matrix2");
+            var NumRows = Matrix1.GetLength(0);
+            var NumCols = Matrix1.GetLength(1) + Matrix2.GetLength(1);
+            var Mat1Cols = Matrix1.GetLength(1);
+            var Mat2Cols = Matrix2.GetLength(1);
+
+            var JointMatrix = new int[NumRows, NumCols];
+
+            for (var j = 0; j < Mat1Cols; j++)
+                for (var k = 0; k < NumRows; k++)
+                    JointMatrix[k, j] = Matrix1[k, j];
+
+
+            for (var j = 0; j < Mat2Cols; j++)
+                for (var k = 0; k < NumRows; k++)
+                    JointMatrix[k, j + Mat1Cols] = Matrix2[k, j];
+
+            return JointMatrix;
+        }
+
+        /// <summary>
+        /// Joins two 2D int arrays one under the other and returns the results. The given variables remain unchanged
+        /// </summary>
+        /// <param name="Matrix1">The Matrix that comes on the top.</param>
+        /// <param name="Matrix2">Matrix that is attached to the bottom</param>
+        /// <returns>
+        /// A 2D int array that has Matrix1 and Matrix2 one below the other
+        /// </returns>
+        /// <exception cref="System.Exception">MatrixMath Size Error: Column dimensions do not match for matrix1 and matrix2</exception>
+        public static int[,] JoinRow(this int[,] Matrix1, int[,] Matrix2)
+        {
+            if (Matrix1.GetLength(1) != Matrix2.GetLength(1))
+                throw new Exception("MatrixMath Size Error: Column dimensions do not match for matrix1 and matrix2");
+            var numRows = Matrix1.GetLength(0) + Matrix2.GetLength(0);
+            var numCols = Matrix1.GetLength(1);
+            var mat1Rows = Matrix1.GetLength(0);
+            var mat2Rows = Matrix2.GetLength(0);
+            var JointMatrix = new int[numRows, numCols];
+
+            for (var j = 0; j < mat1Rows; j++)
+                for (var k = 0; k < numCols; k++)
+                    JointMatrix[j, k] = Matrix1[j, k];
+
+            for (var j = 0; j < mat2Rows; j++)
+                for (var k = 0; k < numCols; k++)
+                    JointMatrix[j + mat1Rows, k] = Matrix2[j, k];
+
+            return JointMatrix;
+        }
         #endregion
 
         #region Join Vectors into one long Vector
         /// <summary>
         /// Concatenates two 1D double arrays and returns the result. The given variables remain unchanged
         /// </summary>
-        /// <param name = "Array1">Array that comes first.</param>
-        /// <param name = "Array2">Array that is appended to the end of the first array</param>
-        /// <returns>An doubleeger array that has Array1 and Array2 side by side</returns>
-        public static double[] JoinVectors(IList<double> Array1, IList<double> Array2)
-        { return JoinVectors(Array1, Array2, Array1.Count, Array2.Count); }
-        /// <summary>
-        /// Concatenates two 1D double arrays and returns the result. The given variables remain unchanged
-        /// </summary>
         /// <param name="Array1">Array that comes first.</param>
         /// <param name="Array2">Array that is appended to the end of the first array</param>
-        /// <param name="Array1Length">Length of the array1.</param>
-        /// <param name="Array2Length">Length of the array2.</param>
         /// <returns>
-        /// An doubleeger array that has Array1 and Array2 side by side
+        /// An double array that has Array1 and Array2 side by side
         /// </returns>
-        public static double[] JoinVectors(IList<double> Array1, IList<double> Array2,
-            int Array1Length, int Array2Length)
+        public static double[] JoinVectors(this IList<double> Array1, IList<double> Array2)
         {
-            var NumElements = Array1Length + Array2Length;
-            var JointArray = new double[NumElements];
+            int Array1Length = Array1.Count;
+            int Array2Length = Array2.Count;
+            var JointArray = new double[Array1Length + Array2Length];
 
             for (var j = 0; j < Array1Length; j++)
                 JointArray[j] = Array1[j];
 
             for (var j = 0; j < Array2Length; j++)
                 JointArray[j + Array1Length] = Array2[j];
-
             return JointArray;
         }
         /// <summary>
@@ -541,21 +740,10 @@ namespace StarMathLib
         /// <param name = "Array1">Array that comes to the left.</param>
         /// <param name = "Array2">Array that is appended to the end of the first array</param>
         /// <returns>An integer array that has Array1 and Array2 side by side</returns>
-        public static int[] JoinVectors(IList<int> Array1, IList<int> Array2)
-        { return JoinVectors(Array1, Array2, Array1.Count, Array2.Count); }
-        /// <summary>
-        /// Concatenates two 1D integer arrays and returns the result. The given variables remain unchanged
-        /// </summary>
-        /// <param name="Array1">Array that comes to the left.</param>
-        /// <param name="Array2">Array that is appended to the end of the first array</param>
-        /// <param name="Array1Length">Length of the array1.</param>
-        /// <param name="Array2Length">Length of the array2.</param>
-        /// <returns>
-        /// An integer array that has Array1 and Array2 side by side
-        /// </returns>
-        public static int[] JoinVectors(IList<int> Array1, IList<int> Array2,
-            int Array1Length, int Array2Length)
+        public static int[] JoinVectors(this IList<int> Array1, IList<int> Array2)
         {
+            int Array1Length = Array1.Count;
+            int Array2Length = Array2.Count;
             var NumElements = Array1Length + Array2Length;
             var JointArray = new int[NumElements];
 
@@ -575,17 +763,10 @@ namespace StarMathLib
         /// </summary>
         /// <param name="A">The matrix of doubles, A.</param>
         /// <returns></returns>
-        public static double[] JoinMatrixColumnsIntoVector(double[,] A)
-        { return JoinMatrixColumnsIntoVector(A, A.GetLength(0), A.GetLength(1)); }
-        /// <summary>
-        /// Joins the matrix columns into vector.
-        /// </summary>
-        /// <param name="A">The matrix of doubles, A.</param>
-        /// <param name="numRows">The number of rows.</param>
-        /// <param name="numCols">The number of columns.</param>
-        /// <returns></returns>
-        public static double[] JoinMatrixColumnsIntoVector(double[,] A, int numRows, int numCols)
+        public static double[] JoinMatrixColumnsIntoVector(this double[,] A)
         {
+            int numRows = A.GetLength(0);
+            int numCols = A.GetLength(1);
             var B = new double[numRows * numCols];
             for (var i = 0; i < numCols; i++)
                 GetColumn(i, A).CopyTo(B, i * numRows);
@@ -596,17 +777,10 @@ namespace StarMathLib
         /// </summary>
         /// <param name="A">The matrix of integers, A.</param>
         /// <returns></returns>
-        public static int[] JoinMatrixColumnsIntoVector(int[,] A)
-        { return JoinMatrixColumnsIntoVector(A, A.GetLength(0), A.GetLength(1)); }
-        /// <summary>
-        /// Joins the matrix columns into vector.
-        /// </summary>
-        /// <param name="A">The matrix of integers, A.</param>
-        /// <param name="numRows">The number of rows.</param>
-        /// <param name="numCols">The number of columns.</param>
-        /// <returns></returns>
-        public static int[] JoinMatrixColumnsIntoVector(int[,] A, int numRows, int numCols)
+        public static int[] JoinMatrixColumnsIntoVector(this int[,] A)
         {
+            int numRows = A.GetLength(0);
+            int numCols = A.GetLength(1);
             var B = new int[numRows * numCols];
             for (var i = 0; i < numCols; i++)
                 GetColumn(i, A).CopyTo(B, i * numRows);
@@ -618,17 +792,10 @@ namespace StarMathLib
         /// </summary>
         /// <param name="A">The matrix of doubles, A.</param>
         /// <returns></returns>
-        public static double[] JoinMatrixRowsIntoVector(double[,] A)
-        { return JoinMatrixRowsIntoVector(A, A.GetLength(0), A.GetLength(1)); }
-        /// <summary>
-        /// Joins the matrix rows into vector.
-        /// </summary>
-        /// <param name="A">The matrix of doubles, A.</param>
-        /// <param name="numRows">The number of rows.</param>
-        /// <param name="numCols">The number of columns.</param>
-        /// <returns></returns>
-        public static double[] JoinMatrixRowsIntoVector(double[,] A, int numRows, int numCols)
+        public static double[] JoinMatrixRowsIntoVector(this double[,] A)
         {
+            int numRows = A.GetLength(0);
+            int numCols = A.GetLength(1);
             var B = new double[numRows * numCols];
             for (var i = 0; i < numRows; i++)
                 GetRow(i, A).CopyTo(B, i * numCols);
@@ -640,17 +807,10 @@ namespace StarMathLib
         /// </summary>
         /// <param name="A">The matrix of integers, A.</param>
         /// <returns></returns>
-        public static int[] JoinMatrixRowsIntoVector(int[,] A)
-        { return JoinMatrixRowsIntoVector(A, A.GetLength(0), A.GetLength(1)); }
-        /// <summary>
-        /// Joins the matrix rows into vector.
-        /// </summary>
-        /// <param name="A">The matrix of integers, A.</param>
-        /// <param name="numRows">The number of rows.</param>
-        /// <param name="numCols">The number of columns.</param>
-        /// <returns></returns>
-        public static int[] JoinMatrixRowsIntoVector(int[,] A, int numRows, int numCols)
+        public static int[] JoinMatrixRowsIntoVector(this int[,] A)
         {
+            int numRows = A.GetLength(0);
+            int numCols = A.GetLength(1);
             var B = new int[numRows * numCols];
             for (var i = 0; i < numRows; i++)
                 GetRow(i, A).CopyTo(B, i * numCols);

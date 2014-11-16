@@ -475,14 +475,13 @@ namespace StarMathLib
         }
 
         /// <summary>
-        /// Returns to 2-norm (square root of the sum of squares of all terms)
-        /// of the matrix, A.
+        /// Returns to p-norm (p-root of the sum of each term raised to the p power)
         /// </summary>
         /// <param name="A">The matrix, A.</param>
         /// <param name="p">The power, p.</param>
         /// <param name="dontDoPRoot">if set to <c>true</c> [don't take the P-root].</param>
         /// <returns>
-        /// Scalar value of 2-norm.
+        /// Scalar value of P-norm.
         /// </returns>
         /// <exception cref="System.Exception">The matrix, A, is null.</exception>
         public static double normP(this int[,] A, double p, Boolean dontDoPRoot = false)
@@ -490,9 +489,8 @@ namespace StarMathLib
             if (A == null) throw new Exception("The matrix, A, is null.");
             return normP(A, p, A.GetLength(0), A.GetLength(1), dontDoPRoot);
         }
-        /// <summary>
-        /// Returns to 2-norm (square root of the sum of squares of all terms)
-        /// of the matrix, A.
+        /// <summary>                                                          
+        /// Returns to p-norm (p-root of the sum of each term raised to the p power)
         /// </summary>
         /// <param name="A">The matrix, A.</param>
         /// <param name="p">The power, p.</param>
@@ -517,8 +515,8 @@ namespace StarMathLib
         #region Normalize
 
         /// <summary>
-        /// Returns to normalized vector (has lenght or 2-norm of 1))
-        /// of the vector, x.
+        /// Returns the normalized vector (has length (or 2-norm) of 1)
+        /// for the vector, x.
         /// </summary>
         /// <param name="x">The vector, x.</param>
         /// <returns>
@@ -529,9 +527,9 @@ namespace StarMathLib
             return normalize(x, x.Count());
         }
 
-        /// <summary>
-        /// Returns to normalized vector (has lenght or 2-norm of 1))
-        /// of the vector, x.
+        /// <summary>             
+        /// Returns the normalized vector (has length (or 2-norm) of 1)
+        /// for the vector, x.
         /// </summary>
         /// <param name="x">The vector, x.</param>
         /// <param name="length">The length of the vector.</param>
@@ -545,7 +543,7 @@ namespace StarMathLib
 
 
         /// <summary>
-        /// Destructively normalize the vector x.
+        /// Destructively normalizes the vector x.
         /// </summary>
         /// <param name="x">The vector x.</param>
         /// <returns></returns>
@@ -554,8 +552,8 @@ namespace StarMathLib
             return normalizeInPlace(x, x.GetLength(0));
         }
 
-        /// <summary>
-        /// Normalizes the in place.
+        /// <summary>                       
+        /// Destructively normalizes the vector x.
         /// </summary>
         /// <param name="x">The x.</param>
         /// <param name="length">The length.</param>

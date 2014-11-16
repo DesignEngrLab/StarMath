@@ -43,12 +43,12 @@ namespace StarMathLib
                 throw new Exception("Matrix, A, must be square.");
             if (length != b.Count)
                 throw new Exception("Matrix, A, must be have the same number of rows as the vector, b.");
-
-            if (isGaussSeidelAppropriate(A, b, initialGuess, length))
-                return solveGaussSeidel(A, b, initialGuess, length);
+            List<int>[] potentialIndices;
+            if (isGaussSeidelAppropriate(A, out potentialIndices, length))
+                return solveGaussSeidel(A, b, initialGuess, length, potentialIndices);
             /****** need code to determine when to switch between *****
              ****** this analytical approach and the SOR approach *****/
-            return solveByInverse(A, b, length);
+            return solveByInverse(A, b);
         }
 
         /// <summary>
@@ -110,23 +110,18 @@ namespace StarMathLib
             return solve(A, b.Select(Convert.ToDouble).ToArray(), initialGuess);
         }
 
-
-        private static double[] solveByInverse(double[,] A, IList<double> b, int length)
-        {
-            return multiply(inverse(A), b, length, length);
-        }
-        private static double[] solveByInverse(double[,] A, IList<double> b)
+        public static double[] solveByInverse(double[,] A, IList<double> b)
         {
             return multiply(inverse(A), b);
         }
 
- // Gauss-Seidel is not working. It only seems to diverge. I can't figure out the problem. todo bug
+        // Gauss-Seidel is not working. It only seems to diverge. I can't figure out the problem. todo bug
         #region Gauss-Seidel or Successive Over-Relaxation
 
         private static bool isGaussSeidelAppropriate(double[,] A, IList<double> b, IList<double> initialGuess, int length)
         {
-            return false; /* Gauss-Seidel is never appropriate! At least not until we fix it. Only seems to diverge. */
-            if (length <= 0) length = b.Count;
+            //return false; /* Gauss-Seidel is never appropriate! At least not until we fix it. Only seems to diverge. */
+
             ifInitialGuessIsNull(ref initialGuess, A, b, length);
             var old_b = multiply(A, initialGuess);
             var error = 0.0;
@@ -141,11 +136,30 @@ namespace StarMathLib
             if (nonZeroFraction > MaxFractionOfZeroesForGaussSeidel) return false;
             return true;
         }
+        private static bool isGaussSeidelAppropriate(double[,] A, out List<int>[] potentialRows, int length)
+        {
+            potentialRows = new List<int>[length];
+            if (length < GaussSeidelMinimumMatrixSize) return false;
+            for (int i = 0; i < length; i++)
+            {
+                var rowNorm1 = A.GetRow(i).norm1();
+                var potentialIndices = new List<int>();
+                for (int j = 0; j < length; j++)
+                    if (Math.Abs(A[i, j]) / (rowNorm1 - Math.Abs(A[i, j])) < GaussSeidelDiagonalDominanceRatio)
+                        potentialIndices.Add(j);
+                if (potentialIndices.Count == 0) return false;
+                potentialRows[i] = potentialIndices;
+            }
+            return potentialRows.SelectMany(x => x).Distinct().Count() == length;
+        }
 
-        private static double[] solveGaussSeidel(double[,] A, IList<double> b, IList<double> initialGuess = null, int length = 0)
+        public static double[] solveGaussSeidel(double[,] A, IList<double> b,
+            IList<double> initialGuess = null, int length = 0, List<int>[] potentialIndices = null)
         {
             if (length <= 0) length = b.Count;
             ifInitialGuessIsNull(ref initialGuess, A, b, length);
+            if (potentialIndices == null) potentialIndices = reorderMatrixForDiagonalDominance(A, length);
+            // todo: need to rewrite this reorder function so that it works like it does in PMKS
             var C = A;
             double[] d = b.ToArray();
             var x = new double[length];
@@ -166,8 +180,9 @@ namespace StarMathLib
             var cNorm1 = norm1(d);
             var error = norm1(subtract(d, multiply(C, x, length, length), length)) / cNorm1;
             var success = error <= GaussSeidelMaxError;
+            var xWentNaN = false;
             var iteration = length * length * GaussSeidelMaxIterationFactor;
-            while (!success && iteration-- > 0)
+            while (!xWentNaN && !success && iteration-- > 0)
             {
                 for (int i = 0; i < length; i++)
                 {
@@ -178,6 +193,7 @@ namespace StarMathLib
                     x[i] = (1 - GaussSeidelRelaxationOmega) * x[i] +
                            GaussSeidelRelaxationOmega * adjust / C[i, i];
                 }
+                xWentNaN = x.Any(double.IsNaN);
                 error = norm1(subtract(d, multiply(C, x, length, length), length)) / cNorm1;
                 success = error <= GaussSeidelMaxError;
             }

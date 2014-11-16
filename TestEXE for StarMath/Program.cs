@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
+using DotNumerics.LinearAlgebra.CSLapack;
 using StarMathLib;
 using DotNum = DotNumerics.LinearAlgebra;
 using MathDot = MathNet.Numerics.LinearAlgebra;
@@ -15,8 +17,8 @@ namespace TestEXE_for_StarMath
             // testStackFunctions();
             // testLUfunctions();
             //benchMarkMatrixInversion();
-            //compareSolvers_Inversion_to_GaussSeidel();
-            checkEigen();
+            compareSolvers_Inversion_to_GaussSeidel();
+            //checkEigen();
             Console.WriteLine("Press any key to close.");
             Console.ReadLine();
         }
@@ -203,15 +205,14 @@ namespace TestEXE_for_StarMath
             var results = new List<List<string>>();
 
             var r = new Random();
-            var fractionZeros = new double[] { 0.0, 0.3, 0.5, 0.8, 0.9, 0.95 };
-            var matrixSize = new int[] { 10, 30, 100, 300, 800 };
+            var fractionDiag = new double[] { 1.0 };
+            var matrixSize = new int[] { 10, 20, 30, 40, 50, 60, 70, 80, 90 };
             for (var i = 0; i < matrixSize.GetLength(0); i++)
             {
-                for (int j = 0; j < fractionZeros.GetLength(0); j++)
+                for (int j = 0; j < fractionDiag.GetLength(0); j++)
                 {
                     int size = matrixSize[i];
                     const int numTrials = 10;
-                    var numZeros = (int)(size * size * fractionZeros[j]);
                     for (var k = 0; k <= numTrials; k++)
                     {
                         var A = new double[size, size];
@@ -222,12 +223,11 @@ namespace TestEXE_for_StarMath
                             for (var jj = 0; jj < size; jj++)
                                 A[ii, jj] = (200 * r.NextDouble()) - 100.0;
                         }
-                        for (int l = 0; l < numZeros; l++)
-                            A[r.Next(size), r.Next(size)] = 0.0;
-                        var result = new List<string> { k.ToString(), size.ToString(), numZeros.ToString() };
+                        for (int l = 0; l < size; l++)
+                            A[l, l] = fractionDiag[j] * A.GetRow(l).norm1();
+                        var result = new List<string> { k.ToString(), size.ToString(), fractionDiag[j].ToString() };
 
                         watch.Restart();
-                        /*
                         var x = StarMath.solveByInverse(A, b);
                         watch.Stop();
                         recordResults(result, A, x, b, watch);
@@ -235,10 +235,10 @@ namespace TestEXE_for_StarMath
                         x = StarMath.solveGaussSeidel(A, b);
                         watch.Stop();
                         recordResults(result, A, x, b, watch);
-
-
+                        Console.WriteLine(result.Aggregate((resultString, next) =>
+                      resultString + " " + next));
                         results.Add(result);
-                         */
+
                     }
                 }
             }
@@ -247,7 +247,15 @@ namespace TestEXE_for_StarMath
 
         private static void recordResults(List<string> result, double[,] A, double[] x, double[] b, Stopwatch watch)
         {
-            var error = b.subtract(A.multiply(x)).norm1() / b.norm1();
+            double error;
+            try
+            {
+                error = b.subtract(A.multiply(x)).norm1() / b.norm1();
+            }
+            catch
+            {
+                error = double.NaN;
+            }
             result.Add(error.ToString());
             result.Add(watch.Elapsed.TotalMilliseconds.ToString());
         }

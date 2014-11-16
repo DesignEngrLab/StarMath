@@ -34,6 +34,7 @@ namespace StarMathLib
         private const double MaxFractionOfZeroesForGaussSeidel = 0.7;
         private const double GaussSeidelMaxError = 1e-10;
         private const double GaussSeidelDiagonalDominanceRatio = 0.5;
+        private const int GaussSeidelMinimumMatrixSize = 55;
         private const int GaussSeidelMaxIterationFactor = 1;
         private const double GaussSeidelRelaxationOmega = 1.0;
 

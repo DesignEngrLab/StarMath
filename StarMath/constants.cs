@@ -30,13 +30,15 @@ namespace StarMathLib
         private const int numDecimals = 3;
 
         private const double EqualityTolerance = 1e-15;
-        private const double MaxErrorForUsingGaussSeidel = 0.5;
-        private const double MaxFractionOfZeroesForGaussSeidel = 0.7;
-        private const double GaussSeidelMaxError = 1e-10;
-        private const double GaussSeidelDiagonalDominanceRatio = 0.5;
+        private const double MaxErrorForUsingGaussSeidel = 3.0;
+        private const double GaussSeidelMaxError = 1e-12;
+        private const double GaussSeidelDiagonalDominanceRatio = 0.3;
+        /* in some simple studies, GaussSeidel failed when ALL diagonals were lower than 0.3 (and higher than -0.5)
+         * so it may seem imprudent to set the diagonal dominance ratio so high. But this is only to throw out
+         * cases in which ANY of the diagonals are lower than this value. */
         private const int GaussSeidelMinimumMatrixSize = 55;
         private const int GaussSeidelMaxIterationFactor = 1;
-        private const double GaussSeidelRelaxationOmega = 1.0;
+        private const double GaussSeidelRelaxationOmega = 1.2;
 
         const int maxSVDiter = 1000;
 

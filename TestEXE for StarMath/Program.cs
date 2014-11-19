@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Runtime.Serialization;
 using DotNumerics.LinearAlgebra.CSLapack;
 using StarMathLib;
 using DotNum = DotNumerics.LinearAlgebra;
@@ -205,7 +206,7 @@ namespace TestEXE_for_StarMath
             var results = new List<List<string>>();
 
             var r = new Random();
-            var fractionDiag = new double[] { 1.0 };
+            var fractionDiag = new double[] { .01, .02, .04, .08, 0.1, 0.15 };
             var matrixSize = new int[] { 10, 20, 30, 40, 50, 60, 70, 80, 90 };
             for (var i = 0; i < matrixSize.GetLength(0); i++)
             {
@@ -221,13 +222,15 @@ namespace TestEXE_for_StarMath
                         {
                             b[ii] = (200 * r.NextDouble()) - 100.0;
                             for (var jj = 0; jj < size; jj++)
-                                A[ii, jj] = (200 * r.NextDouble()) - 100.0;
+                            {
+                                if (((double)Math.Abs(ii - jj)) / size < fractionDiag[j])
+                                    A[ii, jj] = (200 * r.NextDouble()) - 100.0;
+                            }
                         }
-                        for (int l = 0; l < size; l++)
-                            A[l, l] = fractionDiag[j] * A.GetRow(l).norm1();
                         var result = new List<string> { k.ToString(), size.ToString(), fractionDiag[j].ToString() };
 
                         watch.Restart();
+                        //var x = StarMath.solve(A, b);
                         var x = StarMath.solveByInverse(A, b);
                         watch.Stop();
                         recordResults(result, A, x, b, watch);

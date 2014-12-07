@@ -47,16 +47,20 @@ namespace StarMathLib
         /// <summary>
         /// Creates a rotation matrix about the X-axis.
         /// </summary>
-        /// <param name = "xdeg">The amount of angle in degrees (positive is counter-clockwise).</param>
-        /// <returns>4-by-4 matrix rotated by the amount specified.</returns>
-        public static double[,] RotationX(double xdeg)
+        /// <param name="angle">The amount of angle in degrees (positive is counter-clockwise).</param>
+        /// <param name="inRadians">if set to <c>true</c> [in radians].</param>
+        /// <returns>
+        /// 4-by-4 matrix rotated by the amount specified.
+        /// </returns>
+        public static double[,] RotationX(double angle, Boolean inRadians = false)
         {
             var ROTX = makeIdentity(4);
-            var xrad = (Math.PI * xdeg) / 180;
+            if (!inRadians)
+                angle = (Math.PI * angle) / 180;
 
-            ROTX[1, 1] = ROTX[2, 2] = Math.Cos(xrad);
-            ROTX[1, 2] = -Math.Sin(xrad);
-            ROTX[2, 1] = Math.Sin(xrad);
+            ROTX[1, 1] = ROTX[2, 2] = Math.Cos(angle);
+            ROTX[1, 2] = -Math.Sin(angle);
+            ROTX[2, 1] = Math.Sin(angle);
 
             return ROTX;
         }
@@ -64,16 +68,20 @@ namespace StarMathLib
         /// <summary>
         /// Creates a rotation matrix about the Y-axis.
         /// </summary>
-        /// <param name = "ydeg">The amount of angle in degrees (positive is counter-clockwise).</param>
-        /// <returns>4-by-4 matrix rotated by the amount specified.</returns>
-        public static double[,] RotationY(double ydeg)
+        /// <param name="angle">The amount of angle in degrees (positive is counter-clockwise).</param>
+        /// <param name="inRadians">if set to <c>true</c> [in radians].</param>
+        /// <returns>
+        /// 4-by-4 matrix rotated by the amount specified.
+        /// </returns>
+        public static double[,] RotationY(double angle, Boolean inRadians = false)
         {
             var ROTY = makeIdentity(4);
-            var yrad = (Math.PI * ydeg) / 180;
+            if (!inRadians)
+             angle = (Math.PI * angle) / 180;
 
-            ROTY[0, 0] = ROTY[2, 2] = Math.Cos(yrad);
-            ROTY[2, 0] = -Math.Sin(yrad);
-            ROTY[0, 2] = Math.Sin(yrad);
+            ROTY[0, 0] = ROTY[2, 2] = Math.Cos(angle);
+            ROTY[2, 0] = -Math.Sin(angle);
+            ROTY[0, 2] = Math.Sin(angle);
 
             return ROTY;
         }
@@ -81,16 +89,20 @@ namespace StarMathLib
         /// <summary>
         /// Creates a rotation matrix about the Z-axis.
         /// </summary>
-        /// <param name = "zdeg">The amount of angle in degrees (positive is counter-clockwise).</param>
-        /// <returns>4-by-4 matrix rotated by the amount specified.</returns>
-        public static double[,] RotationZ(double zdeg)
+        /// <param name="angle">The amount of angle in degrees (positive is counter-clockwise).</param>
+        /// <param name="inRadians">if set to <c>true</c> [in radians].</param>
+        /// <returns>
+        /// 4-by-4 matrix rotated by the amount specified.
+        /// </returns>
+        public static double[,] RotationZ(double angle, Boolean inRadians = false)
         {
-            var ROTZ = makeIdentity(4);
-            var zrad = (Math.PI * zdeg) / 180;
+            var ROTZ = makeIdentity(4); 
+            if (!inRadians)
+              angle = (Math.PI * angle) / 180;
 
-            ROTZ[0, 0] = ROTZ[1, 1] = Math.Cos(zrad);
-            ROTZ[1, 0] = Math.Sin(zrad);
-            ROTZ[0, 1] = -Math.Sin(zrad);
+            ROTZ[0, 0] = ROTZ[1, 1] = Math.Cos(angle);
+            ROTZ[1, 0] = Math.Sin(angle);
+            ROTZ[0, 1] = -Math.Sin(angle);
 
             return ROTZ;
         }

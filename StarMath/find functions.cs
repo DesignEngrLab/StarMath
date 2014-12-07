@@ -208,7 +208,11 @@ namespace StarMathLib
         /// </returns>
         public static int Max(this IList<int> A)
         {
-            return A.Max();
+            var max = int.MinValue;
+            var numElts = A.Count;
+            for (int i = 0; i < numElts; i++)
+                if (max < A[i]) max = A[i];
+            return max;
         }
         /// <summary>
         /// Finds the minimum value in the given 1D integer array
@@ -219,7 +223,11 @@ namespace StarMathLib
         /// </returns>
         public static int Min(this IList<int> A)
         {
-            return A.Min();
+            var min = int.MaxValue;
+            var numElts = A.Count;
+            for (int i = 0; i < numElts; i++)
+                if (min > A[i]) min = A[i];
+            return min;
         }
         /// <summary>
         /// Finds the maximum value in the given 1D double array
@@ -230,7 +238,11 @@ namespace StarMathLib
         /// </returns>
         public static double Max(this IList<double> A)
         {
-            return A.Max();
+            var max = double.NegativeInfinity;
+            var numElts = A.Count;
+            for (int i = 0; i < numElts; i++)
+                if (max < A[i]) max = A[i];
+            return max;
         }
         /// <summary>
         /// Finds the minimum value in the given 1D double array
@@ -241,7 +253,11 @@ namespace StarMathLib
         /// </returns>
         public static double Min(this IList<double> A)
         {
-            return A.Min();
+            var min = double.PositiveInfinity;
+            var numElts = A.Count;
+            for (int i = 0; i < numElts; i++)
+                if (min > A[i]) min = A[i];
+            return min;
         }
 
         /// <summary>
@@ -254,8 +270,15 @@ namespace StarMathLib
         /// </returns>
         public static double Min(this IList<double> A, out int index)
         {
-            var min = A.Min();
-            index = A.IndexOf(min);
+            index = -1;
+            var min = double.PositiveInfinity;
+            var numElts = A.Count;
+            for (int i = 0; i < numElts; i++)
+                if (min > A[i])
+                {
+                    min = A[i];
+                    index = i;
+                }
             return min;
         }
         /// <summary>
@@ -268,8 +291,15 @@ namespace StarMathLib
         /// </returns>
         public static double Max(this IList<double> A, out int index)
         {
-            var max = A.Max();
-            index = A.IndexOf(max);
+            index = -1;
+            var max = double.NegativeInfinity;
+            var numElts = A.Count;
+            for (int i = 0; i < numElts; i++)
+                if (max < A[i])
+                {
+                    max = A[i];
+                    index = i;
+                }
             return max;
         }
         /// <summary>
@@ -282,8 +312,15 @@ namespace StarMathLib
         /// </returns>
         public static int Min(this IList<int> A, out int index)
         {
-            var min = A.Min();
-            index = A.IndexOf(min);
+            index = -1;
+            var min = int.MaxValue;
+            var numElts = A.Count;
+            for (int i = 0; i < numElts; i++)
+                if (min > A[i])
+                {
+                    min = A[i];
+                    index = i;
+                }
             return min;
         }
         /// <summary>
@@ -296,8 +333,15 @@ namespace StarMathLib
         /// </returns>
         public static int Max(this IList<int> A, out int index)
         {
-            var max = A.Max();
-            index = A.IndexOf(max);
+            index = -1;
+            var max = int.MinValue;
+            var numElts = A.Count;
+            for (int i = 0; i < numElts; i++)
+                if (max < A[i])
+                {
+                    max = A[i];
+                    index = i;
+                }
             return max;
         }
         #endregion

@@ -42,5 +42,56 @@ namespace StarMathLib
 
         const int maxSVDiter = 1000;
 
+        private static readonly Random random = new Random();
+        private const int StartingCarolSeed = 3;
+
+
+
+        /// <summary>
+        /// Determines whether [is practically same] [the specified x].     
+        /// the norm is within 1e-15
+        /// </summary>
+        /// <param name="x">The x.</param>
+        /// <param name="y">The y.</param>
+        /// <returns></returns>
+        public static bool IsPracticallySame(double x, double y)
+        {
+            return IsNegligible(x - y);
+        }
+
+        /// <summary>
+        /// Determines whether [is practically same] [the specified x].
+        /// the norm is within 1e-15
+        /// </summary>
+        /// <param name="x">The x.</param>
+        /// <param name="y">The y.</param>
+        /// <returns></returns>
+        public static bool IsPracticallySame(double[] x, double[] y)
+        {
+            var n = x.GetLength(0);
+            if (n != y.GetLength(0)) return false;
+            return IsNegligible(x.subtract(y));
+        }
+
+        /// <summary>
+        /// Determines whether the specified x is negligible (|x| lte 1e-15).
+        /// </summary>
+        /// <param name="x">The x.</param>
+        /// <returns></returns>
+        public static bool IsNegligible(double[] x)
+        {
+            return (x.norm2(true) <= EqualityTolerance);
+        }
+
+        /// <summary>
+        /// Determines whether the specified x is negligible (|x| lte 1e-15).
+        /// </summary>
+        /// <param name="x">The x.</param>
+        /// <returns></returns>
+        public static bool IsNegligible(double x)
+        {
+            return (Math.Abs(x) <= EqualityTolerance);
+        }
+
     }
 }

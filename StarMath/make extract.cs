@@ -20,6 +20,7 @@
  *************************************************************************/
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace StarMathLib
 {
@@ -190,7 +191,7 @@ namespace StarMathLib
         /// Returns an integer array with a series of numbers starting from start until the end
         /// with a distance of the interval between any pair of numbers.
         /// </returns>
-        public static int[] makeLinearProgression(int end, int interval, int start = 0)
+        public static int[] makeLinearProgression(int end, int interval = 1, int start = 0)
         {
             var NumOfElements = (end - start) / interval;
 
@@ -816,6 +817,75 @@ namespace StarMathLib
                 GetRow(i, A).CopyTo(B, i * numCols);
             return B;
         }
+        #endregion
+
+        #region Distinct
+        /// <summary>
+        /// Removes any duplicates in the List of vectors and returns just the distinct cases.
+        /// The order is preserved with duplicates removed.
+        /// </summary>
+        /// <param name="list">The list.</param>
+        /// <returns></returns>
+        public static List<double[]> DistinctVectors(this List<double[]> list)
+        {
+            var distinctList = new List<double[]>(list);
+            var m = list.Count;
+            var n = list[0].GetLength(0);
+            var CarolNumbers = new double[n];
+            var CarolSeed = StartingCarolSeed;
+            for (int i = 0; i < n; i++)
+            {
+                var carolNumber = Math.Pow(2, CarolSeed) - 1;
+                carolNumber *= carolNumber;
+                carolNumber -= 2;
+                CarolNumbers[i] = carolNumber;
+                CarolSeed += 3;
+            }
+            var indices = makeLinearProgression(m);
+            indices = indices.OrderBy(index => list[index].dotProduct(CarolNumbers)).ToArray();
+            for (int i = m - 1; i > 0; i--)
+            {
+                if (IsPracticallySame(list[indices[i]], list[indices[i - 1]]))
+                    distinctList[indices[i]] = null;
+            }
+            distinctList.RemoveAll(v => v == null);
+            return distinctList;
+        }
+
+        /// <summary>
+        /// Removes any duplicates in the List of vectors and returns just the distinct cases.
+        /// The order is preserved with duplicates removed.
+        /// </summary>
+        /// <param name="list">The list.</param>
+        /// <returns></returns>
+        public static List<int[]> DistinctVectors(this List<int[]> list)
+        {
+            var distinctList = new List<int[]>(list);
+            var m = list.Count;
+            var n = list[0].GetLength(0);
+            var CarolNumbers = new int[n];
+            var CarolSeed = StartingCarolSeed;
+            for (int i = 0; i < n; i++)
+            {
+                var carolNumber = (int)Math.Pow(2, CarolSeed) - 1;
+                carolNumber *= carolNumber;
+                carolNumber -= 2;
+                CarolNumbers[i] = carolNumber;
+                CarolSeed += 3;
+            }
+            var indices = makeLinearProgression(m);
+            indices = indices.OrderBy(index => list[index].dotProduct(CarolNumbers)).ToArray();
+            for (int i = m - 1; i > 0; i--)
+            {
+                if (list[indices[i]].subtract(list[indices[i - 1]]).Max() == 0)
+                    distinctList[indices[i]] = null;
+            }
+
+            distinctList.RemoveAll(v => v == null);
+            return distinctList;
+        }
+
+
         #endregion
     }
 }

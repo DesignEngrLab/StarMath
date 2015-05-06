@@ -61,8 +61,8 @@ namespace StarMathLib
             for (int i = 0; i < A.GetLength(0); i++)
                 for (int j = 0; j < A.GetLength(1); j++)
                     B[i, j] = A[i, j];
-           return  SingularValueDecomposition(false, B, out U, out V);
- 
+            return SingularValueDecomposition(false, B, out U, out V);
+
         }
 
         /// <summary>
@@ -336,7 +336,7 @@ namespace StarMathLib
                 {
                     test = Math.Abs(stemp[l]) + Math.Abs(stemp[l + 1]);
                     ztest = test + Math.Abs(e[l]);
-                    if (Math.Abs(ztest - test) <= EqualityTolerance)
+                    if (IsPracticallySame(ztest, test))
                     {
                         e[l] = 0.0;
                         break;
@@ -354,7 +354,7 @@ namespace StarMathLib
                         if (ls != m - 1) test = test + Math.Abs(e[ls]);
                         if (ls != l + 1) test = test + Math.Abs(e[ls - 1]);
                         ztest = test + Math.Abs(stemp[ls]);
-                        if (Math.Abs(ztest - test) <= EqualityTolerance)
+                        if (IsPracticallySame(ztest, test))
                         {
                             stemp[ls] = 0.0;
                             break;

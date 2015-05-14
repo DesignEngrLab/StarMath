@@ -1,12 +1,40 @@
-﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+﻿<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Designengrlab.GitHub.io by DesignEngrLab</title>
 
-<head>
-<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
-<title>In the latest version of the sou</title>
-</head>
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="javascripts/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="/../../../../../../html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <style type="text/css">
+.auto-style1 {
+	color: #2B91AF;
+}
+</style>
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+         <h1 class="header">StarMath: Static Array Math Library</h1>
+        <p class="header">While there are already countless math libraries for performing common matrix/array functions, 
+        StarMath is distinguished by its simplicity and flexbility. There is no need to declare vectors and matrices in a 
+        specific library format. It works simliar to Math.function calls in C#.  </p>
 
-<body>
+
+
+        <ul>
+          <li><a class="buttons github" href="https://github.com/DesignEngrLab/StarMath">StarMath Repo</a></li>
+        </ul>
+
+      </header>
+      <section>
+  <h1>Benchmarking to Other Libraries</h1>
 <p>In the latest version of the source code, you can find an example that benchmarks the speed of StarMath in doing matrix inversion to that of similar packages:</p>
 <ul>
 <li>Math.Net (<a title="http://www.mathdotnet.com/" href="http://www.mathdotnet.com/">http://www.mathdotnet.com/</a>)</li>
@@ -16,17 +44,29 @@
 <p>All of these have many more functions than what I am currently supporting, and before I went about repeating their efforts (introducing Successive Over-Relaxation, eigenvalues determination, pseudoinverse, and Singular Value Decomposition), I wanted to see if there was anything unique or worthwhile about my approach.</p>
 <p>One thing to note: all of these are based directly on the original LINPACK (<a href="http://www.netlib.org/linpack/">http://www.netlib.org/linpack/</a>)&nbsp;and BLAS (<a href="http://www.netlib.org/blas/">http://www.netlib.org/blas/</a>)&nbsp;code written in Fortran many moons ago &ndash; just like Matlab. But when you look close at that code you see that it&rsquo;s very hard to follow and not written very cleanly or efficiently. Perhaps, some of the coding decisions are no longer valid given the types of functions in-built to modern computers and computer languages like C#, and Java.</p>
 <p>So, I tested how quickly these tools could invert a full, general matrix compared to StarMath from a 3x3 (that's 9 cells) to a 3000x3000 (9 million cells). StarMath on average outperforms these leading matrix manipulation libraries for matrices less thatn 500x500. The following figure shows the speed increase in this library over the competition.</p>
-<p><a href="http://download.codeplex.com/Download?ProjectName=starmath&amp;DownloadId=291730"><img style="padding-left: 0px; padding-right: 0px; display: inline; padding-top: 0px; border: 0px;" title="image" src="http://download.codeplex.com/Download?ProjectName=starmath&amp;DownloadId=291731" alt="image" width="404" height="266" border="0" /></a></p>
+<p><img style="padding-left: 0px; padding-right: 0px; display: inline; padding-top: 0px; border: 0px;" title="image" src="images/benchmark/image_2.png" height="266" border="0" /></p>
 <p>In other words, you can invert 3.3 10-by-10 matrices in StarMath in the time it takes to do this in competing techniques.&nbsp;</p>
 <p>However, my approach seems to be less accurate, but given that these are all analytical results, the error is all less that 1e-10 (fraction of the average data values in the matrix).</p>
-<p><a href="http://download.codeplex.com/Download?ProjectName=starmath&amp;DownloadId=291732"><img style="padding-left: 0px; padding-right: 0px; display: inline; padding-top: 0px; border: 0px;" title="image" src="http://download.codeplex.com/Download?ProjectName=starmath&amp;DownloadId=291733" alt="image" width="404" height="235" border="0" /></a></p>
+<p><img style="padding-left: 0px; padding-right: 0px; display: inline; padding-top: 0px; border: 0px;" title="image" src="images/benchmark/image_4.png" width="404" height="235" border="0" /></p>
 <p>In more detail, this is how the curves were created. A random matrix was created with values between &ndash;100 and +100 in each cell. Each random matrix was sent to each tool to determine the matrix&rsquo;s inverse. This was done for matrix sizes at: 3, 10, 30, 100, 300, 1000, and 3000. The experiment was averaged over as many as 50 for small matrix but only 3 for the 3000x3000 matrix (see code for details).</p>
 <p>Here is the complete plot for times:</p>
-<p><a href="http://download.codeplex.com/Download?ProjectName=starmath&amp;DownloadId=291734"><img style="padding-left: 0px; padding-right: 0px; display: inline; padding-top: 0px; border: 0px;" title="image" src="http://download.codeplex.com/Download?ProjectName=starmath&amp;DownloadId=291735" alt="image" width="404" height="245" border="0" /></a>&nbsp;</p>
+<p><img style="padding-left: 0px; padding-right: 0px; display: inline; padding-top: 0px; border: 0px;" title="image" src="images/benchmark/image_6.png" width="404" height="245" border="0" />&nbsp;</p>
 <p>It is more informative to break this into two plots representing the low and high ranges.</p>
-<p><a href="http://download.codeplex.com/Download?ProjectName=starmath&amp;DownloadId=291736"><img style="padding-left: 0px; padding-right: 0px; display: inline; padding-top: 0px; border: 0px;" title="image" src="http://download.codeplex.com/Download?ProjectName=starmath&amp;DownloadId=291737" alt="image" width="404" height="245" border="0" /></a><a href="http://download.codeplex.com/Download?ProjectName=starmath&amp;DownloadId=291738"><img style="padding-left: 0px; padding-right: 0px; display: inline; padding-top: 0px; border: 0px;" title="image" src="http://download.codeplex.com/Download?ProjectName=starmath&amp;DownloadId=291739" alt="image" width="404" height="245" border="0" /></a></p>
+<p><img style="padding-left: 0px; padding-right: 0px; display: inline; padding-top: 0px; border: 0px;" title="image" src="images/benchmark/image_8.png" width="404" height="245" border="0" />
+<img style="padding-left: 0px; padding-right: 0px; display: inline; padding-top: 0px; border: 0px;" title="image" src="images/benchmark/image_10.png" alt="image" width="404" height="245" border="0"></p>
 <p>The first figure in this document&nbsp;is created by averageing the other three lines and dividing it by the StarMath times.</p>
-<p>It is important to note that in both Math.Net and Dot Numerics, one must use their base classes for matrix instead of a 2D double array (double[,]). I include in the times the conversion to create these objects, which one may view as unfairly biasing against those methods. This makes a more significant dent in Dot Numerics performance, which otherwise is close to StarMath. But I view the conversion to their Matrix class as a necessary evil. Who knows what pre-processing is done on the matrix when put into these classes (well, it wouldn&rsquo;t be hard to check, it is all open-source at least)? But, this is the whole impetus for StarMath. Don&rsquo;t make the programmer have to adopt a new class just to do a straightforward calculation. Matrix calculations should be static functions that work on simple arrays (hence the name).</p>
-</body>
+<p>It is important to note that in both Math.Net and Dot Numerics, one must use their base classes for matrix instead of a 2D double array (double[,]).
+ I include in the times the conversion to create these objects, which one may view as unfairly biasing against those methods. This makes a more significant 
+ dent in Dot Numerics performance, which otherwise is close to StarMath. But I view the conversion to their Matrix class as a necessary evil. Who knows 
+ what pre-processing is done on the matrix when put into these classes (well, it wouldn&rsquo;t be hard to check, it is all open-source at least)? 
+ But, this is the whole impetus for StarMath. Don&rsquo;t make the programmer have to adopt a new class just to do a straightforward calculation. 
+ Matrix calculations should be static functions that work on simple arrays (hence the name).</p>
 
+      </section>
+      <footer>
+      </footer>
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+		
+  </body>
 </html>

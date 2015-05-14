@@ -12,6 +12,11 @@
     <!--[if lt IE 9]>
     <script src="/../../../../../../html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
+    <style type="text/css">
+	.auto-style1 {
+		border: 1px solid #000000;
+	}
+	</style>
     </head>
   <body>
     <div class="wrapper">
@@ -35,31 +40,31 @@
 			optimization methods and uses of StarMath)</p>
 
 <p>This bit of matrix math is used to calculate the Broyden-Fletcher-Goldfarb-Shanno approach to approximating the Newton approach. This is shown to illustrate some of the basic add and multiply functions of StarMath.</p>
-		<table align="center" cellspacing="0" border="12" bgcolor="white" bordercolordark="black"  bordercolor="black" width="350
-		">
+		<table align="center" cellspacing="1" border="12" bgcolor="white" bordercolordark="black"  bordercolor="black" width="350
+		" cellpadding="2" class="auto-style1">
 			<tr>
 				<td style="width: 187px" >
 				<img  src="images/ex2/diffX.png" ></td>
-				<td ><p><font face="Consolas"><font color="#0000ff"><font style="font-size: 9.5pt;">var</font></font><font color="#000000" style="font-size: 9.5pt"> diffX = x.subtract(xLast);</font></p></td>
+				<td style="width: 422px" ><p><font face="Consolas"><font color="#0000ff"><font style="font-size: 9.5pt;">var</font></font><font color="#000000" style="font-size: 9.5pt"> diffX = x.subtract(xLast);</font></p></td>
 			</tr>
 			<tr>
 				<td style="width: 187px" >
 				<img src="images/ex2/diffGradF.png"></td>
-				<td>
+				<td style="width: 422px">
 <p><font face="Consolas"><font color="#0000ff"><font style="font-size: 9.5pt;">var</font></font><font color="#000000" style="font-size: 9.5pt"> diffGradF = gradf.subtract(gradFLast);</font></font></p>
 				</td>
 			</tr>
 			<tr>
 				<td style="width: 187px" >
 				<img  src="images/ex2/Tk_iverseHessian.png" ></td>
-				<td ><p ><font face="Consolas"><font color="#000000"><font style="font-size: 9.5pt;">T = </font></font><font style="font-size: 9.5pt;"><font color="#2b91af">StarMath</font><font color="#000000">.multiplyVectorsIntoAMatrix(diffX, diffGradF);</font></font></font></p>
+				<td style="width: 422px" ><p ><font face="Consolas"><font color="#000000"><font style="font-size: 9.5pt;">T = </font></font><font style="font-size: 9.5pt;"><font color="#2b91af">StarMath</font><font color="#000000">.multiplyVectorsIntoAMatrix(diffX, diffGradF);</font></font></font></p>
 <p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font color="#000000"><font style="font-size: 9.5pt;">T = </font></font>
 <font color="#000000" style="font-size: 9.5pt">T.divide(diffX.multiplyDot(diffGradF));</font></font></p></td>
 			</tr>
 			<tr>
 				<td style="width: 187px" >
 				<img src="images/ex2/uVector.png" ></td>
-				<td ><p ><font face="Consolas"><font color="#000000"><font style="font-size: 9.5pt;">u = </font></font><font style="font-size: 9.5pt;"><font color="#2b91af">StarMath</font><font color="#000000">.multiplyVectorsIntoAMatrix(diffX, diffX);</font></font></font></p>
+				<td style="width: 422px" ><p ><font face="Consolas"><font color="#000000"><font style="font-size: 9.5pt;">u = </font></font><font style="font-size: 9.5pt;"><font color="#2b91af">StarMath</font><font color="#000000">.multiplyVectorsIntoAMatrix(diffX, diffX);</font></font></font></p>
 <p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font color="#000000"><font style="font-size: 9.5pt;">u = </font></font>
 <font color="#000000" style="font-size: 9.5pt">u.multiply(diffX.multiplyDot(diffGradF));</font></font></p>
 
@@ -68,7 +73,7 @@
 			<tr>
 				<td style="width: 187px">
 				<img src="images/ex2/nextInverseHessian.png" ></td>
-				<td ><p ><font face="Consolas"><font color="#000000"><font style="font-size: 9.5pt;">IMinusT = </font></font><font style="font-size: 9.5pt;"><font color="#2b91af">StarMath</font><font color="#000000">.makeIdentity(T.GetLength(0)).subtract(T); </font></font></font></p>
+				<td  ><p ><font face="Consolas"><font color="#000000"><font style="font-size: 9.5pt;">IMinusT = </font></font><font style="font-size: 9.5pt;"><font color="#2b91af">StarMath</font><font color="#000000">.makeIdentity(T.GetLength(0)).subtract(T); </font></font></font></p>
 <p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font color="#000000"><font style="font-size: 9.5pt;">invH = </font></font>
 <font color="#000000" style="font-size: 9.5pt">IMinusT.multiply(</font><font style="font-size: 9.5pt;" color="#000000">invHLast.multiply(IMinusT)).add(u);</font></font></p>
 </td>
@@ -76,7 +81,7 @@
 			<tr>
 				<td style="width: 187px" >
 				<img  src="images/ex2/searchDir.png" ></td>
-				<td ><p ><font face="Consolas"><font color="#000000"><font style="font-size: 9.5pt;">dir = </font></font>
+				<td style="width: 422px" ><p ><font face="Consolas"><font color="#000000"><font style="font-size: 9.5pt;">dir = </font></font>
 <font color="#000000" style="font-size: 9.5pt">invH.multiply(gradf);</font></font></p>
 </td>
 			</tr>

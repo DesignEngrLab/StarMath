@@ -12,12 +12,7 @@
     <!--[if lt IE 9]>
     <script src="/../../../../../../html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
-    <style type="text/css">
-.auto-style1 {
-	color: #2B91AF;
-}
-</style>
-  </head>
+    </head>
   <body>
     <div class="wrapper">
       <header>
@@ -41,7 +36,8 @@
 <li>Dot Numerics (<a title="http://www.dotnumerics.com/" href="http://www.dotnumerics.com/">http://www.dotnumerics.com/</a>)</li>
 <li>ALGLib (<a title="http://www.alglib.net/" href="http://www.alglib.net/">http://www.alglib.net/</a>)</li>
 </ul>
-<p>All of these have many more functions than what I am currently supporting, and before I went about repeating their efforts (introducing Successive Over-Relaxation, eigenvalues determination, pseudoinverse, and Singular Value Decomposition), I wanted to see if there was anything unique or worthwhile about my approach.</p>
+<p>All of these have many more functions than what StarMath currently supports, and before 
+we went about repeating their efforts, I wanted to see if there was anything unique or worthwhile about my approach.</p>
 <p>One thing to note: all of these are based directly on the original LINPACK (<a href="http://www.netlib.org/linpack/">http://www.netlib.org/linpack/</a>)&nbsp;and BLAS (<a href="http://www.netlib.org/blas/">http://www.netlib.org/blas/</a>)&nbsp;code written in Fortran many moons ago &ndash; just like Matlab. But when you look close at that code you see that it&rsquo;s very hard to follow and not written very cleanly or efficiently. Perhaps, some of the coding decisions are no longer valid given the types of functions in-built to modern computers and computer languages like C#, and Java.</p>
 <p>So, I tested how quickly these tools could invert a full, general matrix compared to StarMath from a 3x3 (that's 9 cells) to a 3000x3000 (9 million cells). StarMath on average outperforms these leading matrix manipulation libraries for matrices less thatn 500x500. The following figure shows the speed increase in this library over the competition.</p>
 <p><img style="padding-left: 0px; padding-right: 0px; display: inline; padding-top: 0px; border: 0px;" title="image" src="images/benchmark/image_2.png" height="266" border="0" /></p>

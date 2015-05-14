@@ -1,0 +1,92 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Designengrlab.GitHub.io by DesignEngrLab</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="javascripts/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="/../../../../../../html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    </head>
+  <body>
+    <div class="wrapper">
+      <header>
+         <h1 class="header">StarMath: Static Array Math Library</h1>
+        <p class="header">While there are already countless math libraries for performing common matrix/array functions, 
+        StarMath is distinguished by its simplicity and flexbility. There is no need to declare vectors and matrices in a 
+        specific library format. It works simliar to Math.function calls in C#.  </p>
+
+
+
+        <ul>
+          <li><a class="buttons github" href="https://github.com/DesignEngrLab/StarMath">StarMath Repo</a></li>
+        </ul>
+
+      </header>
+      <section>
+    <h1>Example 2: Quasi-Newton Optimization</h1>
+    <p> This is part of the Object-Oriented Optimization Toolbox (see:
+			<a href="https://github.com/DesignEngrLab/OOOT">OOOT</a> for more 
+			optimization methods and uses of StarMath)</p>
+
+<p>This bit of matrix math is used to calculate the Broyden-Fletcher-Goldfarb-Shanno approach to approximating the Newton approach. This is shown to illustrate some of the basic add and multiply functions of StarMath.</p>
+		<table align="center" cellspacing="0" border="12" bgcolor="white" bordercolordark="black"  bordercolor="black" width="350
+		">
+			<tr>
+				<td style="width: 187px" >
+				<img  src="images/ex2/diffX.png" ></td>
+				<td ><p><font face="Consolas"><font color="#0000ff"><font style="font-size: 9.5pt;">var</font></font><font color="#000000" style="font-size: 9.5pt"> diffX = x.subtract(xLast);</font></p></td>
+			</tr>
+			<tr>
+				<td style="width: 187px" >
+				<img src="images/ex2/diffGradF.png"></td>
+				<td>
+<p><font face="Consolas"><font color="#0000ff"><font style="font-size: 9.5pt;">var</font></font><font color="#000000" style="font-size: 9.5pt"> diffGradF = gradf.subtract(gradFLast);</font></font></p>
+				</td>
+			</tr>
+			<tr>
+				<td style="width: 187px" >
+				<img  src="images/ex2/Tk_iverseHessian.png" ></td>
+				<td ><p ><font face="Consolas"><font color="#000000"><font style="font-size: 9.5pt;">T = </font></font><font style="font-size: 9.5pt;"><font color="#2b91af">StarMath</font><font color="#000000">.multiplyVectorsIntoAMatrix(diffX, diffGradF);</font></font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font color="#000000"><font style="font-size: 9.5pt;">T = </font></font>
+<font color="#000000" style="font-size: 9.5pt">T.divide(diffX.multiplyDot(diffGradF));</font></font></p></td>
+			</tr>
+			<tr>
+				<td style="width: 187px" >
+				<img src="images/ex2/uVector.png" ></td>
+				<td ><p ><font face="Consolas"><font color="#000000"><font style="font-size: 9.5pt;">u = </font></font><font style="font-size: 9.5pt;"><font color="#2b91af">StarMath</font><font color="#000000">.multiplyVectorsIntoAMatrix(diffX, diffX);</font></font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font color="#000000"><font style="font-size: 9.5pt;">u = </font></font>
+<font color="#000000" style="font-size: 9.5pt">u.multiply(diffX.multiplyDot(diffGradF));</font></font></p>
+
+</td>
+			</tr>
+			<tr>
+				<td style="width: 187px">
+				<img src="images/ex2/nextInverseHessian.png" ></td>
+				<td ><p ><font face="Consolas"><font color="#000000"><font style="font-size: 9.5pt;">IMinusT = </font></font><font style="font-size: 9.5pt;"><font color="#2b91af">StarMath</font><font color="#000000">.makeIdentity(T.GetLength(0)).subtract(T); </font></font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font color="#000000"><font style="font-size: 9.5pt;">invH = </font></font>
+<font color="#000000" style="font-size: 9.5pt">IMinusT.multiply(</font><font style="font-size: 9.5pt;" color="#000000">invHLast.multiply(IMinusT)).add(u);</font></font></p>
+</td>
+			</tr>
+			<tr>
+				<td style="width: 187px" >
+				<img  src="images/ex2/searchDir.png" ></td>
+				<td ><p ><font face="Consolas"><font color="#000000"><font style="font-size: 9.5pt;">dir = </font></font>
+<font color="#000000" style="font-size: 9.5pt">invH.multiply(gradf);</font></font></p>
+</td>
+			</tr>
+		</table>
+
+      </section>
+      <footer>
+      </footer>
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+		
+  </body>
+</html>

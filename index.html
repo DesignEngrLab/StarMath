@@ -1,81 +1,651 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
   <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
-    <meta name="author" content="{{ site.author.name }}" />
-    <title>{{ page.title }}</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Designengrlab.GitHub.io by DesignEngrLab</title>
 
-    <link rel="stylesheet" href="{{ ASSET_PATH }}/css/styles.css">
-    <link rel="stylesheet" href="{{ ASSET_PATH }}/css/pygment_trac.css">
-    <script src="{{ ASSET_PATH }}/js/scale.fix.js"></script>
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="javascripts/scale.fix.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
     <!--[if lt IE 9]>
-    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <script src="/../../../../../../html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
-
-    {% include JB/analytics %}
+    <style type="text/css">
+.auto-style1 {
+	color: #2B91AF;
+}
+</style>
   </head>
   <body>
     <div class="wrapper">
       <header>
-        <h1 class="header"><a href="{{ HOME_PATH }}">{{ site.title }}</a></h1>
-        <p class="header">{{ site.tagline }}</p>
+         <h1 class="header">StarMath: Static Array Math Library</h1>
+        <p class="header">While there are already countless math libraries for performing common matrix/array functions, 
+        StarMath is distinguished by its simplicity and flexbility. There is no need to declare vectors and matrices in a 
+        specific library format. It works simliar to Math.function calls in C#.  </p>
+
+
+
         <ul>
-          {% assign pages_list = site.pages %}
-          {% assign group = 'navigation' %}
-          {% include JB/pages_list %}
+          <li><a class="buttons github" href="https://github.com/DesignEngrLab/StarMath">StarMath Repo</a></li>
         </ul>
-        {% if site.ads.google %}
-        <div class="misc ad">
-          <script type="text/javascript"><!--
-            google_ad_client = "{{ site.ads.google.client }}";
-            google_ad_slot = "{{ site.ads.google.slot }}";
-            google_ad_width = {{ site.ads.google.width }};
-            google_ad_height = {{ site.ads.google.height }};
-            //-->
-          </script>
-          <script type="text/javascript" src="http://pagead2.googlesyndication.com/pagead/show_ads.js"></script>
-        </div>
-        {% endif %}
-        {% if site.author %}
-        <div class="misc vcard">
-          <h4>about</h4>
-          <ul>
-            {% if site.author.email %}
-            <li class="contact"><address><span class="author fn n">{{ site.author.name }}</span> - <span class="fn email">{{ site.author.email }}</span></address></li>
-            {% endif %}
-            {% if site.author.github %}
-            <li class="github"><a href="http://github.com/{{ site.author.github }}/" rel="me">github.com/{{ site.author.github }}</a></li>
-            {% endif %}
-            {% if site.author.twitter %}
-            <li class="twitter"><a href="http://twitter.com/{{ site.author.twitter }}/" rel="me">twitter.com/{{ site.author.twitter }}</a></li>
-            {% endif %}
-            {% if site.author.facebook %}
-            <li class="facebook"><a href="http://facebook.com/{{ site.author.facebook }}/" rel="me">facebook.com/{{ site.author.facebook }}</a></li>
-            {% endif %}
-            {% if site.author.flickr %}
-            <li class="flickr"><a href="http://flickr.com/{{ site.author.flickr }}/" rel="me">flickr.com/{{ site.author.flickr }}</a></li>
-            {% endif %}
-            {% if site.author.yelp %}
-            <li class="yelp"><a href="http://{{ site.author.yelp }}.yelp.com/" rel="me">{{ site.author.yelp }}.yelp.com</a></li>
-            {% endif %}
-            {% if site.author.pinterest %}
-            <li class="pinterest"><a href="http://pinterest.com/{{ site.author.pinterest }}" rel="me">pinterest.com/{{ site.author.pinterest }}</a></li>
-            {% endif %}
-          </ul>
-        </div><!-- misc -->
-        {% endif %}
+
       </header>
-
       <section>
-      {{ content }}
-      </section>
+    <h2><strong>Project Description</strong> </h2>
+<p>This project is small .NET managed dynamic library and fully compiles to a Portable Class Library (for all platforms).</p>
+<p>Many matrix libraries like to offer short, concise matrix operations (e.g. 
+A*B) like Matlab. However, this requires that you create vectors and matrices in the format of those libraries. Instead, StarMath is all about simple 
+<strong>static</strong> methods that work with the fundamental
+<strong>Array</strong> objects (actually, many methods work for objects inherited from 
+<span class="auto-style1"><strong>IList</strong></span>). This used to be rather clunky approach as one would 
+have to write:
+<p><span style="font-size: 9.5pt; color: #2b91af;"><strong>var</strong></span><span style="font-size: 9.5pt; color: black;"><strong> z = 
+</strong> </span><span style="font-size: 9.5pt; color: #2b91af;"><strong>StarMath</strong></span><span style="font-size: 9.5pt; color: black;"><strong>.crossProduct2(v1, v2);</strong></span></p>
+ Now, with StarMath 2.0, which takes advantage of <a href="http://msdn.microsoft.com/en-us/library/vstudio/bb383977(v=vs.100).aspx">'extensions'</a>, a more concise 
+ representation of many functions is possible. Now you simple have to write:
+ <p><span style="font-size: 9.5pt; color: #2b91af;"><strong>var</strong></span><span style="font-size: 9.5pt; color: black;"><strong> z = v1.crossProduct2(v2);</strong></span></p>
+		The library is not going to do sophisticated sparse-matrix solving 
+		(yet!), but is intended for applications where common matrix operations 
+		are needed frequently and effortlessly within .NET applications. </p>
+		<h3><a href="benchmark.html">But is StarMath fast?</a></h3>
+<h2>Here are some examples that illustrate ways StarMath has been used to date:</h2>
+		<ul>
+			<li><a href="example_1.html">Example 1: Matrix Inversion</a></li>
+			<li><a href="example_2.html">Example 2: As part of a Quasi-Newton 
+			Optimization</a> (see:
+			<a href="https://github.com/DesignEngrLab/OOOT">OOOT</a> for more 
+			optimization methods and uses of StarMath)</li>
+			<li><a href="example_3.html">Example 3: Vector Manipulation and 
+			Conversion</a> (see: <a href="http://miconvexhull.codeplex.com/">
+			MIConvexhull</a> for an appraoch to using StarMath for n-D Convex 
+			Hull Calculations)</li>
+		</ul>
 
+<h2>The following are functions built into the library.</h2>
+<table width="1">
+<tbody>
+<tr>
+<td colspan="2">
+<h3>Basic Arithmetic</h3>
+</td>
+<td style="width: 466px">
+<h3>Example usage</h3>
+</td>
+</tr>
+<tr>
+<td width="276">
+<p><span style="color: black;">multiply(integer/scalar/vector/matrix, integer/scalar/vector/matrix)</span></p>
+</td>
+<td style="width: 266px">
+<p><span style="color: black;">Multiplies all elements of a 1D array with the scalar.</span></p>
+</td>
+<td style="width: 466px">
+<p><span style="font-size: 9.5pt; color: black;">A.multiply(x);</span></p>
+</td>
+</tr>
+<tr>
+<td width="276">
+<p><span style="color: black;">divide(vector/matrix, scalar)</span></p>
+</td>
+<td style="width: 266px">
+<p><span style="color: black;">Divides all elements of an array by the scalar.</span></p>
+</td>
+<td style="width: 466px">
+<p><span style="font-size: 9.5pt; color: black;">A.divide(3.0);</span></p>
+</td>
+</tr>
+<tr>
+<td width="276">
+<p><span style="color: black;">add(vector/matrix, vector/matrix)</span></p>
+</td>
+<td style="width: 266px">
+<p><span style="color: black;">Adds arrays A and B</span></p>
+</td>
+<td style="width: 466px">
+<p><span style="font-size: 9.5pt; color: black;">A.add(B);</span></p>
+</td>
+</tr>
+<tr>
+<td width="276">
+<p><span style="color: black;">subtract(vector/matrix, vector/matrix)</span></p>
+</td>
+<td style="width: 266px">
+<p><span style="color: black;">Subtracts one vector (B) from the other (A). C = A - B.</span></p>
+</td>
+<td style="width: 466px">
+<p><span style="font-size: 9.5pt; color: black;">A.subtract(B);</span></p>
+</td>
+</tr>
+<tr>
+<td colspan="2">
+<h1>Vector Multiply</h1>
+</td>
+<td style="width: 466px">
+<h1>&nbsp;</h1>
+</td>
+</tr>
+<tr>
+<td width="276">
+<p><span style="color: black;">dotProduct(vector, vector)</span></p>
+</td>
+<td style="width: 266px">
+<p><span style="color: black;">The dot product of the two 1D vectors A and B</span></p>
+</td>
+<td style="width: 466px">
+<p><span style="font-size: 9.5pt; color: black;">v1.dotProduct(v2);</span></p>
+</td>
+</tr>
+<tr>
+<td width="276">
+<p><span style="color: black;">crossProduct(vector, vector)</span></p>
+</td>
+<td style="width: 266px">
+<p><span style="color: black;">The cross product of two -precision vectors, A and B, </span></p>
+</td>
+<td style="width: 466px">
+<p><span style="font-size: 9.5pt; color: black;">v1.crossProduct(v2);</span></p>
+</td>
+</tr>
+<tr>
+<td width="276">
+<p><span style="color: black;">crossProduct2(vector, vector)</span></p>
+</td>
+<td style="width: 266px">
+<p><span style="color: black;">The cross product of two vectors, A and B, which are of length, 2. In actuality, there is no cross-product for 2D. This is shorthand for 2D systems that are really simplifications of 3D. The returned scalar is actually the scalar in the third (read: z) direction.</span></p>
+</td>
+<td style="width: 466px">
+<p><span style="font-size: 9.5pt; color: blue;">double</span><span style="font-size: 9.5pt; color: black;"> z = </span><span style="font-size: 9.5pt; color: #2b91af;">StarMath</span><span style="font-size: 9.5pt; color: black;">.crossProduct2(v1, v2);</span></p>
+</td>
+</tr>
+<tr>
+<td width="276">
+<p><span style="color: black;">multiplyVectorsIntoAMatrix(vector, vector)</span></p>
+</td>
+<td style="width: 266px">
+<p><span style="color: black;">Multiply vector by transpose of another vector to create a matrix. Product of each element of array-1 (1D ) with each element of array-2 (1D ) C[i, j] = A[i] * B[j]</span></p>
+</td>
+<td style="width: 466px">
+<p><span style="font-size: 9.5pt; color: blue;">double</span><span style="font-size: 9.5pt; color: black;">[,] A = </span><span style="font-size: 9.5pt; color: #2b91af;">StarMath</span><span style="font-size: 9.5pt; color: black;">.multiplyVectorsIntoAMatrix(v1, v2);</span></p>
+</td>
+</tr>
+<tr>
+<td width="276">
+<p><span style="color: black;">EltMultiply(vector/matrix, vector/matrix)</span></p>
+</td>
+<td style="width: 266px">
+<p><span style="color: black;">The element-by-element (Hadamard) multiplication of vectors or matrices.</span></p>
+</td>
+<td style="width: 466px">
+<p><span style="font-size: 9.5pt; color: blue;">double</span><span style="font-size: 9.5pt; color: black;">[] v3 = v1.EltMultiply(v2);</span></p>
+</td>
+</tr>
+<tr>
+<td colspan="2">
+<h1>Advanced Matrix Manipulation</h1>
+</td>
+<td style="width: 466px">
+<h1>&nbsp;</h1>
+</td>
+</tr>
+<tr>
+<td width="276">
+<p><span style="color: black;">SingularScalarDecomposition(matrix)</span></p>
+</td>
+<td style="width: 266px">
+<p><span style="color: black;">Computes the singular scalar decomposition of A.</span></p>
+</td>
+<td style="width: 466px">
+<p><span style="font-size: 9.5pt; color: blue;">double</span><span style="font-size: 9.5pt; color: black;">[] sigma = M.SingularValueDecomposition();<br />or<br /></span><span style="font-size: 9.5pt; color: blue;">double</span><span style="font-size: 9.5pt; color: black;">[,] U, V;<br /></span><span style="font-size: 9.5pt; color: blue;">double</span><span style="font-size: 9.5pt; color: black;">[] sigma = M.SingularValueDecomposition(</span><span style="font-size: 9.5pt; color: blue;">out</span><span style="font-size: 9.5pt; color: black;"> U, </span><span style="font-size: 9.5pt; color: blue;">out</span><span style="font-size: 9.5pt; color: black;"> V);</span></p>
+</td>
+</tr>
+<tr>
+<td width="276">
+<p><span style="color: black;">GetEigenScalars(matrix)</span></p>
+</td>
+<td style="width: 266px">
+<p><span style="color: black;">Gets the eigenvalues for matrix, A.</span></p>
+</td>
+<td rowspan="2" style="width: 466px">
+<p><span style="font-size: 9.5pt; color: blue;">var</span><span style="font-size: 9.5pt; color: black;"> eigenVectors = </span><span style="font-size: 9.5pt; color: blue;">new</span> <span style="font-size: 9.5pt; color: blue;">double</span><span style="font-size: 9.5pt; color: black;">[size][];<br /></span><span style="font-size: 9.5pt; color: blue;">var</span><span style="font-size: 9.5pt; color: black;"> &lambda; = A.GetEigenValuesAndVectors(</span><span style="font-size: 9.5pt; color: blue;">out</span><span style="font-size: 9.5pt; color: black;"> eigenVectors);</span></p>
+</td>
+</tr>
+<tr>
+<td width="276">
+<p><span style="color: black;">GetEigenScalarsAndVectors(matrix)</span></p>
+</td>
+<td style="width: 266px">
+<p><span style="color: black;">Gets the eigenscalars and eigenvectors for matrix, A.</span></p>
+</td>
+</tr>
+<tr>
+<td width="276">
+<p><span style="color: black;">inverse(matrix)</span></p>
+</td>
+<td style="width: 266px">
+<p><span style="color: black;">Inverses the matrix A only if the diagonal is all non-zero. A[i, i] != 0.0</span></p>
+</td>
+<td style="width: 466px">
+<p><span style="font-size: 9.5pt; color: blue;">double</span><span style="font-size: 9.5pt; color: black;">[,] B = A.inverse();</span></p>
+</td>
+</tr>
+<tr>
+<td width="276">
+<p><span style="color: black;">LUDecomposition(matrix</span></p>
+</td>
+<td style="width: 266px">
+<p><span style="color: black;">Returns the LU decomposition of A in a new matrix.</span></p>
+</td>
+<td style="width: 466px">
+<p><span style="font-size: 9.5pt; color: blue;">double</span><span style="font-size: 9.5pt; color: black;">[,] L, U;<br /></span><span style="font-size: 9.5pt; color: #2b91af;">StarMath</span><span style="font-size: 9.5pt; color: black;">.LUDecomposition(A, </span><span style="font-size: 9.5pt; color: blue;">out</span><span style="font-size: 9.5pt; color: black;"> L, </span><span style="font-size: 9.5pt; color: blue;">out</span><span style="font-size: 9.5pt; color: black;"> U);</span></p>
+</td>
+</tr>
+<tr>
+<td width="276">
+<p><span style="color: black;">transpose(matrix)</span></p>
+</td>
+<td style="width: 266px">
+<p><span style="color: black;">Transposes the matrix, A.</span></p>
+</td>
+<td style="width: 466px">
+<p><span style="font-size: 9.5pt; color: blue;">double</span><span style="font-size: 9.5pt; color: black;">[,] At = A.transpose();</span></p>
+</td>
+</tr>
+<tr>
+<td width="276">
+<p><span style="color: black;">determinant(matrix)</span></p>
+</td>
+<td style="width: 266px">
+<p><span style="color: black;">Returns the determinant of matrix, A.</span></p>
+</td>
+<td style="width: 466px">
+<p><span style="font-size: 9.5pt; color: blue;">double</span><span style="font-size: 9.5pt; color: black;"> detA = A.determinant();</span></p>
+</td>
+</tr>
+<tr>
+<td width="276">
+<p><span style="color: black;">solve(matrix, vector, vector)</span></p>
+</td>
+<td style="width: 266px">
+<p><span style="color: black;">Solves for x given matrix, A, vector, b &amp; perhaps an initial guess for x in the formulation: Ax = b</span></p>
+</td>
+<td style="width: 466px">
+<p><span style="font-size: 9.5pt; color: blue;">double</span><span style="font-size: 9.5pt; color: black;">[] x = </span><span style="font-size: 9.5pt; color: #2b91af;">StarMath</span><span style="font-size: 9.5pt; color: black;">.solve(A, b);</span></p>
+</td>
+</tr>
+<tr>
+<td colspan="2">
+<h1>Sizing and Finding</h1>
+</td>
+<td style="width: 466px">
+<h1>&nbsp;</h1>
+</td>
+</tr>
+<tr>
+<td width="276">
+<p><span style="color: black;">Max(vector/matrix)</span></p>
+</td>
+<td style="width: 266px">
+<p><span style="color: black;">Finds the maximum scalar in the given array and optionally returns the row and column indices along with it.</span></p>
+</td>
+<td style="width: 466px">
+<p><span style="font-size: 9.5pt; color: blue;">int</span><span style="font-size: 9.5pt; color: black;"> rowIndex, colIndex;<br /></span><span style="font-size: 9.5pt; color: blue;">double</span><span style="font-size: 9.5pt; color: black;"> max = A.Max(</span><span style="font-size: 9.5pt; color: blue;">out</span><span style="font-size: 9.5pt; color: black;"> rowIndex, </span><span style="font-size: 9.5pt; color: blue;">out</span><span style="font-size: 9.5pt; color: black;"> colIndex);</span></p>
+</td>
+</tr>
+<tr>
+<td width="276">
+<p><span style="color: black;">Min(vector/matrix)</span></p>
+</td>
+<td style="width: 266px">
+<p><span style="color: black;">Finds the minimum scalar in the given array and optionally returns the row and column indices along with it.</span></p>
+</td>
+<td style="width: 466px">
+<p><span style="font-size: 9.5pt; color: blue;">var</span><span style="font-size: 9.5pt; color: black;"> min = v1.Min(</span><span style="font-size: 9.5pt; color: blue;">out</span><span style="font-size: 9.5pt; color: black;"> index);</span></p>
+</td>
+</tr>
+<tr>
+<td width="276">
+<p><span style="color: black;">find(vector/matrix, scalar)</span></p>
+</td>
+<td style="width: 266px">
+<p><span style="color: black;">Finds all the indices for the specified find scalar. </span></p>
+</td>
+<td style="width: 466px">
+<p><span style="font-size: 9.5pt; color: #2b91af;">List</span><span style="font-size: 9.5pt; color: black;">&lt;</span><span style="font-size: 9.5pt; color: blue;">int</span><span style="font-size: 9.5pt; color: black;">&gt; indices = v1.find(100.0);</span></p>
+</td>
+</tr>
+<tr>
+<td width="276">
+<p><span style="color: black;">norm1(matrix)</span></p>
+</td>
+<td style="width: 266px">
+<p><span style="color: black;">Returns to 1-norm (sum of absolute scalars of all terms) of the vector or matrix. Or with two arguments, find the norm2 of their difference.</span></p>
+</td>
+<td style="width: 466px">
+<p><span style="font-size: 9.5pt; color: blue;">double</span><span style="font-size: 9.5pt; color: black;"> diff = </span><span style="font-size: 9.5pt; color: #2b91af;">StarMath</span><span style="font-size: 9.5pt; color: black;">.norm1(v1, v2);</span></p>
+</td>
+</tr>
+<tr>
+<td width="276">
+<p><span style="color: black;">norm2(vector/matrix)</span></p>
+</td>
+<td style="width: 266px">
+<p><span style="color: black;">Returns to 2-norm (square root of the sum of squares of all terms) of the vector or matrix (optionally can choose to not do the square root). Or with two arguments, find the norm2 of their difference.</span></p>
+</td>
+<td style="width: 466px">
+<p><span style="font-size: 9.5pt; color: blue;">double</span><span style="font-size: 9.5pt; color: black;">[,] A;<br />...<br />A.norm2();</span></p>
+</td>
+</tr>
+<tr>
+<td width="276">
+<p><span style="color: black;">normP(vector/matrix)</span></p>
+</td>
+<td style="width: 266px">
+<p><span style="color: black;">Returns to p-norm (p-root of the sum of each term raised to the p power)</span></p>
+</td>
+<td style="width: 466px">
+<p><span style="font-size: 9.5pt; color: blue;">double</span><span style="font-size: 9.5pt; color: black;">[,] A;<br />...<br />A.normP(10.0);</span></p>
+</td>
+</tr>
+<tr>
+<td width="276">
+<p><span style="color: black;">normalize(vector)</span></p>
+</td>
+<td style="width: 266px">
+<p><span style="color: black;">Returns the normalized vector (has length (or 2-norm) of 1) of the vector, x.</span></p>
+</td>
+<td style="width: 466px">
+<p><span style="font-size: 9.5pt; color: blue;">double</span><span style="font-size: 9.5pt; color: black;">[] v1;<br />...<br />v1 = v1.normalize();</span></p>
+</td>
+</tr>
+<tr>
+<td width="276">
+<p><span style="color: black;">normalizeInPlace(vector)</span></p>
+</td>
+<td style="width: 266px">
+<p><span style="color: black;">Destructively normalizes the vector x.</span></p>
+</td>
+<td style="width: 466px">
+<p><span style="font-size: 9.5pt; color: blue;">double</span><span style="font-size: 9.5pt; color: black;">[] v1;<br />...<br />v1.normalizeInPlace();</span></p>
+</td>
+</tr>
+<tr>
+<td width="276">
+<p><span style="color: black;">sum(vector/matrix)</span></p>
+</td>
+<td style="width: 266px">
+<p><span style="color: black;">Sum up all the elements of a given vector or matrix</span></p>
+</td>
+<td style="width: 466px">
+<p><span style="font-size: 9.5pt; color: blue;">var</span><span style="font-size: 9.5pt; color: black;"> v1 = </span><span style="font-size: 9.5pt; color: blue;">new</span><span style="font-size: 9.5pt; color: black;">[] { 1, 2, 3, 4, 5 };<br /></span><span style="font-size: 9.5pt; color: blue;">var</span><span style="font-size: 9.5pt; color: black;"> avg = v1.sum() / 5.0;</span></p>
+</td>
+</tr>
+<tr>
+<td width="276">
+<p><span style="color: black;">standardDeviation(vector/matrix)</span></p>
+</td>
+<td style="width: 266px">
+<p><span style="color: black;">Calculates the standard deviation assuming the whole population is provided (not sample st. dev.).</span></p>
+</td>
+<td style="width: 466px">
+<p><span style="font-size: 9.5pt; color: blue;">var</span><span style="font-size: 9.5pt; color: black;"> v1 = </span><span style="font-size: 9.5pt; color: blue;">new</span><span style="font-size: 9.5pt; color: black;">[] { 1, 2, 3, 4, 5 };<br /></span><span style="font-size: 9.5pt; color: blue;">var</span><span style="font-size: 9.5pt; color: black;"> stdev = v1.standardDeviation();</span></p>
+</td>
+</tr>
+<tr>
+<td colspan="2">
+<h1>3D Coordinate Transforms</h1>
+</td>
+<td style="width: 466px">
+<h1>&nbsp;</h1>
+</td>
+</tr>
+<tr>
+<td width="276">
+<p><span style="color: black;">Translate(scalar, scalar, scalar)</span></p>
+</td>
+<td style="width: 266px">
+<p><span style="color: black;">Creates a translated coordinate frame.</span></p>
+</td>
+<td style="width: 466px">
+<p><span style="font-size: 9.5pt; color: blue;">double</span><span style="font-size: 9.5pt; color: black;">[,] t = </span><span style="font-size: 9.5pt; color: #2b91af;">StarMath</span><span style="font-size: 9.5pt; color: black;">.Translate(1.2, 3.4, 5.6);</span></p>
+</td>
+</tr>
+<tr>
+<td width="276">
+<p><span style="color: black;">RotationX(scalar)</span></p>
+</td>
+<td style="width: 266px">
+<p><span style="color: black;">Creates a rotation matrix about the X-axis.</span></p>
+</td>
+<td style="width: 466px">
+<p><span style="font-size: 9.5pt; color: blue;">double</span><span style="font-size: 9.5pt; color: black;">[,] rx45 = </span><span style="font-size: 9.5pt; color: #2b91af;">StarMath</span><span style="font-size: 9.5pt; color: black;">.RotationX(45.0);</span></p>
+</td>
+</tr>
+<tr>
+<td width="276">
+<p><span style="color: black;">RotationY(scalar)</span></p>
+</td>
+<td style="width: 266px">
+<p><span style="color: black;">Creates a rotation matrix about the Y-axis.</span></p>
+</td>
+<td style="width: 466px">
+<p><span style="font-size: 9.5pt; color: blue;">double</span><span style="font-size: 9.5pt; color: black;">[,] ry90 = </span><span style="font-size: 9.5pt; color: #2b91af;">StarMath</span><span style="font-size: 9.5pt; color: black;">.RotationY(90.0);</span></p>
+</td>
+</tr>
+<tr>
+<td width="276">
+<p><span style="color: black;">RotationZ(scalar)</span></p>
+</td>
+<td style="width: 266px">
+<p><span style="color: black;">Creates a rotation matrix about the Z-axis.</span></p>
+</td>
+<td style="width: 466px">
+<p><span style="font-size: 9.5pt; color: blue;">double</span><span style="font-size: 9.5pt; color: black;">[,] rz30 = </span><span style="font-size: 9.5pt; color: #2b91af;">StarMath</span><span style="font-size: 9.5pt; color: black;">.RotationZ(30.0);</span></p>
+</td>
+</tr>
+<tr>
+<td colspan="2">
+<h1>Make/Get/Set Methods</h1>
+</td>
+<td style="width: 466px">
+<h1>&nbsp;</h1>
+</td>
+</tr>
+<tr>
+<td width="276">
+<p><span style="color: black;">makeZero(integer, integer)</span></p>
+</td>
+<td style="width: 266px">
+<p><span style="color: black;">Makes the zero vector/matrix of the given dimensions.</span></p>
+</td>
+<td style="width: 466px">
+<p><span style="font-size: 9.5pt; color: blue;">double</span><span style="font-size: 9.5pt; color: black;">[] g = </span><span style="font-size: 9.5pt; color: #2b91af;">StarMath</span><span style="font-size: 9.5pt; color: black;">.makeZeroVector(3);<br /></span><span style="font-size: 9.5pt; color: blue;">double</span><span style="font-size: 9.5pt; color: black;">[,] H = </span><span style="font-size: 9.5pt; color: #2b91af;">StarMath</span><span style="font-size: 9.5pt; color: black;">.makeZero(4,3);</span></p>
+</td>
+</tr>
+<tr>
+<td width="276">
+<p><span style="color: black;">makeIdentity(integer)</span></p>
+</td>
+<td style="width: 266px">
+<p><span style="color: black;">Makes an identity matrix of size p by p.</span></p>
+</td>
+<td style="width: 466px">
+<p><span style="font-size: 9.5pt; color: blue;">var</span><span style="font-size: 9.5pt; color: black;"> I = </span><span style="font-size: 9.5pt; color: #2b91af;">StarMath</span><span style="font-size: 9.5pt; color: black;">.makeIdentity(4);</span></p>
+</td>
+</tr>
+<tr>
+<td width="276">
+<p><span style="color: black;">makeLinearProgression(scalar, scalar, scalar)</span></p>
+</td>
+<td style="width: 266px">
+<p><span style="color: black;">Makes a linear progression from start to, but not including, the end.</span></p>
+</td>
+<td style="width: 466px">
+<p><span style="font-size: 9.5pt; color: blue;">double</span><span style="font-size: 9.5pt; color: black;">[] timeSteps = </span><span style="font-size: 9.5pt; color: #2b91af;">StarMath</span><span style="font-size: 9.5pt; color: black;">.makeLinearProgression(100, 0.01);</span></p>
+</td>
+</tr>
+<tr>
+<td width="276">
+<p><span style="color: black;">SetRow(integer, matrix, vector)</span></p>
+</td>
+<td style="width: 266px">
+<p><span style="color: black;">Sets/Replaces the given row of matrix A with the vector v.</span></p>
+</td>
+<td style="width: 466px">
+<p><span style="font-size: 9.5pt; color: black;">A.SetRow(0, </span><span style="font-size: 9.5pt; color: blue;">new</span><span style="font-size: 9.5pt; color: black;">[] { 1.0, 2.0, 3.0 });</span></p>
+</td>
+</tr>
+<tr>
+<td width="276">
+<p><span style="color: black;">SetColumn(integer, matrix, vector)</span></p>
+</td>
+<td style="width: 266px">
+<p><span style="color: black;">Sets/Replaces the given column of matrix A with the vector v.</span></p>
+</td>
+<td style="width: 466px">
+<p><span style="font-size: 9.5pt; color: black;">A.SetColumn(0, </span><span style="font-size: 9.5pt; color: blue;">new</span><span style="font-size: 9.5pt; color: black;">[] { 1.0, 2.0, 3.0 });</span></p>
+</td>
+</tr>
+<tr>
+<td width="276">
+<p><span style="color: black;">GetColumn(matrix, integer)</span></p>
+</td>
+<td style="width: 266px">
+<p><span style="color: black;">Gets the column of matrix, A.</span></p>
+</td>
+<td style="width: 466px">
+<p><span style="font-size: 9.5pt; color: blue;">double</span><span style="font-size: 9.5pt; color: black;">[] trans = A.GetColumn(4);</span></p>
+</td>
+</tr>
+<tr>
+<td width="276">
+<p><span style="color: black;">GetColumns(vector, matrix)</span></p>
+</td>
+<td style="width: 266px">
+<p><span style="color: black;">Get more than one column from a given 2D array. </span></p>
+</td>
+<td style="width: 466px">
+<p><span style="font-size: 9.5pt; color: blue;">double</span><span style="font-size: 9.5pt; color: black;">[,] rotation = A.GetColumns(</span><span style="font-size: 9.5pt; color: blue;">new</span><span style="font-size: 9.5pt; color: black;">[] { 0, 1, 2 });</span></p>
+</td>
+</tr>
+<tr>
+<td width="276">
+<p><span style="color: black;">GetRow(integer, matrix)</span></p>
+</td>
+<td style="width: 266px">
+<p><span style="color: black;">Gets a row of matrix, A.</span></p>
+</td>
+<td style="width: 466px">
+<p><span style="font-size: 9.5pt; color: blue;">double</span><span style="font-size: 9.5pt; color: black;">[] scale = A.GetRow(4);</span></p>
+</td>
+</tr>
+<tr>
+<td width="276">
+<p><span style="color: black;">GetRows(vector, matrix)</span></p>
+</td>
+<td style="width: 266px">
+<p><span style="color: black;">Get more than one row from a given 2D array.</span></p>
+</td>
+<td style="width: 466px">
+<p><span style="font-size: 9.5pt; color: blue;">double</span><span style="font-size: 9.5pt; color: black;">[,] rotation = A.GetRows(</span><span style="font-size: 9.5pt; color: blue;">new</span><span style="font-size: 9.5pt; color: black;">[] { 0, 1, 2 });<br /><br /></span></p>
+</td>
+</tr>
+<tr>
+<td width="276">
+<p><span style="color: black;">GetPartialVector(vector, vector)</span></p>
+</td>
+<td style="width: 266px">
+<p><span style="color: black;">Get some portion of a vector and put in a new vector.</span></p>
+</td>
+<td style="width: 466px">
+<p><span style="font-size: 9.5pt; color: blue;">double</span><span style="font-size: 9.5pt; color: black;">[] rx = col.GetPartialVector(</span><span style="font-size: 9.5pt; color: blue;">new</span><span style="font-size: 9.5pt; color: black;">[] { 0, 1, 2 });</span></p>
+</td>
+</tr>
+<tr>
+<td width="276">
+<p><span style="color: black;">JoinCol(matrix, matrix)</span></p>
+</td>
+<td style="width: 266px">
+<p><span style="color: black;">Joins two 2D arrays side by side and returns the results. The given variables remain unchanged</span></p>
+</td>
+<td style="width: 466px">
+<p><span style="font-size: 9.5pt; color: blue;">double</span><span style="font-size: 9.5pt; color: black;">[,] AB = A.JoinCol(B);</span></p>
+</td>
+</tr>
+<tr>
+<td width="276">
+<p><span style="color: black;">JoinRow(matrix, matrix)</span></p>
+</td>
+<td style="width: 266px">
+<p><span style="color: black;">Joins two 2D arrays one under the other and returns the results. The given variables remain unchanged</span></p>
+</td>
+<td style="width: 466px">
+<p><span style="font-size: 9.5pt; color: blue;">double</span><span style="font-size: 9.5pt; color: black;">[,] AB = A.JoinRow(B);</span></p>
+</td>
+</tr>
+<tr>
+<td width="276">
+<p><span style="color: black;">JoinVectors(vector, vector)</span></p>
+</td>
+<td style="width: 266px">
+<p><span style="color: black;">Concatenates two 1D arrays and returns the result. The given variables remain unchanged</span></p>
+</td>
+<td style="width: 466px">
+<p><span style="font-size: 9.5pt; color: blue;">double</span><span style="font-size: 9.5pt; color: black;">[,] v12 = v1.JoinVectors(v2);</span></p>
+</td>
+</tr>
+<tr>
+<td width="276">
+<p><span style="color: black;">JoinMatrixColumnsIntoVector(matrix)</span></p>
+</td>
+<td style="width: 266px">
+<p><span style="color: black;">Joins the matrix columns into vector.</span></p>
+</td>
+<td style="width: 466px">
+<p><span style="font-size: 9.5pt; color: blue;">double</span><span style="font-size: 9.5pt; color: black;">[,] A; <br />...<br /></span><span style="font-size: 9.5pt; color: blue;">double</span><span style="font-size: 9.5pt; color: black;">[] Avect = A.JoinMatrixColumnsIntoVector();</span></p>
+</td>
+</tr>
+<tr>
+<td width="276">
+<p><span style="color: black;">JoinMatrixRowsIntoVector(matrix)</span></p>
+</td>
+<td style="width: 266px">
+<p><span style="color: black;">Joins the matrix rows into vector.</span></p>
+</td>
+<td style="width: 466px">
+<p><span style="font-size: 9.5pt; color: blue;">double</span><span style="font-size: 9.5pt; color: black;">[] Avect = A.JoinMatrixRowsIntoVector();</span></p>
+</td>
+</tr>
+<tr>
+<td width="276">
+<p><span style="color: black;">MakePrintString(matrix, vector)</span></p>
+</td>
+<td style="width: 266px">
+<p><span style="color: black;">Makes the string printing the matrix or vector</span></p>
+</td>
+<td style="width: 466px">
+<p><span style="font-size: 9.5pt; color: #2b91af;">Console</span><span style="font-size: 9.5pt; color: black;">.WriteLine(</span><span style="font-size: 9.5pt; color: #a31515;">"A = "</span><span style="font-size: 9.5pt; color: black;">+ A.MakePrintString());</span></p>
+</td>
+</tr>
+</tbody>
+</table>
+
+		
+
+	
+<h3>
+<a id="authors-and-contributors" class="anchor" href="#authors-and-contributors" aria-hidden="true"><span class="octicon octicon-link"></span></a>Authors and Contributors</h3>
+
+<p>So far, this site has been created by Prof. Matt Campbell (<a href="https://github.com/micampbell" class="user-mention">@micampbell</a>), but I'm sure students and other faculty will join in any day now.</p>
+
+
+      </section>
       <footer>
-      <p><small>Hosted on <a href="http://pages.github.com/">GitHub Pages</a> using the <a href="https://github.com/sodabrew/theme-dinky">Dinky theme</a> for <a href="http://jekyllbootstrap.com/">Jekyll Bootstrap</a></small></p>
       </footer>
     </div>
-    <!--[if !IE]><script>fixScale(document);</script><!--<![endif]-->
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+		
   </body>
 </html>

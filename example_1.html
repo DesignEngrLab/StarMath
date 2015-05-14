@@ -1,0 +1,88 @@
+﻿<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Designengrlab.GitHub.io by DesignEngrLab</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="javascripts/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="/../../../../../../html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <style type="text/css">
+.auto-style1 {
+	color: #2B91AF;
+}
+</style>
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+         <h1 class="header">StarMath: Static Array Math Library</h1>
+        <p class="header">While there are already countless math libraries for performing common matrix/array functions, 
+        StarMath is distinguished by its simplicity and flexbility. There is no need to declare vectors and matrices in a 
+        specific library format. It works simliar to Math.function calls in C#.  </p>
+
+
+
+        <ul>
+          <li><a class="buttons github" href="https://github.com/DesignEngrLab/StarMath">StarMath Repo</a></li>
+        </ul>
+
+      </header>
+      <section>
+    <h1>Example 1: Matrix Inversion</h1>
+<p>The following simple example was created to test the speed and accuracy of StarMath's matrix inversion capabilities. It is included within the &ldquo;tester.exe&rdquo; project in the source code.<font face="Consolas"><font style="font-size: 9.5pt;" color="#000000">&nbsp;</font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font color="#000000"><font style="font-size: 9.5pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font></font><font style="font-size: 9.5pt;"><font color="#0000ff">const</font> <font color="#0000ff">int</font><font color="#000000"> size = 500;</font></font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font color="#000000"><font style="font-size: 9.5pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font></font><font style="font-size: 9.5pt;"><font color="#0000ff">var</font><font color="#000000"> now = </font><font color="#2b91af">DateTime</font><font color="#000000">.Now;</font></font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font color="#000000"><font style="font-size: 9.5pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font></font><font style="font-size: 9.5pt;"><font color="#0000ff">var</font><font color="#000000"> r = </font><font color="#0000ff">new</font> <font color="#2b91af">Random</font><font color="#000000">();</font></font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font color="#000000"><font style="font-size: 9.5pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font></font><font style="font-size: 9.5pt;"><font color="#0000ff">var</font><font color="#000000"> A = </font><font color="#0000ff">new</font> <font color="#0000ff">double</font><font color="#000000">[size,size];</font></font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font color="#000000"><font style="font-size: 9.5pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font></font><font style="font-size: 9.5pt;"><font color="#0000ff">for</font><font color="#000000"> (</font><font color="#0000ff">var</font><font color="#000000"> i = 0; i &lt; size; i++)</font></font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font color="#000000"><font style="font-size: 9.5pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font></font><font style="font-size: 9.5pt;"><font color="#0000ff">for</font><font color="#000000"> (</font><font color="#0000ff">var</font><font color="#000000"> j = 0; j &lt; size; j++)</font></font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font color="#000000"><font style="font-size: 9.5pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font><font style="font-size: 9.5pt;">A[i, j] = (200*r.NextDouble()) - 100.0;</font></font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font color="#000000"><font style="font-size: 9.5pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font></font><font style="font-size: 9.5pt;"><font color="#2b91af">Console</font><font color="#000000">.WriteLine(</font><font color="#a31515">"start invert check for matrix of size: "</font><font color="#000000"> + size);</font></font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font color="#000000"><font style="font-size: 9.5pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font></font><font style="font-size: 9.5pt;"><font color="#0000ff">var</font><font color="#000000"> B = </font><font color="#000000">A.inverse();&nbsp; // or&nbsp;<font size="2">&nbsp;<font color="#2b91af">StarMath</font>.inverse(A);</font></font></font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font color="#000000"><font style="font-size: 9.5pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font></font><font style="font-size: 9.5pt;"><font color="#0000ff">var</font><font color="#000000"> C = </font><font color="#000000">A.multiply(B).subtract(</font><font color="#2b91af">StarMath</font><font color="#000000">.makeIdentity(size));</font></font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font color="#000000"><font style="font-size: 9.5pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font></font><font style="font-size: 9.5pt;"><font color="#0000ff">var</font><font color="#000000"> error = </font><font color="#000000">C.norm2();</font></font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font color="#000000"><font style="font-size: 9.5pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font></font><font style="font-size: 9.5pt;"><font color="#0000ff">var</font><font color="#000000"> interval = </font><font color="#2b91af">DateTime</font><font color="#000000">.Now - now;</font></font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font color="#000000"><font style="font-size: 9.5pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font></font><font style="font-size: 9.5pt;"><font color="#2b91af">Console</font><font color="#000000">.WriteLine(</font><font color="#a31515">"end invert, error = "</font><font color="#000000"> + error);</font></font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font color="#000000"><font style="font-size: 9.5pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font></font><font style="font-size: 9.5pt;"><font color="#2b91af">Console</font><font color="#000000">.WriteLine(</font><font color="#a31515">"time = "</font><font color="#000000"> + interval);</font></font></font></p>
+<p style="line-height: 13pt; margin: 0in 0in 10pt;">&nbsp;</p>
+<p style="line-height: 13pt; margin: 0in 0in 10pt;">The following shows an explanation for these steps.</p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font color="#000000"><font style="font-size: 9.5pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font></font><font style="font-size: 9.5pt;"><font color="#0000ff">const</font> <font color="#0000ff">int</font><font color="#000000"> size = 500;</font></font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font color="#000000"><font style="font-size: 9.5pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font></font><font style="font-size: 9.5pt;"><font color="#0000ff">var</font><font color="#000000"> now = </font><font color="#2b91af">DateTime</font><font color="#000000">.Now;</font></font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font color="#000000"><font style="font-size: 9.5pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font></font><font style="font-size: 9.5pt;"><font color="#0000ff">var</font><font color="#000000"> r = </font><font color="#0000ff">new</font> <font color="#2b91af">Random</font><font color="#000000">();</font></font></font></p>
+<p>First, a matrix of 500 by 500 elements is created with values between &ndash;100 and 100.</p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font color="#000000"><font style="font-size: 9.5pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font></font><font style="font-size: 9.5pt;"><font color="#0000ff">var</font><font color="#000000"> A = </font><font color="#0000ff">new</font> <font color="#0000ff">double</font><font color="#000000">[size,size];</font></font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font color="#000000"><font style="font-size: 9.5pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font></font><font style="font-size: 9.5pt;"><font color="#0000ff">for</font><font color="#000000"> (</font><font color="#0000ff">var</font><font color="#000000"> i = 0; i &lt; size; i++)</font></font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font color="#000000"><font style="font-size: 9.5pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font></font><font style="font-size: 9.5pt;"><font color="#0000ff">for</font><font color="#000000"> (</font><font color="#0000ff">var</font><font color="#000000"> j = 0; j &lt; size; j++)</font></font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font color="#000000"><font style="font-size: 9.5pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font><font style="font-size: 9.5pt;">A[i, j] = (200*r.NextDouble()) - 100.0;</font></font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font color="#000000"><font style="font-size: 9.5pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font></font><font style="font-size: 9.5pt;"><font color="#2b91af">Console</font><font color="#000000">.WriteLine(</font><font color="#a31515">"start invert check for matrix of size: "</font><font color="#000000"> + size); </font></font></font></p>
+<p>B is assigned to the inverse of A (this is the most time consuming step, of course). Note, in StarMath, most of the functions modify the original values &ndash; A is the same after this function call.</p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font color="#000000"><font style="font-size: 9.5pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font></font><font style="font-size: 9.5pt;"><font color="#0000ff">var</font><font color="#000000"> B = </font><font color="#2b91af">StarMath</font><font color="#000000">.inverse(A); <em><font style="font-size: 9pt;">or with extensions, this can be made more compact:</font></em></font></font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font style="font-size: 9.5pt;"><font color="#000000"><font size="2"><font color="#0000ff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; var</font> B = A.inverse();</font></font></font></font></p>
+<p>In order to test the accuracy of the inversion, A and B are multiply (A*A^-1), which should yield the identity matrix. So, the identity matrix is subtracted to produce a matrix, C, which would ideally be all zeros.</p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font color="#000000"><font style="font-size: 9.5pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font></font><font style="font-size: 9.5pt;"><font color="#0000ff">var</font><font color="#000000"> C = </font><font color="#2b91af">StarMath</font><font color="#000000">.subtract(</font><font color="#2b91af">StarMath</font><font color="#000000">.multiply(A, B), </font><font color="#2b91af">StarMath</font><font color="#000000">.makeIdentity(size<font size="2">); </font><em><font style="font-size: 9pt;">or with extensions, this can be compact:</font></em></font></font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font style="font-size: 9.5pt;"><font color="#000000"><font size="2"><font color="#0000ff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; var</font>&nbsp;C = A.multiply(B).subtract(<font color="#2b91af">StarMath</font>.makeIdentity(size)); </font></font></font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;">By taking the norm of matrix C, we can arrive at the root-mean-square error. Note, the norm2&nbsp; and normP functions take an optional second argument (not shown), which is a boolean (the default of which is false) called dontDoPRoot. When this is true, the norm function skips the step the sqaure-root (or p-root) is taken.</p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font color="#000000"><font style="font-size: 9.5pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font></font><font style="font-size: 9.5pt;"><font color="#0000ff">var</font><font color="#000000"> error = </font><font color="#2b91af">StarMath</font><font color="#000000">.norm2(C<font size="2">); </font><em><font style="font-size: 9pt;">or with extensions, this can be :</font></em></font></font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font style="font-size: 9.5pt;"><font color="#000000"><font size="2"><font color="#0000ff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; var</font>&nbsp;error = C.norm2();</font></font></font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;">&nbsp;</p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font color="#000000"><font style="font-size: 9.5pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font></font><font style="font-size: 9.5pt;"><font color="#0000ff">var</font><font color="#000000"> interval = </font><font color="#2b91af">DateTime</font><font color="#000000">.Now - now;</font></font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font color="#000000"><font style="font-size: 9.5pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font></font><font style="font-size: 9.5pt;"><font color="#2b91af">Console</font><font color="#000000">.WriteLine(</font><font color="#a31515">"end invert, error = "</font><font color="#000000"> + error);</font></font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font color="#000000"><font style="font-size: 9.5pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font></font><font style="font-size: 9.5pt;"><font color="#2b91af">Console</font><font color="#000000">.WriteLine(</font><font color="#a31515">"time = "</font><font color="#000000"> + interval);</font></font></font></p>
+<p style="line-height: 13pt; margin: 0in 0in 10pt;"><font face="Calibri"><font style="font-size: 11pt;" color="#000000">&nbsp;</font></font></p>
+
+
+
+      </section>
+      <footer>
+      </footer>
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+		
+  </body>
+</html>

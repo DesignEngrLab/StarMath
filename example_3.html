@@ -1,0 +1,93 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Designengrlab.GitHub.io by DesignEngrLab</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="javascripts/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="/../../../../../../html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    </head>
+  <body>
+    <div class="wrapper">
+      <header>
+         <h1 class="header">StarMath: Static Array Math Library</h1>
+        <p class="header">While there are already countless math libraries for performing common matrix/array functions, 
+        StarMath is distinguished by its simplicity and flexbility. There is no need to declare vectors and matrices in a 
+        specific library format. It works simliar to Math.function calls in C#.  </p>
+
+
+
+        <ul>
+          <li><a class="buttons github" href="https://github.com/DesignEngrLab/StarMath">StarMath Repo</a></li>
+        </ul>
+
+      </header>
+      <section>
+
+    <h1>Example 3: Vector Manipulation</h1>
+
+<p>Here&rsquo;s an example from the MIConvexHull project, where StarMath is used to perform a number of vector operations.</p>
+<p>What is required is to find the normal vector for the (hyper-)plane that passes through the provided vertices.</p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font color="#000000"><font style="font-size: 9.5pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font></font><font style="font-size: 9.5pt;"><font color="#0000ff">private</font> <font color="#0000ff">static</font> <font color="#0000ff">double</font><font color="#000000">[] findNormalVector(</font><font color="#2b91af">IList</font><font color="#000000">&lt;</font><font color="#2b91af">IVertexConvHull</font><font color="#000000">&gt; vertices)</font></font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font color="#000000"><font style="font-size: 9.5pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font><font style="font-size: 9.5pt;">{</font></font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font color="#000000"><font style="font-size: 9.5pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font></font><font style="font-size: 9.5pt;"><font color="#0000ff">double</font><font color="#000000">[] normal;</font></font></font></p>
+<p>if the dimension is 3, then we can simply use StarMath&rsquo;s multiplyCross (crossProduct) to find an orthogonal vector to the 2 vector created in the plane by the 3 points.</p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font style="font-size: 9.5pt;" color="#000000">&nbsp;</font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font color="#000000"><font style="font-size: 9.5pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font></font><font style="font-size: 9.5pt;"><font color="#0000ff">if</font><font color="#000000"> (dimension == 3)</font></font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font color="#000000"><font style="font-size: 9.5pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font><font style="font-size: 9.5pt;">normal = </font></font>
+<font color="#000000" style="font-size: 9.5pt">vertices[1].coordinates.subtract(vertices[0].coordinates).crossProduct(</font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font color="#000000"><font style="font-size: 9.5pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+vertices[2].coordinates</font></font><font color="#000000" style="font-size: 9.5pt">.subtract(vertices[1].coordinates));</font></font></p>
+<p>If the number of dimensions is something else, n, then we will have to solve a system of equations. What is the vector, n which is orthogonal to the n vertices? Here we use StarMath&rsquo;s solve routine to solve the <strong>A</strong>x = b set of linear equations. <strong>A</strong> is simply comprised of&nbsp; vertices&rsquo; coordinate values, and we are seeking values of n (or shown as x in the typical <strong>A</strong>x = b) that produce the same value.</p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font style="font-size: 9.5pt;" color="#0000ff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; else</font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font color="#000000"><font style="font-size: 9.5pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font><font style="font-size: 9.5pt;">{</font></font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font color="#000000"><font style="font-size: 9.5pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font></font><font style="font-size: 9.5pt;"><font color="#0000ff">var</font><font color="#000000"> b = </font><font color="#0000ff">new</font> <font color="#0000ff">double</font><font color="#000000">[dimension];</font></font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font color="#000000"><font style="font-size: 9.5pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font><font style="font-size: 9.5pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font></font><font style="font-size: 9.5pt;"><font color="#0000ff">for</font><font color="#000000"> (</font><font color="#0000ff">var</font><font color="#000000"> i = 0; i &lt; dimension; i++) b[i] = 1.0;</font></font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font color="#000000"><font style="font-size: 9.5pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font></font></font></p>
+<p>In this case that same value is set to 1, as all values are 1. The values of A are created using StarMath&rsquo;s SetRow function.</p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font color="#000000"><font style="font-size: 9.5pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font></font></font><font face="Consolas"><font color="#000000"><font style="font-size: 9.5pt;">&nbsp;&nbsp; </font></font><font style="font-size: 9.5pt;"><font color="#0000ff">var</font><font color="#000000"> A = </font><font color="#0000ff">new</font> <font color="#0000ff">double</font><font color="#000000">[dimension, dimension];</font></font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font color="#000000"><font style="font-size: 9.5pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font></font><font style="font-size: 9.5pt;"><font color="#0000ff">for</font><font color="#000000"> (</font><font color="#0000ff">var</font><font color="#000000"> i = 0; i &lt; dimension; i++)</font></font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font color="#000000"><font style="font-size: 9.5pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font></font><font style="font-size: 9.5pt;"><font color="#2b91af">StarMath</font><font color="#000000">.SetRow(i, A, vertices[i].coordinates);</font></font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font color="#000000"><font style="font-size: 9.5pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font></font></font></p>
+<p>Finally, the normal vector is produced by the solve function. For additional mathematical simplicity, this is normalized so that it has magnitude of 1. This is done by using StarMath&rsquo;s normalize function.</p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font color="#000000"><font style="font-size: 9.5pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font><font style="font-size: 9.5pt;">normal = </font></font><font style="font-size: 9.5pt;"><font color="#2b91af">StarMath</font><font color="#000000">.solve(A, b);</font></font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font color="#000000"><font style="font-size: 9.5pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font><font style="font-size: 9.5pt;">}</font></font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font color="#000000"><font style="font-size: 9.5pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font></font><font style="font-size: 9.5pt;"><font color="#0000ff">return</font> <font color="#2b91af">StarMath</font><font color="#000000">.normalize(normal);</font></font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font color="#000000"><font style="font-size: 9.5pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font><font style="font-size: 9.5pt;">}</font></font></font></p>
+<p style="line-height: 13pt; margin: 0in 0in 10pt;"><font face="Calibri"><font style="font-size: 11pt;" color="#000000">&nbsp;</font></font></p>
+<p style="line-height: 13pt; margin: 0in 0in 10pt;">&nbsp;</p>
+<p style="line-height: 13pt; margin: 0in 0in 10pt;">Here is the entire function shown again.</p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font style="font-size: 9.5pt;" color="#000000">&nbsp;</font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font color="#000000"><font style="font-size: 9.5pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font></font><font style="font-size: 9.5pt;"><font color="#0000ff">private</font> <font color="#0000ff">static</font> <font color="#0000ff">double</font><font color="#000000">[] findNormalVector(</font><font color="#2b91af">IList</font><font color="#000000">&lt;</font><font color="#2b91af">IVertexConvHull</font><font color="#000000">&gt; vertices)</font></font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font color="#000000"><font style="font-size: 9.5pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font><font style="font-size: 9.5pt;">{</font></font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font color="#000000"><font style="font-size: 9.5pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font></font><font style="font-size: 9.5pt;"><font color="#0000ff">double</font><font color="#000000">[] normal;</font></font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font color="#000000"><font style="font-size: 9.5pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font></font><font style="font-size: 9.5pt;"><font color="#0000ff">if</font><font color="#000000"> (dimension == 3)</font></font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font color="#000000"><font style="font-size: 9.5pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font><font style="font-size: 9.5pt;">normal = </font></font><font style="font-size: 9.5pt;"><font color="#2b91af">StarMath</font><font color="#000000">.multiplyCross(</font><font color="#2b91af">StarMath</font><font color="#000000">.subtract(vertices[1].coordinates, vertices[0].coordinates),</font></font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font color="#000000"><font style="font-size: 9.5pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font></font><font style="font-size: 9.5pt;"><font color="#2b91af">StarMath</font><font color="#000000">.subtract(vertices[2].coordinates, vertices[1].coordinates));</font></font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font color="#000000"><font style="font-size: 9.5pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font></font><font style="font-size: 9.5pt;" color="#0000ff">else</font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font color="#000000"><font style="font-size: 9.5pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font><font style="font-size: 9.5pt;">{</font></font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font color="#000000"><font style="font-size: 9.5pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font></font><font style="font-size: 9.5pt;"><font color="#0000ff">var</font><font color="#000000"> b = </font><font color="#0000ff">new</font> <font color="#0000ff">double</font><font color="#000000">[dimension];</font></font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font color="#000000"><font style="font-size: 9.5pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font><font style="font-size: 9.5pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font></font><font style="font-size: 9.5pt;"><font color="#0000ff">for</font><font color="#000000"> (</font><font color="#0000ff">var</font><font color="#000000"> i = 0; i &lt; dimension; i++) b[i] = 1.0;</font></font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font color="#000000"><font style="font-size: 9.5pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font></font><font style="font-size: 9.5pt;"><font color="#0000ff">var</font><font color="#000000"> A = </font><font color="#0000ff">new</font> <font color="#0000ff">double</font><font color="#000000">[dimension, dimension];</font></font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font color="#000000"><font style="font-size: 9.5pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font></font><font style="font-size: 9.5pt;"><font color="#0000ff">for</font><font color="#000000"> (</font><font color="#0000ff">var</font><font color="#000000"> i = 0; i &lt; dimension; i++)</font></font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font color="#000000"><font style="font-size: 9.5pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font></font><font style="font-size: 9.5pt;"><font color="#2b91af">StarMath</font><font color="#000000">.SetRow(i, A, vertices[i].coordinates);</font></font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font color="#000000"><font style="font-size: 9.5pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font><font style="font-size: 9.5pt;">normal = </font></font><font style="font-size: 9.5pt;"><font color="#2b91af">StarMath</font><font color="#000000">.solve(A, b);</font></font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font color="#000000"><font style="font-size: 9.5pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font><font style="font-size: 9.5pt;">}</font></font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font color="#000000"><font style="font-size: 9.5pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font></font><font style="font-size: 9.5pt;"><font color="#0000ff">return</font> <font color="#2b91af">StarMath</font><font color="#000000">.normalize(normal);</font></font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font color="#000000"><font style="font-size: 9.5pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font><font style="font-size: 9.5pt;">}</font></font></font></p>
+<p style="line-height: 13pt; margin: 0in 0in 10pt;"><font face="Calibri"><font style="font-size: 11pt;" color="#000000">&nbsp;</font></font></p>
+
+      </section>
+      <footer>
+      </footer>
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+		
+  </body>
+</html>

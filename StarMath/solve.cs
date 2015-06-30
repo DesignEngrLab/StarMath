@@ -168,7 +168,7 @@ namespace StarMathLib
                 var rowNorm1 = A.GetRow(i).norm1();
                 var potentialIndices = new List<int>();
                 for (int j = 0; j < length; j++)
-                    if (Math.Abs(A[i, j]) / (rowNorm1 - Math.Abs(A[i, j])) >= minimalConsideration)
+                    if (Math.Abs(A[i, j]) / (rowNorm1 - Math.Abs(A[i, j])) > minimalConsideration)
                         potentialIndices.Add(j);
                 if (potentialIndices.Count == 0) return false;
                 potentialDiagonals[i] = potentialIndices;

@@ -222,8 +222,8 @@ namespace StarMathLib
         }
         #endregion
 
-        #region Get/Set parts of a matrix
-
+        #region Get/Set/Remove parts of a matrix
+        #region Get
         /// <summary>
         /// Gets the column of matrix, A.
         /// </summary>
@@ -256,7 +256,7 @@ namespace StarMathLib
             var numRows = A.GetLength(0);
             var numCols = A.GetLength(1);
             if ((colIndex < 0) || (colIndex >= numCols))
-                throw new Exception("MatrixMath Size Error: An index value of "
+                throw new Exception("StarMath Size Error: An index value of "
                                     + colIndex
                                     + " for getColumn is not in required range from 0 up to (but not including) "
                                     + numRows + ".");
@@ -277,7 +277,7 @@ namespace StarMathLib
             var numRows = A.GetLength(0);
             var numCols = A.GetLength(1);
             if ((colIndex < 0) || (colIndex >= numCols))
-                throw new Exception("MatrixMath Size Error: An index value of "
+                throw new Exception("StarMath Size Error: An index value of "
                                     + colIndex
                                     + " for getColumn is not in required range from 0 up to (but not including) "
                                     + numRows + ".");
@@ -285,174 +285,6 @@ namespace StarMathLib
             for (var i = 0; i < numRows; i++)
                 v[i] = A[i, colIndex];
             return v;
-        }
-
-        /// <summary>
-        /// Gets a row of matrix, A.
-        /// </summary>
-        /// <param name = "rowIndex">The row index.</param>
-        /// <param name = "A">The matrix, A.</param>
-        /// <returns>A double array that contains the requested row</returns>
-        public static double[] GetRow(this double[,] A, int rowIndex)
-        { return GetRow(rowIndex, A); }
-        /// <summary>
-        /// Gets a row of matrix, A.
-        /// </summary>
-        /// <param name="A">The matrix, A.</param>
-        /// <param name="rowIndex">The row index.</param>
-        /// <returns>
-        /// A double array that contains the requested row
-        /// </returns>
-        public static int[] GetRow(this int[,] A, int rowIndex)
-        { return GetRow(rowIndex, A); }
-
-        /// <summary>
-        /// Gets a row of matrix, A.
-        /// </summary>
-        /// <param name = "rowIndex">The row index.</param>
-        /// <param name = "A">The matrix, A.</param>
-        /// <returns>A double array that contains the requested row</returns>
-        public static double[] GetRow(int rowIndex, double[,] A)
-        {
-            var numRows = A.GetLength(0);
-            var numCols = A.GetLength(1);
-            if ((rowIndex < 0) || (rowIndex >= numRows))
-                throw new Exception("MatrixMath Size Error: An index value of "
-                                    + rowIndex
-                                    + " for getRow is not in required range from 0 up to (but not including) "
-                                    + numRows + ".");
-            var v = new double[numCols];
-            for (var i = 0; i < numCols; i++)
-                v[i] = A[rowIndex, i];
-            return v;
-        }
-        /// <summary>
-        /// Gets a row of matrix, A.
-        /// </summary>
-        /// <param name = "rowIndex">The row index.</param>
-        /// <param name = "A">The matrix, A.</param>
-        /// <returns>A double array that contains the requested row</returns>
-        public static int[] GetRow(int rowIndex, int[,] A)
-        {
-            var numRows = A.GetLength(0);
-            var numCols = A.GetLength(1);
-            if ((rowIndex < 0) || (rowIndex >= numRows))
-                throw new Exception("MatrixMath Size Error: An index value of "
-                                    + rowIndex
-                                    + " for getRow is not in required range from 0 up to (but not including) "
-                                    + numRows + ".");
-            var v = new int[numCols];
-            for (var i = 0; i < numCols; i++)
-                v[i] = A[rowIndex, i];
-            return v;
-        }
-
-        /// <summary>
-        /// Sets/Replaces the given row of matrix A with the vector v.
-        /// </summary>
-        /// <param name="A">The matrix, A.</param>
-        /// <param name="rowIndex">The index of the row, rowIndex.</param>
-        /// <param name="v">The vector, v.</param>
-        public static void SetRow(this double[,] A, int rowIndex, IList<double> v)
-        { SetRow(rowIndex, A, v); }
-        /// <summary>
-        /// Sets/Replaces the given row of matrix A with the vector v.
-        /// </summary>
-        /// <param name="A">The matrix, A.</param>
-        /// <param name="rowIndex">The index of the row, rowIndex.</param>
-        /// <param name="v">The vector, v.</param>
-        public static void SetRow(this int[,] A, int rowIndex, IList<int> v)
-        { SetRow(rowIndex, A, v); }
-
-        /// <summary>
-        /// Sets/Replaces the given row of matrix A with the vector v.
-        /// </summary>
-        /// <param name = "rowIndex">The index of the row, rowIndex.</param>
-        /// <param name = "A">The matrix, A.</param>
-        /// <param name = "v">The vector, v.</param>
-        public static void SetRow(int rowIndex, double[,] A, IList<double> v)
-        {
-            var numRows = A.GetLength(0);
-            var numCols = A.GetLength(1);
-            if ((rowIndex < 0) || (rowIndex >= numRows))
-                throw new Exception("MatrixMath Size Error: An index value of "
-                                    + rowIndex
-                                    + " for getRow is not in required range from 0 up to (but not including) "
-                                    + numRows + ".");
-            for (var i = 0; i < numCols; i++)
-                A[rowIndex, i] = v[i];
-        }
-        /// <summary>
-        /// Sets/Replaces the given row of matrix A with the vector v.
-        /// </summary>
-        /// <param name = "rowIndex">The index of the row, rowIndex.</param>
-        /// <param name = "A">The matrix, A.</param>
-        /// <param name = "v">The vector, v.</param>
-        public static void SetRow(int rowIndex, int[,] A, IList<int> v)
-        {
-            var numRows = A.GetLength(0);
-            var numCols = A.GetLength(1);
-            if ((rowIndex < 0) || (rowIndex >= numRows))
-                throw new Exception("MatrixMath Size Error: An index value of "
-                                    + rowIndex
-                                    + " for getRow is not in required range from 0 up to (but not including) "
-                                    + numRows + ".");
-            for (var i = 0; i < numCols; i++)
-                A[rowIndex, i] = v[i];
-        }
-
-        /// <summary>
-        /// Sets/Replaces the given column of matrix A with the vector v.
-        /// </summary>
-        /// <param name="A">The matrix, A.</param>
-        /// <param name="colIndex">The index of the column, rowIndex.</param>
-        /// <param name="v">The vector, v.</param>
-        public static void SetColumn(this double[,] A, int colIndex, IList<double> v)
-        { SetRow(colIndex, A, v); }
-        /// <summary>
-        /// Sets/Replaces the given column of matrix A with the vector v.
-        /// </summary>
-        /// <param name="A">The matrix, A.</param>
-        /// <param name="colIndex">The index of the column, rowIndex.</param>
-        /// <param name="v">The vector, v.</param>
-        public static void SetColumn(this int[,] A, int colIndex, IList<int> v)
-        { SetRow(colIndex, A, v); }
-        /// <summary>
-        /// Sets/Replaces the given column of matrix A with the vector v.
-        /// </summary>
-        /// <param name = "colIndex">Index of the col.</param>
-        /// <param name = "A">The A.</param>
-        /// <param name = "v">The v.</param>
-        public static void SetColumn(int colIndex, double[,] A, IList<double> v)
-        {
-            var numRows = A.GetLength(0);
-            var numCols = A.GetLength(1);
-            if ((colIndex < 0) || (colIndex >= numCols))
-                throw new Exception("MatrixMath Size Error: An index value of "
-                                    + colIndex
-                                    + " for getColumn is not in required range from 0 up to (but not including) "
-                                    + numCols + ".");
-            for (var i = 0; i < numRows; i++)
-                A[i, colIndex] = v[i];
-        }
-
-        /// <summary>
-        /// Sets/Replaces the given column of matrix A with the vector v.
-        /// </summary>
-        /// <param name = "colIndex">Index of the col.</param>
-        /// <param name = "A">The A.</param>
-        /// <param name = "v">The v.</param>
-        public static void SetColumn(int colIndex, int[,] A, IList<int> v)
-        {
-            var numRows = A.GetLength(0);
-            var numCols = A.GetLength(1);
-            if ((colIndex < 0) || (colIndex >= numCols))
-                throw new Exception("MatrixMath Size Error: An index value of "
-                                    + colIndex
-                                    + " for getColumn is not in required range from 0 up to (but not including) "
-                                    + numCols + ".");
-            for (var i = 0; i < numRows; i++)
-                A[i, colIndex] = v[i];
         }
 
         /// <summary>
@@ -486,11 +318,11 @@ namespace StarMathLib
         /// </returns>
         public static double[,] GetColumns(IList<int> ColumnList, double[,] A)
         {
-            var Columns = new double[A.GetLength(0), ColumnList.Count];
+            var columns = new double[A.GetLength(0), ColumnList.Count];
             var k = 0;
             foreach (var i in ColumnList)
-                SetColumn(k++, Columns, GetColumn(i, A));
-            return Columns;
+                SetColumn(k++, columns, GetColumn(i, A));
+            return columns;
         }
         /// <summary>
         /// Get more than one column from a given 2D double array.
@@ -509,6 +341,66 @@ namespace StarMathLib
             return Columns;
         }
 
+
+        /// <summary>
+        /// Gets a row of matrix, A.
+        /// </summary>
+        /// <param name = "rowIndex">The row index.</param>
+        /// <param name = "A">The matrix, A.</param>
+        /// <returns>A double array that contains the requested row</returns>
+        public static double[] GetRow(this double[,] A, int rowIndex)
+        { return GetRow(rowIndex, A); }
+        /// <summary>
+        /// Gets a row of matrix, A.
+        /// </summary>
+        /// <param name="A">The matrix, A.</param>
+        /// <param name="rowIndex">The row index.</param>
+        /// <returns>
+        /// A double array that contains the requested row
+        /// </returns>
+        public static int[] GetRow(this int[,] A, int rowIndex)
+        { return GetRow(rowIndex, A); }
+
+        /// <summary>
+        /// Gets a row of matrix, A.
+        /// </summary>
+        /// <param name = "rowIndex">The row index.</param>
+        /// <param name = "A">The matrix, A.</param>
+        /// <returns>A double array that contains the requested row</returns>
+        public static double[] GetRow(int rowIndex, double[,] A)
+        {
+            var numRows = A.GetLength(0);
+            var numCols = A.GetLength(1);
+            if ((rowIndex < 0) || (rowIndex >= numRows))
+                throw new Exception("StarMath Size Error: An index value of "
+                                    + rowIndex
+                                    + " for getRow is not in required range from 0 up to (but not including) "
+                                    + numRows + ".");
+            var v = new double[numCols];
+            for (var i = 0; i < numCols; i++)
+                v[i] = A[rowIndex, i];
+            return v;
+        }
+        /// <summary>
+        /// Gets a row of matrix, A.
+        /// </summary>
+        /// <param name = "rowIndex">The row index.</param>
+        /// <param name = "A">The matrix, A.</param>
+        /// <returns>A double array that contains the requested row</returns>
+        public static int[] GetRow(int rowIndex, int[,] A)
+        {
+            var numRows = A.GetLength(0);
+            var numCols = A.GetLength(1);
+            if ((rowIndex < 0) || (rowIndex >= numRows))
+                throw new Exception("StarMath Size Error: An index value of "
+                                    + rowIndex
+                                    + " for getRow is not in required range from 0 up to (but not including) "
+                                    + numRows + ".");
+            var v = new int[numCols];
+            for (var i = 0; i < numCols; i++)
+                v[i] = A[rowIndex, i];
+            return v;
+        }
 
         /// <summary>
         /// Get more than one row from a given 2D double array.
@@ -559,20 +451,346 @@ namespace StarMathLib
             return Rows;
         }
 
+        #endregion
+        #region Set
+        /// <summary>
+        /// Sets/Replaces the given row of matrix A with the vector v.
+        /// </summary>
+        /// <param name="A">The matrix, A.</param>
+        /// <param name="rowIndex">The index of the row, rowIndex.</param>
+        /// <param name="v">The vector, v.</param>
+        public static void SetRow(this double[,] A, int rowIndex, IList<double> v)
+        { SetRow(rowIndex, A, v); }
+        /// <summary>
+        /// Sets/Replaces the given row of matrix A with the vector v.
+        /// </summary>
+        /// <param name="A">The matrix, A.</param>
+        /// <param name="rowIndex">The index of the row, rowIndex.</param>
+        /// <param name="v">The vector, v.</param>
+        public static void SetRow(this int[,] A, int rowIndex, IList<int> v)
+        { SetRow(rowIndex, A, v); }
+
+        /// <summary>
+        /// Sets/Replaces the given row of matrix A with the vector v.
+        /// </summary>
+        /// <param name = "rowIndex">The index of the row, rowIndex.</param>
+        /// <param name = "A">The matrix, A.</param>
+        /// <param name = "v">The vector, v.</param>
+        public static void SetRow(int rowIndex, double[,] A, IList<double> v)
+        {
+            var numRows = A.GetLength(0);
+            var numCols = A.GetLength(1);
+            if ((rowIndex < 0) || (rowIndex >= numRows))
+                throw new Exception("StarMath Size Error: An index value of "
+                                    + rowIndex
+                                    + " for getRow is not in required range from 0 up to (but not including) "
+                                    + numRows + ".");
+            for (var i = 0; i < numCols; i++)
+                A[rowIndex, i] = v[i];
+        }
+        /// <summary>
+        /// Sets/Replaces the given row of matrix A with the vector v.
+        /// </summary>
+        /// <param name = "rowIndex">The index of the row, rowIndex.</param>
+        /// <param name = "A">The matrix, A.</param>
+        /// <param name = "v">The vector, v.</param>
+        public static void SetRow(int rowIndex, int[,] A, IList<int> v)
+        {
+            var numRows = A.GetLength(0);
+            var numCols = A.GetLength(1);
+            if ((rowIndex < 0) || (rowIndex >= numRows))
+                throw new Exception("StarMath Size Error: An index value of "
+                                    + rowIndex
+                                    + " for getRow is not in required range from 0 up to (but not including) "
+                                    + numRows + ".");
+            for (var i = 0; i < numCols; i++)
+                A[rowIndex, i] = v[i];
+        }
+
+        /// <summary>
+        /// Sets/Replaces the given column of matrix A with the vector v.
+        /// </summary>
+        /// <param name="A">The matrix, A.</param>
+        /// <param name="colIndex">The index of the column, rowIndex.</param>
+        /// <param name="v">The vector, v.</param>
+        public static void SetColumn(this double[,] A, int colIndex, IList<double> v)
+        { SetColumn(colIndex, A, v); }
+        /// <summary>
+        /// Sets/Replaces the given column of matrix A with the vector v.
+        /// </summary>
+        /// <param name="A">The matrix, A.</param>
+        /// <param name="colIndex">The index of the column, rowIndex.</param>
+        /// <param name="v">The vector, v.</param>
+        public static void SetColumn(this int[,] A, int colIndex, IList<int> v)
+        { SetColumn(colIndex, A, v); }
+        /// <summary>
+        /// Sets/Replaces the given column of matrix A with the vector v.
+        /// </summary>
+        /// <param name = "colIndex">Index of the col.</param>
+        /// <param name = "A">The A.</param>
+        /// <param name = "v">The v.</param>
+        public static void SetColumn(int colIndex, double[,] A, IList<double> v)
+        {
+            var numRows = A.GetLength(0);
+            var numCols = A.GetLength(1);
+            if ((colIndex < 0) || (colIndex >= numCols))
+                throw new Exception("StarMath Size Error: An index value of "
+                                    + colIndex
+                                    + " for getColumn is not in required range from 0 up to (but not including) "
+                                    + numCols + ".");
+            for (var i = 0; i < numRows; i++)
+                A[i, colIndex] = v[i];
+        }
+
+        /// <summary>
+        /// Sets/Replaces the given column of matrix A with the vector v.
+        /// </summary>
+        /// <param name = "colIndex">Index of the col.</param>
+        /// <param name = "A">The A.</param>
+        /// <param name = "v">The v.</param>
+        public static void SetColumn(int colIndex, int[,] A, IList<int> v)
+        {
+            var numRows = A.GetLength(0);
+            var numCols = A.GetLength(1);
+            if ((colIndex < 0) || (colIndex >= numCols))
+                throw new Exception("StarMath Size Error: An index value of "
+                                    + colIndex
+                                    + " for getColumn is not in required range from 0 up to (but not including) "
+                                    + numCols + ".");
+            for (var i = 0; i < numRows; i++)
+                A[i, colIndex] = v[i];
+        }
+        #endregion
+        #region Remove
+        /// <summary>
+        /// Removes the given row of matrix A with the vector v.
+        /// </summary>
+        /// <param name="A">The matrix, A.</param>
+        /// <param name="rowIndex">The index of the row, rowIndex.</param>
+        /// <param name="v">The vector, v.</param>
+        public static double[,] RemoveRow(this double[,] A, int rowIndex)
+        {
+            var numRows = A.GetLength(0);
+            var numCols = A.GetLength(1);
+            if ((rowIndex < 0) || (rowIndex >= numRows))
+                throw new Exception("StarMath Size Error: An index value of "
+                                    + rowIndex
+                                    + " for RemoveRow is not in required range from 0 up to (but not including) "
+                                    + numRows + "."); 
+            var B = new double[numRows - 1, numCols];
+            var j = 0;
+            for (var i = 0; i < numRows; i++)
+                if (i != rowIndex)
+                    B.SetRow(j++, A.GetRow(i));
+            return B;
+        }
+        /// <summary>
+        /// Removes the given row of matrix A with the vector v.
+        /// </summary>
+        /// <param name="A">The matrix, A.</param>
+        /// <param name="rowIndex">The index of the row, rowIndex.</param>
+        /// <param name="v">The vector, v.</param>
+        public static int[,] RemoveRow(this int[,] A, int rowIndex)
+        {
+            var numRows = A.GetLength(0);
+            var numCols = A.GetLength(1);
+            if ((rowIndex < 0) || (rowIndex >= numRows))
+                throw new Exception("StarMath Size Error: An index value of "
+                                    + rowIndex
+                                    + " for RemoveRow is not in required range from 0 up to (but not including) "
+                                    + numRows + "."); 
+            var B = new int[numRows - 1, numCols];
+            var j = 0;
+            for (var i = 0; i < numRows; i++)
+                if (i != rowIndex)
+                    B.SetRow(j++, A.GetRow(i));
+            return B;
+        }
+
+
+        /// <summary>
+        /// Removes the given column of matrix A with the vector v.
+        /// </summary>
+        /// <param name="A">The matrix, A.</param>
+        /// <param name="colIndex">The index of the column, rowIndex.</param>
+        /// <param name="v">The vector, v.</param>
+        public static double[,] RemoveColumn(this double[,] A, int colIndex)
+        {
+            var numRows = A.GetLength(0);
+            var numCols = A.GetLength(1);
+            if ((colIndex < 0) || (colIndex >= numRows))
+                throw new Exception("StarMath Size Error: An index value of "
+                                    + colIndex
+                                    + " for RemoveColumn is not in required range from 0 up to (but not including) "
+                                    + numCols + ".");  
+            var B = new double[numRows, numCols - 1];
+            var j = 0;
+            for (var i = 0; i < numRows; i++)
+                if (i != colIndex)
+                    B.SetColumn(j++, A.GetColumn(i));
+            return B;
+        }
+        /// <summary>
+        /// Removes the given column of matrix A with the vector v.
+        /// </summary>
+        /// <param name="A">The matrix, A.</param>
+        /// <param name="colIndex">The index of the column, rowIndex.</param>
+        /// <param name="v">The vector, v.</param>
+        public static int[,] RemoveColumn(this int[,] A, int colIndex)
+        {
+            var numRows = A.GetLength(0);
+            var numCols = A.GetLength(1);
+            if ((colIndex < 0) || (colIndex >= numRows))
+                throw new Exception("StarMath Size Error: An index value of "
+                                    + colIndex
+                                    + " for RemoveColumn is not in required range from 0 up to (but not including) "
+                                    + numCols + ".");    
+            var B = new int[numRows, numCols - 1];
+            var j = 0;
+            for (var i = 0; i < numRows; i++)
+                if (i != colIndex)
+                    B.SetColumn(j++, A.GetColumn(i));
+            return B;
+        }
+        /// <summary>
+        /// Removes the given row of matrix A with the vector v.
+        /// </summary>
+        /// <param name="A">The matrix, A.</param>
+        /// <param name="rowIndex">The index of the row, rowIndex.</param>
+        /// <param name="v">The vector, v.</param>
+        public static double[,] RemoveRows(this double[,] A, IList<int> rowIndices)
+        {
+            var numRows = A.GetLength(0);
+            var numCols = A.GetLength(1);
+            if (rowIndices.Max() >= numRows)
+                throw new Exception("StarMath Size Error: A row index, with value " + rowIndices.Max() +
+                    ", in the provided rowIndices for RemoveRows exceeds the number of rows (number of rows = " + numRows +
+                    ") in the provided matrix.");
+            if (rowIndices.Count >= numRows)
+                throw new Exception("StarMath Size Error: An there are more rows to remove (rowIndices.Count = " + rowIndices.Count +
+                    ") than there are rows in the matrix provided to RemoveRows (number of rows = " + numRows + ").");  
+            var B = new double[numRows - rowIndices.Count, numCols];
+            var j = 0;
+            for (var i = 0; i < numRows; i++)
+                if (!rowIndices.Contains(i))
+                    B.SetRow(j++, A.GetRow(i));
+            return B;
+        }
+        /// <summary>
+        /// Removes the given rows of matrix A.
+        /// </summary>
+        /// <param name="A">The matrix, A.</param>
+        /// <param name="rowIndices">The row indices.</param>
+        /// <returns>System.Int32[].</returns>
+        /// <exception cref="Exception">
+        /// StarMath Size Error: A row index, with value  + rowIndices.Max() +
+        ///                     , in the provided rowIndices for RemoveRows exceeds the number of rows (number of rows =  + numRows +
+        ///                     ) in the provided matrix.
+        /// or
+        /// StarMath Size Error: An there are more rows to remove (rowIndices.Count =  + rowIndices.Count +
+        ///                     ) than there are rows in the matrix provided to RemoveRows (number of rows =  + numRows + ).
+        /// </exception>
+        public static int[,] RemoveRows(this int[,] A, IList<int> rowIndices)
+        {
+            var numRows = A.GetLength(0);
+            var numCols = A.GetLength(1);
+            if (rowIndices.Max() >= numRows)
+                throw new Exception("StarMath Size Error: A row index, with value " + rowIndices.Max() +
+                    ", in the provided rowIndices for RemoveRows exceeds the number of rows (number of rows = " + numRows +
+                    ") in the provided matrix.");
+            if (rowIndices.Count >= numRows)
+                throw new Exception("StarMath Size Error: An there are more rows to remove (rowIndices.Count = " + rowIndices.Count +
+                    ") than there are rows in the matrix provided to RemoveRows (number of rows = " + numRows + ").");   
+            var B = new int[numRows - rowIndices.Count, numCols];
+            var j = 0;
+            for (var i = 0; i < numRows; i++)
+                if (!rowIndices.Contains(i))
+                    B.SetRow(j++, A.GetRow(i));
+            return B;
+        }
+
+
+        /// <summary>
+        /// Removes the given columns of matrix A.
+        /// </summary>
+        /// <param name="A">The matrix, A.</param>
+        /// <param name="colIndices">The col indices.</param>
+        /// <returns>System.Double[].</returns>
+        /// <exception cref="Exception">
+        /// StarMath Size Error: A row index, with value  + colIndices.Max() +
+        ///                     , in the provided rowIndices for RemoveColumns exceeds the number of rows (number of rows =  + numCols +
+        ///                     ) in the provided matrix.
+        /// or
+        /// StarMath Size Error: An there are more rows to remove (rowIndices.Count =   
+        ///                     + colIndices.Count +                                                             
+        ///                     ) than there are rows in the matrix provided to RemoveColumns (number of rows =  + numCols + ).
+        /// </exception>
+        public static double[,] RemoveColumns(this double[,] A, IList<int> colIndices)
+        {
+            var numRows = A.GetLength(0);
+            var numCols = A.GetLength(1);
+            if (colIndices.Max() >= numCols)
+                throw new Exception("StarMath Size Error: A row index, with value " + colIndices.Max() +
+                    ", in the provided rowIndices for RemoveColumns exceeds the number of rows (number of rows = " + numCols +
+                    ") in the provided matrix.");
+            if (colIndices.Count >= numCols)
+                throw new Exception("StarMath Size Error: An there are more rows to remove (rowIndices.Count = "  
+                    + colIndices.Count +                                                             
+                    ") than there are rows in the matrix provided to RemoveColumns (number of rows = " + numCols + ")."); 
+            var B = new double[numRows, numCols - colIndices.Count];
+            var j = 0;
+            for (var i = 0; i < numCols; i++)
+                if (!colIndices.Contains(i))
+                    B.SetColumn(j++, A.GetColumn(i));
+            return B;
+        }
+        /// <summary>
+        /// Removes the given columns of matrix A.
+        /// </summary>
+        /// <param name="A">The matrix, A.</param>
+        /// <param name="colIndices">The col indices.</param>
+        /// <returns>System.Int32[].</returns>
+        /// <exception cref="Exception">StarMath Size Error: A row index, with value  + colIndices.Max() +
+        /// , in the provided rowIndices for RemoveColumns exceeds the number of rows (number of rows =  + numCols +
+        /// ) in the provided matrix.
+        /// or
+        /// StarMath Size Error: An there are more rows to remove (rowIndices.Count =
+        /// + colIndices.Count +
+        /// ) than there are rows in the matrix provided to RemoveColumns (number of rows =  + numCols + ).</exception>
+        public static int[,] RemoveColumns(this int[,] A, IList<int> colIndices)
+        {
+            var numRows = A.GetLength(0);
+            var numCols = A.GetLength(1);
+            if (colIndices.Max() >= numCols)
+                throw new Exception("StarMath Size Error: A row index, with value " + colIndices.Max() +
+                    ", in the provided rowIndices for RemoveColumns exceeds the number of rows (number of rows = " + numCols +
+                    ") in the provided matrix.");
+            if (colIndices.Count >= numCols)
+                throw new Exception("StarMath Size Error: An there are more rows to remove (rowIndices.Count = "
+                    + colIndices.Count +
+                    ") than there are rows in the matrix provided to RemoveColumns (number of rows = " + numCols + ").");
+            var B = new int[numRows, numCols - colIndices.Count];
+            var j = 0;
+            for (var i = 0; i < numCols; i++)
+                if (!colIndices.Contains(i))
+                    B.SetColumn(j++, A.GetColumn(i));
+            return B;
+        }
+        #endregion
 
         /// <summary>
         /// Get some portion of a vector and put in a new vector.  
         /// </summary>
         /// <param name="A">1D double array from which elements need to be extracted</param>
-        /// <param name="ColumnList">The indices of the elements.</param>
+        /// <param name="indexList">The indices of the elements.</param>
         /// <returns>
         /// A single 1D double array that contains all the requested elements.
         /// </returns>
-        public static double[] GetPartialVector(this IList<double> A, IList<int> ColumnList)
+        public static double[] GetPartialVector(this IList<double> A, IList<int> indexList)
         {
-            var result = new double[ColumnList.Count];
-            for (var i = 0; i < ColumnList.Count; i++)
-                result[i] = A[ColumnList[i]];
+            var result = new double[indexList.Count];
+            for (var i = 0; i < indexList.Count; i++)
+                result[i] = A[indexList[i]];
             return result;
         }
 
@@ -580,18 +798,128 @@ namespace StarMathLib
         /// Get some portion of a vector and put in a new vector.
         /// </summary>
         /// <param name="A">1D double array from which elements need to be extracted</param>
-        /// <param name="ColumnList">The indices of the elements.</param>
+        /// <param name="indexList">The indices of the elements.</param>
         /// <returns>
         /// A single 1D double array that contains all the requested elements.
         /// </returns>
-        public static int[] GetPartialVector(this IList<int> A, IList<int> ColumnList)
+        public static int[] GetPartialVector(this IList<int> A, IList<int> indexList)
         {
-            var result = new int[ColumnList.Count];
-            for (var i = 0; i < ColumnList.Count; i++)
-                result[i] = A[ColumnList[i]];
+            var result = new int[indexList.Count];
+            for (var i = 0; i < indexList.Count; i++)
+                result[i] = A[indexList[i]];
             return result;
         }
 
+        /// <summary>
+        /// Removes the given entry of vector A.
+        /// </summary>
+        /// <param name="A">The vector, A.</param>
+        /// <param name="index">The index to remove.</param>
+        /// <returns>System.Double[].</returns>
+        /// <exception cref="Exception">StarMath Size Error: An index value of
+        /// + index
+        /// +  for RemoveVectorCell is not in required range from 0 up to (but not including)
+        /// + length + .</exception>
+        public static double[] RemoveVectorCell(this IList<double> A, int index)
+        {
+            var length = A.Count;
+            if ((index < 0) || (index >= length))
+                throw new Exception("StarMath Size Error: An index value of "
+                                    + index
+                                    + " for RemoveVectorCell is not in required range from 0 up to (but not including) "
+                                    + length + "."); 
+            var B = new double[length - 1];
+            var j = 0;
+            for (var i = 0; i < length; i++)
+                if (i != index)
+                    B[j++] = A[i];
+            return B;
+        }
+
+        /// <summary>
+        /// Removes the given entry of vector A.
+        /// </summary>
+        /// <param name="A">The vector, A.</param>
+        /// <param name="index">The index to remove.</param>
+        /// <returns>System.Int32[].</returns>
+        /// <exception cref="Exception">StarMath Size Error: An index value of
+        /// + index
+        /// +  for RemoveVectorCell is not in required range from 0 up to (but not including)
+        /// + length + .</exception>
+        public static int[] RemoveVectorCell(this IList<int> A, int index)
+        {
+            var length = A.Count;
+            if ((index < 0) || (index >= length))
+                throw new Exception("StarMath Size Error: An index value of "
+                                    + index
+                                    + " for RemoveVectorCell is not in required range from 0 up to (but not including) "
+                                    + length + ".");  
+            var B = new int[length - 1];
+            var j = 0;
+            for (var i = 0; i < length; i++)
+                if (i != index)
+                    B[j++] = A[i];
+            return B;
+        }
+
+
+        /// <summary>
+        /// Removes the given entry of vector A.
+        /// </summary>
+        /// <param name="A">The vector, A.</param>
+        /// <param name="indices">The indices.</param>
+        /// <returns>System.Double[].</returns>
+        /// <exception cref="Exception">StarMath Size Error: An index value of
+        /// + index
+        /// +  for RemoveVectorCell is not in required range from 0 up to (but not including)
+        /// + length + .</exception>
+        public static double[] RemoveVectorCells(this IList<double> A, IList<int> indices)
+        {
+            var length = A.Count;
+            var numToRemove = indices.Count;
+            if (indices.Max() >= length)
+                throw new Exception("StarMath Size Error: A cell index, with value " + indices.Max() +
+                    ", in the provided indices for RemoveVectorCells exceeds the number of entries (size = " + length +
+                    ") in the provided vector.");
+            if (indices.Count >= length)
+                throw new Exception("StarMath Size Error: There are more cells to remove (Count = " + indices.Count +
+                    ") than there are cells in the vector provided to RemoveVectorCells (Count = " + length + ").");
+            var B = new double[length - numToRemove];
+            var j = 0;
+            for (var i = 0; i < length; i++)
+                if (!indices.Contains(i))
+                    B[j++] = A[i];
+            return B;
+        }
+
+        /// <summary>
+        /// Removes the given entry of vector A.
+        /// </summary>
+        /// <param name="A">The vector, A.</param>
+        /// <param name="indices">The indices.</param>
+        /// <returns>System.Double[].</returns>
+        /// <exception cref="Exception">StarMath Size Error: An index value of
+        /// + index
+        /// +  for RemoveVectorCell is not in required range from 0 up to (but not including)
+        /// + length + .</exception>
+        public static int[] RemoveVectorCells(this IList<int> A, IList<int> indices)
+        {
+            var length = A.Count;
+            var numToRemove = indices.Count;
+            if (indices.Max() >= length)
+                throw new Exception("StarMath Size Error: A cell index, with value " + indices.Max() +
+                    ", in the provided indices for RemoveVectorCells exceeds the number of entries (size = " + length +
+                    ") in the provided vector.");
+            if (indices.Count >= length)
+                throw new Exception("StarMath Size Error: There are more cells to remove (Count = " + indices.Count +
+                    ") than there are cells in the vector provided to RemoveVectorCells (Count = " + length + ").");
+            var B = new int[length - numToRemove];
+            var j = 0;
+            for (var i = 0; i < length; i++)
+                if (!indices.Contains(i))
+                    B[j++] = A[i];
+            return B;
+        }
         #endregion
 
         #region Join Matrices into taller/fatter matrix
@@ -604,7 +932,7 @@ namespace StarMathLib
         public static double[,] JoinCol(this double[,] Matrix1, double[,] Matrix2)
         {
             if (Matrix1.GetLength(0) != Matrix2.GetLength(0))
-                throw new Exception("MatrixMath Size Error: Row dimensions do not match for matrix1 and matrix2");
+                throw new Exception("StarMath Size Error: Row dimensions do not match for matrix1 and matrix2");
             var NumRows = Matrix1.GetLength(0);
             var NumCols = Matrix1.GetLength(1) + Matrix2.GetLength(1);
             var Mat1Cols = Matrix1.GetLength(1);
@@ -632,11 +960,11 @@ namespace StarMathLib
         /// <returns>
         /// A 2D double array that has Matrix1 and Matrix2 one below the other
         /// </returns>
-        /// <exception cref="System.Exception">MatrixMath Size Error: Column dimensions do not match for matrix1 and matrix2</exception>
+        /// <exception cref="System.Exception">StarMath Size Error: Column dimensions do not match for matrix1 and matrix2</exception>
         public static double[,] JoinRow(this double[,] Matrix1, double[,] Matrix2)
         {
             if (Matrix1.GetLength(1) != Matrix2.GetLength(1))
-                throw new Exception("MatrixMath Size Error: Column dimensions do not match for matrix1 and matrix2");
+                throw new Exception("StarMath Size Error: Column dimensions do not match for matrix1 and matrix2");
             var numRows = Matrix1.GetLength(0) + Matrix2.GetLength(0);
             var numCols = Matrix1.GetLength(1);
             var mat1Rows = Matrix1.GetLength(0);
@@ -662,7 +990,7 @@ namespace StarMathLib
         public static int[,] JoinCol(this int[,] Matrix1, int[,] Matrix2)
         {
             if (Matrix1.GetLength(0) != Matrix2.GetLength(0))
-                throw new Exception("MatrixMath Size Error: Row dimensions do not match for matrix1 and matrix2");
+                throw new Exception("StarMath Size Error: Row dimensions do not match for matrix1 and matrix2");
             var NumRows = Matrix1.GetLength(0);
             var NumCols = Matrix1.GetLength(1) + Matrix2.GetLength(1);
             var Mat1Cols = Matrix1.GetLength(1);
@@ -690,11 +1018,11 @@ namespace StarMathLib
         /// <returns>
         /// A 2D int array that has Matrix1 and Matrix2 one below the other
         /// </returns>
-        /// <exception cref="System.Exception">MatrixMath Size Error: Column dimensions do not match for matrix1 and matrix2</exception>
+        /// <exception cref="System.Exception">StarMath Size Error: Column dimensions do not match for matrix1 and matrix2</exception>
         public static int[,] JoinRow(this int[,] Matrix1, int[,] Matrix2)
         {
             if (Matrix1.GetLength(1) != Matrix2.GetLength(1))
-                throw new Exception("MatrixMath Size Error: Column dimensions do not match for matrix1 and matrix2");
+                throw new Exception("StarMath Size Error: Column dimensions do not match for matrix1 and matrix2");
             var numRows = Matrix1.GetLength(0) + Matrix2.GetLength(0);
             var numCols = Matrix1.GetLength(1);
             var mat1Rows = Matrix1.GetLength(0);

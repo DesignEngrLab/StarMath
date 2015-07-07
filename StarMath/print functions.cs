@@ -1,26 +1,18 @@
-﻿/*************************************************************************
- *     This file & class is part of the StarMath Project
- *     Copyright 2010, 2011 Matthew Ira Campbell, PhD.
- *
- *     StarMath is free software: you can redistribute it and/or modify
- *     it under the terms of the GNU General Public License as published by
- *     the Free Software Foundation, either version 3 of the License, or
- *     (at your option) any later version.
- *  
- *     StarMath is distributed in the hope that it will be useful,
- *     but WITHOUT ANY WARRANTY; without even the implied warranty of
- *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *     GNU General Public License for more details.
- *  
- *     You should have received a copy of the GNU General Public License
- *     along with StarMath.  If not, see <http://www.gnu.org/licenses/>.
- *     
- *     Please find further details and contact information on StarMath
- *     at http://starmath.codeplex.com/.
- *************************************************************************/
+﻿// ***********************************************************************
+// Assembly         : StarMath
+// Author           : MICampbell
+// Created          : 05-14-2015
+//
+// Last Modified By : MICampbell
+// Last Modified On : 07-07-2015
+// ***********************************************************************
+// <copyright file="print functions.cs" company="Design Engineering Lab -- MICampbell">
+//     2014
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
 using System;
 using System.Collections.Generic;
-
 
 namespace StarMathLib
 {
@@ -30,7 +22,7 @@ namespace StarMathLib
         /// Makes the print string.
         /// </summary>
         /// <param name="A">The matrix, A.</param>
-        /// <returns></returns>
+        /// <returns>System.String.</returns>
         public static string MakePrintString(this double[,] A)
         {
             if (A == null) return "<null>";
@@ -48,12 +40,11 @@ namespace StarMathLib
             return p;
         }
 
-
         /// <summary>
         /// Makes the print string.
         /// </summary>
         /// <param name="A">The A.</param>
-        /// <returns></returns>
+        /// <returns>System.String.</returns>
         public static string MakePrintString(this IEnumerable<double> A)
         {
             if (A == null) return "<null>";
@@ -70,7 +61,7 @@ namespace StarMathLib
         /// Makes the print string.
         /// </summary>
         /// <param name="A">The A.</param>
-        /// <returns></returns>
+        /// <returns>System.String.</returns>
         public static string MakePrintString(this int[,] A)
         {
             if (A == null) return "<null>";
@@ -92,7 +83,7 @@ namespace StarMathLib
         /// Makes the print string.
         /// </summary>
         /// <param name="A">The A.</param>
-        /// <returns></returns>
+        /// <returns>System.String.</returns>
         public static string MakePrintString(this IEnumerable<int> A)
         {
             if (A == null) return "<null>";
@@ -105,14 +96,19 @@ namespace StarMathLib
             return p;
         }
 
-
+        /// <summary>
+        /// Formats the cell.
+        /// </summary>
+        /// <param name="format">The format.</param>
+        /// <param name="p">The p.</param>
+        /// <returns>System.Object.</returns>
         private static object formatCell(string format, double p)
         {
             var numStr = string.Format(format, p);
             numStr = numStr.TrimEnd('0');
             numStr = numStr.TrimEnd('.');
-            var padAmt = ((double)(cellWidth - numStr.Length)) / 2;
-            numStr = numStr.PadLeft((int)Math.Floor(padAmt + numStr.Length));
+            var padAmt = ((double) (cellWidth - numStr.Length))/2;
+            numStr = numStr.PadLeft((int) Math.Floor(padAmt + numStr.Length));
             numStr = numStr.PadRight(cellWidth);
             return numStr;
         }

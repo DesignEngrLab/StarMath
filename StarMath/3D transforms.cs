@@ -1,25 +1,17 @@
-﻿/*************************************************************************
- *     This file & class is part of the StarMath Project
- *     Copyright 2010, 2011 Matthew Ira Campbell, PhD.
- *
- *     StarMath is free software: you can redistribute it and/or modify
- *     it under the terms of the GNU General Public License as published by
- *     the Free Software Foundation, either version 3 of the License, or
- *     (at your option) any later version.
- *  
- *     StarMath is distributed in the hope that it will be useful,
- *     but WITHOUT ANY WARRANTY; without even the implied warranty of
- *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *     GNU General Public License for more details.
- *  
- *     You should have received a copy of the GNU General Public License
- *     along with StarMath.  If not, see <http://www.gnu.org/licenses/>.
- *     
- *     Please find further details and contact information on StarMath
- *     at http://starmath.codeplex.com/.
- *************************************************************************/
+﻿// ***********************************************************************
+// Assembly         : StarMath
+// Author           : MICampbell
+// Created          : 05-14-2015
+//
+// Last Modified By : MICampbell
+// Last Modified On : 07-07-2015
+// ***********************************************************************
+// <copyright file="3D transforms.cs" company="Design Engineering Lab -- MICampbell">
+//     2014
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
 using System;
-
 namespace StarMathLib
 {
     public static partial class StarMath
@@ -29,9 +21,9 @@ namespace StarMathLib
         /// <summary>
         /// Creates a translated coordinate frame.
         /// </summary>
-        /// <param name = "Tx">Amount of translation in x.</param>
-        /// <param name = "Ty">Amount of translation in y.</param>
-        /// <param name = "Tz">Amount of translation in z.</param>
+        /// <param name="Tx">Amount of translation in x.</param>
+        /// <param name="Ty">Amount of translation in y.</param>
+        /// <param name="Tz">Amount of translation in z.</param>
         /// <returns>4-by-4 matrix translated by the amount specified.</returns>
         public static double[,] Translate(double Tx, double Ty, double Tz)
         {
@@ -49,14 +41,12 @@ namespace StarMathLib
         /// </summary>
         /// <param name="angle">The amount of angle in degrees (positive is counter-clockwise).</param>
         /// <param name="inRadians">if set to <c>true</c> [in radians].</param>
-        /// <returns>
-        /// 4-by-4 matrix rotated by the amount specified.
-        /// </returns>
+        /// <returns>4-by-4 matrix rotated by the amount specified.</returns>
         public static double[,] RotationX(double angle, Boolean inRadians = false)
         {
             var ROTX = makeIdentity(4);
             if (!inRadians)
-                angle = (Math.PI * angle) / 180;
+                angle = (Math.PI*angle)/180;
 
             ROTX[1, 1] = ROTX[2, 2] = Math.Cos(angle);
             ROTX[1, 2] = -Math.Sin(angle);
@@ -70,14 +60,12 @@ namespace StarMathLib
         /// </summary>
         /// <param name="angle">The amount of angle in degrees (positive is counter-clockwise).</param>
         /// <param name="inRadians">if set to <c>true</c> [in radians].</param>
-        /// <returns>
-        /// 4-by-4 matrix rotated by the amount specified.
-        /// </returns>
+        /// <returns>4-by-4 matrix rotated by the amount specified.</returns>
         public static double[,] RotationY(double angle, Boolean inRadians = false)
         {
             var ROTY = makeIdentity(4);
             if (!inRadians)
-             angle = (Math.PI * angle) / 180;
+                angle = (Math.PI*angle)/180;
 
             ROTY[0, 0] = ROTY[2, 2] = Math.Cos(angle);
             ROTY[2, 0] = -Math.Sin(angle);
@@ -91,14 +79,12 @@ namespace StarMathLib
         /// </summary>
         /// <param name="angle">The amount of angle in degrees (positive is counter-clockwise).</param>
         /// <param name="inRadians">if set to <c>true</c> [in radians].</param>
-        /// <returns>
-        /// 4-by-4 matrix rotated by the amount specified.
-        /// </returns>
+        /// <returns>4-by-4 matrix rotated by the amount specified.</returns>
         public static double[,] RotationZ(double angle, Boolean inRadians = false)
         {
-            var ROTZ = makeIdentity(4); 
+            var ROTZ = makeIdentity(4);
             if (!inRadians)
-              angle = (Math.PI * angle) / 180;
+                angle = (Math.PI*angle)/180;
 
             ROTZ[0, 0] = ROTZ[1, 1] = Math.Cos(angle);
             ROTZ[1, 0] = Math.Sin(angle);
@@ -108,6 +94,5 @@ namespace StarMathLib
         }
 
         #endregion
-
     }
 }

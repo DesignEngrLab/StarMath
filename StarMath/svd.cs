@@ -1,25 +1,17 @@
-﻿/*************************************************************************
- *     This file & class is part of the StarMath Project
- *     Copyright 2010, 2011 Matthew Ira Campbell, PhD.
- *
- *     StarMath is free software: you can redistribute it and/or modify
- *     it under the terms of the GNU General Public License as published by
- *     the Free Software Foundation, either version 3 of the License, or
- *     (at your option) any later version.
- *  
- *     StarMath is distributed in the hope that it will be useful,
- *     but WITHOUT ANY WARRANTY; without even the implied warranty of
- *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *     GNU General Public License for more details.
- *  
- *     You should have received a copy of the GNU General Public License
- *     along with StarMath.  If not, see <http://www.gnu.org/licenses/>.
- *     
- *     Please find further details and contact information on StarMath
- *     at http://starmath.codeplex.com/.
- *************************************************************************/
+﻿// ***********************************************************************
+// Assembly         : StarMath
+// Author           : MICampbell
+// Created          : 05-14-2015
+//
+// Last Modified By : MICampbell
+// Last Modified On : 07-07-2015
+// ***********************************************************************
+// <copyright file="svd.cs" company="Design Engineering Lab -- MICampbell">
+//     2014
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
 using System;
-
 namespace StarMathLib
 {
     public static partial class StarMath
@@ -41,28 +33,25 @@ namespace StarMathLib
         /// <param name="A">The matrix in question, A can be rectangular [m, n]</param>
         /// <param name="U">The m-by-m uitary matrix that pre-multiplies the singular values.</param>
         /// <param name="V">The n-by-n conjugate transpose matrix of V that post-multiplies the singular values.</param>
-        /// <returns>
-        /// The singular values of A in ascending value, often indicated as sigma (provided as a vector).
-        /// </returns>
+        /// <returns>The singular values of A in ascending value, often indicated as sigma (provided as a vector).</returns>
         public static double[] SingularValueDecomposition(this double[,] A, out double[,] U, out double[,] V)
-        { return SingularValueDecomposition(true, A, out U, out V); }
+        {
+            return SingularValueDecomposition(true, A, out U, out V);
+        }
 
         /// <summary>
         /// Computes the singular value decomposition of A.
         /// </summary>
         /// <param name="A">The matrix in question, A can be rectangular m-by-n.</param>
-        /// <returns>
-        /// The singular values of A in ascending value, often indicated as sigma (provided as a vector).
-        /// </returns>
+        /// <returns>The singular values of A in ascending value, often indicated as sigma (provided as a vector).</returns>
         public static double[] SingularValueDecomposition(this int[,] A)
         {
             double[,] U, V;
             var B = new double[A.GetLength(0), A.GetLength(1)];
-            for (int i = 0; i < A.GetLength(0); i++)
-                for (int j = 0; j < A.GetLength(1); j++)
+            for (var i = 0; i < A.GetLength(0); i++)
+                for (var j = 0; j < A.GetLength(1); j++)
                     B[i, j] = A[i, j];
             return SingularValueDecomposition(false, B, out U, out V);
-
         }
 
         /// <summary>
@@ -71,24 +60,31 @@ namespace StarMathLib
         /// <param name="A">The matrix in question, A can be rectangular [m, n]</param>
         /// <param name="U">The m-by-m uitary matrix that pre-multiplies the singular values.</param>
         /// <param name="V">The n-by-n conjugate transpose matrix of V that post-multiplies the singular values.</param>
-        /// <returns>
-        /// The singular values of A in ascending value, often indicated as sigma (provided as a vector).
-        /// </returns>
+        /// <returns>The singular values of A in ascending value, often indicated as sigma (provided as a vector).</returns>
         public static double[] SingularValueDecomposition(this int[,] A, out double[,] U, out double[,] V)
         {
             var B = new double[A.GetLength(0), A.GetLength(1)];
-            for (int i = 0; i < A.GetLength(0); i++)
-                for (int j = 0; j < A.GetLength(1); j++)
+            for (var i = 0; i < A.GetLength(0); i++)
+                for (var j = 0; j < A.GetLength(1); j++)
                     B[i, j] = A[i, j];
             return SingularValueDecomposition(true, B, out U, out V);
         }
 
-
         //This is equivalent to the GESVD LAPACK routine.
-        private static double[] SingularValueDecomposition(bool computeVectors, double[,] A, out double[,] u, out  double[,] vt)
+        /// <summary>
+        /// Singulars the value decomposition.
+        /// </summary>
+        /// <param name="computeVectors">if set to <c>true</c> [compute vectors].</param>
+        /// <param name="A">a.</param>
+        /// <param name="u">The u.</param>
+        /// <param name="vt">The vt.</param>
+        /// <returns>System.Double[].</returns>
+        /// <exception cref="System.Exception">SVD did not converge.</exception>
+        private static double[] SingularValueDecomposition(bool computeVectors, double[,] A, out double[,] u,
+            out double[,] vt)
         {
-            int numRow = A.GetLength(0);
-            int numCol = A.GetLength(1);
+            var numRow = A.GetLength(0);
+            var numCol = A.GetLength(1);
             u = new double[numRow, numRow];
             var v = new double[numCol, numCol];
             vt = new double[numCol, numCol];
@@ -121,9 +117,9 @@ namespace StarMathLib
                     for (var i1 = l; i1 < numRow; i1++)
                         sum += A[l, i1] * A[l, i1];
                     stemp[l] = Math.Sqrt(sum);
-                    if (stemp[l] != 0.0)
+                    if (!stemp[l].IsNegligible())
                     {
-                        if (A[l, l] != 0.0)
+                        if (!A[l, l].IsNegligible())
                             stemp[l] = Math.Abs(stemp[l]) * (A[l, l] / Math.Abs(A[l, l]));
                         // A part of column "l" of Matrix A from row "l" to end multiply by 1.0 / s[l]
                         for (i = l; i < numRow; i++)
@@ -138,7 +134,7 @@ namespace StarMathLib
                 {
                     if (l < nct)
                     {
-                        if (stemp[l] != 0.0)
+                        if (!stemp[l].IsNegligible())
                         {
                             // Apply the transformation.
                             t = 0.0;
@@ -167,9 +163,9 @@ namespace StarMathLib
                     enorm += e[i] * e[i];
 
                 e[l] = Math.Sqrt(enorm);
-                if (e[l] != 0.0)
+                if (!e[l].IsNegligible())
                 {
-                    if (e[lp1] != 0.0)
+                    if (!e[lp1].IsNegligible())
                         e[l] = Math.Abs(e[l]) * (e[lp1] / Math.Abs(e[lp1]));
 
                     // Scale vector "e" from "lp1" by 1.0 / e[l]
@@ -180,7 +176,7 @@ namespace StarMathLib
                 }
                 e[l] = -e[l];
 
-                if (lp1 < numRow && e[l] != 0.0)
+                if (lp1 < numRow && !e[l].IsNegligible())
                 {
                     // Apply the transformation.
                     for (i = lp1; i < numRow; i++)
@@ -231,7 +227,7 @@ namespace StarMathLib
 
                 for (l = nct - 1; l >= 0; l--)
                 {
-                    if (stemp[l] != 0.0)
+                    if (!stemp[l].IsNegligible())
                     {
                         for (j = l + 1; j < ncu; j++)
                         {
@@ -266,7 +262,7 @@ namespace StarMathLib
                     lp1 = l + 1;
                     if (l < nrt)
                     {
-                        if (e[l] != 0.0)
+                        if (!e[l].IsNegligible())
                         {
                             for (j = lp1; j < numCol; j++)
                             {
@@ -288,7 +284,7 @@ namespace StarMathLib
             for (i = 0; i < m; i++)
             {
                 double r;
-                if (stemp[i] != 0.0)
+                if (!stemp[i].IsNegligible())
                 {
                     t = stemp[i];
                     r = stemp[i] / t;
@@ -301,7 +297,7 @@ namespace StarMathLib
 
                 // Exit
                 if (i == m - 1) break;
-                if (e[i] == 0.0) continue;
+                if (e[i].IsNegligible()) continue;
                 t = e[i];
                 r = t / e[i];
                 e[i] = t;
@@ -388,7 +384,7 @@ namespace StarMathLib
                             k = m - 2 - kk + l;
                             t1 = stemp[k];
 
-                            drotg(ref t1, ref f, out cs, out sn);
+                            fromCartesianToPolar(ref t1, ref f, out cs, out sn);
                             stemp[k] = t1;
                             if (k != l)
                             {
@@ -417,7 +413,7 @@ namespace StarMathLib
                         for (k = l; k < m; k++)
                         {
                             t1 = stemp[k];
-                            drotg(ref t1, ref f, out cs, out sn);
+                            fromCartesianToPolar(ref t1, ref f, out cs, out sn);
                             stemp[k] = t1;
                             f = -sn * e[k];
                             e[k] = cs * e[k];
@@ -453,7 +449,7 @@ namespace StarMathLib
                         var b = (((smm1 + sm) * (smm1 - sm)) + (emm1 * emm1)) / 2.0;
                         var c = (sm * emm1) * (sm * emm1);
                         var shift = 0.0;
-                        if (b != 0.0 || c != 0.0)
+                        if (!b.IsNegligible() || !c.IsNegligible())
                         {
                             shift = Math.Sqrt((b * b) + c);
                             if (b < 0.0)
@@ -467,7 +463,7 @@ namespace StarMathLib
                         // Chase zeros
                         for (k = l; k < m - 1; k++)
                         {
-                            drotg(ref f, ref g, out cs, out sn);
+                            fromCartesianToPolar(ref f, ref g, out cs, out sn);
                             if (k != l)
                                 e[k - 1] = f;
                             f = (cs * stemp[k]) + (sn * e[k]);
@@ -483,7 +479,7 @@ namespace StarMathLib
                                     v[k, i] = z;
                                 }
                             }
-                            drotg(ref f, ref g, out cs, out sn);
+                            fromCartesianToPolar(ref f, ref g, out cs, out sn);
                             stemp[k] = f;
                             f = (cs * e[k]) + (sn * stemp[k + 1]);
                             stemp[k + 1] = -(sn * e[k]) + (cs * stemp[k + 1]);
@@ -566,62 +562,43 @@ namespace StarMathLib
         }
 
         /// <summary>
-        /// Given the Cartesian coordinates (da, db) of a point p, these function return the parameters da, db, c, and s
+        /// Given the Cartesian coordinates (x, y) of a point p, these function return the parameters da, db, c, and s
         /// associated with the Givens rotation that zeros the y-coordinate of the point.
         /// </summary>
-        /// <param name="da">Provides the x-coordinate of the point p. On exit contains the parameter r associated with the Givens rotation</param>
-        /// <param name="db">Provides the y-coordinate of the point p. On exit contains the parameter z associated with the Givens rotation</param>
-        /// <param name="c">Contains the parameter c associated with the Givens rotation</param>
-        /// <param name="s">Contains the parameter s associated with the Givens rotation</param>
+        /// <param name="x">Provides the x-coordinate of the point p. On exit contains the parameter r associated with the Givens
+        /// rotation</param>
+        /// <param name="y">Provides the y-coordinate of the point p. On exit contains the parameter z associated with the Givens
+        /// rotation</param>
+        /// <param name="cosAngle">Contains the parameter c associated with the Givens rotation</param>
+        /// <param name="sinAngle">Contains the parameter s associated with the Givens rotation</param>
         /// <remarks>This is equivalent to the DROTG LAPACK routine.</remarks>
-        static void drotg(ref double da, ref double db, out double c, out double s)
+        private static void fromCartesianToPolar(ref double x, ref double y, out double cosAngle, out double sinAngle)
         {
-            double r, z;
+            var absX = Math.Abs(x);
+            var absY = Math.Abs(y);
+            var scale = absX + absY;
 
-            var roe = db;
-            var absda = Math.Abs(da);
-            var absdb = Math.Abs(db);
-            if (absda > absdb)
+            if (scale.IsNegligible())
             {
-                roe = da;
+                cosAngle = 1.0;
+                sinAngle = 0.0;
+                x = 0.0;
+                y = 0.0;
+                return;
             }
+            var sign = Math.Sign((absX > absY) ? x : y);
+            var sda = x / scale;
+            var sdb = y / scale;
+            var r = sign * scale * Math.Sqrt((sda * sda) + (sdb * sdb));
+            cosAngle = x / r;
+            sinAngle = y / r;
+            x = r;
 
-            var scale = absda + absdb;
-            if (scale == 0.0)
-            {
-                c = 1.0;
-                s = 0.0;
-                r = 0.0;
-                z = 0.0;
-            }
-            else
-            {
-                var sda = da / scale;
-                var sdb = db / scale;
-                r = scale * Math.Sqrt((sda * sda) + (sdb * sdb));
-                if (roe < 0.0)
-                {
-                    r = -r;
-                }
-
-                c = da / r;
-                s = db / r;
-                z = 1.0;
-                if (absda > absdb)
-                {
-                    z = s;
-                }
-
-                if (absdb >= absda && c != 0.0)
-                {
-                    z = 1.0 / c;
-                }
-            }
-
-            da = r;
-            db = z;
+            if (absX > absY)
+                y = sinAngle;
+            else if (absY >= absX && !cosAngle.IsNegligible())
+                y = 1.0 / cosAngle;
+            else y = 1;
         }
-
-
     }
 }

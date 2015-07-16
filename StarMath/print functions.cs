@@ -65,7 +65,7 @@ namespace StarMathLib
         public static string MakePrintString(this int[,] A)
         {
             if (A == null) return "<null>";
-            const string format = "{0}";
+            const string format = "{0:F}";
             var p = "";
             for (var i = 0; i < A.GetLength(0); i++)
             {
@@ -87,7 +87,7 @@ namespace StarMathLib
         public static string MakePrintString(this IEnumerable<int> A)
         {
             if (A == null) return "<null>";
-            var format = "{0:F" + numDecimals + "}";
+            var format = "{0:F}";
             var p = "{ ";
             foreach (var d in A)
                 p += formatCell(format, d) + ",";

@@ -1952,7 +1952,7 @@ namespace StarMathLib
                     {
                         for (int l = 0; l < q; l++)
                         {
-                            C[m * i + k, n * j + l] = A[i, j] * B[k, l];
+                            C[p * i + k, q * j + l] = A[i, j] * B[k, l];
                         }
                     }
                 }
@@ -1980,7 +1980,7 @@ namespace StarMathLib
                     {
                         for (int l = 0; l < q; l++)
                         {
-                            C[q * i + k, p * j + l] = A[i, j] * B[k, l];
+                            C[p * i + k, q * j + l] = A[i, j] * B[k, l];
                         }
                     }
                 }
@@ -2008,7 +2008,7 @@ namespace StarMathLib
                     {
                         for (int l = 0; l < q; l++)
                         {
-                            C[q * i + k, p * j + l] = A[i, j] * B[k, l];
+                            C[p * i + k, q * j + l] = A[i, j] * B[k, l];
                         }
                     }
                 }
@@ -2036,7 +2036,7 @@ namespace StarMathLib
                     {
                         for (int l = 0; l < q; l++)
                         {
-                            C[q * i + k, p * j + l] = A[i, j] * B[k, l];
+                            C[p * i + k, q * j + l] = A[i, j] * B[k, l];
                         }
                     }
                 }

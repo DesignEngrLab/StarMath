@@ -16,7 +16,7 @@ namespace TestEXE_for_StarMath
         private static void Main()
         {
             // testStackFunctions();
-            // testLUfunctions();
+             //testLUfunctions();
             //benchMarkMatrixInversion();
             compareSolvers_Inversion_to_GaussSeidel();
             //checkEigen();
@@ -34,7 +34,7 @@ namespace TestEXE_for_StarMath
 
         private static void testLUfunctions()
         {
-            const int size = 250;
+            const int size = 9;
             var r = new Random();
 
             var A = new double[size, size];
@@ -212,7 +212,7 @@ namespace TestEXE_for_StarMath
             {
                 for (int j = 0; j < fractionDiag.GetLength(0); j++)
                 {
-                    int size = matrixSize[i];
+                    int size =10* matrixSize[i];
                     const int numTrials = 10;
                     for (var k = 0; k <= numTrials; k++)
                     {
@@ -223,7 +223,7 @@ namespace TestEXE_for_StarMath
                             b[ii] = (200 * r.NextDouble()) - 100.0;
                             for (var jj = 0; jj < size; jj++)
                             {
-                                if (((double)Math.Abs(ii - jj)) / size < fractionDiag[j])
+                             //   if (((double)Math.Abs(ii - jj)) / size < fractionDiag[j])
                                     A[ii, jj] = (200 * r.NextDouble()) - 100.0;
                             }
                         }
@@ -231,11 +231,11 @@ namespace TestEXE_for_StarMath
 
                         watch.Restart();
                         //var x = StarMath.solve(A, b);
-                        var x = StarMath.solveByInverse(A, b);
+                        var x = StarMath.SolveAnalytically(A, b);
                         watch.Stop();
                         recordResults(result, A, x, b, watch);
                         watch.Restart();
-                        x = StarMath.solveGaussSeidel(A, b);
+                        x = StarMath.solveIteratively(A, b);
                         watch.Stop();
                         recordResults(result, A, x, b, watch);
                         Console.WriteLine(result.Aggregate((resultString, next) =>

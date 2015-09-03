@@ -42,6 +42,7 @@
   <ItemGroup>
     <Compile Include="multiply divide.cs" />
     <Compile Include="constants.cs" />
+    <Compile Include="SparseMatrix.cs" />
     <Compile Include="svd.cs" />
     <Compile Include="3D transforms.cs" />
     <Compile Include="add subtract.cs" />

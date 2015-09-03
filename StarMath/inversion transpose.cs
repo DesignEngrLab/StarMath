@@ -21,7 +21,7 @@ namespace StarMathLib
         /// <summary>
         /// Inverses the matrix A only if the matrix has already been
         /// "triangularized" - meaning there are no elements in the bottom
-        /// triangle - A[i,j]=0.0 where j&gt;i
+        /// triangle - A[i,j]=0.0 where j>i
         /// </summary>
         /// <param name="A">The matrix to invert. This matrix is unchanged by this function.</param>
         /// <returns>The inverted matrix, A^-1.</returns>
@@ -255,7 +255,7 @@ namespace StarMathLib
         /// <exception cref="System.Exception">LU Decomposition can only be determined for square matrices.</exception>
         private static double[,] LUDecomposition(double[,] A, int length)
         {
-            var B = (double[,]) A.Clone();
+            var B = (double[,])A.Clone();
             // normalize row 0
             for (var i = 1; i < length; i++) B[0, i] /= B[0, 0];
 
@@ -265,7 +265,7 @@ namespace StarMathLib
                 {
                     // do a column of L
                     for (var k = 0; k < i; k++)
-                        B[j, i] -= B[j, k]*B[k, i];
+                        B[j, i] -= B[j, k] * B[k, i];
                 }
                 if (i == length - 1) continue;
                 for (var j = i + 1; j < length; j++)
@@ -273,8 +273,8 @@ namespace StarMathLib
                     // do a row of U
                     var sum = B[i, j];
                     for (var k = 0; k < i; k++)
-                        sum -= B[i, k]*B[k, j];
-                    B[i, j] = (sum == 0.0) ? 0.0 : sum/B[i, i];
+                        sum -= B[i, k] * B[k, j];
+                    B[i, j] = (sum == 0.0) ? 0.0 : sum / B[i, i];
                 }
             }
             return B;
@@ -317,7 +317,7 @@ namespace StarMathLib
             var B = new double[length, length];
             B[0, 0] = A[0, 0];
             // normalize row 0
-            for (var i = 1; i < length; i++) B[0, i] = A[0, i]/B[0, 0];
+            for (var i = 1; i < length; i++) B[0, i] = A[0, i] / B[0, 0];
 
             for (var i = 1; i < length; i++)
                 for (var j = 0; j < length; j++)
@@ -329,7 +329,7 @@ namespace StarMathLib
                 {
                     // do a column of L
                     for (var k = 0; k < i; k++)
-                        B[j, i] -= B[j, k]*B[k, i];
+                        B[j, i] -= B[j, k] * B[k, i];
                 }
                 if (i == length - 1) continue;
                 for (var j = i + 1; j < length; j++)
@@ -337,13 +337,47 @@ namespace StarMathLib
                     // do a row of U
                     var sum = B[i, j];
                     for (var k = 0; k < i; k++)
-                        sum -= B[i, k]*B[k, j];
-                    B[i, j] = sum/B[i, i];
+                        sum -= B[i, k] * B[k, j];
+                    B[i, j] = sum / B[i, i];
                 }
             }
             return B;
         }
 
+        #endregion
+
+        #region Cholesky Decomposition
+        // this is intended only for symmetric positive definite matrices
+        /// <summary>
+        /// Returns the LU decomposition of A in a new matrix.
+        /// </summary>
+        /// <param name="A">The matrix to invert. This matrix is unchanged by this function.</param>
+        /// <exception cref="System.Exception">Matrix cannnot be inverted. Can only invert sqare matrices.</exception>
+        public static double[,] CholeskyDecomposition(double[,] A)
+        {
+            var length = A.GetLength(0);
+            if (length != A.GetLength(1))
+                throw new Exception("LU Decomposition can only be determined for square matrices.");
+            var L = (double[,])A.Clone();
+            
+            for (var i = 0; i < length; i++)
+            {
+                double sum;
+                for (var j = 0; j <i; j++)
+                {
+                    sum = 0.0;
+                    for (int k = 0; k < j; k++)
+                        sum += L[i, k] * L[j, k];
+                    L[i, j] = (L[i,j] - sum)/L[j,j];
+                }
+                sum = 0.0;
+                for (int k = 0; k < i; k++)
+                    sum += L[i, k] * L[i, k];
+                L[i, i] = Math.Sqrt(L[i, i] - sum);
+            }
+            return L;
+        }
+        
         #endregion
 
         #region Transpose

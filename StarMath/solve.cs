@@ -25,11 +25,13 @@ namespace StarMathLib
         /// <param name="A">The A.</param>
         /// <param name="b">The b.</param>
         /// <param name="initialGuess">The initial guess.</param>
+        /// <param name="AIsSymmeticPositiveDefinite">Is A known to by Symmetric and Positive-Definite?</param>
         /// <returns>System.Double[].</returns>
         /// <exception cref="System.Exception">Matrix, A, must be square.
         /// or
         /// Matrix, A, must be have the same number of rows as the vector, b.</exception>
-        public static double[] solve(double[,] A, IList<double> b, IList<double> initialGuess = null)
+        public static double[] solve(double[,] A, IList<double> b, IList<double> initialGuess = null,
+            Boolean AIsSymmeticPositiveDefinite = false)
         {
             var length = A.GetLength(0);
             if (length != A.GetLength(1))
@@ -38,10 +40,10 @@ namespace StarMathLib
                 throw new Exception("Matrix, A, must be have the same number of rows as the vector, b.");
             List<int>[] potentialDiagonals;
             if (isGaussSeidelAppropriate(A, b, out potentialDiagonals, ref initialGuess, length))
-                return solveGaussSeidel(A, b, initialGuess, length, potentialDiagonals);
+                return solveIteratively(A, b, initialGuess, length, potentialDiagonals);
             /****** need code to determine when to switch between *****
              ****** this analytical approach and the SOR approach *****/
-            return solveByInverse(A, b);
+            return SolveAnalytically(A, b, length, AIsSymmeticPositiveDefinite, potentialDiagonals);
         }
 
         /// <summary>
@@ -106,9 +108,10 @@ namespace StarMathLib
         /// <param name="b">The b.</param>
         /// <param name="length">The length.</param>
         /// <param name="potentialDiagonals">The potential diagonals.</param>
+        /// <param name="AIsSymmeticPositiveDefinite">Is A known to by Symmetric and Positive-Definite?</param>
         /// <returns>System.Double[].</returns>
-        public static double[] solveByInverse(double[,] A, IList<double> b,
-            int length = -1, List<int>[] potentialDiagonals = null)
+        public static double[] SolveAnalytically(double[,] A, IList<double> b,
+            int length = -1, bool AIsSymmeticPositiveDefinite = false, List<int>[] potentialDiagonals = null)
         {
             if (length < 0) length = b.Count;
             double[,] C;
@@ -130,10 +133,28 @@ namespace StarMathLib
             }
             else
             {
-                C = (double[,]) A.Clone();
+                C = (double[,])A.Clone();
                 d = b.ToArray();
             }
-            return multiply(inverse(C), d);
+            var LU = LUDecomposition(C, length);
+            var x = new double[length];
+            // forward substitution
+            for (int i = 0; i < length; i++)
+            {
+                var sumFromKnownTerms = 0.0;
+                for (int j = 0; j < i; j++)
+                    sumFromKnownTerms += LU[i, j] * x[j];
+                x[i] = (d[i] - sumFromKnownTerms) / LU[i, i];
+            }
+            // backward substitution
+            for (int i = length - 1; i >= 0; i--)
+            {
+                var sumFromKnownTerms = 0.0;
+                for (int j = i + 1; j < length; j++)
+                    sumFromKnownTerms += LU[i, j] * x[j];
+                x[i] -= sumFromKnownTerms;
+            }
+            return x;
         }
 
         #region Gauss-Seidel or Successive Over-Relaxation
@@ -152,8 +173,9 @@ namespace StarMathLib
         {
             potentialDiagonals = null;
             if (length < GaussSeidelMinimumMatrixSize) return false;
-            ifInitialGuessIsNull(ref initialGuess, A, b, length);
-            var error = norm1(subtract(b, multiply(A, initialGuess, length, length), length))/norm1(b);
+            if (initialGuess == null)
+                initialGuess = makeInitialGuess(A, b, length);
+            var error = norm1(subtract(b, multiply(A, initialGuess, length, length), length)) / norm1(b);
             if (error > MaxErrorForUsingGaussSeidel) return false;
             return findPotentialDiagonals(A, out potentialDiagonals, length, GaussSeidelDiagonalDominanceRatio);
         }
@@ -175,11 +197,14 @@ namespace StarMathLib
                 var rowNorm1 = A.GetRow(i).norm1();
                 var potentialIndices = new List<int>();
                 for (var j = 0; j < length; j++)
-                    if (Math.Abs(A[i, j])/(rowNorm1 - Math.Abs(A[i, j])) > minimalConsideration)
+                    if (Math.Abs(A[i, j]) / (rowNorm1 - Math.Abs(A[i, j])) > minimalConsideration)
                         potentialIndices.Add(j);
                 if (potentialIndices.Count == 0) return false;
                 potentialDiagonals[i] = potentialIndices;
-            }
+            }  //todo: this is not a great function! first off is this n^2 operation beneficial?
+               // it would be better to sort the potential indices as opposed to choosing a cutoff
+               // since large matrices will have a problem having any that meet the "minimalConsideration"
+               // sorting would then remove a constant (which is always a good idea).
             return potentialDiagonals.SelectMany(x => x).Distinct().Count() == length;
         }
 
@@ -192,7 +217,7 @@ namespace StarMathLib
         /// <param name="length">The length.</param>
         /// <param name="potentialDiagonals">The potential indices.</param>
         /// <returns>System.Double[].</returns>
-        public static double[] solveGaussSeidel(double[,] A, IList<double> b,
+        public static double[] solveIteratively(double[,] A, IList<double> b,
             IList<double> initialGuess = null, int length = -1, List<int>[] potentialDiagonals = null)
         {
             if (length < 0) length = b.Count;
@@ -200,7 +225,8 @@ namespace StarMathLib
             double[] d;
 
             var x = new double[length];
-            ifInitialGuessIsNull(ref initialGuess, A, b, length);
+            if (initialGuess == null)
+                initialGuess = makeInitialGuess(A, b, length);
             for (var i = 0; i < length; i++)
                 x[i] = initialGuess[i];
 
@@ -221,15 +247,15 @@ namespace StarMathLib
             }
             else
             {
-                C = (double[,]) A.Clone();
+                C = (double[,])A.Clone();
                 d = b.ToArray();
             }
 
             var cNorm1 = norm1(d);
-            var error = norm1(subtract(d, multiply(C, x, length, length), length))/cNorm1;
+            var error = norm1(subtract(d, multiply(C, x, length, length), length)) / cNorm1;
             var success = error <= GaussSeidelMaxError;
             var xWentNaN = false;
-            var iteration = length*length*GaussSeidelMaxIterationFactor;
+            var iteration = length * length * GaussSeidelMaxIterationFactor;
             while (!xWentNaN && !success && iteration-- > 0)
             {
                 for (var i = 0; i < length; i++)
@@ -237,12 +263,12 @@ namespace StarMathLib
                     var adjust = d[i];
                     for (var j = 0; j < length; j++)
                         if (i != j)
-                            adjust -= C[i, j]*x[j];
-                    x[i] = (1 - GaussSeidelRelaxationOmega)*x[i] +
-                           GaussSeidelRelaxationOmega*adjust/C[i, i];
+                            adjust -= C[i, j] * x[j];
+                    x[i] = (1 - GaussSeidelRelaxationOmega) * x[i] +
+                           GaussSeidelRelaxationOmega * adjust / C[i, i];
                 }
                 xWentNaN = x.Any(double.IsNaN);
-                error = norm1(subtract(d, multiply(C, x, length, length), length))/cNorm1;
+                error = norm1(subtract(d, multiply(C, x, length, length), length)) / cNorm1;
                 success = error <= GaussSeidelMaxError;
             }
             if (!success) return null;
@@ -253,19 +279,15 @@ namespace StarMathLib
         /// <summary>
         /// Ifs the initial guess is null.
         /// </summary>
-        /// <param name="initialGuess">The initial guess.</param>
         /// <param name="A">a.</param>
         /// <param name="b">The b.</param>
         /// <param name="length">The length.</param>
-        private static void ifInitialGuessIsNull(ref IList<double> initialGuess, double[,] A, IList<double> b,
-            int length)
+        private static double[] makeInitialGuess(double[,] A, IList<double> b, int length)
         {
-            if (initialGuess == null)
-            {
-                initialGuess = new double[length];
-                var initGuessValue = sum(b)/sum(A);
-                for (var i = 0; i < length; i++) initialGuess[i] = initGuessValue;
-            }
+            var initialGuess = new double[length];
+            var initGuessValue = sum(b) / sum(A);
+            for (var i = 0; i < length; i++) initialGuess[i] = initGuessValue;
+            return initialGuess;
         }
 
         /// <summary>
@@ -284,11 +306,17 @@ namespace StarMathLib
                 for (var j = 0; j < length; j++)
                     if (i != j)
                         rowSum += Math.Abs(A[i, j]);
-                if (Math.Abs(A[i, i]/rowSum) < minimalConsideration)
+                if (Math.Abs(A[i, i] / rowSum) < minimalConsideration)
                     return true;
             }
             return false;
         }
+
+        // what about this:
+        // find a condition number for each column -> divide the smallest by the largest
+        // (and take absolute value). Address columns with lowest values first - especially
+        // the columns that yield zero!
+
 
         /// <summary>
         /// Reorders the matrix for diagonal dominance.
@@ -334,7 +362,7 @@ namespace StarMathLib
                         possibleIndicesForRow = possibleIndicesForRow.OrderBy(r => Math.Abs(A[r, colIndex])).ToList();
                         foreach (var i in possibleIndicesForRow)
                         {
-                            var child = (int[]) candidate.Clone();
+                            var child = (int[])candidate.Clone();
                             child[colIndex] = i;
                             stack.Push(child);
                         }

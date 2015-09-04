@@ -42,7 +42,9 @@
   <ItemGroup>
     <Compile Include="multiply divide.cs" />
     <Compile Include="constants.cs" />
-    <Compile Include="SparseMatrix.cs" />
+    <Compile Include="Sparse Matrix\SparseMatrix multiply.cs" />
+    <Compile Include="Sparse Matrix\SparseMatrix Solve.cs" />
+    <Compile Include="Sparse Matrix\SparseMatrix Main.cs" />
     <Compile Include="svd.cs" />
     <Compile Include="3D transforms.cs" />
     <Compile Include="add subtract.cs" />

@@ -37,7 +37,7 @@ namespace StarMathLib
 
             for (var j = 0; j < length; j++)
             {
-                B[j, j] = 1/A[j, j];
+                B[j, j] = 1 / A[j, j];
                 for (var i = 0; i < j; i++)
                     B[i, j] = A[i, j];
             }
@@ -53,13 +53,13 @@ namespace StarMathLib
                     {
                         v = 0.0;
                         for (var jj = i + 1; jj < j; jj++)
-                            v += B[i, jj]*t[jj];
+                            v += B[i, jj] * t[jj];
                     }
                     else v = 0;
-                    B[i, j] = v + B[i, i]*t[i];
+                    B[i, j] = v + B[i, i] * t[i];
                 }
                 for (var ii = 0; ii < j; ii++)
-                    B[ii, j] = Bjj*B[ii, j];
+                    B[ii, j] = Bjj * B[ii, j];
             }
             return B;
         }
@@ -82,7 +82,7 @@ namespace StarMathLib
 
             for (var j = 0; j < length; j++)
             {
-                B[j, j] = 1/(double) A[j, j];
+                B[j, j] = 1 / (double)A[j, j];
                 for (var i = 0; i < j; i++)
                     B[i, j] = A[i, j];
             }
@@ -98,13 +98,13 @@ namespace StarMathLib
                     {
                         v = 0.0;
                         for (var jj = i + 1; jj < j; jj++)
-                            v += B[i, jj]*t[jj];
+                            v += B[i, jj] * t[jj];
                     }
                     else v = 0;
-                    B[i, j] = v + B[i, i]*t[i];
+                    B[i, j] = v + B[i, i] * t[i];
                 }
                 for (var ii = 0; ii < j; ii++)
-                    B[ii, j] = Bjj*B[ii, j];
+                    B[ii, j] = Bjj * B[ii, j];
             }
             return B;
         }
@@ -121,7 +121,7 @@ namespace StarMathLib
             var length = A.GetLength(0);
             if (length != A.GetLength(1))
                 throw new Exception("Matrix cannnot be inverted. Can only invert sqare matrices.");
-            if (length == 1) return new[,] {{1/A[0, 0]}};
+            if (length == 1) return new[,] { { 1 / A[0, 0] } };
             return inverseWithLUResult(LUDecomposition(A, length), length);
         }
 
@@ -137,7 +137,7 @@ namespace StarMathLib
             var length = A.GetLength(0);
             if (length != A.GetLength(1))
                 throw new Exception("Matrix cannnot be inverted. Can only invert sqare matrices.");
-            if (length == 1) return new[,] {{1/(double) A[0, 0]}};
+            if (length == 1) return new[,] { { 1 / (double)A[0, 0] } };
             return inverseWithLUResult(LUDecomposition(A, length), length);
         }
 
@@ -158,13 +158,13 @@ namespace StarMathLib
 
             for (var i = 0; i < length; i++)
             {
-                B[i, i] = 1.0/B[i, i];
+                B[i, i] = 1.0 / B[i, i];
                 for (var j = i + 1; j < length; j++)
                 {
                     var sum = 0.0;
                     for (var k = i; k < j; k++)
-                        sum -= B[j, k]*B[k, i];
-                    B[j, i] = (sum == 0) ? 0.0 : sum/B[j, j];
+                        sum -= B[j, k] * B[k, i];
+                    B[j, i] = (sum == 0) ? 0.0 : sum / B[j, j];
                 }
             }
 
@@ -177,7 +177,7 @@ namespace StarMathLib
                 {
                     var sum = -B[i, j];
                     for (var k = i + 1; k < j; k++)
-                        sum -= B[k, j]*B[i, k];
+                        sum -= B[k, j] * B[i, k];
                     B[i, j] = sum;
                 }
 
@@ -192,21 +192,21 @@ namespace StarMathLib
                     {
                         var sum = B[i, i];
                         for (var k = i + 1; k < length; k++)
-                            sum += B[i, k]*B[k, i];
+                            sum += B[i, k] * B[k, i];
                         B[i, i] = sum;
                     }
                     else if (j < i)
                     {
                         var sum = 0.0;
                         for (var k = i; k < length; k++)
-                            sum += B[j, k]*B[k, i];
+                            sum += B[j, k] * B[k, i];
                         B[j, i] = sum;
                     }
                     else // then i<j
                     {
                         var sum = B[j, i];
                         for (var k = j + 1; k < length; k++)
-                            sum += B[j, k]*B[k, i];
+                            sum += B[j, k] * B[k, i];
                         B[j, i] = sum;
                     }
                 }
@@ -226,7 +226,8 @@ namespace StarMathLib
         /// <param name="A">The matrix to invert. This matrix is unchanged by this function.</param>
         /// <param name="L">The L matrix is output where the diagonal elements are included and not (necessarily) equal to one.</param>
         /// <param name="U">The U matrix is output where the diagonal elements are all equal to one.</param>
-        /// <exception cref="System.Exception">Matrix cannnot be inverted. Can only invert sqare matrices.</exception>
+        /// <exception cref="Exception">LU Decomposition can only be determined for square matrices.</exception>
+        /// <exception cref="System.Exception">Matrix cannot be inverted. Can only invert sqyare matrices.</exception>
         public static void LUDecomposition(double[,] A, out double[,] L, out double[,] U)
         {
             var length = A.GetLength(0);
@@ -252,9 +253,13 @@ namespace StarMathLib
         /// <param name="length">The length/order/number of rows of matrix, A.</param>
         /// <returns>A matrix of equal size to A that combines the L and U. Here the diagonals belongs to L and the U's diagonal
         /// elements are all 1.</returns>
+        /// <exception cref="Exception">LU Decomposition can only be determined for square matrices.</exception>
         /// <exception cref="System.Exception">LU Decomposition can only be determined for square matrices.</exception>
-        private static double[,] LUDecomposition(double[,] A, int length)
+        private static double[,] LUDecomposition(double[,] A, int length = -1)
         {
+            if (length == -1) length = A.GetLength(0);
+            if (length != A.GetLength(1))
+                throw new Exception("LU Decomposition can only be determined for square matrices.");
             var B = (double[,])A.Clone();
             // normalize row 0
             for (var i = 1; i < length; i++) B[0, i] /= B[0, 0];
@@ -286,6 +291,7 @@ namespace StarMathLib
         /// <param name="A">The matrix to invert. This matrix is unchanged by this function.</param>
         /// <param name="L">The L matrix is output where the diagonal elements are included and not (necessarily) equal to one.</param>
         /// <param name="U">The U matrix is output where the diagonal elements are all equal to one.</param>
+        /// <exception cref="Exception">LU Decomposition can only be determined for square matrices.</exception>
         /// <exception cref="System.Exception">LU Decomposition can only be determined for square matrices.</exception>
         public static void LUDecomposition(int[,] A, out double[,] L, out double[,] U)
         {
@@ -309,11 +315,15 @@ namespace StarMathLib
         /// Returns the LU decomposition of A in a new matrix.
         /// </summary>
         /// <param name="A">The matrix to invert. This matrix is unchanged by this function.</param>
-        /// <param name="length">The length of the number of rows/columns in the square matrix, A.</param>
+        /// <param name="length">The length.</param>
         /// <returns>A matrix of equal size to A that combines the L and U. Here the diagonals belongs to L and the U's diagonal
         /// elements are all 1.</returns>
-        private static double[,] LUDecomposition(int[,] A, int length)
+        /// <exception cref="Exception">LU Decomposition can only be determined for square matrices.</exception>
+        private static double[,] LUDecomposition(int[,] A, int length = -1)
         {
+            if (length == -1) length = A.GetLength(0);
+            if (length != A.GetLength(1))
+                throw new Exception("LU Decomposition can only be determined for square matrices.");
             var B = new double[length, length];
             B[0, 0] = A[0, 0];
             // normalize row 0
@@ -349,35 +359,83 @@ namespace StarMathLib
         #region Cholesky Decomposition
         // this is intended only for symmetric positive definite matrices
         /// <summary>
-        /// Returns the LU decomposition of A in a new matrix.
+        /// Returns the Cholesky decomposition of A in a new matrix.
         /// </summary>
         /// <param name="A">The matrix to invert. This matrix is unchanged by this function.</param>
-        /// <exception cref="System.Exception">Matrix cannnot be inverted. Can only invert sqare matrices.</exception>
+        /// <returns>System.Double[].</returns>
+        /// <exception cref="Exception">
+        /// Cholesky Decomposition can only be determined for square matrices.
+        /// or
+        /// Matrix is not positive definite. Cannot complete Cholesky decomposition.
+        /// </exception>
+        /// <exception cref="System.Exception">Matrix cannot be inverted. Can only invert square matrices.</exception>
         public static double[,] CholeskyDecomposition(double[,] A)
         {
             var length = A.GetLength(0);
             if (length != A.GetLength(1))
-                throw new Exception("LU Decomposition can only be determined for square matrices.");
+                throw new Exception("Cholesky Decomposition can only be determined for square matrices.");
             var L = (double[,])A.Clone();
-            
+
             for (var i = 0; i < length; i++)
             {
                 double sum;
-                for (var j = 0; j <i; j++)
+                for (var j = 0; j < i; j++)
                 {
                     sum = 0.0;
                     for (int k = 0; k < j; k++)
                         sum += L[i, k] * L[j, k];
-                    L[i, j] = (L[i,j] - sum)/L[j,j];
+                    L[i, j] = (L[i, j] - sum) / L[j, j];
                 }
                 sum = 0.0;
                 for (int k = 0; k < i; k++)
                     sum += L[i, k] * L[i, k];
-                L[i, i] = Math.Sqrt(L[i, i] - sum);
+                sum = L[i, i] - sum;
+                if (sum < 0) throw new Exception("Matrix is not positive definite. Cannot complete Cholesky decomposition.");
+                L[i, i] = Math.Sqrt(sum);
+                for (int j = i + 1; j < length; j++)
+                    L[i, j] = 0.0;
             }
             return L;
         }
-        
+        // this is intended only for symmetric positive definite matrices
+        /// <summary>
+        /// Returns the Cholesky decomposition of A in a new matrix.
+        /// </summary>
+        /// <param name="A">The matrix to invert. This matrix is unchanged by this function.</param>
+        /// <returns>System.Double[].</returns>
+        /// <exception cref="Exception">Cholesky Decomposition can only be determined for square matrices.
+        /// or
+        /// Matrix is not positive definite. Cannot complete Cholesky decomposition.</exception>
+        /// <exception cref="System.Exception">Cholesky Decomposition can only be determined for square matrices.
+        /// or
+        /// Matrix is not positive definite. Cannot complete Cholesky decomposition.</exception>
+        public static double[,] CholeskyDecomposition(int[,] A)
+        {
+            var length = A.GetLength(0);
+            if (length != A.GetLength(1))
+                throw new Exception("Cholesky Decomposition can only be determined for square matrices.");
+            var L = new double[length, length];
+
+            for (var i = 0; i < length; i++)
+            {
+                double sum;
+                for (var j = 0; j < i; j++)
+                {
+                    sum = 0.0;
+                    for (int k = 0; k < j; k++)
+                        sum += L[i, k] * L[j, k];
+                    L[i, j] = (A[i, j] - sum) / L[j, j];
+                }
+                sum = 0.0;
+                for (int k = 0; k < i; k++)
+                    sum += L[i, k] * L[i, k];
+                sum = A[i, i] - sum;
+                if (sum < 0) throw new Exception("Matrix is not positive definite. Cannot complete Cholesky decomposition.");
+                L[i, i] = Math.Sqrt(sum);
+            }
+            return L;
+        }
+
         #endregion
 
         #region Transpose
@@ -386,7 +444,8 @@ namespace StarMathLib
         /// Transposes the matrix, A.
         /// </summary>
         /// <param name="A">The matrix to transpose. This matrix is unchanged by this function.</param>
-        /// <returns>The transponse of A.</returns>
+        /// <returns>The transpose of A.</returns>
+        /// <exception cref="Exception">The matrix, A, is null.</exception>
         /// <exception cref="System.Exception">The matrix, A, is null.</exception>
         public static double[,] transpose(this double[,] A)
         {
@@ -405,7 +464,8 @@ namespace StarMathLib
         /// Transposes the matrix, A.
         /// </summary>
         /// <param name="A">The matrix to transpose. This matrix is unchanged by this function.</param>
-        /// <returns>The transponse of A.</returns>
+        /// <returns>The transpose of A.</returns>
+        /// <exception cref="Exception">The matrix, A, is null.</exception>
         /// <exception cref="System.Exception">The matrix, A, is null.</exception>
         public static int[,] transpose(this int[,] A)
         {
@@ -444,14 +504,14 @@ namespace StarMathLib
                 throw new Exception("The determinant is only possible for square matrices.");
             if (length == 0) return 0.0;
             if (length == 1) return A[0, 0];
-            if (length == 2) return (A[0, 0]*A[1, 1]) - (A[0, 1]*A[1, 0]);
+            if (length == 2) return (A[0, 0] * A[1, 1]) - (A[0, 1] * A[1, 0]);
             if (length == 3)
-                return (A[0, 0]*A[1, 1]*A[2, 2])
-                       + (A[0, 1]*A[1, 2]*A[2, 0])
-                       + (A[0, 2]*A[1, 0]*A[2, 1])
-                       - (A[0, 0]*A[1, 2]*A[2, 1])
-                       - (A[0, 1]*A[1, 0]*A[2, 2])
-                       - (A[0, 2]*A[1, 1]*A[2, 0]);
+                return (A[0, 0] * A[1, 1] * A[2, 2])
+                       + (A[0, 1] * A[1, 2] * A[2, 0])
+                       + (A[0, 2] * A[1, 0] * A[2, 1])
+                       - (A[0, 0] * A[1, 2] * A[2, 1])
+                       - (A[0, 1] * A[1, 0] * A[2, 2])
+                       - (A[0, 2] * A[1, 1] * A[2, 0]);
             return determinantBig(A, length);
         }
 
@@ -491,14 +551,14 @@ namespace StarMathLib
                 throw new Exception("The determinant is only possible for square matrices.");
             if (length == 0) return 0;
             if (length == 1) return A[0, 0];
-            if (length == 2) return (A[0, 0]*A[1, 1]) - (A[0, 1]*A[1, 0]);
+            if (length == 2) return (A[0, 0] * A[1, 1]) - (A[0, 1] * A[1, 0]);
             if (length == 3)
-                return (A[0, 0]*A[1, 1]*A[2, 2])
-                       + (A[0, 1]*A[1, 2]*A[2, 0])
-                       + (A[0, 2]*A[1, 0]*A[2, 1])
-                       - (A[0, 0]*A[1, 2]*A[2, 1])
-                       - (A[0, 1]*A[1, 0]*A[2, 2])
-                       - (A[0, 2]*A[1, 1]*A[2, 0]);
+                return (A[0, 0] * A[1, 1] * A[2, 2])
+                       + (A[0, 1] * A[1, 2] * A[2, 0])
+                       + (A[0, 2] * A[1, 0] * A[2, 1])
+                       - (A[0, 0] * A[1, 2] * A[2, 1])
+                       - (A[0, 1] * A[1, 0] * A[2, 2])
+                       - (A[0, 2] * A[1, 1] * A[2, 0]);
             return determinantBig(A, length);
         }
 
@@ -516,7 +576,7 @@ namespace StarMathLib
                 if (double.IsNaN(L[i, i]))
                     return 0;
                 else result *= L[i, i];
-            return (int) result;
+            return (int)result;
         }
 
         #endregion

@@ -13,6 +13,7 @@
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 namespace StarMathLib
 {
@@ -191,6 +192,29 @@ namespace StarMathLib
         }
 
         #endregion
+
+
+        public static SparseMatrix ConvertDenseToSparseMatrix(this double[,] A)
+        {
+            var numRows = A.GetLength(0);
+            var numCols = A.GetLength(1);
+            List<int> rowIndices = new List<int>();
+            List<int> colIndices = new List<int>();
+            List<double> values = new List<double>();
+            for (int i = 0; i < numRows; i++)
+                for (int j = 0; j < numCols; j++)
+                {
+                    if (!A[i, j].IsNegligible())
+                    {
+                        rowIndices.Add(i);
+                        colIndices.Add(j);
+                        values.Add(A[i, j]);
+                    }
+                }
+            Debug.WriteLine(values.Count/(double)(numRows*numCols));
+            return new SparseMatrix(rowIndices, colIndices, values, numRows, numCols);
+        }
+
 
         #region Get/Set/Remove parts of a matrix
 

@@ -16,7 +16,7 @@ namespace TestEXE_for_StarMath
         private static void Main()
         {
             // testStackFunctions();
-             //testLUfunctions();
+            //testLUfunctions();
             //benchMarkMatrixInversion();
             compareSolvers_Inversion_to_GaussSeidel();
             //checkEigen();
@@ -206,14 +206,14 @@ namespace TestEXE_for_StarMath
             var results = new List<List<string>>();
 
             var r = new Random();
-            var fractionDiag = new double[] { .01, .02, .04, .08, 0.1, 0.15 };
-            var matrixSize = new int[] { 10, 20, 30, 40, 50, 60, 70, 80, 90 };
+            var fractionDiag = new[] { .01, .02};//, .04, .08, 0.1, 0.15 };
+            var matrixSize = new[] { 10, 20, 30, 40, 50, 60, 70, 80, 90 };
             for (var i = 0; i < matrixSize.GetLength(0); i++)
             {
                 for (int j = 0; j < fractionDiag.GetLength(0); j++)
                 {
-                    int size =10* matrixSize[i];
-                    const int numTrials = 10;
+                    int size =25* matrixSize[i];
+                    const int numTrials = 1;
                     for (var k = 0; k <= numTrials; k++)
                     {
                         var A = new double[size, size];
@@ -221,21 +221,28 @@ namespace TestEXE_for_StarMath
                         for (var ii = 0; ii < size; ii++)
                         {
                             b[ii] = (200 * r.NextDouble()) - 100.0;
-                            for (var jj = 0; jj < size; jj++)
+                            for (var jj = ii; jj < size; jj++)
                             {
-                             //   if (((double)Math.Abs(ii - jj)) / size < fractionDiag[j])
-                                    A[ii, jj] = (200 * r.NextDouble()) - 100.0;
+                                //var probability = Math.Abs(ii - jj)/(double) (size*.125);
+                                //if (r.NextDouble()>probability)
+                                   if (((double)Math.Abs(ii - jj)) / size < fractionDiag[j])
+                                //if (ii == jj)
+                                //    A[ii, jj] = 200 * r.NextDouble();
+                                //else
+                                    A[ii, jj] = A[jj, ii] = (200 * r.NextDouble()) - 100.0;
                             }
                         }
+                        A = A.multiply(A.transpose());
                         var result = new List<string> { k.ToString(), size.ToString(), fractionDiag[j].ToString() };
 
+                        //watch.Restart();
+                        //var x = StarMath.SolveAnalytically(A, b, true);
+                        //watch.Stop();
+                        //recordResults(result, A, x, b, watch);
+                        var SparseA = A.ConvertDenseToSparseMatrix();
                         watch.Restart();
-                        //var x = StarMath.solve(A, b);
-                        var x = StarMath.SolveAnalytically(A, b);
-                        watch.Stop();
-                        recordResults(result, A, x, b, watch);
-                        watch.Restart();
-                        x = StarMath.solveIteratively(A, b);
+                       var x = SparseA.SolveAnalytically(b, true);
+                       // x = StarMath.SolveAnalytically(A, b,false);
                         watch.Stop();
                         recordResults(result, A, x, b, watch);
                         Console.WriteLine(result.Aggregate((resultString, next) =>

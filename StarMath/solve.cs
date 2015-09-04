@@ -43,7 +43,7 @@ namespace StarMathLib
                 return solveIteratively(A, b, initialGuess, length, potentialDiagonals);
             /****** need code to determine when to switch between *****
              ****** this analytical approach and the SOR approach *****/
-            return SolveAnalytically(A, b, length, AIsSymmeticPositiveDefinite, potentialDiagonals);
+            return SolveAnalytically(A, b, AIsSymmeticPositiveDefinite, potentialDiagonals);
         }
 
         /// <summary>
@@ -106,55 +106,79 @@ namespace StarMathLib
         /// </summary>
         /// <param name="A">a.</param>
         /// <param name="b">The b.</param>
-        /// <param name="length">The length.</param>
+        /// <param name="AIsSymmetricPositiveDefinite">Is A known to by Symmetric and Positive-Definite?</param>
         /// <param name="potentialDiagonals">The potential diagonals.</param>
-        /// <param name="AIsSymmeticPositiveDefinite">Is A known to by Symmetric and Positive-Definite?</param>
         /// <returns>System.Double[].</returns>
-        public static double[] SolveAnalytically(double[,] A, IList<double> b,
-            int length = -1, bool AIsSymmeticPositiveDefinite = false, List<int>[] potentialDiagonals = null)
+        public static double[] SolveAnalytically(double[,] A, IList<double> b, bool AIsSymmetricPositiveDefinite = false, List<int>[] potentialDiagonals = null)
         {
-            if (length < 0) length = b.Count;
-            double[,] C;
-            double[] d;
-            if (needToReorder(A, length, 0.0))
+            var length = b.Count;
+            if (AIsSymmetricPositiveDefinite)
             {
-                if (potentialDiagonals == null &&
-                    !findPotentialDiagonals(A, out potentialDiagonals, length, 0.0))
-                    return null;
-                var order = reorderMatrixForDiagonalDominance(A, length, potentialDiagonals);
-                if (order == null) return null;
-                C = new double[length, length];
-                d = new double[length];
-                for (var i = 0; i < length; i++)
+                var L = CholeskyDecomposition(A);
+                var x = new double[length];
+                // forward substitution
+                for (int i = 0; i < length; i++)
                 {
-                    d[i] = b[order[i]];
-                    SetRow(i, C, GetRow(order[i], A));
+                    var sumFromKnownTerms = 0.0;
+                    for (int j = 0; j < i; j++)
+                        sumFromKnownTerms += L[i, j] * x[j];
+                    x[i] = (b[i] - sumFromKnownTerms) / L[i, i];
                 }
+                // backward substitution
+                for (int i = length - 1; i >= 0; i--)
+                {
+                    var sumFromKnownTerms = 0.0;
+                    for (int j = i + 1; j < length; j++)
+                        sumFromKnownTerms += L[j, i] * x[j];
+                    x[i] -= sumFromKnownTerms;
+                    x[i] /= L[i, i];
+                }
+                return x;
             }
             else
             {
-                C = (double[,])A.Clone();
-                d = b.ToArray();
+                double[,] C;
+                double[] d;
+                if (needToReorder(A, length, 0.0))
+                {
+                    if (potentialDiagonals == null &&
+                        !findPotentialDiagonals(A, out potentialDiagonals, length, 0.0))
+                        return null;
+                    var order = reorderMatrixForDiagonalDominance(A, length, potentialDiagonals);
+                    if (order == null) return null;
+                    C = new double[length, length];
+                    d = new double[length];
+                    for (var i = 0; i < length; i++)
+                    {
+                        d[i] = b[order[i]];
+                        SetRow(i, C, GetRow(order[i], A));
+                    }
+                }
+                else
+                {
+                    C = (double[,])A.Clone();
+                    d = b.ToArray();
+                }
+                var LU = LUDecomposition(C, length);
+                var x = new double[length];
+                // forward substitution
+                for (int i = 0; i < length; i++)
+                {
+                    var sumFromKnownTerms = 0.0;
+                    for (int j = 0; j < i; j++)
+                        sumFromKnownTerms += LU[i, j] * x[j];
+                    x[i] = (d[i] - sumFromKnownTerms) / LU[i, i];
+                }
+                // backward substitution
+                for (int i = length - 1; i >= 0; i--)
+                {
+                    var sumFromKnownTerms = 0.0;
+                    for (int j = i + 1; j < length; j++)
+                        sumFromKnownTerms += LU[i, j] * x[j];
+                    x[i] -= sumFromKnownTerms;
+                }
+                return x;
             }
-            var LU = LUDecomposition(C, length);
-            var x = new double[length];
-            // forward substitution
-            for (int i = 0; i < length; i++)
-            {
-                var sumFromKnownTerms = 0.0;
-                for (int j = 0; j < i; j++)
-                    sumFromKnownTerms += LU[i, j] * x[j];
-                x[i] = (d[i] - sumFromKnownTerms) / LU[i, i];
-            }
-            // backward substitution
-            for (int i = length - 1; i >= 0; i--)
-            {
-                var sumFromKnownTerms = 0.0;
-                for (int j = i + 1; j < length; j++)
-                    sumFromKnownTerms += LU[i, j] * x[j];
-                x[i] -= sumFromKnownTerms;
-            }
-            return x;
         }
 
         #region Gauss-Seidel or Successive Over-Relaxation
@@ -168,7 +192,7 @@ namespace StarMathLib
         /// <param name="initialGuess">The initial guess.</param>
         /// <param name="length">The length.</param>
         /// <returns><c>true</c> if [is gauss seidel appropriate] [the specified a]; otherwise, <c>false</c>.</returns>
-        public static bool isGaussSeidelAppropriate(double[,] A, IList<double> b, out List<int>[] potentialDiagonals,
+        private static bool isGaussSeidelAppropriate(double[,] A, IList<double> b, out List<int>[] potentialDiagonals,
             ref IList<double> initialGuess, int length)
         {
             potentialDiagonals = null;

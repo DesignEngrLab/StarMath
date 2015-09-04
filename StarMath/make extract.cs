@@ -144,12 +144,12 @@ namespace StarMathLib
         /// with a distance of the interval between any pair of numbers.</returns>
         public static double[] makeLinearProgression(double end, double interval, double start = 0.0)
         {
-            var NumOfElements = (int) ((end - start)/interval);
+            var NumOfElements = (int)((end - start) / interval);
 
             var prog = new double[NumOfElements];
 
             for (var i = 0; i < NumOfElements; i++)
-                prog[i] = start + interval*i;
+                prog[i] = start + interval * i;
 
             return prog;
         }
@@ -164,12 +164,12 @@ namespace StarMathLib
         /// with a distance of the interval between any pair of numbers.</returns>
         public static int[] makeLinearProgression(int end, int interval = 1, int start = 0)
         {
-            var NumOfElements = (end - start)/interval;
+            var NumOfElements = (end - start) / interval;
 
             var prog = new int[NumOfElements];
 
             for (var i = 0; i < NumOfElements; i++)
-                prog[i] = start + interval*i;
+                prog[i] = start + interval * i;
 
             return prog;
         }
@@ -185,15 +185,20 @@ namespace StarMathLib
         public static double[] makeLinearProgression(double end, int numElements, double start = 0.0)
         {
             var prog = new double[numElements];
-            var interval = (end - start)/numElements;
+            var interval = (end - start) / numElements;
             for (var i = 0; i < numElements; i++)
-                prog[i] = start + interval*i;
+                prog[i] = start + interval * i;
             return prog;
         }
 
         #endregion
 
 
+        /// <summary>
+        /// Converts the 2D double array to a Sparse matrix.
+        /// </summary>
+        /// <param name="A">a.</param>
+        /// <returns>SparseMatrix.</returns>
         public static SparseMatrix ConvertDenseToSparseMatrix(this double[,] A)
         {
             var numRows = A.GetLength(0);
@@ -211,7 +216,31 @@ namespace StarMathLib
                         values.Add(A[i, j]);
                     }
                 }
-            Debug.WriteLine(values.Count/(double)(numRows*numCols));
+            return new SparseMatrix(rowIndices, colIndices, values, numRows, numCols);
+        }
+        /// <summary>
+        /// Converts the 2D double array to a Sparse matrix.
+        /// </summary>
+        /// <param name="A">a.</param>
+        /// <param name="tolerance">The tolerance.</param>
+        /// <returns>SparseMatrix.</returns>
+        public static SparseMatrix ConvertDenseToSparseMatrix(this double[,] A, double tolerance)
+        {
+            var numRows = A.GetLength(0);
+            var numCols = A.GetLength(1);
+            List<int> rowIndices = new List<int>();
+            List<int> colIndices = new List<int>();
+            List<double> values = new List<double>();
+            for (int i = 0; i < numRows; i++)
+                for (int j = 0; j < numCols; j++)
+                {
+                    if (Math.Abs(A[i, j]) > tolerance)
+                    {
+                        rowIndices.Add(i);
+                        colIndices.Add(j);
+                        values.Add(A[i, j]);
+                    }
+                }
             return new SparseMatrix(rowIndices, colIndices, values, numRows, numCols);
         }
 
@@ -1251,9 +1280,9 @@ namespace StarMathLib
         {
             var numRows = A.GetLength(0);
             var numCols = A.GetLength(1);
-            var B = new double[numRows*numCols];
+            var B = new double[numRows * numCols];
             for (var i = 0; i < numCols; i++)
-                GetColumn(i, A).CopyTo(B, i*numRows);
+                GetColumn(i, A).CopyTo(B, i * numRows);
             return B;
         }
 
@@ -1266,9 +1295,9 @@ namespace StarMathLib
         {
             var numRows = A.GetLength(0);
             var numCols = A.GetLength(1);
-            var B = new int[numRows*numCols];
+            var B = new int[numRows * numCols];
             for (var i = 0; i < numCols; i++)
-                GetColumn(i, A).CopyTo(B, i*numRows);
+                GetColumn(i, A).CopyTo(B, i * numRows);
             return B;
         }
 
@@ -1281,9 +1310,9 @@ namespace StarMathLib
         {
             var numRows = A.GetLength(0);
             var numCols = A.GetLength(1);
-            var B = new double[numRows*numCols];
+            var B = new double[numRows * numCols];
             for (var i = 0; i < numRows; i++)
-                GetRow(i, A).CopyTo(B, i*numCols);
+                GetRow(i, A).CopyTo(B, i * numCols);
             return B;
         }
 
@@ -1296,9 +1325,9 @@ namespace StarMathLib
         {
             var numRows = A.GetLength(0);
             var numCols = A.GetLength(1);
-            var B = new int[numRows*numCols];
+            var B = new int[numRows * numCols];
             for (var i = 0; i < numRows; i++)
-                GetRow(i, A).CopyTo(B, i*numCols);
+                GetRow(i, A).CopyTo(B, i * numCols);
             return B;
         }
 
@@ -1353,7 +1382,7 @@ namespace StarMathLib
             var CarolSeed = StartingCarolSeed;
             for (var i = 0; i < n; i++)
             {
-                var carolNumber = (int) Math.Pow(2, CarolSeed) - 1;
+                var carolNumber = (int)Math.Pow(2, CarolSeed) - 1;
                 carolNumber *= carolNumber;
                 carolNumber -= 2;
                 CarolNumbers[i] = carolNumber;

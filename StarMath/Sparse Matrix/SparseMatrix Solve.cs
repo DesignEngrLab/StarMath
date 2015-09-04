@@ -14,12 +14,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-
-
-/// <summary>
-/// The StarMathLib namespace.
-/// </summary>
 
 namespace StarMathLib
 {
@@ -28,6 +22,17 @@ namespace StarMathLib
     /// </summary>
     public partial class SparseMatrix
     {
+        /// <summary>
+        /// Solves the system of equations where this Sparse Matrix is 'A' in Ax = b.
+        /// The resulting x is returned.
+        /// </summary>
+        /// <param name="b">The b.</param>
+        /// <param name="initialGuess">The initial guess.</param>
+        /// <param name="AIsSymmeticPositiveDefinite">a is symmetic positive definite.</param>
+        /// <returns>System.Double[].</returns>
+        /// <exception cref="Exception">Spare Matrix must be square to solve Ax = b.
+        /// or
+        /// Sparse Matrix must be have the same number of rows as the vector, b.</exception>
         public double[] solve(IList<double> b, IList<double> initialGuess = null,
             Boolean AIsSymmeticPositiveDefinite = false)
         {
@@ -43,6 +48,14 @@ namespace StarMathLib
             return SolveAnalytically(b, AIsSymmeticPositiveDefinite, potentialDiagonals);
         }
 
+        /// <summary>
+        /// Solves the system of equations analytically.
+        /// </summary>
+        /// <param name="b">The b.</param>
+        /// <param name="AIsSymmetricPositiveDefinite">if set to <c>true</c> [a is symmetric positive definite].</param>
+        /// <param name="potentialDiagonals">The potential diagonals.</param>
+        /// <returns>System.Double[].</returns>
+        /// <exception cref="NotImplementedException"></exception>
         public double[] SolveAnalytically(IList<double> b, bool AIsSymmetricPositiveDefinite = false,
             List<int>[] potentialDiagonals = null)
         {
@@ -222,6 +235,14 @@ namespace StarMathLib
             //return findPotentialDiagonals(out potentialDiagonals, length, StarMath.GaussSeidelDiagonalDominanceRatio);
         }
 
+        /// <summary>
+        /// Solves the system of equations iteratively.
+        /// </summary>
+        /// <param name="b">The b.</param>
+        /// <param name="initialGuess">The initial guess.</param>
+        /// <param name="potentialDiagonals">The potential diagonals.</param>
+        /// <returns>System.Double[].</returns>
+        /// <exception cref="NotImplementedException"></exception>
         public double[] solveIteratively(IList<double> b, IList<double> initialGuess = null,
             List<int>[] potentialDiagonals = null)
         {

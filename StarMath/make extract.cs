@@ -25,10 +25,10 @@ namespace StarMathLib
         /// </summary>
         /// <param name="p">The size (number of both rows and columns).</param>
         /// <returns>an empty (all zeros) square matrix (2D double).</returns>
-        /// <exception cref="System.Exception">The size, p, must be a positive integer.</exception>
+        /// <exception cref="System.ArithmeticException">The size, p, must be a positive integer.</exception>
         public static double[,] makeZero(int p)
         {
-            if (p <= 0) throw new Exception("The size, p, must be a positive integer.");
+            if (p <= 0) throw new ArithmeticException("The size, p, must be a positive integer.");
             return new double[p, p];
         }
 
@@ -37,10 +37,10 @@ namespace StarMathLib
         /// </summary>
         /// <param name="p">The size (number of both rows and columns).</param>
         /// <returns>an empty (all zeros) square matrix (2D int).</returns>
-        /// <exception cref="System.Exception">The size, p, must be a positive integer.</exception>
+        /// <exception cref="System.ArithmeticException">The size, p, must be a positive integer.</exception>
         public static int[,] makeZeroInt(int p)
         {
-            if (p <= 0) throw new Exception("The size, p, must be a positive integer.");
+            if (p <= 0) throw new ArithmeticException("The size, p, must be a positive integer.");
             return new int[p, p];
         }
 
@@ -49,10 +49,10 @@ namespace StarMathLib
         /// </summary>
         /// <param name="p">The p.</param>
         /// <returns>System.Double[].</returns>
-        /// <exception cref="System.Exception">The size, p, must be a positive integer.</exception>
+        /// <exception cref="System.ArithmeticException">The size, p, must be a positive integer.</exception>
         public static double[] makeZeroVector(int p)
         {
-            if (p <= 0) throw new Exception("The size, p, must be a positive integer.");
+            if (p <= 0) throw new ArithmeticException("The size, p, must be a positive integer.");
             return new double[p];
         }
 
@@ -61,10 +61,10 @@ namespace StarMathLib
         /// </summary>
         /// <param name="p">The p.</param>
         /// <returns>System.Int32[].</returns>
-        /// <exception cref="System.Exception">The size, p, must be a positive integer.</exception>
+        /// <exception cref="System.ArithmeticException">The size, p, must be a positive integer.</exception>
         public static int[] makeZeroIntVector(int p)
         {
-            if (p <= 0) throw new Exception("The size, p, must be a positive integer.");
+            if (p <= 0) throw new ArithmeticException("The size, p, must be a positive integer.");
             return new int[p];
         }
 
@@ -74,13 +74,13 @@ namespace StarMathLib
         /// <param name="numRows">The number of rows.</param>
         /// <param name="numCols">The number of columns.</param>
         /// <returns>an empty (all zeros) matrix.</returns>
-        /// <exception cref="System.Exception">The number of rows, numRows, must be a positive integer.
+        /// <exception cref="System.ArithmeticException">The number of rows, numRows, must be a positive integer.
         /// or
         /// The number of columns, numCols, must be a positive integer.</exception>
         public static double[,] makeZero(int numRows, int numCols)
         {
-            if (numRows <= 0) throw new Exception("The number of rows, numRows, must be a positive integer.");
-            if (numCols <= 0) throw new Exception("The number of columns, numCols, must be a positive integer.");
+            if (numRows <= 0) throw new ArithmeticException("The number of rows, numRows, must be a positive integer.");
+            if (numCols <= 0) throw new ArithmeticException("The number of columns, numCols, must be a positive integer.");
             return new double[numRows, numCols];
         }
 
@@ -90,13 +90,13 @@ namespace StarMathLib
         /// <param name="numRows">The number of rows.</param>
         /// <param name="numCols">The number of columns.</param>
         /// <returns>an empty (all zeros) matrix.</returns>
-        /// <exception cref="System.Exception">The number of rows, numRows, must be a positive integer.
+        /// <exception cref="System.ArithmeticException">The number of rows, numRows, must be a positive integer.
         /// or
         /// The number of columns, numCols, must be a positive integer.</exception>
         public static int[,] makeZeroInt(int numRows, int numCols)
         {
-            if (numRows <= 0) throw new Exception("The number of rows, numRows, must be a positive integer.");
-            if (numCols <= 0) throw new Exception("The number of columns, numCols, must be a positive integer.");
+            if (numRows <= 0) throw new ArithmeticException("The number of rows, numRows, must be a positive integer.");
+            if (numCols <= 0) throw new ArithmeticException("The number of columns, numCols, must be a positive integer.");
             return new int[numRows, numCols];
         }
 
@@ -105,10 +105,10 @@ namespace StarMathLib
         /// </summary>
         /// <param name="p">The size (number of both rows and columns).</param>
         /// <returns>the identity matrix, I.</returns>
-        /// <exception cref="System.Exception">The size, p, must be a positive integer.</exception>
+        /// <exception cref="System.ArithmeticException">The size, p, must be a positive integer.</exception>
         public static double[,] makeIdentity(int p)
         {
-            if (p <= 0) throw new Exception("The size, p, must be a positive integer.");
+            if (p <= 0) throw new ArithmeticException("The size, p, must be a positive integer.");
             var I = new double[p, p];
             for (var i = 0; i < p; i++)
                 I[i, i] = 1.0;
@@ -120,10 +120,10 @@ namespace StarMathLib
         /// </summary>
         /// <param name="p">The size (number of both rows and columns).</param>
         /// <returns>the identity matrix, I.</returns>
-        /// <exception cref="System.Exception">The size, p, must be a positive integer.</exception>
+        /// <exception cref="System.ArithmeticException">The size, p, must be a positive integer.</exception>
         public static int[,] makeIdentityInt(int p)
         {
-            if (p <= 0) throw new Exception("The size, p, must be a positive integer.");
+            if (p <= 0) throw new ArithmeticException("The size, p, must be a positive integer.");
             var I = new int[p, p];
             for (var i = 0; i < p; i++)
                 I[i, i] = 1;
@@ -277,7 +277,7 @@ namespace StarMathLib
         /// <param name="colIndex">The column index.</param>
         /// <param name="A">The matrix, A.</param>
         /// <returns>A double array that contains the requested column</returns>
-        /// <exception cref="System.Exception">StarMath Size Error: An index value of 
+        /// <exception cref="System.ArithmeticException">StarMath Size Error: An index value of 
         ///                                     + colIndex
         ///                                     +  for getColumn is not in required range from 0 up to (but not including) 
         ///                                     + numRows + .</exception>
@@ -286,7 +286,7 @@ namespace StarMathLib
             var numRows = A.GetLength(0);
             var numCols = A.GetLength(1);
             if ((colIndex < 0) || (colIndex >= numCols))
-                throw new Exception("StarMath Size Error: An index value of "
+                throw new ArithmeticException("StarMath Size Error: An index value of "
                                     + colIndex
                                     + " for getColumn is not in required range from 0 up to (but not including) "
                                     + numRows + ".");
@@ -302,7 +302,7 @@ namespace StarMathLib
         /// <param name="colIndex">The column index.</param>
         /// <param name="A">The matrix, A.</param>
         /// <returns>A double array that contains the requested column</returns>
-        /// <exception cref="System.Exception">StarMath Size Error: An index value of 
+        /// <exception cref="System.ArithmeticException">StarMath Size Error: An index value of 
         ///                                     + colIndex
         ///                                     +  for getColumn is not in required range from 0 up to (but not including) 
         ///                                     + numRows + .</exception>
@@ -311,7 +311,7 @@ namespace StarMathLib
             var numRows = A.GetLength(0);
             var numCols = A.GetLength(1);
             if ((colIndex < 0) || (colIndex >= numCols))
-                throw new Exception("StarMath Size Error: An index value of "
+                throw new ArithmeticException("StarMath Size Error: An index value of "
                                     + colIndex
                                     + " for getColumn is not in required range from 0 up to (but not including) "
                                     + numRows + ".");
@@ -402,7 +402,7 @@ namespace StarMathLib
         /// <param name="rowIndex">The row index.</param>
         /// <param name="A">The matrix, A.</param>
         /// <returns>A double array that contains the requested row</returns>
-        /// <exception cref="System.Exception">StarMath Size Error: An index value of 
+        /// <exception cref="System.ArithmeticException">StarMath Size Error: An index value of 
         ///                                     + rowIndex
         ///                                     +  for getRow is not in required range from 0 up to (but not including) 
         ///                                     + numRows + .</exception>
@@ -411,7 +411,7 @@ namespace StarMathLib
             var numRows = A.GetLength(0);
             var numCols = A.GetLength(1);
             if ((rowIndex < 0) || (rowIndex >= numRows))
-                throw new Exception("StarMath Size Error: An index value of "
+                throw new ArithmeticException("StarMath Size Error: An index value of "
                                     + rowIndex
                                     + " for getRow is not in required range from 0 up to (but not including) "
                                     + numRows + ".");
@@ -427,7 +427,7 @@ namespace StarMathLib
         /// <param name="rowIndex">The row index.</param>
         /// <param name="A">The matrix, A.</param>
         /// <returns>A double array that contains the requested row</returns>
-        /// <exception cref="System.Exception">StarMath Size Error: An index value of 
+        /// <exception cref="System.ArithmeticException">StarMath Size Error: An index value of 
         ///                                     + rowIndex
         ///                                     +  for getRow is not in required range from 0 up to (but not including) 
         ///                                     + numRows + .</exception>
@@ -436,7 +436,7 @@ namespace StarMathLib
             var numRows = A.GetLength(0);
             var numCols = A.GetLength(1);
             if ((rowIndex < 0) || (rowIndex >= numRows))
-                throw new Exception("StarMath Size Error: An index value of "
+                throw new ArithmeticException("StarMath Size Error: An index value of "
                                     + rowIndex
                                     + " for getRow is not in required range from 0 up to (but not including) "
                                     + numRows + ".");
@@ -530,7 +530,7 @@ namespace StarMathLib
         /// <param name="rowIndex">The index of the row, rowIndex.</param>
         /// <param name="A">The matrix, A.</param>
         /// <param name="v">The vector, v.</param>
-        /// <exception cref="System.Exception">StarMath Size Error: An index value of 
+        /// <exception cref="System.ArithmeticException">StarMath Size Error: An index value of 
         ///                                     + rowIndex
         ///                                     +  for getRow is not in required range from 0 up to (but not including) 
         ///                                     + numRows + .</exception>
@@ -539,7 +539,7 @@ namespace StarMathLib
             var numRows = A.GetLength(0);
             var numCols = A.GetLength(1);
             if ((rowIndex < 0) || (rowIndex >= numRows))
-                throw new Exception("StarMath Size Error: An index value of "
+                throw new ArithmeticException("StarMath Size Error: An index value of "
                                     + rowIndex
                                     + " for getRow is not in required range from 0 up to (but not including) "
                                     + numRows + ".");
@@ -553,7 +553,7 @@ namespace StarMathLib
         /// <param name="rowIndex">The index of the row, rowIndex.</param>
         /// <param name="A">The matrix, A.</param>
         /// <param name="v">The vector, v.</param>
-        /// <exception cref="System.Exception">StarMath Size Error: An index value of 
+        /// <exception cref="System.ArithmeticException">StarMath Size Error: An index value of 
         ///                                     + rowIndex
         ///                                     +  for getRow is not in required range from 0 up to (but not including) 
         ///                                     + numRows + .</exception>
@@ -562,7 +562,7 @@ namespace StarMathLib
             var numRows = A.GetLength(0);
             var numCols = A.GetLength(1);
             if ((rowIndex < 0) || (rowIndex >= numRows))
-                throw new Exception("StarMath Size Error: An index value of "
+                throw new ArithmeticException("StarMath Size Error: An index value of "
                                     + rowIndex
                                     + " for getRow is not in required range from 0 up to (but not including) "
                                     + numRows + ".");
@@ -598,7 +598,7 @@ namespace StarMathLib
         /// <param name="colIndex">Index of the col.</param>
         /// <param name="A">The A.</param>
         /// <param name="v">The v.</param>
-        /// <exception cref="System.Exception">StarMath Size Error: An index value of 
+        /// <exception cref="System.ArithmeticException">StarMath Size Error: An index value of 
         ///                                     + colIndex
         ///                                     +  for getColumn is not in required range from 0 up to (but not including) 
         ///                                     + numCols + .</exception>
@@ -607,7 +607,7 @@ namespace StarMathLib
             var numRows = A.GetLength(0);
             var numCols = A.GetLength(1);
             if ((colIndex < 0) || (colIndex >= numCols))
-                throw new Exception("StarMath Size Error: An index value of "
+                throw new ArithmeticException("StarMath Size Error: An index value of "
                                     + colIndex
                                     + " for getColumn is not in required range from 0 up to (but not including) "
                                     + numCols + ".");
@@ -621,7 +621,7 @@ namespace StarMathLib
         /// <param name="colIndex">Index of the col.</param>
         /// <param name="A">The A.</param>
         /// <param name="v">The v.</param>
-        /// <exception cref="System.Exception">StarMath Size Error: An index value of 
+        /// <exception cref="System.ArithmeticException">StarMath Size Error: An index value of 
         ///                                     + colIndex
         ///                                     +  for getColumn is not in required range from 0 up to (but not including) 
         ///                                     + numCols + .</exception>
@@ -630,7 +630,7 @@ namespace StarMathLib
             var numRows = A.GetLength(0);
             var numCols = A.GetLength(1);
             if ((colIndex < 0) || (colIndex >= numCols))
-                throw new Exception("StarMath Size Error: An index value of "
+                throw new ArithmeticException("StarMath Size Error: An index value of "
                                     + colIndex
                                     + " for getColumn is not in required range from 0 up to (but not including) "
                                     + numCols + ".");
@@ -648,7 +648,7 @@ namespace StarMathLib
         /// <param name="A">The matrix, A.</param>
         /// <param name="rowIndex">The index of the row, rowIndex.</param>
         /// <returns>System.Double[].</returns>
-        /// <exception cref="System.Exception">StarMath Size Error: An index value of 
+        /// <exception cref="System.ArithmeticException">StarMath Size Error: An index value of 
         ///                                     + rowIndex
         ///                                     +  for RemoveRow is not in required range from 0 up to (but not including) 
         ///                                     + numRows + .</exception>
@@ -657,7 +657,7 @@ namespace StarMathLib
             var numRows = A.GetLength(0);
             var numCols = A.GetLength(1);
             if ((rowIndex < 0) || (rowIndex >= numRows))
-                throw new Exception("StarMath Size Error: An index value of "
+                throw new ArithmeticException("StarMath Size Error: An index value of "
                                     + rowIndex
                                     + " for RemoveRow is not in required range from 0 up to (but not including) "
                                     + numRows + ".");
@@ -675,7 +675,7 @@ namespace StarMathLib
         /// <param name="A">The matrix, A.</param>
         /// <param name="rowIndex">The index of the row, rowIndex.</param>
         /// <returns>System.Int32[].</returns>
-        /// <exception cref="System.Exception">StarMath Size Error: An index value of 
+        /// <exception cref="System.ArithmeticException">StarMath Size Error: An index value of 
         ///                                     + rowIndex
         ///                                     +  for RemoveRow is not in required range from 0 up to (but not including) 
         ///                                     + numRows + .</exception>
@@ -684,7 +684,7 @@ namespace StarMathLib
             var numRows = A.GetLength(0);
             var numCols = A.GetLength(1);
             if ((rowIndex < 0) || (rowIndex >= numRows))
-                throw new Exception("StarMath Size Error: An index value of "
+                throw new ArithmeticException("StarMath Size Error: An index value of "
                                     + rowIndex
                                     + " for RemoveRow is not in required range from 0 up to (but not including) "
                                     + numRows + ".");
@@ -703,7 +703,7 @@ namespace StarMathLib
         /// <param name="A">The matrix, A.</param>
         /// <param name="colIndex">The index of the column, rowIndex.</param>
         /// <returns>System.Double[].</returns>
-        /// <exception cref="System.Exception">StarMath Size Error: An index value of 
+        /// <exception cref="System.ArithmeticException">StarMath Size Error: An index value of 
         ///                                     + colIndex
         ///                                     +  for RemoveColumn is not in required range from 0 up to (but not including) 
         ///                                     + numCols + .</exception>
@@ -712,7 +712,7 @@ namespace StarMathLib
             var numRows = A.GetLength(0);
             var numCols = A.GetLength(1);
             if ((colIndex < 0) || (colIndex >= numRows))
-                throw new Exception("StarMath Size Error: An index value of "
+                throw new ArithmeticException("StarMath Size Error: An index value of "
                                     + colIndex
                                     + " for RemoveColumn is not in required range from 0 up to (but not including) "
                                     + numCols + ".");
@@ -730,7 +730,7 @@ namespace StarMathLib
         /// <param name="A">The matrix, A.</param>
         /// <param name="colIndex">The index of the column, rowIndex.</param>
         /// <returns>System.Int32[].</returns>
-        /// <exception cref="System.Exception">StarMath Size Error: An index value of 
+        /// <exception cref="System.ArithmeticException">StarMath Size Error: An index value of 
         ///                                     + colIndex
         ///                                     +  for RemoveColumn is not in required range from 0 up to (but not including) 
         ///                                     + numCols + .</exception>
@@ -739,7 +739,7 @@ namespace StarMathLib
             var numRows = A.GetLength(0);
             var numCols = A.GetLength(1);
             if ((colIndex < 0) || (colIndex >= numRows))
-                throw new Exception("StarMath Size Error: An index value of "
+                throw new ArithmeticException("StarMath Size Error: An index value of "
                                     + colIndex
                                     + " for RemoveColumn is not in required range from 0 up to (but not including) "
                                     + numCols + ".");
@@ -757,7 +757,7 @@ namespace StarMathLib
         /// <param name="A">The matrix, A.</param>
         /// <param name="rowIndices">The row indices.</param>
         /// <returns>System.Double[].</returns>
-        /// <exception cref="System.Exception">
+        /// <exception cref="System.ArithmeticException">
         /// StarMath Size Error: A row index, with value  + rowIndices.Max() +
         ///                                     , in the provided rowIndices for RemoveRows exceeds the number of rows (number of rows =  +
         ///                                     numRows +
@@ -773,12 +773,12 @@ namespace StarMathLib
             var numRows = A.GetLength(0);
             var numCols = A.GetLength(1);
             if (rowIndices.Max() >= numRows)
-                throw new Exception("StarMath Size Error: A row index, with value " + rowIndices.Max() +
+                throw new ArithmeticException("StarMath Size Error: A row index, with value " + rowIndices.Max() +
                                     ", in the provided rowIndices for RemoveRows exceeds the number of rows (number of rows = " +
                                     numRows +
                                     ") in the provided matrix.");
             if (rowIndices.Count >= numRows)
-                throw new Exception("StarMath Size Error: An there are more rows to remove (rowIndices.Count = " +
+                throw new ArithmeticException("StarMath Size Error: An there are more rows to remove (rowIndices.Count = " +
                                     rowIndices.Count +
                                     ") than there are rows in the matrix provided to RemoveRows (number of rows = " +
                                     numRows + ").");
@@ -796,7 +796,7 @@ namespace StarMathLib
         /// <param name="A">The matrix, A.</param>
         /// <param name="rowIndices">The row indices.</param>
         /// <returns>System.Int32[].</returns>
-        /// <exception cref="System.Exception">
+        /// <exception cref="System.ArithmeticException">
         /// StarMath Size Error: A row index, with value  + rowIndices.Max() +
         ///                                     , in the provided rowIndices for RemoveRows exceeds the number of rows (number of rows =  +
         ///                                     numRows +
@@ -807,7 +807,7 @@ namespace StarMathLib
         ///                                     ) than there are rows in the matrix provided to RemoveRows (number of rows =  +
         ///                                     numRows + ).
         /// </exception>
-        /// <exception cref="Exception">StarMath Size Error: A row index, with value  + rowIndices.Max() +
+        /// <exception cref="ArithmeticException">StarMath Size Error: A row index, with value  + rowIndices.Max() +
         /// , in the provided rowIndices for RemoveRows exceeds the number of rows (number of rows =  + numRows +
         /// ) in the provided matrix.
         /// or
@@ -818,12 +818,12 @@ namespace StarMathLib
             var numRows = A.GetLength(0);
             var numCols = A.GetLength(1);
             if (rowIndices.Max() >= numRows)
-                throw new Exception("StarMath Size Error: A row index, with value " + rowIndices.Max() +
+                throw new ArithmeticException("StarMath Size Error: A row index, with value " + rowIndices.Max() +
                                     ", in the provided rowIndices for RemoveRows exceeds the number of rows (number of rows = " +
                                     numRows +
                                     ") in the provided matrix.");
             if (rowIndices.Count >= numRows)
-                throw new Exception("StarMath Size Error: An there are more rows to remove (rowIndices.Count = " +
+                throw new ArithmeticException("StarMath Size Error: An there are more rows to remove (rowIndices.Count = " +
                                     rowIndices.Count +
                                     ") than there are rows in the matrix provided to RemoveRows (number of rows = " +
                                     numRows + ").");
@@ -842,7 +842,7 @@ namespace StarMathLib
         /// <param name="A">The matrix, A.</param>
         /// <param name="colIndices">The col indices.</param>
         /// <returns>System.Double[].</returns>
-        /// <exception cref="System.Exception">
+        /// <exception cref="System.ArithmeticException">
         /// StarMath Size Error: A row index, with value  + colIndices.Max() +
         ///                                     , in the provided rowIndices for RemoveColumns exceeds the number of rows (number of rows =  +
         ///                                     numCols +
@@ -853,7 +853,7 @@ namespace StarMathLib
         ///                                     ) than there are rows in the matrix provided to RemoveColumns (number of rows =  +
         ///                                     numCols + ).
         /// </exception>
-        /// <exception cref="Exception">StarMath Size Error: A row index, with value  + colIndices.Max() +
+        /// <exception cref="ArithmeticException">StarMath Size Error: A row index, with value  + colIndices.Max() +
         /// , in the provided rowIndices for RemoveColumns exceeds the number of rows (number of rows =  + numCols +
         /// ) in the provided matrix.
         /// or
@@ -865,12 +865,12 @@ namespace StarMathLib
             var numRows = A.GetLength(0);
             var numCols = A.GetLength(1);
             if (colIndices.Max() >= numCols)
-                throw new Exception("StarMath Size Error: A row index, with value " + colIndices.Max() +
+                throw new ArithmeticException("StarMath Size Error: A row index, with value " + colIndices.Max() +
                                     ", in the provided rowIndices for RemoveColumns exceeds the number of rows (number of rows = " +
                                     numCols +
                                     ") in the provided matrix.");
             if (colIndices.Count >= numCols)
-                throw new Exception("StarMath Size Error: An there are more rows to remove (rowIndices.Count = "
+                throw new ArithmeticException("StarMath Size Error: An there are more rows to remove (rowIndices.Count = "
                                     + colIndices.Count +
                                     ") than there are rows in the matrix provided to RemoveColumns (number of rows = " +
                                     numCols + ").");
@@ -888,7 +888,7 @@ namespace StarMathLib
         /// <param name="A">The matrix, A.</param>
         /// <param name="colIndices">The col indices.</param>
         /// <returns>System.Int32[].</returns>
-        /// <exception cref="System.Exception">
+        /// <exception cref="System.ArithmeticException">
         /// StarMath Size Error: A row index, with value  + colIndices.Max() +
         ///                                     , in the provided rowIndices for RemoveColumns exceeds the number of rows (number of rows =  +
         ///                                     numCols +
@@ -899,7 +899,7 @@ namespace StarMathLib
         ///                                     ) than there are rows in the matrix provided to RemoveColumns (number of rows =  +
         ///                                     numCols + ).
         /// </exception>
-        /// <exception cref="Exception">StarMath Size Error: A row index, with value  + colIndices.Max() +
+        /// <exception cref="ArithmeticException">StarMath Size Error: A row index, with value  + colIndices.Max() +
         /// , in the provided rowIndices for RemoveColumns exceeds the number of rows (number of rows =  + numCols +
         /// ) in the provided matrix.
         /// or
@@ -911,12 +911,12 @@ namespace StarMathLib
             var numRows = A.GetLength(0);
             var numCols = A.GetLength(1);
             if (colIndices.Max() >= numCols)
-                throw new Exception("StarMath Size Error: A row index, with value " + colIndices.Max() +
+                throw new ArithmeticException("StarMath Size Error: A row index, with value " + colIndices.Max() +
                                     ", in the provided rowIndices for RemoveColumns exceeds the number of rows (number of rows = " +
                                     numCols +
                                     ") in the provided matrix.");
             if (colIndices.Count >= numCols)
-                throw new Exception("StarMath Size Error: An there are more rows to remove (rowIndices.Count = "
+                throw new ArithmeticException("StarMath Size Error: An there are more rows to remove (rowIndices.Count = "
                                     + colIndices.Count +
                                     ") than there are rows in the matrix provided to RemoveColumns (number of rows = " +
                                     numCols + ").");
@@ -964,11 +964,11 @@ namespace StarMathLib
         /// <param name="A">The vector, A.</param>
         /// <param name="index">The index to remove.</param>
         /// <returns>System.Double[].</returns>
-        /// <exception cref="System.Exception">StarMath Size Error: An index value of 
+        /// <exception cref="System.ArithmeticException">StarMath Size Error: An index value of 
         ///                                     + index
         ///                                     +  for RemoveVectorCell is not in required range from 0 up to (but not including) 
         ///                                     + length + .</exception>
-        /// <exception cref="Exception">StarMath Size Error: An index value of
+        /// <exception cref="ArithmeticException">StarMath Size Error: An index value of
         /// + index
         /// +  for RemoveVectorCell is not in required range from 0 up to (but not including)
         /// + length + .</exception>
@@ -976,7 +976,7 @@ namespace StarMathLib
         {
             var length = A.Count;
             if ((index < 0) || (index >= length))
-                throw new Exception("StarMath Size Error: An index value of "
+                throw new ArithmeticException("StarMath Size Error: An index value of "
                                     + index
                                     + " for RemoveVectorCell is not in required range from 0 up to (but not including) "
                                     + length + ".");
@@ -994,11 +994,11 @@ namespace StarMathLib
         /// <param name="A">The vector, A.</param>
         /// <param name="index">The index to remove.</param>
         /// <returns>System.Int32[].</returns>
-        /// <exception cref="System.Exception">StarMath Size Error: An index value of 
+        /// <exception cref="System.ArithmeticException">StarMath Size Error: An index value of 
         ///                                     + index
         ///                                     +  for RemoveVectorCell is not in required range from 0 up to (but not including) 
         ///                                     + length + .</exception>
-        /// <exception cref="Exception">StarMath Size Error: An index value of
+        /// <exception cref="ArithmeticException">StarMath Size Error: An index value of
         /// + index
         /// +  for RemoveVectorCell is not in required range from 0 up to (but not including)
         /// + length + .</exception>
@@ -1006,7 +1006,7 @@ namespace StarMathLib
         {
             var length = A.Count;
             if ((index < 0) || (index >= length))
-                throw new Exception("StarMath Size Error: An index value of "
+                throw new ArithmeticException("StarMath Size Error: An index value of "
                                     + index
                                     + " for RemoveVectorCell is not in required range from 0 up to (but not including) "
                                     + length + ".");
@@ -1025,7 +1025,7 @@ namespace StarMathLib
         /// <param name="A">The vector, A.</param>
         /// <param name="indices">The indices.</param>
         /// <returns>System.Double[].</returns>
-        /// <exception cref="System.Exception">
+        /// <exception cref="System.ArithmeticException">
         /// StarMath Size Error: A cell index, with value  + indices.Max() +
         ///                                     , in the provided indices for RemoveVectorCells exceeds the number of entries (size =  +
         ///                                     length +
@@ -1035,7 +1035,7 @@ namespace StarMathLib
         ///                                     ) than there are cells in the vector provided to RemoveVectorCells (Count =  +
         ///                                     length + ).
         /// </exception>
-        /// <exception cref="Exception">StarMath Size Error: An index value of
+        /// <exception cref="ArithmeticException">StarMath Size Error: An index value of
         /// + index
         /// +  for RemoveVectorCell is not in required range from 0 up to (but not including)
         /// + length + .</exception>
@@ -1044,12 +1044,12 @@ namespace StarMathLib
             var length = A.Count;
             var numToRemove = indices.Count;
             if (indices.Max() >= length)
-                throw new Exception("StarMath Size Error: A cell index, with value " + indices.Max() +
+                throw new ArithmeticException("StarMath Size Error: A cell index, with value " + indices.Max() +
                                     ", in the provided indices for RemoveVectorCells exceeds the number of entries (size = " +
                                     length +
                                     ") in the provided vector.");
             if (indices.Count >= length)
-                throw new Exception("StarMath Size Error: There are more cells to remove (Count = " + indices.Count +
+                throw new ArithmeticException("StarMath Size Error: There are more cells to remove (Count = " + indices.Count +
                                     ") than there are cells in the vector provided to RemoveVectorCells (Count = " +
                                     length + ").");
             var B = new double[length - numToRemove];
@@ -1066,7 +1066,7 @@ namespace StarMathLib
         /// <param name="A">The vector, A.</param>
         /// <param name="indices">The indices.</param>
         /// <returns>System.Double[].</returns>
-        /// <exception cref="System.Exception">
+        /// <exception cref="System.ArithmeticException">
         /// StarMath Size Error: A cell index, with value  + indices.Max() +
         ///                                     , in the provided indices for RemoveVectorCells exceeds the number of entries (size =  +
         ///                                     length +
@@ -1076,7 +1076,7 @@ namespace StarMathLib
         ///                                     ) than there are cells in the vector provided to RemoveVectorCells (Count =  +
         ///                                     length + ).
         /// </exception>
-        /// <exception cref="Exception">StarMath Size Error: An index value of
+        /// <exception cref="ArithmeticException">StarMath Size Error: An index value of
         /// + index
         /// +  for RemoveVectorCell is not in required range from 0 up to (but not including)
         /// + length + .</exception>
@@ -1085,12 +1085,12 @@ namespace StarMathLib
             var length = A.Count;
             var numToRemove = indices.Count;
             if (indices.Max() >= length)
-                throw new Exception("StarMath Size Error: A cell index, with value " + indices.Max() +
+                throw new ArithmeticException("StarMath Size Error: A cell index, with value " + indices.Max() +
                                     ", in the provided indices for RemoveVectorCells exceeds the number of entries (size = " +
                                     length +
                                     ") in the provided vector.");
             if (indices.Count >= length)
-                throw new Exception("StarMath Size Error: There are more cells to remove (Count = " + indices.Count +
+                throw new ArithmeticException("StarMath Size Error: There are more cells to remove (Count = " + indices.Count +
                                     ") than there are cells in the vector provided to RemoveVectorCells (Count = " +
                                     length + ").");
             var B = new int[length - numToRemove];
@@ -1111,11 +1111,11 @@ namespace StarMathLib
         /// <param name="Matrix1">The Matrix that comes on the left.</param>
         /// <param name="Matrix2">Matrix that is attached to the right</param>
         /// <returns>A 2D double array that has Matrix1 and Matrix2 side by side</returns>
-        /// <exception cref="System.Exception">StarMath Size Error: Row dimensions do not match for matrix1 and matrix2</exception>
+        /// <exception cref="System.ArithmeticException">StarMath Size Error: Row dimensions do not match for matrix1 and matrix2</exception>
         public static double[,] JoinCol(this double[,] Matrix1, double[,] Matrix2)
         {
             if (Matrix1.GetLength(0) != Matrix2.GetLength(0))
-                throw new Exception("StarMath Size Error: Row dimensions do not match for matrix1 and matrix2");
+                throw new ArithmeticException("StarMath Size Error: Row dimensions do not match for matrix1 and matrix2");
             var NumRows = Matrix1.GetLength(0);
             var NumCols = Matrix1.GetLength(1) + Matrix2.GetLength(1);
             var Mat1Cols = Matrix1.GetLength(1);
@@ -1141,11 +1141,11 @@ namespace StarMathLib
         /// <param name="Matrix1">The Matrix that comes on the top.</param>
         /// <param name="Matrix2">Matrix that is attached to the bottom</param>
         /// <returns>A 2D double array that has Matrix1 and Matrix2 one below the other</returns>
-        /// <exception cref="System.Exception">StarMath Size Error: Column dimensions do not match for matrix1 and matrix2</exception>
+        /// <exception cref="System.ArithmeticException">StarMath Size Error: Column dimensions do not match for matrix1 and matrix2</exception>
         public static double[,] JoinRow(this double[,] Matrix1, double[,] Matrix2)
         {
             if (Matrix1.GetLength(1) != Matrix2.GetLength(1))
-                throw new Exception("StarMath Size Error: Column dimensions do not match for matrix1 and matrix2");
+                throw new ArithmeticException("StarMath Size Error: Column dimensions do not match for matrix1 and matrix2");
             var numRows = Matrix1.GetLength(0) + Matrix2.GetLength(0);
             var numCols = Matrix1.GetLength(1);
             var mat1Rows = Matrix1.GetLength(0);
@@ -1169,11 +1169,11 @@ namespace StarMathLib
         /// <param name="Matrix1">The Matrix that comes on the left.</param>
         /// <param name="Matrix2">Matrix that is attached to the right</param>
         /// <returns>A 2D int array that has Matrix1 and Matrix2 side by side</returns>
-        /// <exception cref="System.Exception">StarMath Size Error: Row dimensions do not match for matrix1 and matrix2</exception>
+        /// <exception cref="System.ArithmeticException">StarMath Size Error: Row dimensions do not match for matrix1 and matrix2</exception>
         public static int[,] JoinCol(this int[,] Matrix1, int[,] Matrix2)
         {
             if (Matrix1.GetLength(0) != Matrix2.GetLength(0))
-                throw new Exception("StarMath Size Error: Row dimensions do not match for matrix1 and matrix2");
+                throw new ArithmeticException("StarMath Size Error: Row dimensions do not match for matrix1 and matrix2");
             var NumRows = Matrix1.GetLength(0);
             var NumCols = Matrix1.GetLength(1) + Matrix2.GetLength(1);
             var Mat1Cols = Matrix1.GetLength(1);
@@ -1199,11 +1199,11 @@ namespace StarMathLib
         /// <param name="Matrix1">The Matrix that comes on the top.</param>
         /// <param name="Matrix2">Matrix that is attached to the bottom</param>
         /// <returns>A 2D int array that has Matrix1 and Matrix2 one below the other</returns>
-        /// <exception cref="System.Exception">StarMath Size Error: Column dimensions do not match for matrix1 and matrix2</exception>
+        /// <exception cref="System.ArithmeticException">StarMath Size Error: Column dimensions do not match for matrix1 and matrix2</exception>
         public static int[,] JoinRow(this int[,] Matrix1, int[,] Matrix2)
         {
             if (Matrix1.GetLength(1) != Matrix2.GetLength(1))
-                throw new Exception("StarMath Size Error: Column dimensions do not match for matrix1 and matrix2");
+                throw new ArithmeticException("StarMath Size Error: Column dimensions do not match for matrix1 and matrix2");
             var numRows = Matrix1.GetLength(0) + Matrix2.GetLength(0);
             var numCols = Matrix1.GetLength(1);
             var mat1Rows = Matrix1.GetLength(0);

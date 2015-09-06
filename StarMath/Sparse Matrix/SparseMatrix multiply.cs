@@ -116,12 +116,12 @@ namespace StarMathLib
         /// </summary>
         /// <param name="x">The x.</param>
         /// <returns>System.Double[].</returns>
-        /// <exception cref="Exception">Matrix number of columns does not match length of vector.</exception>
+        /// <exception cref="ArithmeticException">Matrix number of columns does not match length of vector.</exception>
         public double[] multiply(IList<double> x)
         {
             var length = x.Count;
             if (length!= NumCols)
-                throw new Exception("Matrix number of columns does not match length of vector.");
+                throw new ArithmeticException("Matrix number of columns does not match length of vector.");
             var b = new double[length];
             for (int i = 0; i < NumRows; i++)
             {

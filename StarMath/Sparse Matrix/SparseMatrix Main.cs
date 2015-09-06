@@ -23,7 +23,8 @@ namespace StarMathLib
     /// </summary>
     public partial class SparseMatrix
     {
-        private readonly SparseCell[] cellsRowbyRow;
+        #region Fields and Properties
+        private readonly List<SparseCell> cellsRowbyRow;
 
         /// <summary>
         /// The first non-zero cell in each row.
@@ -57,6 +58,7 @@ namespace StarMathLib
         /// The number rows
         /// </summary>
         public int NumRows { get; private set; }
+        #endregion
 
         #region Constructors
 
@@ -68,9 +70,9 @@ namespace StarMathLib
         /// <param name="values">The values.</param>
         /// <param name="numRows">The number rows.</param>
         /// <param name="numCols">The number cols.</param>
-        public SparseMatrix(IList<int> rowIndices, IList<int> colIndices, IList<double> values, int numRows, int numCols) : this(numRows, numCols, values.Count)
+        public SparseMatrix(IList<int> rowIndices, IList<int> colIndices, IList<double> values, int numRows, int numCols) : this(numRows, numCols)
         {
-            IOrderedEnumerable<int> indices = Enumerable.Range(0, NumNonZero).OrderBy(i => rowIndices[i] * numCols + colIndices[i]);
+            var indices = Enumerable.Range(0, values.Count).OrderBy(i => rowIndices[i] * numCols + colIndices[i]).ToList();
             var rowByRowIndices = indices.Select(i => rowIndices[i] * numCols + colIndices[i]).ToArray();
             var rowByRowValues = indices.Select(i => values[i]).ToArray();
             FillInSparseMatrix(this, rowByRowIndices, rowByRowValues);
@@ -82,7 +84,7 @@ namespace StarMathLib
         /// <param name="cellDictionary">The cell dictionary with keys as [i,j] pairs.</param>
         /// <param name="numRows">The number rows.</param>
         /// <param name="numCols">The number cols.</param>
-        public SparseMatrix(Dictionary<int[], double> cellDictionary, int numRows, int numCols) : this(numRows, numCols, cellDictionary.Count)
+        public SparseMatrix(Dictionary<int[], double> cellDictionary, int numRows, int numCols) : this(numRows, numCols)
         {
             var orderedCellDictionary = cellDictionary.OrderBy(x => x.Key[0] * numCols + x.Key[1]);
             var rowByRowIndices = orderedCellDictionary.Select(x => x.Key[0] * numCols + x.Key[1]).ToArray();
@@ -96,7 +98,7 @@ namespace StarMathLib
         /// <param name="cellDictionary">The cell dictionary with keys as single row-by-row indices.</param>
         /// <param name="numRows">The number rows.</param>
         /// <param name="numCols">The number cols.</param>
-        public SparseMatrix(Dictionary<int, double> cellDictionary, int numRows, int numCols) : this(numRows, numCols, cellDictionary.Count)
+        public SparseMatrix(Dictionary<int, double> cellDictionary, int numRows, int numCols) : this(numRows, numCols)
         {
             var orderedCellDictionary = cellDictionary.OrderBy(x => x.Key);
             var rowByRowIndices = orderedCellDictionary.Select(x => x.Key).ToArray();
@@ -109,20 +111,9 @@ namespace StarMathLib
         /// </summary>
         /// <param name="numRows">The number rows.</param>
         /// <param name="numCols">The number cols.</param>
-        /// <param name="numValues">The number values.</param>
-        public SparseMatrix(int numRows, int numCols, int numValues) : this(numRows, numCols)
-        {
-            NumNonZero = numValues;
-            cellsRowbyRow = new SparseCell[NumNonZero];
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SparseMatrix"/> class.
-        /// </summary>
-        /// <param name="numRows">The number rows.</param>
-        /// <param name="numCols">The number cols.</param>
         public SparseMatrix(int numRows, int numCols)
         {
+            cellsRowbyRow = new List<SparseCell>();
             NumRows = numRows;
             NumCols = numCols;
             RowFirsts = new SparseCell[numRows];
@@ -142,7 +133,7 @@ namespace StarMathLib
             var rowLowerLimit = 0;
             var rowUpperLimit = newMatrix.NumCols;
             var newRow = true;
-            for (var i = 0; i < newMatrix.NumNonZero; i++)
+            for (var i = 0; i < rowByRowValues.Count; i++)
             {
                 var index = rowByRowIndices[i];
                 var value = rowByRowValues[i];
@@ -160,7 +151,7 @@ namespace StarMathLib
                 }
                 var colI = index - rowLowerLimit;
                 var cell = new SparseCell(rowI, colI, value);
-                newMatrix.cellsRowbyRow[i] = cell;
+                newMatrix.cellsRowbyRow.Add(cell);
                 if (newRow)
                 {
                     newMatrix.RowFirsts[rowI] = cell;
@@ -185,10 +176,11 @@ namespace StarMathLib
                     newMatrix.ColLasts[colI] = cell;
                 }
             }
-
+            newMatrix.NumNonZero = newMatrix.cellsRowbyRow.Count;
         }
         #endregion
 
+        #region Finding Cell(s) Methods
         /// <summary>
         /// Gets or sets the <see cref="System.Double" /> with the specified row i.
         /// </summary>
@@ -239,7 +231,7 @@ namespace StarMathLib
         /// <param name="rowIndex">Index of the row.</param>
         /// <param name="startCell">The start cell.</param>
         /// <returns>SparseCell.</returns>
-        /// <exception cref="Exception">No non-zero sparse matrix cell found at the location.</exception>
+        /// <exception cref="ArithmeticException">No non-zero sparse matrix cell found at the location.</exception>
         private SparseCell SearchDownToCell(int rowIndex, SparseCell startCell)
         {
             do
@@ -250,10 +242,11 @@ namespace StarMathLib
                 startCell = startCell.Down;
             } while (true);
         }
+        #endregion
 
         private SparseMatrix Copy()
         {
-            var copy = new SparseMatrix(NumRows, NumCols, NumNonZero);
+            var copy = new SparseMatrix(NumRows, NumCols);
             FillInSparseMatrix(copy,
                 cellsRowbyRow.Select(x => x.RowIndex * NumCols + x.ColIndex).ToArray(),
                 cellsRowbyRow.Select(c => c.Value).ToArray());
@@ -262,7 +255,6 @@ namespace StarMathLib
 
         private void RemoveCell(SparseCell cell)
         {
-            NumNonZero--;
             if (cell.Left == null)
                 RowFirsts[cell.RowIndex] = cell.Right;
             else cell.Left.Right = cell.Right;
@@ -276,6 +268,53 @@ namespace StarMathLib
             if (cell.Down == null)
                 ColLasts[cell.ColIndex] = cell.Up;
             else cell.Down.Up = cell.Up;
+            int removalIndex = FindInsertionIndex(cell);
+            cellsRowbyRow.RemoveAt(removalIndex);
+            NumNonZero--;
+        }
+
+        /// <summary>
+        /// Finds the index of the insertion within the cellsRowbyRow. Of course, there are built-in functions to do this,
+        /// but the idea with writing our own is that we can make a faster search given information that is known about
+        /// this .
+        /// </summary>
+        /// <param name="cell">The cell.</param>
+        /// <returns>System.Int32.</returns>
+        private int FindInsertionIndex(SparseCell cell)
+        {
+            var averageCellPerRow = NumNonZero / NumRows;
+            var index = Math.Min(averageCellPerRow * cell.RowIndex + cell.ColIndex, NumNonZero - 1);
+            int step = averageCellPerRow;
+            do
+            {
+                if (cell.RowIndex < cellsRowbyRow[index].RowIndex
+                    || (cell.RowIndex == cellsRowbyRow[index].RowIndex
+                    && cell.ColIndex < cellsRowbyRow[index].ColIndex))
+                {
+                    if (index == 0 || step == 1) step = 0;
+                    else if (step > 0) step = -step / 2;
+                }
+                else if (cell.RowIndex > cellsRowbyRow[index].RowIndex
+                    || (cell.RowIndex == cellsRowbyRow[index].RowIndex
+                    && cell.ColIndex > cellsRowbyRow[index].ColIndex))
+                {
+                    if (index == NumNonZero - 1 || step == -1) step = 0;
+                    else if (step < 0) step = -step / 2;
+                }
+                else step = 0;
+                index += step;
+                if (index < 0)
+                {
+                    step -= index;
+                    index = 0;
+                }
+                else if (index >= NumNonZero)
+                {
+                    step = index - (NumNonZero - 1);
+                    index = NumNonZero - 1;
+                }
+            } while (step != 0);
+            return index;
         }
 
         private SparseCell AddCell(int rowI, int colI, double value = Double.NaN)
@@ -328,8 +367,194 @@ namespace StarMathLib
                 cell.Up.Down = cell;
                 startCell.Up = cell;
             }
+            int insertIndex = FindInsertionIndex(cell);
+            cellsRowbyRow.Insert(insertIndex, cell);
 
             return cell;
+        }
+
+
+        /// <summary>
+        /// Removes the row.
+        /// </summary>
+        /// <param name="rowIndexToRemove">The row index to remove.</param>
+        public void RemoveRow(int rowIndexToRemove)
+        {
+            var thisCell = RowFirsts[rowIndexToRemove];
+            while (thisCell != null)
+            {
+                var nextCell = thisCell.Right;
+                RemoveCell(thisCell);
+                thisCell = nextCell;
+            }
+
+            NumRows--;
+            var newRowFirsts = new SparseCell[NumRows];
+            var newRowLasts = new SparseCell[NumRows];
+
+            for (int i = 0; i < rowIndexToRemove; i++)
+            {
+                newRowFirsts[i] = RowFirsts[i];
+                newRowLasts[i] = RowLasts[i];
+            }
+            for (int i = rowIndexToRemove; i < NumRows; i++)
+            {
+                newRowFirsts[i] = RowFirsts[i + 1];
+                newRowLasts[i] = RowLasts[i + 1];
+                var cell = RowFirsts[i + 1];
+                while (cell != null)
+                {
+                    cell.RowIndex = i;
+                    cell = cell.Right;
+                }
+            }
+            RowFirsts = newRowFirsts;
+            RowLasts = newRowLasts;
+        }
+        /// <summary>
+        /// Removes the column.
+        /// </summary>
+        /// <param name="colIndexToRemove">The col index to remove.</param>
+        public void RemoveColumn(int colIndexToRemove)
+        {
+            var thisCell = ColFirsts[colIndexToRemove];
+            while (thisCell != null)
+            {
+                var nextCell = thisCell.Down;
+                RemoveCell(thisCell);
+                thisCell = nextCell;
+            }
+
+            NumCols--;
+            var newColFirsts = new SparseCell[NumCols];
+            var newColLasts = new SparseCell[NumCols];
+
+            for (int i = 0; i < colIndexToRemove; i++)
+            {
+                newColFirsts[i] = ColFirsts[i];
+                newColLasts[i] = ColLasts[i];
+            }
+            for (int i = colIndexToRemove; i < NumCols; i++)
+            {
+                newColFirsts[i] = ColFirsts[i + 1];
+                newColLasts[i] = ColLasts[i + 1];
+                var cell = ColFirsts[i + 1];
+                while (cell != null)
+                {
+                    cell.ColIndex = i;
+                    cell = cell.Down;
+                }
+            }
+            ColFirsts = newColFirsts;
+            ColLasts = newColLasts;
+        }
+        /// <summary>
+        /// Removes the rows.
+        /// </summary>
+        /// <param name="rowIndicesToRemove">The row indices to remove.</param>
+        public void RemoveRows(IList<int> rowIndicesToRemove)
+        {
+            var numToRemove = rowIndicesToRemove.Count;
+            var removeIndices = rowIndicesToRemove.OrderBy(i => i).ToArray();
+            for (int i = 0; i < numToRemove; i++)
+            {
+                var cell = RowFirsts[removeIndices[i]];
+                while (cell != null)
+                {
+                    var nextCell = cell.Right;
+                    RemoveCell(cell);
+                    cell = nextCell;
+                }
+            }
+            NumRows -= numToRemove;
+            var newRowFirsts = new SparseCell[NumRows];
+            var newRowLasts = new SparseCell[NumRows];
+            var offset = 0;
+            for (int i = 0; i < NumRows; i++)
+            {
+                while (offset < numToRemove && (i + offset) == removeIndices[offset])
+                    offset++;
+                newRowFirsts[i] = RowFirsts[i + offset];
+                newRowLasts[i] = RowLasts[i + offset];
+                var cell = RowFirsts[i + offset];
+                while (cell != null)
+                {
+                    cell.RowIndex = i;
+                    cell = cell.Right;
+                }
+            }
+            RowFirsts = newRowFirsts;
+            RowLasts = newRowLasts;
+        }
+        /// <summary>
+        /// Removes the columns.
+        /// </summary>
+        /// <param name="colIndicesToRemove">The col indices to remove.</param>
+        public void RemoveColumns(IList<int> colIndicesToRemove)
+        {
+            var numToRemove = colIndicesToRemove.Count;
+            var removeIndices = colIndicesToRemove.OrderBy(i => i).ToArray();
+            for (int i = 0; i < numToRemove; i++)
+            {
+                var cell = ColFirsts[removeIndices[i]];
+                while (cell != null)
+                {
+                    var nextCell = cell.Down;
+                    RemoveCell(cell);
+                    cell = nextCell;
+                }
+            }
+            NumCols -= numToRemove;
+            var newColFirsts = new SparseCell[NumCols];
+            var newColLasts = new SparseCell[NumCols];
+            var offset = 0;
+            for (int i = 0; i < NumCols; i++)
+            {
+                while (offset < numToRemove && (i + offset) == removeIndices[offset])
+                    offset++;
+                newColFirsts[i] = ColFirsts[i + offset];
+                newColLasts[i] = ColLasts[i + offset];
+                var cell = ColFirsts[i + offset];
+                while (cell != null)
+                {
+                    cell.ColIndex = i;
+                    cell = cell.Down;
+                }
+            }
+            ColFirsts = newColFirsts;
+            ColLasts = newColLasts;
+        }
+
+        public void Transpose()
+        {
+            var tempArray = RowFirsts;
+            RowFirsts = ColFirsts;
+            ColFirsts = tempArray;
+            tempArray = RowLasts;
+            RowLasts = ColLasts;
+            ColLasts = tempArray;
+            foreach (var sparseCell in cellsRowbyRow)
+            {
+                var tempCell = sparseCell.Right;
+                sparseCell.Right = sparseCell.Down;
+                sparseCell.Down = tempCell;
+                tempCell = sparseCell.Left;
+                sparseCell.Left = sparseCell.Up;
+                sparseCell.Up = tempCell;
+            }
+            var tempLimit = NumRows;
+            NumRows = NumCols;
+            NumCols = tempLimit;
+            cellsRowbyRow.Clear();
+            for (int i = 0; i < NumRows; i++)
+            {
+                var cell = RowFirsts[i];
+                while (cell != null)
+                {
+                    cellsRowbyRow.Add(cell);
+                    cell = cell.Right;
+                }
+            }
         }
     }
 

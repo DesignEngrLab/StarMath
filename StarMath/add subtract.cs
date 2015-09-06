@@ -26,11 +26,11 @@ namespace StarMathLib
         /// <param name="A">1D double array 1</param>
         /// <param name="B">1D double array 2</param>
         /// <returns>1D double array that contains sum of vectros A and B</returns>
-        /// <exception cref="System.Exception">Matrix sizes do not match</exception>
+        /// <exception cref="System.ArithmeticException">Matrix sizes do not match</exception>
         public static double[] add(this IList<double> A, IList<double> B)
         {
             var length = A.Count();
-            if (length != B.Count()) throw new Exception("Matrix sizes do not match");
+            if (length != B.Count()) throw new ArithmeticException("Matrix sizes do not match");
             return add(A, B, length);
         }
 
@@ -40,11 +40,11 @@ namespace StarMathLib
         /// <param name="A">1D int array 1</param>
         /// <param name="B">1D double array 2</param>
         /// <returns>1D double array that contains sum of vectros A and B</returns>
-        /// <exception cref="System.Exception">Matrix sizes do not match</exception>
+        /// <exception cref="System.ArithmeticException">Matrix sizes do not match</exception>
         public static double[] add(this IList<int> A, IList<double> B)
         {
             var length = A.Count();
-            if (length != B.Count()) throw new Exception("Matrix sizes do not match");
+            if (length != B.Count()) throw new ArithmeticException("Matrix sizes do not match");
             return add(A, B, length);
         }
 
@@ -54,11 +54,11 @@ namespace StarMathLib
         /// <param name="A">1D int array 1</param>
         /// <param name="B">1D int array 2</param>
         /// <returns>1D integer array that contains sum of vectros A and B</returns>
-        /// <exception cref="System.Exception">Matrix sizes do not match</exception>
+        /// <exception cref="System.ArithmeticException">Matrix sizes do not match</exception>
         public static int[] add(this IList<int> A, IList<int> B)
         {
             var length = A.Count();
-            if (length != B.Count()) throw new Exception("Matrix sizes do not match");
+            if (length != B.Count()) throw new ArithmeticException("Matrix sizes do not match");
             return add(A, B, length);
         }
 
@@ -68,7 +68,7 @@ namespace StarMathLib
         /// <param name="A">2D double array 1</param>
         /// <param name="B">2D double array 2</param>
         /// <returns>2D double array that contains sum of vectros A and B</returns>
-        /// <exception cref="System.Exception">Matrix row count do not match
+        /// <exception cref="System.ArithmeticException">Matrix row count do not match
         /// or
         /// Matrix column count do not match</exception>
         public static double[,] add(this double[,] A, double[,] B)
@@ -76,9 +76,9 @@ namespace StarMathLib
             var numRows = A.GetLength(0);
             var numCols = A.GetLength(1);
             if (numRows != B.GetLength(0))
-                throw new Exception("Matrix row count do not match");
+                throw new ArithmeticException("Matrix row count do not match");
             if (numCols != B.GetLength(1))
-                throw new Exception("Matrix column count do not match");
+                throw new ArithmeticException("Matrix column count do not match");
 
             return add(A, B, numRows, numCols);
         }
@@ -89,7 +89,7 @@ namespace StarMathLib
         /// <param name="A">2D double array 1</param>
         /// <param name="B">2D int array 2</param>
         /// <returns>2D double array that contains sum of vectros A and B</returns>
-        /// <exception cref="System.Exception">Matrix row count do not match
+        /// <exception cref="System.ArithmeticException">Matrix row count do not match
         /// or
         /// Matrix column count do not match</exception>
         public static double[,] add(this int[,] A, double[,] B)
@@ -97,9 +97,9 @@ namespace StarMathLib
             var numRows = A.GetLength(0);
             var numCols = A.GetLength(1);
             if (numRows != B.GetLength(0))
-                throw new Exception("Matrix row count do not match");
+                throw new ArithmeticException("Matrix row count do not match");
             if (numCols != B.GetLength(1))
-                throw new Exception("Matrix column count do not match");
+                throw new ArithmeticException("Matrix column count do not match");
 
             return add(A, B, numRows, numCols);
         }
@@ -110,7 +110,7 @@ namespace StarMathLib
         /// <param name="A">2D integer array 1</param>
         /// <param name="B">2D integer array 2</param>
         /// <returns>2D integer array that contains sum of vectros A and B</returns>
-        /// <exception cref="System.Exception">Matrix row count do not match
+        /// <exception cref="System.ArithmeticException">Matrix row count do not match
         /// or
         /// Matrix column count do not match</exception>
         public static int[,] add(this int[,] A, int[,] B)
@@ -118,9 +118,9 @@ namespace StarMathLib
             var numRows = A.GetLength(0);
             var numCols = A.GetLength(1);
             if (numRows != B.GetLength(0))
-                throw new Exception("Matrix row count do not match");
+                throw new ArithmeticException("Matrix row count do not match");
             if (numCols != B.GetLength(1))
-                throw new Exception("Matrix column count do not match");
+                throw new ArithmeticException("Matrix column count do not match");
 
             return add(A, B, numRows, numCols);
         }
@@ -235,12 +235,12 @@ namespace StarMathLib
         /// <param name="A">The minuend vector, A (1D double)</param>
         /// <param name="B">The subtrahend vector, B (1D double)</param>
         /// <returns>Returns the difference vector, C (1D double)</returns>
-        /// <exception cref="System.Exception">Matrix sizes do not match</exception>
+        /// <exception cref="System.ArithmeticException">Matrix sizes do not match</exception>
         public static double[] subtract(this IList<double> A, IList<double> B)
         {
             var length = A.Count();
             if (length != B.Count())
-                throw new Exception("Matrix sizes do not match");
+                throw new ArithmeticException("Matrix sizes do not match");
             return subtract(A, B, length);
         }
 
@@ -250,12 +250,12 @@ namespace StarMathLib
         /// <param name="A">The minuend vector, A (1D int)</param>
         /// <param name="B">The subtrahend vector, B (1D double)</param>
         /// <returns>Returns the difference vector, C (1D double)</returns>
-        /// <exception cref="System.Exception">Matrix sizes do not match</exception>
+        /// <exception cref="System.ArithmeticException">Matrix sizes do not match</exception>
         public static double[] subtract(this IList<int> A, IList<double> B)
         {
             var length = A.Count();
             if (length != B.Count())
-                throw new Exception("Matrix sizes do not match");
+                throw new ArithmeticException("Matrix sizes do not match");
             return subtract(A, B, length);
         }
 
@@ -265,12 +265,12 @@ namespace StarMathLib
         /// <param name="A">The minuend vector, A (1D double)</param>
         /// <param name="B">The subtrahend vector, B (1D int)</param>
         /// <returns>Returns the difference vector, C (1D double)</returns>
-        /// <exception cref="System.Exception">Matrix sizes do not match</exception>
+        /// <exception cref="System.ArithmeticException">Matrix sizes do not match</exception>
         public static double[] subtract(this IList<double> A, IList<int> B)
         {
             var length = A.Count();
             if (length != B.Count())
-                throw new Exception("Matrix sizes do not match");
+                throw new ArithmeticException("Matrix sizes do not match");
             return subtract(A, B, length);
         }
 
@@ -280,12 +280,12 @@ namespace StarMathLib
         /// <param name="A">The minuend vector, A (1D int)</param>
         /// <param name="B">The subtrahend vector, B (1D int)</param>
         /// <returns>Returns the difference vector, C (1D int)</returns>
-        /// <exception cref="System.Exception">Matrix sizes do not match</exception>
+        /// <exception cref="System.ArithmeticException">Matrix sizes do not match</exception>
         public static int[] subtract(this IList<int> A, IList<int> B)
         {
             var length = A.Count();
             if (length != B.Count())
-                throw new Exception("Matrix sizes do not match");
+                throw new ArithmeticException("Matrix sizes do not match");
             return subtract(A, B, length);
         }
 
@@ -295,7 +295,7 @@ namespace StarMathLib
         /// <param name="A">The minuend matrix, A (2D double).</param>
         /// <param name="B">The subtrahend matrix, B (2D double).</param>
         /// <returns>Returns the difference matrix, C (2D double)</returns>
-        /// <exception cref="System.Exception">Matrix row count do not match
+        /// <exception cref="System.ArithmeticException">Matrix row count do not match
         /// or
         /// Matrix column count do not match</exception>
         public static double[,] subtract(this double[,] A, double[,] B)
@@ -303,9 +303,9 @@ namespace StarMathLib
             var numRows = A.GetLength(0);
             var numCols = A.GetLength(1);
             if (numRows != B.GetLength(0))
-                throw new Exception("Matrix row count do not match");
+                throw new ArithmeticException("Matrix row count do not match");
             if (numCols != B.GetLength(1))
-                throw new Exception("Matrix column count do not match");
+                throw new ArithmeticException("Matrix column count do not match");
 
             return subtract(A, B, numRows, numCols);
         }
@@ -316,7 +316,7 @@ namespace StarMathLib
         /// <param name="A">The minuend matrix, A (2D int).</param>
         /// <param name="B">The subtrahend matrix, B (2D double).</param>
         /// <returns>Returns the difference matrix, C (2D double)</returns>
-        /// <exception cref="System.Exception">Matrix row count do not match
+        /// <exception cref="System.ArithmeticException">Matrix row count do not match
         /// or
         /// Matrix column count do not match</exception>
         public static double[,] subtract(this int[,] A, double[,] B)
@@ -324,9 +324,9 @@ namespace StarMathLib
             var numRows = A.GetLength(0);
             var numCols = A.GetLength(1);
             if (numRows != B.GetLength(0))
-                throw new Exception("Matrix row count do not match");
+                throw new ArithmeticException("Matrix row count do not match");
             if (numCols != B.GetLength(1))
-                throw new Exception("Matrix column count do not match");
+                throw new ArithmeticException("Matrix column count do not match");
 
             return subtract(A, B, numRows, numCols);
         }
@@ -337,7 +337,7 @@ namespace StarMathLib
         /// <param name="A">The minuend matrix, A (2D double).</param>
         /// <param name="B">The subtrahend matrix, B (2D int).</param>
         /// <returns>Returns the difference matrix, C (2D double)</returns>
-        /// <exception cref="System.Exception">Matrix row count do not match
+        /// <exception cref="System.ArithmeticException">Matrix row count do not match
         /// or
         /// Matrix column count do not match</exception>
         public static double[,] subtract(this double[,] A, int[,] B)
@@ -345,9 +345,9 @@ namespace StarMathLib
             var numRows = A.GetLength(0);
             var numCols = A.GetLength(1);
             if (numRows != B.GetLength(0))
-                throw new Exception("Matrix row count do not match");
+                throw new ArithmeticException("Matrix row count do not match");
             if (numCols != B.GetLength(1))
-                throw new Exception("Matrix column count do not match");
+                throw new ArithmeticException("Matrix column count do not match");
 
             return subtract(A, B, numRows, numCols);
         }
@@ -358,7 +358,7 @@ namespace StarMathLib
         /// <param name="A">The minuend matrix, A (2D integer).</param>
         /// <param name="B">The subtrahend matrix, B (2D integer).</param>
         /// <returns>Returns the difference matrix, C (2D integer)</returns>
-        /// <exception cref="System.Exception">Matrix row count do not match
+        /// <exception cref="System.ArithmeticException">Matrix row count do not match
         /// or
         /// Matrix column count do not match</exception>
         public static int[,] subtract(this int[,] A, int[,] B)
@@ -366,9 +366,9 @@ namespace StarMathLib
             var numRows = A.GetLength(0);
             var numCols = A.GetLength(1);
             if (numRows != B.GetLength(0))
-                throw new Exception("Matrix row count do not match");
+                throw new ArithmeticException("Matrix row count do not match");
             if (numCols != B.GetLength(1))
-                throw new Exception("Matrix column count do not match");
+                throw new ArithmeticException("Matrix column count do not match");
 
             return subtract(A, B, numRows, numCols);
         }

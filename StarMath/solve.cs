@@ -27,7 +27,7 @@ namespace StarMathLib
         /// <param name="initialGuess">The initial guess.</param>
         /// <param name="AIsSymmeticPositiveDefinite">Is A known to by Symmetric and Positive-Definite?</param>
         /// <returns>System.Double[].</returns>
-        /// <exception cref="System.Exception">Matrix, A, must be square.
+        /// <exception cref="System.ArithmeticException">Matrix, A, must be square.
         /// or
         /// Matrix, A, must be have the same number of rows as the vector, b.</exception>
         public static double[] solve(double[,] A, IList<double> b, IList<double> initialGuess = null,
@@ -35,9 +35,9 @@ namespace StarMathLib
         {
             var length = A.GetLength(0);
             if (length != A.GetLength(1))
-                throw new Exception("Matrix, A, must be square.");
+                throw new ArithmeticException("Matrix, A, must be square.");
             if (length != b.Count)
-                throw new Exception("Matrix, A, must be have the same number of rows as the vector, b.");
+                throw new ArithmeticException("Matrix, A, must be have the same number of rows as the vector, b.");
             List<int>[] potentialDiagonals;
             if (isGaussSeidelAppropriate(A, b, out potentialDiagonals, ref initialGuess, length))
                 return solveIteratively(A, b, initialGuess, length, potentialDiagonals);
@@ -53,16 +53,16 @@ namespace StarMathLib
         /// <param name="b">The b.</param>
         /// <param name="initialGuess">The initial guess.</param>
         /// <returns>System.Double[].</returns>
-        /// <exception cref="System.Exception">Matrix, A, must be square.
+        /// <exception cref="System.ArithmeticException">Matrix, A, must be square.
         /// or
         /// Matrix, A, must be have the same number of rows as the vector, b.</exception>
         public static double[] solve(int[,] A, IList<double> b, IList<double> initialGuess = null)
         {
             var length = A.GetLength(0);
             if (length != A.GetLength(1))
-                throw new Exception("Matrix, A, must be square.");
+                throw new ArithmeticException("Matrix, A, must be square.");
             if (length != b.Count)
-                throw new Exception("Matrix, A, must be have the same number of rows as the vector, b.");
+                throw new ArithmeticException("Matrix, A, must be have the same number of rows as the vector, b.");
 
             var B = new double[length, length];
             for (var i = 0; i < length; i++)
@@ -78,7 +78,7 @@ namespace StarMathLib
         /// <param name="b">The b.</param>
         /// <param name="initialGuess">The initial guess.</param>
         /// <returns>System.Double[].</returns>
-        /// <exception cref="System.Exception">Matrix, A, must be square.
+        /// <exception cref="System.ArithmeticException">Matrix, A, must be square.
         /// or
         /// Matrix, A, must be have the same number of rows as the vector, b.</exception>
         public static double[] solve(double[,] A, IList<int> b, IList<double> initialGuess = null)
@@ -93,7 +93,7 @@ namespace StarMathLib
         /// <param name="b">The b.</param>
         /// <param name="initialGuess">The initial guess.</param>
         /// <returns>System.Double[].</returns>
-        /// <exception cref="System.Exception">Matrix, A, must be square.
+        /// <exception cref="System.ArithmeticException">Matrix, A, must be square.
         /// or
         /// Matrix, A, must be have the same number of rows as the vector, b.</exception>
         public static double[] solve(int[,] A, IList<int> b, IList<double> initialGuess = null)

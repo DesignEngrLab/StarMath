@@ -79,7 +79,7 @@ namespace StarMathLib
         /// <param name="u">The u.</param>
         /// <param name="vt">The vt.</param>
         /// <returns>System.Double[].</returns>
-        /// <exception cref="System.Exception">SVD did not converge.</exception>
+        /// <exception cref="System.ArithmeticException">SVD did not converge.</exception>
         private static double[] SingularValueDecomposition(bool computeVectors, double[,] A, out double[,] u,
             out double[,] vt)
         {
@@ -317,7 +317,7 @@ namespace StarMathLib
                 // If too many iterations have been performed throw exception.
                 if (iter >= maxSVDiter)
                 {
-                    throw new Exception("SVD did not converge.");
+                    throw new ArithmeticException("SVD did not converge.");
                 }
 
                 // This section of the program inspects for negligible elements in the s and e arrays,

@@ -30,16 +30,16 @@ namespace StarMathLib
         /// <param name="initialGuess">The initial guess.</param>
         /// <param name="AIsSymmeticPositiveDefinite">a is symmetic positive definite.</param>
         /// <returns>System.Double[].</returns>
-        /// <exception cref="Exception">Spare Matrix must be square to solve Ax = b.
+        /// <exception cref="ArithmeticException">Spare Matrix must be square to solve Ax = b.
         /// or
         /// Sparse Matrix must be have the same number of rows as the vector, b.</exception>
         public double[] solve(IList<double> b, IList<double> initialGuess = null,
             Boolean AIsSymmeticPositiveDefinite = false)
         {
             if (NumRows != NumCols)
-                throw new Exception("Spare Matrix must be square to solve Ax = b.");
+                throw new ArithmeticException("Spare Matrix must be square to solve Ax = b.");
             if (NumRows != b.Count)
-                throw new Exception("Sparse Matrix must be have the same number of rows as the vector, b.");
+                throw new ArithmeticException("Sparse Matrix must be have the same number of rows as the vector, b.");
             List<int>[] potentialDiagonals;
             if (isGaussSeidelAppropriate(b, out potentialDiagonals, ref initialGuess))
                 return solveIteratively(b, initialGuess, potentialDiagonals);
@@ -62,7 +62,7 @@ namespace StarMathLib
             var length = b.Count;
             if (AIsSymmetricPositiveDefinite)
             {
-                var L = this.Copy();
+                var L = this;//.Copy();
                 L.CholeskyDecomposition();
                 return L.solveFromCholeskyFactorization(b, NumCols);
 
@@ -149,7 +149,7 @@ namespace StarMathLib
         /// Overwrites the matrix with its Cholesky decomposition (i.e. it is destructive).
         /// </summary>
         /// <returns>SparseMatrix.</returns>
-        /// <exception cref="Exception">
+        /// <exception cref="ArithmeticException">
         /// Cholesky Decomposition can only be determined for square matrices.
         /// or
         /// Sparse Matrix is not positive definite. Cannot complete Cholesky decomposition.
@@ -157,11 +157,11 @@ namespace StarMathLib
         public void CholeskyDecomposition()
         {
             if (NumCols != NumRows)
-                throw new Exception("Cholesky Decomposition can only be determined for square matrices.");
+                throw new ArithmeticException("Cholesky Decomposition can only be determined for square matrices.");
 
             for (var i = 0; i < NumRows; i++)
             {
-                var sum = 0.0;
+                double sum;
                 var startCellRowI = RowFirsts[i];
                 SparseCell cellRowI;
                 for (var j = 0; j < i; j++)
@@ -200,7 +200,7 @@ namespace StarMathLib
                     cellRowI = cellRowI.Right;
                 }
                 if (cellRowI.ColIndex != i || sum > cellRowI.Value)
-                    throw new Exception("Sparse Matrix is not positive definite. Cannot complete Cholesky decomposition.");
+                    throw new ArithmeticException("Sparse Matrix is not positive definite. Cannot complete Cholesky decomposition.");
                 sum = cellRowI.Value - sum;
                 cellRowI.Value = Math.Sqrt(sum);
                 // delete the rest of the entries on the row

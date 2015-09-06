@@ -29,10 +29,10 @@ namespace StarMathLib
         /// </summary>
         /// <param name="x">The vector, x.</param>
         /// <returns>Scalar value of 1-norm.</returns>
-        /// <exception cref="System.Exception">The vector, x, is null.</exception>
+        /// <exception cref="System.ArithmeticException">The vector, x, is null.</exception>
         public static double norm1(this IEnumerable<double> x)
         {
-            if (x == null) throw new Exception("The vector, x, is null.");
+            if (x == null) throw new ArithmeticException("The vector, x, is null.");
             return x.Sum(a => Math.Abs(a));
         }
 
@@ -42,10 +42,10 @@ namespace StarMathLib
         /// </summary>
         /// <param name="x">The vector, x.</param>
         /// <returns>Scalar value of 1-norm.</returns>
-        /// <exception cref="System.Exception">The vector, x, is null.</exception>
+        /// <exception cref="System.ArithmeticException">The vector, x, is null.</exception>
         public static int norm1(this IEnumerable<int> x)
         {
-            if (x == null) throw new Exception("The vector, x, is null.");
+            if (x == null) throw new ArithmeticException("The vector, x, is null.");
             return x.Sum(a => Math.Abs(a));
         }
 
@@ -56,7 +56,7 @@ namespace StarMathLib
         /// <param name="x">The vector, x.</param>
         /// <param name="y">The vector, y.</param>
         /// <returns>Scalar value of 1-norm.</returns>
-        /// <exception cref="System.Exception">The vector, x, is null.
+        /// <exception cref="System.ArithmeticException">The vector, x, is null.
         /// or
         /// The vector, y, is null.
         /// or
@@ -64,9 +64,9 @@ namespace StarMathLib
         public static double norm1(this IList<double> x, IList<double> y)
         {
             var xlength = x.Count();
-            if (x == null) throw new Exception("The vector, x, is null.");
-            if (y == null) throw new Exception("The vector, y, is null.");
-            if (xlength != y.Count()) throw new Exception("The vectors are not the same size.");
+            if (x == null) throw new ArithmeticException("The vector, x, is null.");
+            if (y == null) throw new ArithmeticException("The vector, y, is null.");
+            if (xlength != y.Count()) throw new ArithmeticException("The vectors are not the same size.");
             return norm1(x, y, xlength);
         }
 
@@ -93,7 +93,7 @@ namespace StarMathLib
         /// <param name="x">The vector, x.</param>
         /// <param name="y">The vector, y.</param>
         /// <returns>Scalar value of 1-norm.</returns>
-        /// <exception cref="System.Exception">The vector, x, is null.
+        /// <exception cref="System.ArithmeticException">The vector, x, is null.
         /// or
         /// The vector, y, is null.
         /// or
@@ -101,9 +101,9 @@ namespace StarMathLib
         public static int norm1(this IList<int> x, IList<int> y)
         {
             var xlength = x.Count();
-            if (x == null) throw new Exception("The vector, x, is null.");
-            if (y == null) throw new Exception("The vector, y, is null.");
-            if (xlength != y.Count()) throw new Exception("The vectors are not the same size.");
+            if (x == null) throw new ArithmeticException("The vector, x, is null.");
+            if (y == null) throw new ArithmeticException("The vector, y, is null.");
+            if (xlength != y.Count()) throw new ArithmeticException("The vectors are not the same size.");
             return norm1(x, y, xlength);
         }
 
@@ -129,10 +129,10 @@ namespace StarMathLib
         /// </summary>
         /// <param name="A">The matrix, A.</param>
         /// <returns>Scalar value of 1-norm.</returns>
-        /// <exception cref="System.Exception">The matrix, A, is null.</exception>
+        /// <exception cref="System.ArithmeticException">The matrix, A, is null.</exception>
         public static double norm1(this double[,] A)
         {
-            if (A == null) throw new Exception("The matrix, A, is null.");
+            if (A == null) throw new ArithmeticException("The matrix, A, is null.");
             return norm1(A, A.GetLength(0), A.GetLength(1));
         }
 
@@ -160,10 +160,10 @@ namespace StarMathLib
         /// </summary>
         /// <param name="A">The matrix, A.</param>
         /// <returns>Scalar value of 1-norm.</returns>
-        /// <exception cref="System.Exception">The matrix, A, is null.</exception>
+        /// <exception cref="System.ArithmeticException">The matrix, A, is null.</exception>
         public static int norm1(this int[,] A)
         {
-            if (A == null) throw new Exception("The matrix, A, is null.");
+            if (A == null) throw new ArithmeticException("The matrix, A, is null.");
             return norm1(A, A.GetLength(0), A.GetLength(1));
         }
 
@@ -196,7 +196,7 @@ namespace StarMathLib
         /// <param name="y">The vector, y.</param>
         /// <param name="dontDoSqrt">if set to <c>true</c> [don't take the square root].</param>
         /// <returns>Scalar value of 2-norm.</returns>
-        /// <exception cref="System.Exception">The vector, x, is null.
+        /// <exception cref="System.ArithmeticException">The vector, x, is null.
         /// or
         /// The vector, y, is null.
         /// or
@@ -204,9 +204,9 @@ namespace StarMathLib
         public static double norm2(this IList<double> x, IList<double> y, Boolean dontDoSqrt = false)
         {
             var xlength = x.Count();
-            if (x == null) throw new Exception("The vector, x, is null.");
-            if (y == null) throw new Exception("The vector, y, is null.");
-            if (xlength != y.Count()) throw new Exception("The vectors are not the same size.");
+            if (x == null) throw new ArithmeticException("The vector, x, is null.");
+            if (y == null) throw new ArithmeticException("The vector, y, is null.");
+            if (xlength != y.Count()) throw new ArithmeticException("The vectors are not the same size.");
             return norm2(x, y, xlength, dontDoSqrt);
         }
 
@@ -236,7 +236,7 @@ namespace StarMathLib
         /// <param name="y">The vector, y.</param>
         /// <param name="dontDoSqrt">if set to <c>true</c> [don't take the square root].</param>
         /// <returns>Scalar value of 2-norm.</returns>
-        /// <exception cref="System.Exception">The vector, x, is null.
+        /// <exception cref="System.ArithmeticException">The vector, x, is null.
         /// or
         /// The vector, y, is null.
         /// or
@@ -244,9 +244,9 @@ namespace StarMathLib
         public static double norm2(this IList<int> x, IList<int> y, Boolean dontDoSqrt = false)
         {
             var xlength = x.Count();
-            if (x == null) throw new Exception("The vector, x, is null.");
-            if (y == null) throw new Exception("The vector, y, is null.");
-            if (xlength != y.Count()) throw new Exception("The vectors are not the same size.");
+            if (x == null) throw new ArithmeticException("The vector, x, is null.");
+            if (y == null) throw new ArithmeticException("The vector, y, is null.");
+            if (xlength != y.Count()) throw new ArithmeticException("The vectors are not the same size.");
             return norm2(x, y, xlength, dontDoSqrt);
         }
 
@@ -274,10 +274,10 @@ namespace StarMathLib
         /// <param name="x">The vector, x.</param>
         /// <param name="dontDoSqrt">if set to <c>true</c> [don't take the square root].</param>
         /// <returns>Scalar value of 2-norm.</returns>
-        /// <exception cref="System.Exception">The vector, x, is null.</exception>
+        /// <exception cref="System.ArithmeticException">The vector, x, is null.</exception>
         public static double norm2(this IEnumerable<double> x, Boolean dontDoSqrt = false)
         {
-            if (x == null) throw new Exception("The vector, x, is null.");
+            if (x == null) throw new ArithmeticException("The vector, x, is null.");
             return dontDoSqrt ? x.Sum(a => a*a) : Math.Sqrt(x.Sum(a => a*a));
         }
 
@@ -289,10 +289,10 @@ namespace StarMathLib
         /// <param name="x">The vector, x.</param>
         /// <param name="dontDoSqrt">if set to <c>true</c> [don't take the square root].</param>
         /// <returns>Scalar value of 2-norm.</returns>
-        /// <exception cref="System.Exception">The vector, x, is null.</exception>
+        /// <exception cref="System.ArithmeticException">The vector, x, is null.</exception>
         public static double norm2(this IEnumerable<int> x, Boolean dontDoSqrt = false)
         {
-            if (x == null) throw new Exception("The vector, x, is null.");
+            if (x == null) throw new ArithmeticException("The vector, x, is null.");
             return dontDoSqrt ? x.Sum(a => a*a) : Math.Sqrt(x.Sum(a => a*a));
         }
 
@@ -304,10 +304,10 @@ namespace StarMathLib
         /// <param name="A">The matrix, A.</param>
         /// <param name="dontDoSqrt">if set to <c>true</c> [don't take the square root].</param>
         /// <returns>Scalar value of 2-norm.</returns>
-        /// <exception cref="System.Exception">The matrix, A, is null.</exception>
+        /// <exception cref="System.ArithmeticException">The matrix, A, is null.</exception>
         public static double norm2(this double[,] A, Boolean dontDoSqrt = false)
         {
-            if (A == null) throw new Exception("The matrix, A, is null.");
+            if (A == null) throw new ArithmeticException("The matrix, A, is null.");
             return norm2(A, A.GetLength(0), A.GetLength(1), dontDoSqrt);
         }
 
@@ -336,10 +336,10 @@ namespace StarMathLib
         /// <param name="A">The matrix, A.</param>
         /// <param name="dontDoSqrt">if set to <c>true</c> [don't take the square root].</param>
         /// <returns>Scalar value of 2-norm.</returns>
-        /// <exception cref="System.Exception">The matrix, A, is null.</exception>
+        /// <exception cref="System.ArithmeticException">The matrix, A, is null.</exception>
         public static double norm2(this int[,] A, Boolean dontDoSqrt = false)
         {
-            if (A == null) throw new Exception("The matrix, A, is null.");
+            if (A == null) throw new ArithmeticException("The matrix, A, is null.");
             return norm2(A, A.GetLength(0), A.GetLength(1), dontDoSqrt);
         }
 
@@ -372,10 +372,10 @@ namespace StarMathLib
         /// <param name="p">The power, p.</param>
         /// <param name="dontDoPRoot">if set to <c>true</c> [don't take the P-root].</param>
         /// <returns>Scalar value of P-norm.</returns>
-        /// <exception cref="System.Exception">The vector, x, is null.</exception>
+        /// <exception cref="System.ArithmeticException">The vector, x, is null.</exception>
         public static double normP(this IEnumerable<double> x, double p, Boolean dontDoPRoot = false)
         {
-            if (x == null) throw new Exception("The vector, x, is null.");
+            if (x == null) throw new ArithmeticException("The vector, x, is null.");
             return dontDoPRoot ? x.Sum(a => Math.Pow(a, p)) : Math.Pow(x.Sum(a => a*a), 1/p);
         }
 
@@ -386,10 +386,10 @@ namespace StarMathLib
         /// <param name="p">The power, p.</param>
         /// <param name="dontDoPRoot">if set to <c>true</c> [don't take the P-root].</param>
         /// <returns>Scalar value of P-norm.</returns>
-        /// <exception cref="System.Exception">The vector, x, is null.</exception>
+        /// <exception cref="System.ArithmeticException">The vector, x, is null.</exception>
         public static double normP(this IEnumerable<int> x, double p, Boolean dontDoPRoot = false)
         {
-            if (x == null) throw new Exception("The vector, x, is null.");
+            if (x == null) throw new ArithmeticException("The vector, x, is null.");
             return dontDoPRoot ? x.Sum(a => Math.Pow(a, p)) : Math.Pow(x.Sum(a => a*a), 1/p);
         }
 
@@ -401,10 +401,10 @@ namespace StarMathLib
         /// <param name="p">The power, p.</param>
         /// <param name="dontDoPRoot">if set to <c>true</c> [don't take the P-root].</param>
         /// <returns>Scalar value of P-norm.</returns>
-        /// <exception cref="System.Exception">The matrix, A, is null.</exception>
+        /// <exception cref="System.ArithmeticException">The matrix, A, is null.</exception>
         public static double normP(this double[,] A, double p, Boolean dontDoPRoot = false)
         {
-            if (A == null) throw new Exception("The matrix, A, is null.");
+            if (A == null) throw new ArithmeticException("The matrix, A, is null.");
             return normP(A, p, A.GetLength(0), A.GetLength(1), dontDoPRoot);
         }
 
@@ -433,10 +433,10 @@ namespace StarMathLib
         /// <param name="p">The power, p.</param>
         /// <param name="dontDoPRoot">if set to <c>true</c> [don't take the P-root].</param>
         /// <returns>Scalar value of P-norm.</returns>
-        /// <exception cref="System.Exception">The matrix, A, is null.</exception>
+        /// <exception cref="System.ArithmeticException">The matrix, A, is null.</exception>
         public static double normP(this int[,] A, double p, Boolean dontDoPRoot = false)
         {
-            if (A == null) throw new Exception("The matrix, A, is null.");
+            if (A == null) throw new ArithmeticException("The matrix, A, is null.");
             return normP(A, p, A.GetLength(0), A.GetLength(1), dontDoPRoot);
         }
 

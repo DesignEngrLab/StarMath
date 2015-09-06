@@ -459,12 +459,12 @@ namespace StarMathLib
         /// <param name="A">1D double Array, A</param>
         /// <param name="B">1D double Array, B</param>
         /// <returns>A double value that contains the dot product</returns>
-        /// <exception cref="System.Exception">Matrix sizes do not match</exception>
+        /// <exception cref="System.ArithmeticException">Matrix sizes do not match</exception>
         public static double dotProduct(this IList<double> A, IList<double> B)
         {
             var length = A.Count();
             if (length != B.Count())
-                throw new Exception("Matrix sizes do not match");
+                throw new ArithmeticException("Matrix sizes do not match");
             return dotProduct(A, B, length);
         }
 
@@ -490,12 +490,12 @@ namespace StarMathLib
         /// <param name="A">1D int Array, A</param>
         /// <param name="B">1D double Array, B</param>
         /// <returns>A double value that contains the dot product</returns>
-        /// <exception cref="System.Exception">Matrix sizes do not match</exception>
+        /// <exception cref="System.ArithmeticException">Matrix sizes do not match</exception>
         public static double dotProduct(this IList<int> A, IList<double> B)
         {
             var length = A.Count();
             if (length != B.Count())
-                throw new Exception("Matrix sizes do not match");
+                throw new ArithmeticException("Matrix sizes do not match");
             return dotProduct(A, B, length);
         }
 
@@ -521,13 +521,13 @@ namespace StarMathLib
         /// <param name="A">1D int Array, A</param>
         /// <param name="B">1D int Array, B</param>
         /// <returns>A double value that contains the dot product</returns>
-        /// <exception cref="System.Exception">Matrix sizes do not match</exception>
+        /// <exception cref="System.ArithmeticException">Matrix sizes do not match</exception>
         public static int dotProduct(this IList<int> A, IList<int> B)
         {
             // this is B dot term_i multiplication
             var length = A.Count();
             if (length != B.Count())
-                throw new Exception("Matrix sizes do not match");
+                throw new ArithmeticException("Matrix sizes do not match");
             return dotProduct(A, B, length);
         }
 
@@ -557,7 +557,7 @@ namespace StarMathLib
         /// <param name="A">1D double Array, A</param>
         /// <param name="B">1D double Array, B</param>
         /// <returns>A double value that contains the dot product</returns>
-        /// <exception cref="System.Exception">Cross product is only possible for vectors of length: 1, 3, or 7</exception>
+        /// <exception cref="System.ArithmeticException">Cross product is only possible for vectors of length: 1, 3, or 7</exception>
         public static double[] crossProduct(this IList<double> A, IList<double> B)
         {
             var Alength = A.Count();
@@ -570,7 +570,7 @@ namespace StarMathLib
                 return crossProduct3(A, B);
             if ((Alength == 7) && (Blength == 7))
                 return crossProduct7(A, B);
-            throw new Exception("Cross product is only possible for vectors of length: 1, 3, or 7");
+            throw new ArithmeticException("Cross product is only possible for vectors of length: 1, 3, or 7");
         }
 
         /// <summary>
@@ -579,7 +579,7 @@ namespace StarMathLib
         /// <param name="A">1D integer Array, A</param>
         /// <param name="B">1D double Array, B</param>
         /// <returns>A double value that contains the dot product</returns>
-        /// <exception cref="System.Exception">Cross product is only possible for vectors of length: 1, 3, or 7</exception>
+        /// <exception cref="System.ArithmeticException">Cross product is only possible for vectors of length: 1, 3, or 7</exception>
         public static double[] crossProduct(this IList<int> A, IList<double> B)
         {
             var Alength = A.Count();
@@ -592,7 +592,7 @@ namespace StarMathLib
                 return crossProduct3(A, B);
             if ((Alength == 7) && (Blength == 7))
                 return crossProduct7(A, B);
-            throw new Exception("Cross product is only possible for vectors of length: 1, 3, or 7");
+            throw new ArithmeticException("Cross product is only possible for vectors of length: 1, 3, or 7");
         }
 
         /// <summary>
@@ -601,7 +601,7 @@ namespace StarMathLib
         /// <param name="A">1D double Array, A</param>
         /// <param name="B">1D integer Array, B</param>
         /// <returns>A double value that contains the dot product</returns>
-        /// <exception cref="System.Exception">Cross product is only possible for vectors of length: 1, 3, or 7</exception>
+        /// <exception cref="System.ArithmeticException">Cross product is only possible for vectors of length: 1, 3, or 7</exception>
         public static double[] crossProduct(this IList<double> A, IList<int> B)
         {
             var Alength = A.Count();
@@ -614,7 +614,7 @@ namespace StarMathLib
                 return crossProduct3(A, B);
             if ((Alength == 7) && (Blength == 7))
                 return crossProduct7(A, B);
-            throw new Exception("Cross product is only possible for vectors of length: 1, 3, or 7");
+            throw new ArithmeticException("Cross product is only possible for vectors of length: 1, 3, or 7");
         }
 
         /// <summary>
@@ -623,7 +623,7 @@ namespace StarMathLib
         /// <param name="A">1D integer Array, A</param>
         /// <param name="B">1D integer Array, B</param>
         /// <returns>A double value that contains the dot product</returns>
-        /// <exception cref="System.Exception">Cross product is only possible for vectors of length: 1, 3, or 7</exception>
+        /// <exception cref="System.ArithmeticException">Cross product is only possible for vectors of length: 1, 3, or 7</exception>
         public static int[] crossProduct(this IList<int> A, IList<int> B)
         {
             var Alength = A.Count();
@@ -636,7 +636,7 @@ namespace StarMathLib
                 return crossProduct3(A, B);
             if ((Alength == 7) && (Blength == 7))
                 return crossProduct7(A, B);
-            throw new Exception("Cross product is only possible for vectors of length: 1, 3, or 7");
+            throw new ArithmeticException("Cross product is only possible for vectors of length: 1, 3, or 7");
         }
 
         /// <summary>
@@ -648,14 +648,14 @@ namespace StarMathLib
         /// <param name="A">1D double Array, A</param>
         /// <param name="B">1D double Array, B</param>
         /// <returns>System.Double.</returns>
-        /// <exception cref="System.Exception">This cross product \shortcut\ is only used with 2D vectors to get the single value in the,
+        /// <exception cref="System.ArithmeticException">This cross product \shortcut\ is only used with 2D vectors to get the single value in the,
         ///                                 + would be, Z-direction.</exception>
         public static double crossProduct2(IList<double> A, IList<double> B)
         {
             if (((A.Count() == 2) && (B.Count() == 2))
                 || ((A.Count() == 3) && (B.Count() == 3) && A[2] == 0.0 && B[2] == 0.0))
                 return A[0]*B[1] - B[0]*A[1];
-            throw new Exception("This cross product \"shortcut\" is only used with 2D vectors to get the single value in the,"
+            throw new ArithmeticException("This cross product \"shortcut\" is only used with 2D vectors to get the single value in the,"
                                 + "would be, Z-direction.");
         }
 
@@ -668,14 +668,14 @@ namespace StarMathLib
         /// <param name="A">1D integer Array, A</param>
         /// <param name="B">1D double Array, B</param>
         /// <returns>System.Double.</returns>
-        /// <exception cref="System.Exception">This cross product \shortcut\ is only used with 2D vectors to get the single value in the,
+        /// <exception cref="System.ArithmeticException">This cross product \shortcut\ is only used with 2D vectors to get the single value in the,
         ///                                 + would be, Z-direction.</exception>
         public static double crossProduct2(IList<int> A, IList<double> B)
         {
             if (((A.Count() == 2) && (B.Count() == 2))
                 || ((A.Count() == 3) && (B.Count() == 3) && A[2] == 0.0 && B[2] == 0.0))
                 return A[0]*B[1] - B[0]*A[1];
-            throw new Exception("This cross product \"shortcut\" is only used with 2D vectors to get the single value in the,"
+            throw new ArithmeticException("This cross product \"shortcut\" is only used with 2D vectors to get the single value in the,"
                                 + "would be, Z-direction.");
         }
 
@@ -688,14 +688,14 @@ namespace StarMathLib
         /// <param name="A">1D double Array, A</param>
         /// <param name="B">1D integer Array, B</param>
         /// <returns>System.Double.</returns>
-        /// <exception cref="System.Exception">This cross product \shortcut\ is only used with 2D vectors to get the single value in the,
+        /// <exception cref="System.ArithmeticException">This cross product \shortcut\ is only used with 2D vectors to get the single value in the,
         ///                                 + would be, Z-direction.</exception>
         public static double crossProduct2(IList<double> A, IList<int> B)
         {
             if (((A.Count() == 2) && (B.Count() == 2))
                 || ((A.Count() == 3) && (B.Count() == 3) && A[2] == 0.0 && B[2] == 0.0))
                 return A[0]*B[1] - B[0]*A[1];
-            throw new Exception("This cross product \"shortcut\" is only used with 2D vectors to get the single value in the,"
+            throw new ArithmeticException("This cross product \"shortcut\" is only used with 2D vectors to get the single value in the,"
                                 + "would be, Z-direction.");
         }
 
@@ -708,14 +708,14 @@ namespace StarMathLib
         /// <param name="A">1D integer Array, A</param>
         /// <param name="B">1D integer Array, B</param>
         /// <returns>System.Int32.</returns>
-        /// <exception cref="System.Exception">This cross product \shortcut\ is only used with 2D vectors to get the single value in the,
+        /// <exception cref="System.ArithmeticException">This cross product \shortcut\ is only used with 2D vectors to get the single value in the,
         ///                                 + would be, Z-direction.</exception>
         public static int crossProduct2(IList<int> A, IList<int> B)
         {
             if (((A.Count() == 2) && (B.Count() == 2))
                 || ((A.Count() == 3) && (B.Count() == 3) && A[2] == 0.0 && B[2] == 0.0))
                 return A[0]*B[1] - B[0]*A[1];
-            throw new Exception("This cross product \"shortcut\" is only used with 2D vectors to get the single value in the,"
+            throw new ArithmeticException("This cross product \"shortcut\" is only used with 2D vectors to get the single value in the,"
                                 + "would be, Z-direction.");
         }
 
@@ -1013,11 +1013,11 @@ namespace StarMathLib
         /// <param name="A">2D double Array, A</param>
         /// <param name="B">2D double Array, A</param>
         /// <returns>A 2D double array that is the product of the two matrices A and B</returns>
-        /// <exception cref="System.Exception">Column count in first matrix must be equal to row count in second matrix</exception>
+        /// <exception cref="System.ArithmeticException">Column count in first matrix must be equal to row count in second matrix</exception>
         public static double[,] multiply(this double[,] A, double[,] B)
         {
             if (A.GetLength(1) != B.GetLength(0))
-                throw new Exception("Column count in first matrix must be equal to row count in second matrix");
+                throw new ArithmeticException("Column count in first matrix must be equal to row count in second matrix");
             return multiply(A, B, A.GetLength(0), B.GetLength(1));
         }
 
@@ -1027,11 +1027,11 @@ namespace StarMathLib
         /// <param name="A">2D int Array, A</param>
         /// <param name="B">2D double Array, A</param>
         /// <returns>A 2D double array that is the product of the two matrices A and B</returns>
-        /// <exception cref="System.Exception">Column count in first matrix must be equal to row count in second matrix</exception>
+        /// <exception cref="System.ArithmeticException">Column count in first matrix must be equal to row count in second matrix</exception>
         public static double[,] multiply(this int[,] A, double[,] B)
         {
             if (A.GetLength(1) != B.GetLength(0))
-                throw new Exception("Column count in first matrix must be equal to row count in second matrix");
+                throw new ArithmeticException("Column count in first matrix must be equal to row count in second matrix");
             return multiply(A, B, A.GetLength(0), B.GetLength(1));
         }
 
@@ -1041,11 +1041,11 @@ namespace StarMathLib
         /// <param name="A">2D double Array, A</param>
         /// <param name="B">2D int Array, A</param>
         /// <returns>A 2D double array that is the product of the two matrices A and B</returns>
-        /// <exception cref="System.Exception">Column count in first matrix must be equal to row count in second matrix</exception>
+        /// <exception cref="System.ArithmeticException">Column count in first matrix must be equal to row count in second matrix</exception>
         public static double[,] multiply(this double[,] A, int[,] B)
         {
             if (A.GetLength(1) != B.GetLength(0))
-                throw new Exception("Column count in first matrix must be equal to row count in second matrix");
+                throw new ArithmeticException("Column count in first matrix must be equal to row count in second matrix");
             return multiply(A, B, A.GetLength(0), B.GetLength(1));
         }
 
@@ -1056,11 +1056,11 @@ namespace StarMathLib
         /// <param name="A">2D int Array, A</param>
         /// <param name="B">2D int Array, A</param>
         /// <returns>A 2D int array that is the product of the two matrices A and B</returns>
-        /// <exception cref="System.Exception">Column count in first matrix must be equal to row count in second matrix</exception>
+        /// <exception cref="System.ArithmeticException">Column count in first matrix must be equal to row count in second matrix</exception>
         public static int[,] multiply(this int[,] A, int[,] B)
         {
             if (A.GetLength(1) != B.GetLength(0))
-                throw new Exception("Column count in first matrix must be equal to row count in second matrix");
+                throw new ArithmeticException("Column count in first matrix must be equal to row count in second matrix");
             return multiply(A, B, A.GetLength(0), B.GetLength(1));
         }
 
@@ -1162,14 +1162,14 @@ namespace StarMathLib
         /// <param name="A">2D double Array</param>
         /// <param name="B">1D double array - column vector (1 element row)</param>
         /// <returns>A 1D double array that is the product of the two matrices A and B</returns>
-        /// <exception cref="System.Exception">Column count in first matrix must be equal to row count in second matrix</exception>
+        /// <exception cref="System.ArithmeticException">Column count in first matrix must be equal to row count in second matrix</exception>
         public static double[] multiply(this double[,] A, IList<double> B)
         {
             // this is B dot term_i multiplication
             var numRows = A.GetLength(0);
             var numCols = A.GetLength(1);
             if (numCols != B.Count())
-                throw new Exception("Column count in first matrix must be equal to row count in second matrix");
+                throw new ArithmeticException("Column count in first matrix must be equal to row count in second matrix");
             return multiply(A, B, numRows, numCols);
         }
 
@@ -1179,14 +1179,14 @@ namespace StarMathLib
         /// <param name="A">2D int Array</param>
         /// <param name="B">1D double array - column vector (1 element row)</param>
         /// <returns>A 1D double array that is the product of the two matrices A and B</returns>
-        /// <exception cref="System.Exception">Column count in first matrix must be equal to row count in second matrix</exception>
+        /// <exception cref="System.ArithmeticException">Column count in first matrix must be equal to row count in second matrix</exception>
         public static double[] multiply(this int[,] A, IList<double> B)
         {
             // this is B dot term_i multiplication
             var numRows = A.GetLength(0);
             var numCols = A.GetLength(1);
             if (numCols != B.Count())
-                throw new Exception("Column count in first matrix must be equal to row count in second matrix");
+                throw new ArithmeticException("Column count in first matrix must be equal to row count in second matrix");
             return multiply(A, B, numRows, numCols);
         }
 
@@ -1196,14 +1196,14 @@ namespace StarMathLib
         /// <param name="A">2D double Array</param>
         /// <param name="B">1D int array - column vector (1 element row)</param>
         /// <returns>A 1D double array that is the product of the two matrices A and B</returns>
-        /// <exception cref="System.Exception">Column count in first matrix must be equal to row count in second matrix</exception>
+        /// <exception cref="System.ArithmeticException">Column count in first matrix must be equal to row count in second matrix</exception>
         public static double[] multiply(this double[,] A, IList<int> B)
         {
             // this is B dot term_i multiplication
             var numRows = A.GetLength(0);
             var numCols = A.GetLength(1);
             if (numCols != B.Count())
-                throw new Exception("Column count in first matrix must be equal to row count in second matrix");
+                throw new ArithmeticException("Column count in first matrix must be equal to row count in second matrix");
             return multiply(A, B, numRows, numCols);
         }
 
@@ -1213,14 +1213,14 @@ namespace StarMathLib
         /// <param name="A">2D int Array</param>
         /// <param name="B">1D int array - column vector (1 element row)</param>
         /// <returns>A 1D int array that is the product of the two matrices A and B</returns>
-        /// <exception cref="System.Exception">Column count in first matrix must be equal to row count in second matrix</exception>
+        /// <exception cref="System.ArithmeticException">Column count in first matrix must be equal to row count in second matrix</exception>
         public static int[] multiply(this int[,] A, IList<int> B)
         {
             // this is B dot term_i multiplication
             var numRows = A.GetLength(0);
             var numCols = A.GetLength(1);
             if (numCols != B.Count())
-                throw new Exception("Column count in first matrix must be equal to row count in second matrix");
+                throw new ArithmeticException("Column count in first matrix must be equal to row count in second matrix");
             return multiply(A, B, numRows, numCols);
         }
 
@@ -1230,14 +1230,14 @@ namespace StarMathLib
         /// <param name="B">2D double Array</param>
         /// <param name="A">1D double array - row vector (1 element column)</param>
         /// <returns>A 1D double array that is the product of the two matrices A and B</returns>
-        /// <exception cref="System.Exception">Column count in first matrix must be equal to row count in second matrix</exception>
+        /// <exception cref="System.ArithmeticException">Column count in first matrix must be equal to row count in second matrix</exception>
         public static double[] multiply(this IList<double> B, double[,] A)
         {
             // this is B dot term_i multiplication
             var numRows = A.GetLength(0);
             var numCols = A.GetLength(1);
             if (numRows != B.Count())
-                throw new Exception("Column count in first matrix must be equal to row count in second matrix");
+                throw new ArithmeticException("Column count in first matrix must be equal to row count in second matrix");
             return multiply(B, A, numRows, numCols);
         }
 
@@ -1247,14 +1247,14 @@ namespace StarMathLib
         /// <param name="B">2D int Array</param>
         /// <param name="A">1D double array - row vector (1 element column)</param>
         /// <returns>A 1D double array that is the product of the two matrices A and B</returns>
-        /// <exception cref="System.Exception">Column count in first matrix must be equal to row count in second matrix</exception>
+        /// <exception cref="System.ArithmeticException">Column count in first matrix must be equal to row count in second matrix</exception>
         public static double[] multiply(this IList<double> B, int[,] A)
         {
             // this is B dot term_i multiplication
             var numRows = A.GetLength(0);
             var numCols = A.GetLength(1);
             if (numRows != B.Count())
-                throw new Exception("Column count in first matrix must be equal to row count in second matrix");
+                throw new ArithmeticException("Column count in first matrix must be equal to row count in second matrix");
             return multiply(B, A, numRows, numCols);
         }
 
@@ -1264,14 +1264,14 @@ namespace StarMathLib
         /// <param name="B">2D double Array</param>
         /// <param name="A">1D int array - row vector (1 element column)</param>
         /// <returns>A 1D double array that is the product of the two matrices A and B</returns>
-        /// <exception cref="System.Exception">Column count in first matrix must be equal to row count in second matrix</exception>
+        /// <exception cref="System.ArithmeticException">Column count in first matrix must be equal to row count in second matrix</exception>
         public static double[] multiply(this IList<int> B, double[,] A)
         {
             // this is B dot term_i multiplication
             var numRows = A.GetLength(0);
             var numCols = A.GetLength(1);
             if (numRows != B.Count())
-                throw new Exception("Column count in first matrix must be equal to row count in second matrix");
+                throw new ArithmeticException("Column count in first matrix must be equal to row count in second matrix");
             return multiply(B, A, numRows, numCols);
         }
 
@@ -1281,14 +1281,14 @@ namespace StarMathLib
         /// <param name="B">2D int Array</param>
         /// <param name="A">1D int array - row vector (1 element column)</param>
         /// <returns>A 1D int array that is the product of the two matrices A and B</returns>
-        /// <exception cref="System.Exception">Column count in first matrix must be equal to row count in second matrix</exception>
+        /// <exception cref="System.ArithmeticException">Column count in first matrix must be equal to row count in second matrix</exception>
         public static int[] multiply(this IList<int> B, int[,] A)
         {
             // this is B dot term_i multiplication
             var numRows = A.GetLength(0);
             var numCols = A.GetLength(1);
             if (numRows != B.Count())
-                throw new Exception("Column count in first matrix must be equal to row count in second matrix");
+                throw new ArithmeticException("Column count in first matrix must be equal to row count in second matrix");
             return multiply(B, A, numRows, numCols);
         }
 
@@ -1472,12 +1472,12 @@ namespace StarMathLib
         /// <param name="A">1D double Array, A</param>
         /// <param name="B">1D double Array, B</param>
         /// <returns>A double value that contains the element-by-element</returns>
-        /// <exception cref="System.Exception">Matrix sizes do not match</exception>
+        /// <exception cref="System.ArithmeticException">Matrix sizes do not match</exception>
         public static double[] EltMultiply(this IList<double> A, IList<double> B)
         {
             var length = A.Count();
             if (length != B.Count())
-                throw new Exception("Matrix sizes do not match");
+                throw new ArithmeticException("Matrix sizes do not match");
             return EltMultiply(A, B, length);
         }
 
@@ -1503,12 +1503,12 @@ namespace StarMathLib
         /// <param name="A">1D int Array, A</param>
         /// <param name="B">1D double Array, B</param>
         /// <returns>A double value that contains the element-by-element</returns>
-        /// <exception cref="System.Exception">Matrix sizes do not match</exception>
+        /// <exception cref="System.ArithmeticException">Matrix sizes do not match</exception>
         public static double[] EltMultiply(this IList<int> A, IList<double> B)
         {
             var length = A.Count();
             if (length != B.Count())
-                throw new Exception("Matrix sizes do not match");
+                throw new ArithmeticException("Matrix sizes do not match");
             return EltMultiply(A, B, length);
         }
 
@@ -1534,13 +1534,13 @@ namespace StarMathLib
         /// <param name="A">1D int Array, A</param>
         /// <param name="B">1D int Array, B</param>
         /// <returns>A double value that contains the element-by-element</returns>
-        /// <exception cref="System.Exception">Matrix sizes do not match</exception>
+        /// <exception cref="System.ArithmeticException">Matrix sizes do not match</exception>
         public static int[] EltMultiply(this IList<int> A, IList<int> B)
         {
             // this is B dot term_i multiplication
             var length = A.Count();
             if (length != B.Count())
-                throw new Exception("Matrix sizes do not match");
+                throw new ArithmeticException("Matrix sizes do not match");
             return EltMultiply(A, B, length);
         }
 
@@ -1567,11 +1567,11 @@ namespace StarMathLib
         /// <param name="A">2D double Array, A</param>
         /// <param name="B">2D double Array, A</param>
         /// <returns>A 2D double array that is the product of the two matrices A and B</returns>
-        /// <exception cref="System.Exception">Column count in first matrix must be equal to row count in second matrix</exception>
+        /// <exception cref="System.ArithmeticException">Column count in first matrix must be equal to row count in second matrix</exception>
         public static double[,] EltMultiply(this double[,] A, double[,] B)
         {
             if (A.GetLength(0) != B.GetLength(0) && A.GetLength(1) != B.GetLength(1))
-                throw new Exception("Column count in first matrix must be equal to row count in second matrix");
+                throw new ArithmeticException("Column count in first matrix must be equal to row count in second matrix");
             return EltMultiply(A, B, A.GetLength(0), B.GetLength(1));
         }
 
@@ -1581,11 +1581,11 @@ namespace StarMathLib
         /// <param name="A">2D int Array, A</param>
         /// <param name="B">2D double Array, A</param>
         /// <returns>A 2D double array that is the product of the two matrices A and B</returns>
-        /// <exception cref="System.Exception">Column count in first matrix must be equal to row count in second matrix</exception>
+        /// <exception cref="System.ArithmeticException">Column count in first matrix must be equal to row count in second matrix</exception>
         public static double[,] EltMultiply(this int[,] A, double[,] B)
         {
             if (A.GetLength(0) != B.GetLength(0) && A.GetLength(1) != B.GetLength(1))
-                throw new Exception("Column count in first matrix must be equal to row count in second matrix");
+                throw new ArithmeticException("Column count in first matrix must be equal to row count in second matrix");
             return EltMultiply(A, B, A.GetLength(0), B.GetLength(1));
         }
 
@@ -1595,11 +1595,11 @@ namespace StarMathLib
         /// <param name="A">2D double Array, A</param>
         /// <param name="B">2D int Array, A</param>
         /// <returns>A 2D double array that is the product of the two matrices A and B</returns>
-        /// <exception cref="System.Exception">Column count in first matrix must be equal to row count in second matrix</exception>
+        /// <exception cref="System.ArithmeticException">Column count in first matrix must be equal to row count in second matrix</exception>
         public static double[,] EltMultiply(this double[,] A, int[,] B)
         {
             if (A.GetLength(0) != B.GetLength(0) && A.GetLength(1) != B.GetLength(1))
-                throw new Exception("Column count in first matrix must be equal to row count in second matrix");
+                throw new ArithmeticException("Column count in first matrix must be equal to row count in second matrix");
             return EltMultiply(A, B, A.GetLength(0), B.GetLength(1));
         }
 
@@ -1610,11 +1610,11 @@ namespace StarMathLib
         /// <param name="A">2D int Array, A</param>
         /// <param name="B">2D int Array, A</param>
         /// <returns>A 2D int array that is the product of the two matrices A and B</returns>
-        /// <exception cref="System.Exception">Column count in first matrix must be equal to row count in second matrix</exception>
+        /// <exception cref="System.ArithmeticException">Column count in first matrix must be equal to row count in second matrix</exception>
         public static int[,] EltMultiply(this int[,] A, int[,] B)
         {
             if (A.GetLength(0) != B.GetLength(0) && A.GetLength(1) != B.GetLength(1))
-                throw new Exception("Column count in first matrix must be equal to row count in second matrix");
+                throw new ArithmeticException("Column count in first matrix must be equal to row count in second matrix");
             return EltMultiply(A, B, A.GetLength(0), B.GetLength(1));
         }
 
@@ -1703,12 +1703,12 @@ namespace StarMathLib
         /// <param name="A">1D double Array, A</param>
         /// <param name="B">1D double Array, B</param>
         /// <returns>A double value that contains the element-by-element</returns>
-        /// <exception cref="System.Exception">Matrix sizes do not match</exception>
+        /// <exception cref="System.ArithmeticException">Matrix sizes do not match</exception>
         public static double[] EltDivide(this IList<double> A, IList<double> B)
         {
             var length = A.Count();
             if (length != B.Count())
-                throw new Exception("Matrix sizes do not match");
+                throw new ArithmeticException("Matrix sizes do not match");
             return EltDivide(A, B, length);
         }
 
@@ -1734,12 +1734,12 @@ namespace StarMathLib
         /// <param name="A">1D int Array, A</param>
         /// <param name="B">1D double Array, B</param>
         /// <returns>A double value that contains the element-by-element</returns>
-        /// <exception cref="System.Exception">Matrix sizes do not match</exception>
+        /// <exception cref="System.ArithmeticException">Matrix sizes do not match</exception>
         public static double[] EltDivide(this IList<int> A, IList<double> B)
         {
             var length = A.Count();
             if (length != B.Count())
-                throw new Exception("Matrix sizes do not match");
+                throw new ArithmeticException("Matrix sizes do not match");
             return EltDivide(A, B, length);
         }
 
@@ -1765,13 +1765,13 @@ namespace StarMathLib
         /// <param name="A">1D int Array, A</param>
         /// <param name="B">1D int Array, B</param>
         /// <returns>A double value that contains the element-by-element</returns>
-        /// <exception cref="System.Exception">Matrix sizes do not match</exception>
+        /// <exception cref="System.ArithmeticException">Matrix sizes do not match</exception>
         public static double[] EltDivide(this IList<int> A, IList<int> B)
         {
             // this is B dot term_i multiplication
             var length = A.Count();
             if (length != B.Count())
-                throw new Exception("Matrix sizes do not match");
+                throw new ArithmeticException("Matrix sizes do not match");
             return EltDivide(A, B, length);
         }
 
@@ -1798,11 +1798,11 @@ namespace StarMathLib
         /// <param name="A">2D double Array, A</param>
         /// <param name="B">2D double Array, A</param>
         /// <returns>A 2D double array that is the product of the two matrices A and B</returns>
-        /// <exception cref="System.Exception">Column count in first matrix must be equal to row count in second matrix</exception>
+        /// <exception cref="System.ArithmeticException">Column count in first matrix must be equal to row count in second matrix</exception>
         public static double[,] EltDivide(this double[,] A, double[,] B)
         {
             if (A.GetLength(0) != B.GetLength(0) && A.GetLength(1) != B.GetLength(1))
-                throw new Exception("Column count in first matrix must be equal to row count in second matrix");
+                throw new ArithmeticException("Column count in first matrix must be equal to row count in second matrix");
             return EltDivide(A, B, A.GetLength(0), B.GetLength(1));
         }
 
@@ -1812,11 +1812,11 @@ namespace StarMathLib
         /// <param name="A">2D int Array, A</param>
         /// <param name="B">2D double Array, A</param>
         /// <returns>A 2D double array that is the product of the two matrices A and B</returns>
-        /// <exception cref="System.Exception">Column count in first matrix must be equal to row count in second matrix</exception>
+        /// <exception cref="System.ArithmeticException">Column count in first matrix must be equal to row count in second matrix</exception>
         public static double[,] EltDivide(this int[,] A, double[,] B)
         {
             if (A.GetLength(0) != B.GetLength(0) && A.GetLength(1) != B.GetLength(1))
-                throw new Exception("Column count in first matrix must be equal to row count in second matrix");
+                throw new ArithmeticException("Column count in first matrix must be equal to row count in second matrix");
             return EltDivide(A, B, A.GetLength(0), B.GetLength(1));
         }
 
@@ -1826,11 +1826,11 @@ namespace StarMathLib
         /// <param name="A">2D double Array, A</param>
         /// <param name="B">2D int Array, A</param>
         /// <returns>A 2D double array that is the product of the two matrices A and B</returns>
-        /// <exception cref="System.Exception">Column count in first matrix must be equal to row count in second matrix</exception>
+        /// <exception cref="System.ArithmeticException">Column count in first matrix must be equal to row count in second matrix</exception>
         public static double[,] EltDivide(this double[,] A, int[,] B)
         {
             if (A.GetLength(0) != B.GetLength(0) && A.GetLength(1) != B.GetLength(1))
-                throw new Exception("Column count in first matrix must be equal to row count in second matrix");
+                throw new ArithmeticException("Column count in first matrix must be equal to row count in second matrix");
             return EltDivide(A, B, A.GetLength(0), B.GetLength(1));
         }
 
@@ -1841,11 +1841,11 @@ namespace StarMathLib
         /// <param name="A">2D int Array, A</param>
         /// <param name="B">2D int Array, A</param>
         /// <returns>A 2D int array that is the product of the two matrices A and B</returns>
-        /// <exception cref="System.Exception">Column count in first matrix must be equal to row count in second matrix</exception>
+        /// <exception cref="System.ArithmeticException">Column count in first matrix must be equal to row count in second matrix</exception>
         public static double[,] EltDivide(this int[,] A, int[,] B)
         {
             if (A.GetLength(0) != B.GetLength(0) && A.GetLength(1) != B.GetLength(1))
-                throw new Exception("Column count in first matrix must be equal to row count in second matrix");
+                throw new ArithmeticException("Column count in first matrix must be equal to row count in second matrix");
             return EltDivide(A, B, A.GetLength(0), B.GetLength(1));
         }
 

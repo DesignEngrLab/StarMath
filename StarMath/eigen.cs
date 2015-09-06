@@ -49,7 +49,7 @@ namespace StarMathLib
         {
             var length = A.GetLength(0);
             if (length != A.GetLength(1))
-                throw new Exception("Matrix, A, must be square.");
+                throw new ArithmeticException("Matrix, A, must be square.");
             eigenVectors = new double[length][];
             /* start out with the eigenvectors assigned to unit vectors */
             for (var i = 0; i < length; i++)
@@ -292,7 +292,7 @@ namespace StarMathLib
                     iter = iter + 1;
                     if (iter >= 30*length)
                     {
-                        throw new Exception("Eigen decomposition does not converge.");
+                        throw new ArithmeticException("Eigen decomposition does not converge.");
                     }
 
                     // Look for two consecutive small sub-diagonal elements
@@ -409,7 +409,7 @@ namespace StarMathLib
             // Backsubstitute to find vectors of upper triangular form
             if (norm.IsNegligible())
             {
-                throw new Exception("Eigen decomposition failed due to norm = 0.");
+                throw new ArithmeticException("Eigen decomposition failed due to norm = 0.");
             }
 
             for (n = length - 1; n >= 0; n--)

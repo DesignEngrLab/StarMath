@@ -273,53 +273,8 @@ namespace StarMathLib
             NumNonZero--;
         }
 
-        /// <summary>
-        /// Finds the index of the insertion within the cellsRowbyRow. Of course, there are built-in functions to do this,
-        /// but the idea with writing our own is that we can make a faster search given information that is known about
-        /// this .
-        /// </summary>
-        /// <param name="cell">The cell.</param>
-        /// <returns>System.Int32.</returns>
-        private int FindInsertionIndex(SparseCell cell)
-        {
-            var averageCellPerRow = NumNonZero / NumRows;
-            var index = Math.Min(averageCellPerRow * cell.RowIndex + cell.ColIndex, NumNonZero - 1);
-            int step = averageCellPerRow;
-            do
-            {
-                if (cell.RowIndex < cellsRowbyRow[index].RowIndex
-                    || (cell.RowIndex == cellsRowbyRow[index].RowIndex
-                    && cell.ColIndex < cellsRowbyRow[index].ColIndex))
-                {
-                    if (index == 0 || step == 1) step = 0;
-                    else if (step > 0) step = -step / 2;
-                }
-                else if (cell.RowIndex > cellsRowbyRow[index].RowIndex
-                    || (cell.RowIndex == cellsRowbyRow[index].RowIndex
-                    && cell.ColIndex > cellsRowbyRow[index].ColIndex))
-                {
-                    if (index == NumNonZero - 1 || step == -1) step = 0;
-                    else if (step < 0) step = -step / 2;
-                }
-                else step = 0;
-                index += step;
-                if (index < 0)
-                {
-                    step -= index;
-                    index = 0;
-                }
-                else if (index >= NumNonZero)
-                {
-                    step = index - (NumNonZero - 1);
-                    index = NumNonZero - 1;
-                }
-            } while (step != 0);
-            return index;
-        }
-
         private SparseCell AddCell(int rowI, int colI, double value = Double.NaN)
         {
-            NumNonZero++;
             var cell = new SparseCell(rowI, colI, value);
             // stitch it into the rows
             if (RowFirsts[rowI].ColIndex > colI)
@@ -369,8 +324,53 @@ namespace StarMathLib
             }
             int insertIndex = FindInsertionIndex(cell);
             cellsRowbyRow.Insert(insertIndex, cell);
+            NumNonZero++;
 
             return cell;
+        }
+
+        /// <summary>
+        /// Finds the index of the insertion within the cellsRowbyRow. Of course, there are built-in functions to do this,
+        /// but the idea with writing our own is that we can make a faster search given information that is known about
+        /// this .
+        /// </summary>
+        /// <param name="cell">The cell.</param>
+        /// <returns>System.Int32.</returns>
+        private int FindInsertionIndex(SparseCell cell)
+        {
+            var averageCellPerRow = NumNonZero / NumRows;
+            var index = Math.Min(averageCellPerRow * cell.RowIndex + cell.ColIndex, NumNonZero - 1);
+            int step = averageCellPerRow;
+            do
+            {
+                if (cell.RowIndex < cellsRowbyRow[index].RowIndex
+                    || (cell.RowIndex == cellsRowbyRow[index].RowIndex
+                    && cell.ColIndex < cellsRowbyRow[index].ColIndex))
+                {
+                    if (index == 0 || step == 1) step = 0;
+                    else if (step > 0) step = -step / 2;
+                }
+                else if (cell.RowIndex > cellsRowbyRow[index].RowIndex
+                    || (cell.RowIndex == cellsRowbyRow[index].RowIndex
+                    && cell.ColIndex > cellsRowbyRow[index].ColIndex))
+                {
+                    if (index == NumNonZero - 1 || step == -1) step = 0;
+                    else if (step < 0) step = -step / 2;
+                }
+                else step = 0;
+                index += step;
+                if (index < 0)
+                {
+                    step -= index;
+                    index = 0;
+                }
+                else if (index >= NumNonZero)
+                {
+                    step = index - (NumNonZero - 1);
+                    index = NumNonZero - 1;
+                }
+            } while (step != 0);
+            return index;
         }
 
 

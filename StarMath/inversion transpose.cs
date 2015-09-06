@@ -357,18 +357,14 @@ namespace StarMathLib
         #endregion
 
         #region Cholesky Decomposition
-        // this is intended only for symmetric positive definite matrices
+        // this is intended only for symmetric  matrices
         /// <summary>
         /// Returns the Cholesky decomposition of A in a new matrix.
         /// </summary>
         /// <param name="A">The matrix to invert. This matrix is unchanged by this function.</param>
         /// <returns>System.Double[].</returns>
-        /// <exception cref="ArithmeticException">
-        /// Cholesky Decomposition can only be determined for square matrices.
-        /// or
-        /// Matrix is not positive definite. Cannot complete Cholesky decomposition.
-        /// </exception>
         /// <exception cref="System.ArithmeticException">Matrix cannot be inverted. Can only invert square matrices.</exception>
+        /// <exception cref="ArithmeticException">Cholesky Decomposition can only be determined for square matrices.</exception>
         public static double[,] CholeskyDecomposition(double[,] A)
         {
             var length = A.GetLength(0);
@@ -383,30 +379,28 @@ namespace StarMathLib
                 {
                     sum = 0.0;
                     for (int k = 0; k < j; k++)
-                        sum += L[i, k] * L[j, k];
+                        sum += L[i, k] * L[j, k] * L[k, k];
                     L[i, j] = (L[i, j] - sum) / L[j, j];
                 }
                 sum = 0.0;
                 for (int k = 0; k < i; k++)
-                    sum += L[i, k] * L[i, k];
-                sum = L[i, i] - sum;
-                if (sum < 0) throw new ArithmeticException("Matrix is not positive definite. Cannot complete Cholesky decomposition.");
-                L[i, i] = Math.Sqrt(sum);
-                for (int j = i + 1; j < length; j++)
+                    sum += L[i, k] * L[i, k] * L[k, k];
+                L[i, i] -= sum;
+                 for (int j = i + 1; j < length; j++)
                     L[i, j] = 0.0;
             }
             return L;
         }
-        // this is intended only for symmetric positive definite matrices
+        // this is intended only for symmetric matrices
         /// <summary>
         /// Returns the Cholesky decomposition of A in a new matrix.
         /// </summary>
         /// <param name="A">The matrix to invert. This matrix is unchanged by this function.</param>
         /// <returns>System.Double[].</returns>
-        /// <exception cref="ArithmeticException">Cholesky Decomposition can only be determined for square matrices.
+        /// <exception cref="System.ArithmeticException">Cholesky Decomposition can only be determined for square matrices.
         /// or
         /// Matrix is not positive definite. Cannot complete Cholesky decomposition.</exception>
-        /// <exception cref="System.ArithmeticException">Cholesky Decomposition can only be determined for square matrices.
+        /// <exception cref="ArithmeticException">Cholesky Decomposition can only be determined for square matrices.
         /// or
         /// Matrix is not positive definite. Cannot complete Cholesky decomposition.</exception>
         public static double[,] CholeskyDecomposition(int[,] A)
@@ -423,15 +417,15 @@ namespace StarMathLib
                 {
                     sum = 0.0;
                     for (int k = 0; k < j; k++)
-                        sum += L[i, k] * L[j, k];
-                    L[i, j] = (A[i, j] - sum) / L[j, j];
+                        sum += L[i, k] * L[j, k] * L[k, k];
+                    L[i, j] = (L[i, j] - sum) / L[j, j];
                 }
                 sum = 0.0;
                 for (int k = 0; k < i; k++)
-                    sum += L[i, k] * L[i, k];
-                sum = A[i, i] - sum;
-                if (sum < 0) throw new ArithmeticException("Matrix is not positive definite. Cannot complete Cholesky decomposition.");
-                L[i, i] = Math.Sqrt(sum);
+                    sum += L[i, k] * L[i, k] * L[k, k];
+                L[i, i] -= sum;
+                for (int j = i + 1; j < length; j++)
+                    L[i, j] = 0.0;
             }
             return L;
         }

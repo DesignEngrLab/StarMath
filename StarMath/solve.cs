@@ -106,13 +106,13 @@ namespace StarMathLib
         /// </summary>
         /// <param name="A">a.</param>
         /// <param name="b">The b.</param>
-        /// <param name="AIsSymmetricPositiveDefinite">Is A known to by Symmetric and Positive-Definite?</param>
+        /// <param name="IsASymmetric">Is A known to by Symmetric and Positive-Definite?</param>
         /// <param name="potentialDiagonals">The potential diagonals.</param>
         /// <returns>System.Double[].</returns>
-        public static double[] SolveAnalytically(double[,] A, IList<double> b, bool AIsSymmetricPositiveDefinite = false, List<int>[] potentialDiagonals = null)
+        public static double[] SolveAnalytically(double[,] A, IList<double> b, bool IsASymmetric = false, List<int>[] potentialDiagonals = null)
         {
             var length = b.Count;
-            if (AIsSymmetricPositiveDefinite)
+            if (IsASymmetric)
             {
                 var L = CholeskyDecomposition(A);
                 var x = new double[length];
@@ -122,8 +122,12 @@ namespace StarMathLib
                     var sumFromKnownTerms = 0.0;
                     for (int j = 0; j < i; j++)
                         sumFromKnownTerms += L[i, j] * x[j];
-                    x[i] = (b[i] - sumFromKnownTerms) / L[i, i];
+                    x[i] = (b[i] - sumFromKnownTerms);
                 }
+
+                for (int i = 0; i < length; i++)
+                    x[i] /= L[i, i];
+            
                 // backward substitution
                 for (int i = length - 1; i >= 0; i--)
                 {
@@ -131,7 +135,6 @@ namespace StarMathLib
                     for (int j = i + 1; j < length; j++)
                         sumFromKnownTerms += L[j, i] * x[j];
                     x[i] -= sumFromKnownTerms;
-                    x[i] /= L[i, i];
                 }
                 return x;
             }

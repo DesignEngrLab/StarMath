@@ -54,7 +54,7 @@ namespace StarMathLib
         /// </summary>
         /// <param name="a">The double value to be multiplied</param>
         /// <returns>A 2D double array that contains the product</returns>
-        public void Multiply(double a)
+        public void multiply(double a)
         {
             foreach (var sparseCell in cellsRowbyRow)
                 sparseCell.Value *= a;
@@ -67,7 +67,7 @@ namespace StarMathLib
         /// <returns>A 2D double array that contains the product</returns>
         public void Divide(double a)
         {
-             Multiply(1/a);
+             multiply(1/a);
         }
 
         #endregion

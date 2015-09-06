@@ -28,13 +28,18 @@ namespace StarMathLib
         /// </summary>
         /// <param name="b">The b.</param>
         /// <param name="initialGuess">The initial guess.</param>
-        /// <param name="AIsSymmeticPositiveDefinite">a is symmetic positive definite.</param>
+        /// <param name="IsASymmetric">The is a symmetric.</param>
         /// <returns>System.Double[].</returns>
+        /// <exception cref="System.ArithmeticException">
+        /// Spare Matrix must be square to solve Ax = b.
+        /// or
+        /// Sparse Matrix must be have the same number of rows as the vector, b.
+        /// </exception>
         /// <exception cref="ArithmeticException">Spare Matrix must be square to solve Ax = b.
         /// or
         /// Sparse Matrix must be have the same number of rows as the vector, b.</exception>
         public double[] solve(IList<double> b, IList<double> initialGuess = null,
-            Boolean AIsSymmeticPositiveDefinite = false)
+            Boolean IsASymmetric = false)
         {
             if (NumRows != NumCols)
                 throw new ArithmeticException("Spare Matrix must be square to solve Ax = b.");
@@ -45,14 +50,14 @@ namespace StarMathLib
                 return solveIteratively(b, initialGuess, potentialDiagonals);
             /****** need code to determine when to switch between *****
              ****** this analytical approach and the SOR approach *****/
-            return SolveAnalytically(b, AIsSymmeticPositiveDefinite, potentialDiagonals);
+            return SolveAnalytically(b, IsASymmetric, potentialDiagonals);
         }
 
         /// <summary>
         /// Solves the system of equations analytically.
         /// </summary>
         /// <param name="b">The b.</param>
-        /// <param name="AIsSymmetricPositiveDefinite">if set to <c>true</c> [a is symmetric positive definite].</param>
+        /// <param name="AIsSymmetricPositiveDefinite">if set to <c>true</c> [a is symmetric].</param>
         /// <param name="potentialDiagonals">The potential diagonals.</param>
         /// <returns>System.Double[].</returns>
         /// <exception cref="NotImplementedException"></exception>
@@ -62,7 +67,7 @@ namespace StarMathLib
             var length = b.Count;
             if (AIsSymmetricPositiveDefinite)
             {
-                var L = this;//.Copy();
+                var L = this.Copy();
                 L.CholeskyDecomposition();
                 return L.solveFromCholeskyFactorization(b, NumCols);
 
@@ -122,25 +127,27 @@ namespace StarMathLib
             {
                 var sumFromKnownTerms = 0.0;
                 var startCell = RowFirsts[i];
-                while (startCell.ColIndex < i)
+                while (startCell != null && startCell.ColIndex < i)
                 {
                     sumFromKnownTerms += startCell.Value * x[startCell.ColIndex];
                     startCell = startCell.Right;
                 }
-                x[i] = (b[i] - sumFromKnownTerms) / this[i, i];
+                x[i] = (b[i] - sumFromKnownTerms);
             }
+            for (int i = 0; i < length; i++)
+                x[i] /= this[i, i];
+
             // backward substitution
             for (int i = length - 1; i >= 0; i--)
             {
                 var sumFromKnownTerms = 0.0;
                 var startCell = ColLasts[i];  // this is because it is the transposed one
-                while (startCell.RowIndex > i)
+                while (startCell != null && startCell.RowIndex > i)
                 {
                     sumFromKnownTerms += startCell.Value * x[startCell.RowIndex];
                     startCell = startCell.Up;
                 }
                 x[i] -= sumFromKnownTerms;
-                x[i] /= this[i, i];
             }
             return x;
         }
@@ -149,11 +156,8 @@ namespace StarMathLib
         /// Overwrites the matrix with its Cholesky decomposition (i.e. it is destructive).
         /// </summary>
         /// <returns>SparseMatrix.</returns>
-        /// <exception cref="ArithmeticException">
-        /// Cholesky Decomposition can only be determined for square matrices.
-        /// or
-        /// Sparse Matrix is not positive definite. Cannot complete Cholesky decomposition.
-        /// </exception>
+        /// <exception cref="System.ArithmeticException">Cholesky Decomposition can only be determined for square matrices.</exception>
+        /// <exception cref="ArithmeticException">Cholesky Decomposition can only be determined for square matrices.</exception>
         public void CholeskyDecomposition()
         {
             if (NumCols != NumRows)
@@ -173,7 +177,8 @@ namespace StarMathLib
                     {
                         if (cellRowI.ColIndex == cellRowJ.ColIndex)
                         {
-                            sum += cellRowI.Value * cellRowJ.Value;
+                            sum += cellRowI.Value * cellRowJ.Value
+                                * this[cellRowI.ColIndex, cellRowI.ColIndex];
                             cellRowI = cellRowI.Right;
                             cellRowJ = cellRowJ.Right;
                         }
@@ -196,13 +201,10 @@ namespace StarMathLib
                 sum = 0.0;
                 while (cellRowI.ColIndex < i)
                 {
-                    sum += cellRowI.Value * cellRowI.Value;
+                    sum += cellRowI.Value * cellRowI.Value * this[cellRowI.ColIndex, cellRowI.ColIndex];
                     cellRowI = cellRowI.Right;
                 }
-                if (cellRowI.ColIndex != i || sum > cellRowI.Value)
-                    throw new ArithmeticException("Sparse Matrix is not positive definite. Cannot complete Cholesky decomposition.");
-                sum = cellRowI.Value - sum;
-                cellRowI.Value = Math.Sqrt(sum);
+                cellRowI.Value -= sum;
                 // delete the rest of the entries on the row
                 RowLasts[i] = cellRowI;
                 while (cellRowI.Right != null)

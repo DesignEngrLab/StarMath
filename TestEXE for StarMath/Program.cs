@@ -206,17 +206,20 @@ namespace TestEXE_for_StarMath
             var results = new List<List<string>>();
 
             var r = new Random();
-            var fractionDiag = new[] { .1, .2, .4, .8, 1 };
+            var fractionDiag = new[] { .001, .2, .4, .8, 1 };
             var matrixSize = new[] { 10, 20, 30, 40, 50, 60, 70, 80, 90 };
             for (var i = 0; i < matrixSize.GetLength(0); i++)
             {
                 for (int j = 0; j < fractionDiag.GetLength(0); j++)
                 {
-                    int size = 25*matrixSize[i];
+                    int size = 25 * matrixSize[i];
                     const int numTrials = 1;
                     for (var k = 0; k <= numTrials; k++)
                     {
-                        var A = new double[size, size];
+                      //  var A = new double[size, size];
+                        var AValues = new List<double>();
+                        var rows = new List<int>();
+                        var cols = new List<int>();
                         var b = new double[size];
                         for (var ii = 0; ii < size; ii++)
                         {
@@ -225,21 +228,35 @@ namespace TestEXE_for_StarMath
                             {
                                 var probability = Math.Abs(ii - jj) / (double)(size * fractionDiag[j]);
                                 if (r.NextDouble() > probability)
-                                    A[ii, jj] = A[jj, ii] = (200 * r.NextDouble()) - 100.0;
+                                {
+                                    var value = (200 * r.NextDouble()) - 100.0;
+                                   // A[ii, jj] = value;
+                                    AValues.Add(value);
+                                    rows.Add(ii);
+                                    cols.Add(jj);
+                                    if (ii != jj || ii==1)
+                                    {
+                                    //    A[jj, ii] = value;
+                                        AValues.Add(value);
+                                        rows.Add(jj);
+                                        cols.Add(ii);
+                                    }
+                                }
                             }
                         }
-                        var result = new List<string> { k.ToString(), size.ToString(), fractionDiag[j].ToString() };
+                        var result = new List<string> { k.ToString(), size.ToString(), (AValues.Count/(double)(size*size)).ToString() };
 
+                        //watch.Restart();
+                        //var x = StarMath.SolveAnalytically(A, b, true);
+                        //watch.Stop();
+                        //recordResults(result, A, x, b, watch);
+                        //var SparseA = A.ConvertDenseToSparseMatrix();
+                        var SparseA = new SparseMatrix(rows, cols, AValues, size, size);
                         watch.Restart();
-                        var x = StarMath.SolveAnalytically(A, b, true);
-                        watch.Stop();
-                        recordResults(result, A, x, b, watch);
-                        var SparseA = A.ConvertDenseToSparseMatrix();
-                        watch.Restart();
-                        x = SparseA.SolveAnalytically(b, true);
+                        var x = SparseA.SolveAnalytically(b, true);
                         //x = StarMath.SolveAnalytically(A, b, false);
                         watch.Stop();
-                        recordResults(result, A, x, b, watch);
+                        recordResults(result, SparseA, x, b, watch);
                         Console.WriteLine(result.Aggregate((resultString, next) =>
                       resultString + " " + next));
                         results.Add(result);
@@ -248,6 +265,21 @@ namespace TestEXE_for_StarMath
                 }
             }
             SaveResultsToCSV("results.csv", results);
+        }
+
+        private static void recordResults(List<string> result, SparseMatrix A, double[] x, double[] b, Stopwatch watch)
+        {
+            double error;
+            try
+            {
+                error = b.subtract(A.multiply(x)).norm1() / b.norm1();
+            }
+            catch
+            {
+                error = double.NaN;
+            }
+            result.Add(error.ToString());
+            result.Add(watch.Elapsed.TotalMilliseconds.ToString());
         }
 
         private static void recordResults(List<string> result, double[,] A, double[] x, double[] b, Stopwatch watch)

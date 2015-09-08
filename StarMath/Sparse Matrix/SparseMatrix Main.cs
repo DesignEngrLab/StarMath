@@ -24,7 +24,12 @@ namespace StarMathLib
     public partial class SparseMatrix
     {
         #region Fields and Properties
-        private readonly List<SparseCell> cellsRowbyRow;
+        private readonly HashSet<SparseCell> cellsRowbyRow;
+
+        /// <summary>
+        /// The first non-zero cell in each row.
+        /// </summary>
+        internal SparseCell[] Diagonals { get; private set; }
 
         /// <summary>
         /// The first non-zero cell in each row.
@@ -73,9 +78,17 @@ namespace StarMathLib
         public SparseMatrix(IList<int> rowIndices, IList<int> colIndices, IList<double> values, int numRows, int numCols) : this(numRows, numCols)
         {
             var indices = Enumerable.Range(0, values.Count).OrderBy(i => rowIndices[i] * numCols + colIndices[i]).ToList();
-            var rowByRowIndices = indices.Select(i => rowIndices[i] * numCols + colIndices[i]).ToArray();
-            var rowByRowValues = indices.Select(i => values[i]).ToArray();
-            FillInSparseMatrix(this, rowByRowIndices, rowByRowValues);
+            var orederedRowByRowIndices = indices.Select(i => rowIndices[i] * numCols + colIndices[i]).ToArray();
+            var orderedRowByRowValues = indices.Select(i => values[i]).ToArray();
+            FillInSparseMatrix(this, orederedRowByRowIndices, orderedRowByRowValues);
+        }
+
+        public SparseMatrix(IList<int> rowByRowIndices, IList<double> values, int numRows, int numCols) : this(numRows, numCols)
+        {
+            var indices = Enumerable.Range(0, values.Count).OrderBy(i => rowByRowIndices[i]).ToList();
+            var orderedRowByRowIndices = indices.Select(i => rowByRowIndices[i]).ToArray();
+            var orderedRowByRowValues = indices.Select(i => values[i]).ToArray();
+            FillInSparseMatrix(this, orderedRowByRowIndices, orderedRowByRowValues);
         }
 
         /// <summary>
@@ -113,9 +126,10 @@ namespace StarMathLib
         /// <param name="numCols">The number cols.</param>
         public SparseMatrix(int numRows, int numCols)
         {
-            cellsRowbyRow = new List<SparseCell>();
+            cellsRowbyRow = new HashSet<SparseCell>();
             NumRows = numRows;
             NumCols = numCols;
+            Diagonals = new SparseCell[numRows];
             RowFirsts = new SparseCell[numRows];
             RowLasts = new SparseCell[numRows];
             ColFirsts = new SparseCell[numCols];
@@ -137,7 +151,7 @@ namespace StarMathLib
             {
                 var index = rowByRowIndices[i];
                 var value = rowByRowValues[i];
-                while (i < newMatrix.NumNonZero - 1 && rowByRowIndices[i] == rowByRowIndices[i + 1])
+                while (i < rowByRowValues.Count - 1 && rowByRowIndices[i] == rowByRowIndices[i + 1])
                 {
                     i++;
                     value += rowByRowValues[i];
@@ -151,6 +165,7 @@ namespace StarMathLib
                 }
                 var colI = index - rowLowerLimit;
                 var cell = new SparseCell(rowI, colI, value);
+                if (rowI == colI) newMatrix.Diagonals[rowI] = cell;
                 newMatrix.cellsRowbyRow.Add(cell);
                 if (newRow)
                 {
@@ -205,6 +220,7 @@ namespace StarMathLib
 
         private SparseCell CellAt(int rowI, int colI)
         {
+            if (rowI == colI) return Diagonals[rowI];
             if (rowI >= colI) return SearchRightToCell(colI, RowFirsts[rowI]);
             return SearchDownToCell(rowI, ColFirsts[colI]);
         }
@@ -246,11 +262,8 @@ namespace StarMathLib
 
         private SparseMatrix Copy()
         {
-            var copy = new SparseMatrix(NumRows, NumCols);
-            FillInSparseMatrix(copy,
-                cellsRowbyRow.Select(x => x.RowIndex * NumCols + x.ColIndex).ToArray(),
-                cellsRowbyRow.Select(c => c.Value).ToArray());
-            return copy;
+            return new SparseMatrix(cellsRowbyRow.Select(x => x.RowIndex * NumCols + x.ColIndex).ToArray(),
+                cellsRowbyRow.Select(c => c.Value).ToArray(),NumRows,NumCols);
         }
 
         private void RemoveCell(SparseCell cell)
@@ -268,8 +281,7 @@ namespace StarMathLib
             if (cell.Down == null)
                 ColLasts[cell.ColIndex] = cell.Up;
             else cell.Down.Up = cell.Up;
-            int removalIndex = FindInsertionIndex(cell);
-            cellsRowbyRow.RemoveAt(removalIndex);
+            cellsRowbyRow.Remove(cell);
             NumNonZero--;
         }
 
@@ -322,8 +334,8 @@ namespace StarMathLib
                 cell.Up.Down = cell;
                 startCell.Up = cell;
             }
-            int insertIndex = FindInsertionIndex(cell);
-            cellsRowbyRow.Insert(insertIndex, cell);
+            if (rowI == colI) Diagonals[rowI] = cell;
+            cellsRowbyRow.Add(cell);
             NumNonZero++;
 
             return cell;
@@ -336,42 +348,44 @@ namespace StarMathLib
         /// </summary>
         /// <param name="cell">The cell.</param>
         /// <returns>System.Int32.</returns>
-        private int FindInsertionIndex(SparseCell cell)
-        {
-            var averageCellPerRow = NumNonZero / NumRows;
-            var index = Math.Min(averageCellPerRow * cell.RowIndex + cell.ColIndex, NumNonZero - 1);
-            int step = averageCellPerRow;
-            do
-            {
-                if (cell.RowIndex < cellsRowbyRow[index].RowIndex
-                    || (cell.RowIndex == cellsRowbyRow[index].RowIndex
-                    && cell.ColIndex < cellsRowbyRow[index].ColIndex))
-                {
-                    if (index == 0 || step == 1) step = 0;
-                    else if (step > 0) step = -step / 2;
-                }
-                else if (cell.RowIndex > cellsRowbyRow[index].RowIndex
-                    || (cell.RowIndex == cellsRowbyRow[index].RowIndex
-                    && cell.ColIndex > cellsRowbyRow[index].ColIndex))
-                {
-                    if (index == NumNonZero - 1 || step == -1) step = 0;
-                    else if (step < 0) step = -step / 2;
-                }
-                else step = 0;
-                index += step;
-                if (index < 0)
-                {
-                    step -= index;
-                    index = 0;
-                }
-                else if (index >= NumNonZero)
-                {
-                    step = index - (NumNonZero - 1);
-                    index = NumNonZero - 1;
-                }
-            } while (step != 0);
-            return index;
-        }
+        //private int FindInsertionIndex(SparseCell cell)
+        //{
+           //int i= cellsRowbyRow.IndexOf(cell);
+           // if (i >= 0) return i;
+            //var averageCellPerRow = NumNonZero / NumRows;
+            //var index = Math.Min(averageCellPerRow * cell.RowIndex + cell.ColIndex, NumNonZero - 1);
+            //int step = averageCellPerRow;
+            //do
+            //{
+            //    if (cell.RowIndex < cellsRowbyRow[index].RowIndex
+            //        || (cell.RowIndex == cellsRowbyRow[index].RowIndex
+            //        && cell.ColIndex < cellsRowbyRow[index].ColIndex))
+            //    {
+            //        if (index == 0 || step == 1) step = 0;
+            //        else if (step > 0) step = -step / 2;
+            //    }
+            //    else if (cell.RowIndex > cellsRowbyRow[index].RowIndex
+            //        || (cell.RowIndex == cellsRowbyRow[index].RowIndex
+            //        && cell.ColIndex > cellsRowbyRow[index].ColIndex))
+            //    {
+            //        if (index == NumNonZero - 1 || step == -1) step = 0;
+            //        else if (step < 0) step = -step / 2;
+            //    }
+            //    else step = 0;
+            //    index += step;
+            //    if (index < 0)
+            //    {
+            //        step -= index;
+            //        index = 0;
+            //    }
+            //    else if (index >= NumNonZero)
+            //    {
+            //        step = index - (NumNonZero - 1);
+            //        index = NumNonZero - 1;
+            //    }
+            //} while (step != 0);
+            //return index;
+        //}
 
 
         /// <summary>
@@ -405,6 +419,7 @@ namespace StarMathLib
                 while (cell != null)
                 {
                     cell.RowIndex = i;
+                    if (cell.ColIndex == i) Diagonals[i] = cell;
                     cell = cell.Right;
                 }
             }
@@ -442,6 +457,7 @@ namespace StarMathLib
                 while (cell != null)
                 {
                     cell.ColIndex = i;
+                    if (cell.RowIndex == i) Diagonals[i] = cell;
                     cell = cell.Down;
                 }
             }
@@ -480,6 +496,7 @@ namespace StarMathLib
                 while (cell != null)
                 {
                     cell.RowIndex = i;
+                    if (cell.ColIndex == i) Diagonals[i] = cell;
                     cell = cell.Right;
                 }
             }
@@ -518,6 +535,7 @@ namespace StarMathLib
                 while (cell != null)
                 {
                     cell.ColIndex = i;
+                    if (cell.RowIndex == i) Diagonals[i] = cell;
                     cell = cell.Down;
                 }
             }
@@ -545,16 +563,16 @@ namespace StarMathLib
             var tempLimit = NumRows;
             NumRows = NumCols;
             NumCols = tempLimit;
-            cellsRowbyRow.Clear();
-            for (int i = 0; i < NumRows; i++)
-            {
-                var cell = RowFirsts[i];
-                while (cell != null)
-                {
-                    cellsRowbyRow.Add(cell);
-                    cell = cell.Right;
-                }
-            }
+            //cellsRowbyRow.Clear();
+            //for (int i = 0; i < NumRows; i++)
+            //{
+            //    var cell = RowFirsts[i];
+            //    while (cell != null)
+            //    {
+            //        cellsRowbyRow.Add(cell);
+            //        cell = cell.Right;
+            //    }
+            //}
         }
     }
 

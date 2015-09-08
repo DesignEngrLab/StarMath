@@ -135,7 +135,7 @@ namespace StarMathLib
                 x[i] = (b[i] - sumFromKnownTerms);
             }
             for (int i = 0; i < length; i++)
-                x[i] /= this[i, i];
+                x[i] /= Diagonals[i].Value;
 
             // backward substitution
             for (int i = length - 1; i >= 0; i--)
@@ -178,7 +178,7 @@ namespace StarMathLib
                         if (cellRowI.ColIndex == cellRowJ.ColIndex)
                         {
                             sum += cellRowI.Value * cellRowJ.Value
-                                * this[cellRowI.ColIndex, cellRowI.ColIndex];
+                                * Diagonals[cellRowI.ColIndex].Value;
                             cellRowI = cellRowI.Right;
                             cellRowJ = cellRowJ.Right;
                         }
@@ -194,14 +194,14 @@ namespace StarMathLib
                         continue;
                     }
                     if (cellRowI == null && !sum.IsNegligible()) cellRowI = AddCell(i, j, 0.0);
-                    cellRowI.Value = (cellRowI.Value - sum) / this[j, j];
+                    cellRowI.Value = (cellRowI.Value - sum) / Diagonals[j].Value;
                 }
 
                 cellRowI = startCellRowI;
                 sum = 0.0;
                 while (cellRowI.ColIndex < i)
                 {
-                    sum += cellRowI.Value * cellRowI.Value * this[cellRowI.ColIndex, cellRowI.ColIndex];
+                    sum += cellRowI.Value * cellRowI.Value * Diagonals[cellRowI.ColIndex].Value;
                     cellRowI = cellRowI.Right;
                 }
                 cellRowI.Value -= sum;

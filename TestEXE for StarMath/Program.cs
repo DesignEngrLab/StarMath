@@ -206,17 +206,17 @@ namespace TestEXE_for_StarMath
             var results = new List<List<string>>();
 
             var r = new Random();
-            var fractionDiag = new[] { .001, .2, .4, .8, 1 };
+            var numberPerRow = new[] { 3, 6, 12, 24, 48 };
             var matrixSize = new[] { 10, 20, 30, 40, 50, 60, 70, 80, 90 };
             for (var i = 0; i < matrixSize.GetLength(0); i++)
             {
-                for (int j = 0; j < fractionDiag.GetLength(0); j++)
+                for (int j = 0; j < numberPerRow.GetLength(0); j++)
                 {
                     int size = 25 * matrixSize[i];
                     const int numTrials = 1;
                     for (var k = 0; k <= numTrials; k++)
                     {
-                      //  var A = new double[size, size];
+                        //  var A = new double[size, size];
                         var AValues = new List<double>();
                         var rows = new List<int>();
                         var cols = new List<int>();
@@ -224,27 +224,30 @@ namespace TestEXE_for_StarMath
                         for (var ii = 0; ii < size; ii++)
                         {
                             b[ii] = (200 * r.NextDouble()) - 100.0;
-                            for (var jj = ii; jj < size; jj++)
+                            var diagvalue = (200 * r.NextDouble()) - 100.0;
+                            //    A[jj, ii] = diagvalue;
+                            AValues.Add(diagvalue);
+                            rows.Add(ii);
+                            cols.Add(ii);
+                            var formerRandomPositions = new List<int>();
+                            for (var jj = 0; jj < numberPerRow[j]; jj++)
                             {
-                                var probability = Math.Abs(ii - jj) / (double)(size * fractionDiag[j]);
-                                if (r.NextDouble() > probability)
+                                int randomPosition;
+                                do
                                 {
-                                    var value = (200 * r.NextDouble()) - 100.0;
-                                   // A[ii, jj] = value;
-                                    AValues.Add(value);
-                                    rows.Add(ii);
-                                    cols.Add(jj);
-                                    if (ii != jj || ii==1)
-                                    {
-                                    //    A[jj, ii] = value;
-                                        AValues.Add(value);
-                                        rows.Add(jj);
-                                        cols.Add(ii);
-                                    }
-                                }
+                                    randomPosition = r.Next(size);
+                                } while (ii == randomPosition || formerRandomPositions.Contains(randomPosition));
+                                formerRandomPositions.Add(randomPosition);
+                                var value = (200 * r.NextDouble()) - 100.0;
+                                // A[ii, jj] = value;
+                                AValues.Add(value); AValues.Add(value);
+                                rows.Add(ii);
+                                cols.Add(randomPosition);
+                                rows.Add(randomPosition);
+                                cols.Add(ii);
                             }
                         }
-                        var result = new List<string> { k.ToString(), size.ToString(), (AValues.Count/(double)(size*size)).ToString() };
+                        var result = new List<string> { k.ToString(), size.ToString(), (numberPerRow[j] / (double)size).ToString() };
 
                         //watch.Restart();
                         //var x = StarMath.SolveAnalytically(A, b, true);

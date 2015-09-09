@@ -399,6 +399,7 @@ namespace StarMathLib
             {
                 var nextCell = thisCell.Right;
                 RemoveCell(thisCell);
+                if (thisCell.ColIndex == rowIndexToRemove) Diagonals[rowIndexToRemove] = null;
                 thisCell = nextCell;
             }
 
@@ -437,6 +438,7 @@ namespace StarMathLib
             {
                 var nextCell = thisCell.Down;
                 RemoveCell(thisCell);
+                if (thisCell.RowIndex == colIndexToRemove) Diagonals[colIndexToRemove] = null;
                 thisCell = nextCell;
             }
 
@@ -479,6 +481,7 @@ namespace StarMathLib
                 {
                     var nextCell = cell.Right;
                     RemoveCell(cell);
+                    if (cell.ColIndex == cell.RowIndex) Diagonals[cell.RowIndex] = null;
                     cell = nextCell;
                 }
             }
@@ -518,6 +521,7 @@ namespace StarMathLib
                 {
                     var nextCell = cell.Down;
                     RemoveCell(cell);
+                    if (cell.ColIndex == cell.RowIndex) Diagonals[cell.RowIndex] = null;
                     cell = nextCell;
                 }
             }

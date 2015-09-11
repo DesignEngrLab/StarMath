@@ -212,7 +212,7 @@ namespace TestEXE_for_StarMath
             {
                 for (int j = 0; j < numberPerRow.GetLength(0); j++)
                 {
-                    int size = 25 * matrixSize[i];
+                    int size = 100 * matrixSize[i];
                     const int numTrials = 1;
                     for (var k = 0; k <= numTrials; k++)
                     {
@@ -224,6 +224,16 @@ namespace TestEXE_for_StarMath
                         for (var ii = 0; ii < size; ii++)
                         {
                             b[ii] = (200 * r.NextDouble()) - 100.0;
+                            //for (int jj = ii; jj < size; jj++)
+                            //{
+                            //    var value = (200 * r.NextDouble()) - 100.0;
+                            //    AValues.Add(value);
+                            //    rows.Add(ii);
+                            //    cols.Add(jj);
+                            //    AValues.Add(value);
+                            //    rows.Add(jj);
+                            //    cols.Add(ii);
+                            //}
                             var diagvalue = (200 * r.NextDouble()) - 100.0;
                             //    A[jj, ii] = diagvalue;
                             AValues.Add(diagvalue);
@@ -247,6 +257,7 @@ namespace TestEXE_for_StarMath
                                 cols.Add(ii);
                             }
                         }
+
                         var result = new List<string> { k.ToString(), size.ToString(), (numberPerRow[j] / (double)size).ToString() };
 
                         //watch.Restart();

@@ -14,6 +14,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace StarMathLib
 {
@@ -57,20 +58,18 @@ namespace StarMathLib
         /// Solves the system of equations analytically.
         /// </summary>
         /// <param name="b">The b.</param>
-        /// <param name="AIsSymmetricPositiveDefinite">if set to <c>true</c> [a is symmetric].</param>
+        /// <param name="IsASymmetric">if set to <c>true</c> [a is symmetric].</param>
         /// <param name="potentialDiagonals">The potential diagonals.</param>
         /// <returns>System.Double[].</returns>
         /// <exception cref="NotImplementedException"></exception>
-        public double[] SolveAnalytically(IList<double> b, bool AIsSymmetricPositiveDefinite = false,
+        public double[] SolveAnalytically(IList<double> b, bool IsASymmetric = false,
             List<int>[] potentialDiagonals = null)
         {
-            var length = b.Count;
-            if (AIsSymmetricPositiveDefinite)
+            if (IsASymmetric)
             {
-                var L = this.Copy();
-                L.CholeskyDecomposition();
-                return L.solveFromCholeskyFactorization(b, NumCols);
-
+                double[] L, D;
+                CholeskyDecomposition(out L, out D);
+                return solveFromCholeskyFactorization(b, L, D, NumCols);
             }
             else
             {
@@ -119,101 +118,81 @@ namespace StarMathLib
             }
         }
 
-        private double[] solveFromCholeskyFactorization(IList<double> b, int length)
+        private double[] solveFromCholeskyFactorization(IList<double> b, double[] L, double[] D, int length)
         {
             var x = new double[length];
+            var ithRowStartIndex = 0;
             // forward substitution
             for (int i = 0; i < length; i++)
             {
                 var sumFromKnownTerms = 0.0;
-                var startCell = RowFirsts[i];
-                while (startCell != null && startCell.ColIndex < i)
-                {
-                    sumFromKnownTerms += startCell.Value * x[startCell.ColIndex];
-                    startCell = startCell.Right;
-                }
+                for (int j = 0; j < i; j++)
+                    sumFromKnownTerms += L[ithRowStartIndex + j] * x[j];
                 x[i] = (b[i] - sumFromKnownTerms);
+                ithRowStartIndex += i;
             }
             for (int i = 0; i < length; i++)
-                x[i] /= Diagonals[i].Value;
+                x[i] /= D[i];
 
+            ithRowStartIndex = (length*(length + 1)/2) - 1;
             // backward substitution
             for (int i = length - 1; i >= 0; i--)
             {
                 var sumFromKnownTerms = 0.0;
-                var startCell = ColLasts[i];  // this is because it is the transposed one
-                while (startCell != null && startCell.RowIndex > i)
+                var jthColStartIndex = 0;
+                for (int j = i + 1; j < length; j++)
                 {
-                    sumFromKnownTerms += startCell.Value * x[startCell.RowIndex];
-                    startCell = startCell.Up;
+                    sumFromKnownTerms += L[ithRowStartIndex + jthColStartIndex] * x[j];
+                    jthColStartIndex += j;
                 }
                 x[i] -= sumFromKnownTerms;
+                ithRowStartIndex -= i+1;
             }
             return x;
         }
-
+ 
         /// <summary>
         /// Overwrites the matrix with its Cholesky decomposition (i.e. it is destructive).
+        /// This is based on: https://en.wikipedia.org/wiki/Cholesky_decomposition#LDL_decomposition_2
         /// </summary>
+        /// <param name="L">The Lower matrix as a 1D array.</param>
+        /// <param name="D">The Diagonals as a 1D array.</param>
         /// <returns>SparseMatrix.</returns>
         /// <exception cref="System.ArithmeticException">Cholesky Decomposition can only be determined for square matrices.</exception>
         /// <exception cref="ArithmeticException">Cholesky Decomposition can only be determined for square matrices.</exception>
-        public void CholeskyDecomposition()
+        private void CholeskyDecomposition(out double[] L, out double[] D)
         {
             if (NumCols != NumRows)
                 throw new ArithmeticException("Cholesky Decomposition can only be determined for square matrices.");
-
+            L = new double[NumRows * (NumRows - 1) / 2];
+            D = new double[NumRows];
+            var ithRowStartIndex = 0;
             for (var i = 0; i < NumRows; i++)
             {
-                double sum;
-                var startCellRowI = RowFirsts[i];
-                SparseCell cellRowI;
+                var jthRowStartIndex = 0;
+                var sum = 0.0;
+                var nextNonZeroCell = RowFirsts[i];
                 for (var j = 0; j < i; j++)
                 {
-                    cellRowI = startCellRowI;
-                    var cellRowJ = RowFirsts[j];
                     sum = 0.0;
-                    while (cellRowI.ColIndex < j && cellRowJ.ColIndex < j)
+                    for (int k = 0; k < j; k++)
                     {
-                        if (cellRowI.ColIndex == cellRowJ.ColIndex)
-                        {
-                            sum += cellRowI.Value * cellRowJ.Value
-                                * Diagonals[cellRowI.ColIndex].Value;
-                            cellRowI = cellRowI.Right;
-                            cellRowJ = cellRowJ.Right;
-                        }
-                        else if (cellRowI.ColIndex < cellRowJ.ColIndex)
-                            cellRowI = cellRowI.Right;
-                        else cellRowJ = cellRowJ.Right;
+                        sum += L[ithRowStartIndex + k] * L[jthRowStartIndex + k] * D[k];
                     }
-                    cellRowI = SearchRightToCell(j, cellRowI);
-                    if (cellRowI == null && sum.IsNegligible()) continue;
-                    if (cellRowI != null && cellRowI.Value.IsPracticallySame(sum))
+                    if (j < nextNonZeroCell.ColIndex)
+                        L[ithRowStartIndex + j] = -sum / D[j];
+                    else
                     {
-                        RemoveCell(cellRowI);
-                        continue;
+                        L[ithRowStartIndex + j] = (nextNonZeroCell.Value - sum) / D[j];
+                        nextNonZeroCell = nextNonZeroCell.Right;
                     }
-                    if (cellRowI == null && !sum.IsNegligible()) cellRowI = AddCell(i, j, 0.0);
-                    cellRowI.Value = (cellRowI.Value - sum) / Diagonals[j].Value;
+                    jthRowStartIndex += j;
                 }
-
-                cellRowI = startCellRowI;
                 sum = 0.0;
-                while (cellRowI.ColIndex < i)
-                {
-                    sum += cellRowI.Value * cellRowI.Value * Diagonals[cellRowI.ColIndex].Value;
-                    cellRowI = cellRowI.Right;
-                }
-                cellRowI.Value -= sum;
-                // delete the rest of the entries on the row
-                RowLasts[i] = cellRowI;
-                while (cellRowI.Right != null)
-                {
-                    cellRowI = cellRowI.Right;
-                    cellRowI.Left.Right = null;
-                    ColFirsts[cellRowI.ColIndex] = cellRowI.Down;
-                    cellRowI.Down.Up = null;
-                }
+                for (int k = 0; k < i; k++)
+                    sum += L[ithRowStartIndex + k] * L[ithRowStartIndex + k] * D[k];
+                D[i] = Diagonals[i].Value - sum;
+                ithRowStartIndex += i;
             }
         }
 

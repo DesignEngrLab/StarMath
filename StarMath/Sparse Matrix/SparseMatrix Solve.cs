@@ -62,7 +62,7 @@ namespace StarMathLib
         /// <param name="potentialDiagonals">The potential diagonals.</param>
         /// <returns>System.Double[].</returns>
         /// <exception cref="NotImplementedException"></exception>
-        public double[] SolveAnalytically(IList<double> b, bool IsASymmetric = false,
+        public double[] SolveAnalyticallyCSRApproach(IList<double> b, bool IsASymmetric = false,
             List<int>[] potentialDiagonals = null)
         {
             if (IsASymmetric)
@@ -70,8 +70,8 @@ namespace StarMathLib
                 double[] D;
                 List<double>[] L;
                 List<int>[] LIndices;
-                CholeskyDecomposition(out L, out LIndices, out D);
-                return solveFromCholeskyFactorization(b, L, LIndices, D, NumCols);
+                CholeskyDecompositionCSRApproach(out L, out LIndices, out D);
+                return solveFromCholeskyFactorizationCSRApproach(b, L, LIndices, D, NumCols);
             }
             else
             {
@@ -128,14 +128,14 @@ namespace StarMathLib
         /// <param name="potentialDiagonals">The potential diagonals.</param>
         /// <returns>System.Double[].</returns>
         /// <exception cref="NotImplementedException"></exception>
-        public double[] SolveAnalyticallyFat(IList<double> b, bool IsASymmetric = false,
+        public double[] SolveAnalytically(IList<double> b, bool IsASymmetric = false,
             List<int>[] potentialDiagonals = null)
         {
             if (IsASymmetric)
             {
                 var L = this.Copy();
-                L.CholeskyDecompositionFat();
-                return L.solveFromCholeskyFactorizationFat(b, NumCols);
+                L.CholeskyDecomposition();
+                return L.solveFromCholeskyFactorization(b, NumCols);
             }
             else
             {
@@ -184,7 +184,7 @@ namespace StarMathLib
             }
         }
 
-        private double[] solveFromCholeskyFactorization(IList<double> b, List<double>[] L, List<int>[] LIndices, double[] D, int length)
+        private double[] solveFromCholeskyFactorizationCSRApproach(IList<double> b, List<double>[] L, List<int>[] LIndices, double[] D, int length)
         {
             var x = new double[length];
             // forward substitution
@@ -229,7 +229,7 @@ namespace StarMathLib
         /// <returns>SparseMatrix.</returns>
         /// <exception cref="System.ArithmeticException">Cholesky Decomposition can only be determined for square matrices.</exception>
         /// <exception cref="ArithmeticException">Cholesky Decomposition can only be determined for square matrices.</exception>
-        private void CholeskyDecomposition(out List<double>[] L, out List<int>[] LIndices, out double[] D)
+        private void CholeskyDecompositionCSRApproach(out List<double>[] L, out List<int>[] LIndices, out double[] D)
         {
             if (NumCols != NumRows)
                 throw new ArithmeticException("Cholesky Decomposition can only be determined for square matrices.");
@@ -292,7 +292,7 @@ namespace StarMathLib
             if (ithPosition >= LIndices[i].Count) return int.MaxValue;
             else return LIndices[i][ithPosition];
         }
-        private double[] solveFromCholeskyFactorizationFat(IList<double> b, int length)
+        private double[] solveFromCholeskyFactorization(IList<double> b, int length)
         {
             var x = new double[length];
             // forward substitution
@@ -331,7 +331,7 @@ namespace StarMathLib
         /// <returns>SparseMatrix.</returns>
         /// <exception cref="System.ArithmeticException">Cholesky Decomposition can only be determined for square matrices.</exception>
         /// <exception cref="ArithmeticException">Cholesky Decomposition can only be determined for square matrices.</exception>
-        public void CholeskyDecompositionFat()
+        public void CholeskyDecomposition()
         {
             if (NumCols != NumRows)
                 throw new ArithmeticException("Cholesky Decomposition can only be determined for square matrices.");

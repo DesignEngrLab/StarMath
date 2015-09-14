@@ -271,7 +271,7 @@ namespace TestEXE_for_StarMath
                         watch.Stop();
                         recordResults(result, SparseA, x, b, watch);
                         watch.Restart();
-                        x = SparseA.SolveAnalyticallyFat(b, true);
+                        x = SparseA.SolveAnalyticallyCSRApproach(b, true);
                         watch.Stop();
                         recordResults(result, SparseA, x, b, watch);
                         Console.WriteLine(result.Aggregate((resultString, next) =>

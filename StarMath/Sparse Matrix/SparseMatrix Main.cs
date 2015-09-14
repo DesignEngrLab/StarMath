@@ -231,6 +231,22 @@ namespace StarMathLib
         /// <param name="colIndex">Index of the col.</param>
         /// <param name="startCell">The start cell.</param>
         /// <returns>SparseCell.</returns>
+        private Boolean TrySearchRightToCell(int colIndex, ref SparseCell startCell)
+        {
+            do
+            {
+                if (startCell == null || startCell.ColIndex > colIndex)
+                    return false;
+                if (startCell.ColIndex == colIndex) return true;
+                startCell = startCell.Right;
+            } while (true);
+        }
+        /// <summary>
+        /// Searches the left to.
+        /// </summary>
+        /// <param name="colIndex">Index of the col.</param>
+        /// <param name="startCell">The start cell.</param>
+        /// <returns>SparseCell.</returns>
         private SparseCell SearchRightToCell(int colIndex, SparseCell startCell)
         {
             do
@@ -260,7 +276,7 @@ namespace StarMathLib
         }
         #endregion
 
-        private SparseMatrix Copy()
+        public SparseMatrix Copy()
         {
             return new SparseMatrix(cellsRowbyRow.Select(x => x.RowIndex * NumCols + x.ColIndex).ToArray(),
                 cellsRowbyRow.Select(c => c.Value).ToArray(),NumRows,NumCols);
@@ -563,6 +579,9 @@ namespace StarMathLib
                 tempCell = sparseCell.Left;
                 sparseCell.Left = sparseCell.Up;
                 sparseCell.Up = tempCell;
+                var tempIndex = sparseCell.RowIndex;
+                sparseCell.RowIndex = sparseCell.ColIndex;
+                sparseCell.ColIndex = tempIndex;
             }
             var tempLimit = NumRows;
             NumRows = NumCols;

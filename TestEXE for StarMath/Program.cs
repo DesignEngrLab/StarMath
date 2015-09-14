@@ -21,7 +21,7 @@ namespace TestEXE_for_StarMath
             compareSolvers_Inversion_to_GaussSeidel();
             //checkEigen();
             Console.WriteLine("Press any key to close.");
-            Console.ReadLine();
+          //  Console.ReadLine();
         }
 
         private static void testStackFunctions()
@@ -207,13 +207,13 @@ namespace TestEXE_for_StarMath
 
             var r = new Random();
             var numberPerRow = new[] { 3, 6, 12, 24, 48 };
-            var matrixSize = new[] { 10, 20, 30, 40, 50, 60, 70, 80, 90 };
+            var matrixSize = new[] { 10, 20,  40,  80 };
             for (var i = 0; i < matrixSize.GetLength(0); i++)
             {
                 for (int j = 0; j < numberPerRow.GetLength(0); j++)
                 {
-                    int size = 100 * matrixSize[i];
-                    const int numTrials = 1;
+                    int size = 20 * matrixSize[i];
+                    const int numTrials = 0;
                     for (var k = 0; k <= numTrials; k++)
                     {
                         //  var A = new double[size, size];
@@ -235,7 +235,6 @@ namespace TestEXE_for_StarMath
                             //    cols.Add(ii);
                             //}
                             var diagvalue = (200 * r.NextDouble()) - 100.0;
-                            //    A[jj, ii] = diagvalue;
                             AValues.Add(diagvalue);
                             rows.Add(ii);
                             cols.Add(ii);
@@ -250,11 +249,9 @@ namespace TestEXE_for_StarMath
                                 formerRandomPositions.Add(randomPosition);
                                 var value = (200 * r.NextDouble()) - 100.0;
                                 // A[ii, jj] = value;
-                                AValues.Add(value); AValues.Add(value);
+                                AValues.Add(value); 
                                 rows.Add(ii);
                                 cols.Add(randomPosition);
-                                rows.Add(randomPosition);
-                                cols.Add(ii);
                             }
                         }
 
@@ -266,9 +263,15 @@ namespace TestEXE_for_StarMath
                         //recordResults(result, A, x, b, watch);
                         //var SparseA = A.ConvertDenseToSparseMatrix();
                         var SparseA = new SparseMatrix(rows, cols, AValues, size, size);
+                        var ATranspose = SparseA.Copy();
+                        ATranspose.Transpose();
+                        SparseA.addInPlace(ATranspose);
                         watch.Restart();
                         var x = SparseA.SolveAnalytically(b, true);
-                        //x = StarMath.SolveAnalytically(A, b, false);
+                        watch.Stop();
+                        recordResults(result, SparseA, x, b, watch);
+                        watch.Restart();
+                        x = SparseA.SolveAnalyticallyFat(b, true);
                         watch.Stop();
                         recordResults(result, SparseA, x, b, watch);
                         Console.WriteLine(result.Aggregate((resultString, next) =>

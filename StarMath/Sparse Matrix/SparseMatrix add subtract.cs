@@ -67,6 +67,7 @@ namespace StarMathLib
         {
             throw new NotImplementedException();
         }
+
         /// <summary>
         /// Adds the specified 2D double array, A to this sparse matrix and writes over
         /// this sparse matrix with the result.
@@ -76,20 +77,34 @@ namespace StarMathLib
         public void addInPlace(SparseMatrix A)
         {
             if (NumRows != A.NumRows || NumCols != A.NumCols)
-                throw new ArithmeticException("Adding Sparse Matrices can only be accomplished if both are the same size.");
+                throw new ArithmeticException(
+                    "Adding Sparse Matrices can only be accomplished if both are the same size.");
 
-            throw new NotImplementedException();
-            //var C = new double[numRows, numCols];
-
-            //for (var i = 0; i  NumRows; i++)
-            //    for (var j = 0; j != numCols; j++)
-            //    {
-            //        C[i, j] = 0.0;
-            //        for (var k = 0; k != A.GetLength(1); k++)
-            //            C[i, j] += A[i, k] * B[k, j];
-            //    }
-            //return C;
+            for (var i = 0; i < NumRows; i++)
+            {
+                var thisCell = RowFirsts[i];
+                var ACell = A.RowFirsts[i];
+                while (thisCell != null || ACell != null)
+                {
+                    if (thisCell == null || (ACell != null && ACell.ColIndex < thisCell.ColIndex))
+                    {
+                        AddCell(i, ACell.ColIndex, ACell.Value);
+                        ACell = ACell.Right;
+                    }
+                    else if (ACell == null || thisCell.ColIndex < ACell.ColIndex)
+                    {
+                        thisCell = thisCell.Right;
+                    }
+                    else //then the two values must be at the same cell
+                    {
+                        thisCell.Value += ACell.Value;
+                        thisCell = thisCell.Right;
+                        ACell = ACell.Right;
+                    }
+                }
+            }
         }
+
 
         /// <summary>
         /// Adds the specified 2D double array, A to this sparse matrix to create a new
@@ -100,7 +115,7 @@ namespace StarMathLib
         /// <exception cref="NotImplementedException"></exception>
         public SparseMatrix add(SparseMatrix A)
         {
-          if (NumRows!=A.NumRows || NumCols!=A.NumCols)
+            if (NumRows != A.NumRows || NumCols != A.NumCols)
                 throw new ArithmeticException("Adding Sparse Matrices can only be accomplished if both are the same size.");
 
             throw new NotImplementedException();

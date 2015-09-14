@@ -133,7 +133,7 @@ namespace StarMathLib
         {
             if (IsASymmetric)
             {
-                var L = this.Copy();
+                var L = Copy();
                 L.CholeskyDecomposition();
                 return L.solveFromCholeskyFactorization(b, NumCols);
             }
@@ -183,115 +183,7 @@ namespace StarMathLib
                 //return x;
             }
         }
-
-        private double[] solveFromCholeskyFactorizationCSRApproach(IList<double> b, List<double>[] L, List<int>[] LIndices, double[] D, int length)
-        {
-            var x = new double[length];
-            // forward substitution
-            for (int i = 0; i < length; i++)
-            {
-                var sumFromKnownTerms = 0.0;
-                var ithPosition = 0;
-                var ithRowColIndex = GetLIndex(LIndices, i, ithPosition);
-                while (ithRowColIndex < i)
-                {
-                    sumFromKnownTerms += L[i][ithPosition] * x[ithRowColIndex];
-                    ithRowColIndex = GetLIndex(LIndices, i, ++ithPosition);
-                }
-                x[i] = (b[i] - sumFromKnownTerms);
-            }
-            for (int i = 0; i < length; i++)
-                x[i] /= D[i];
-
-            // backward substitution
-            for (int j = length - 1; j >= 0; j--)
-            {
-                var sumFromKnownTerms = 0.0;
-                var ithRow = length - 1;
-                while (ithRow > j)
-                {
-                    var jthPosition = LIndices[ithRow].IndexOf(j);
-                    if (jthPosition >= 0)
-                        sumFromKnownTerms += L[ithRow][jthPosition] * x[ithRow];
-                    ithRow--;
-                }
-                x[j] -= sumFromKnownTerms;
-            }
-            return x;
-        }
-
-        /// <summary>
-        /// Overwrites the matrix with its Cholesky decomposition (i.e. it is destructive).
-        /// This is based on: https://en.wikipedia.org/wiki/Cholesky_decomposition#LDL_decomposition_2
-        /// </summary>
-        /// <param name="L">The Lower matrix as a 1D array.</param>
-        /// <param name="D">The Diagonals as a 1D array.</param>
-        /// <returns>SparseMatrix.</returns>
-        /// <exception cref="System.ArithmeticException">Cholesky Decomposition can only be determined for square matrices.</exception>
-        /// <exception cref="ArithmeticException">Cholesky Decomposition can only be determined for square matrices.</exception>
-        private void CholeskyDecompositionCSRApproach(out List<double>[] L, out List<int>[] LIndices, out double[] D)
-        {
-            if (NumCols != NumRows)
-                throw new ArithmeticException("Cholesky Decomposition can only be determined for square matrices.");
-            L = new List<double>[NumRows];
-            LIndices = new List<int>[NumRows];
-            D = new double[NumRows];
-            for (var i = 0; i < NumRows; i++)
-            {
-                L[i] = new List<double>();
-                LIndices[i] = new List<int>();
-                double sum;
-                var nextNonZeroCell = RowFirsts[i];
-                int ithPosition, ithRowColIndex;
-                for (var j = 0; j < i; j++)
-                {
-                    sum = 0.0;
-                    ithPosition = 0;
-                    var jthPosition = 0;
-                    ithRowColIndex = GetLIndex(LIndices, i, ithPosition);
-                    var jthRowColIndex = GetLIndex(LIndices, j, jthPosition);
-                    while (ithRowColIndex < j && jthRowColIndex < j)
-                    {
-                        if (ithRowColIndex == jthRowColIndex)
-                        {
-                            sum += L[i][ithPosition] * L[j][jthPosition]
-                                   * D[ithRowColIndex];
-                            ithRowColIndex = GetLIndex(LIndices, i, ++ithPosition);
-                            jthRowColIndex = GetLIndex(LIndices, j, ++jthPosition);
-                        }
-                        else if (ithRowColIndex < jthRowColIndex)
-                            ithRowColIndex = GetLIndex(LIndices, i, ++ithPosition);
-                        else jthRowColIndex = GetLIndex(LIndices, j, ++jthPosition);
-                    }
-                    if (j < nextNonZeroCell.ColIndex && sum != 0.0)
-                    {
-                        L[i].Add(-sum / D[j]);
-                        LIndices[i].Add(j);
-                    }
-                    else if (j == nextNonZeroCell.ColIndex && !nextNonZeroCell.Value.IsPracticallySame(sum))
-                    {
-                        L[i].Add((nextNonZeroCell.Value - sum) / D[j]);
-                        LIndices[i].Add(j);
-                        nextNonZeroCell = nextNonZeroCell.Right;
-                    }
-                }
-                sum = 0.0;
-                ithPosition = 0;
-                ithRowColIndex = GetLIndex(LIndices, i, ithPosition);
-                while (ithRowColIndex < i)
-                {
-                    sum += L[i][ithPosition] * L[i][ithPosition] * D[ithRowColIndex];
-                    ithRowColIndex = GetLIndex(LIndices, i, ++ithPosition);
-                }
-                D[i] = Diagonals[i].Value - sum;
-            }
-        }
-
-        private int GetLIndex(List<int>[] LIndices, int i, int ithPosition)
-        {
-            if (ithPosition >= LIndices[i].Count) return int.MaxValue;
-            else return LIndices[i][ithPosition];
-        }
+        
         private double[] solveFromCholeskyFactorization(IList<double> b, int length)
         {
             var x = new double[length];
@@ -327,6 +219,7 @@ namespace StarMathLib
 
         /// <summary>
         /// Overwrites the matrix with its Cholesky decomposition (i.e. it is destructive).
+        /// This is based on: https://en.wikipedia.org/wiki/Cholesky_decomposition#LDL_decomposition_2
         /// </summary>
         /// <returns>SparseMatrix.</returns>
         /// <exception cref="System.ArithmeticException">Cholesky Decomposition can only be determined for square matrices.</exception>
@@ -348,8 +241,6 @@ namespace StarMathLib
                     sum = 0.0;
                     while (cellRowI.ColIndex < j && cellRowJ.ColIndex < j)
                     {
-                        furthestDownCells[cellRowI.ColIndex] = cellRowI;
-                        furthestDownCells[cellRowJ.ColIndex] = cellRowJ;
                         if (cellRowI.ColIndex == cellRowJ.ColIndex)
                         {
                             sum += cellRowI.Value * cellRowJ.Value
@@ -362,19 +253,14 @@ namespace StarMathLib
                         else cellRowJ = cellRowJ.Right;
                     }
                     var alreadyExists = TrySearchRightToCell(j, ref cellRowI);
-                    if (cellRowI != null) furthestDownCells[cellRowI.ColIndex] = cellRowI;
+                    if (!alreadyExists && sum.IsNegligible()) continue;
                     // what's up with this furthestDownCells?! It turns out the the AddCell function
                     // was too slow when it was done on the basis of just the [i,j] indices. This "fat"
                     // approach to encoding sparse matrices is bad for that. To avoid, this - the
                     // special function "AddCellToTheLeftOfAndBelow" was created. It has a significant
                     // improvemnt on time.
-                    if (!alreadyExists && sum.IsNegligible()) continue;
-                    //if (alreadyExists && cellRowI.Value.IsPracticallySame(sum))
-                    //{
-                    //    RemoveCell(cellRowI);
-                    //    continue;
-                    //}
-                    if (!alreadyExists && !sum.IsNegligible()) cellRowI = AddCellToTheLeftOfAndBelow(cellRowI, furthestDownCells[j], i, j, 0.0);
+                    if (!alreadyExists && !sum.IsNegligible())
+                        cellRowI = AddCellToTheLeftOfAndBelow(cellRowI, furthestDownCells[j], i, j, 0.0);
                     cellRowI.Value = (cellRowI.Value - sum) / Diagonals[j].Value;
                 }
 
@@ -437,14 +323,6 @@ namespace StarMathLib
             }
             else
             {
-                //if (cellToTheUp==null)
-                //var startCell = ColFirsts[colI];
-                //while (startCell.RowIndex < rowI)
-                //    startCell = startCell.Down;
-                //cell.Down = startCell;
-                //cell.Up = startCell.Up;
-                //cell.Up.Down = cell;
-                //startCell.Up = cell;
                 cell.Up = cellToTheUp;
                 cell.Down = cellToTheUp.Down;
                 cell.Down.Up = cell;

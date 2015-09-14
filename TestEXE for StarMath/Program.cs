@@ -21,7 +21,7 @@ namespace TestEXE_for_StarMath
             compareSolvers_Inversion_to_GaussSeidel();
             //checkEigen();
             Console.WriteLine("Press any key to close.");
-          //  Console.ReadLine();
+            Console.ReadLine();
         }
 
         private static void testStackFunctions()
@@ -270,12 +270,12 @@ namespace TestEXE_for_StarMath
                         var x = SparseA.SolveAnalytically(b, true);
                         watch.Stop();
                         recordResults(result, SparseA, x, b, watch);
-                        watch.Restart();
-                        x = SparseA.SolveAnalyticallyCSRApproach(b, true);
-                        watch.Stop();
-                        recordResults(result, SparseA, x, b, watch);
+                        //watch.Restart();
+                        //x = SparseA.SolveAnalyticallyCSRApproach(b, true);
+                        //watch.Stop();
+                        //recordResults(result, SparseA, x, b, watch);
                         Console.WriteLine(result.Aggregate((resultString, next) =>
-                      resultString + " " + next));
+                        resultString + " " + next));
                         results.Add(result);
 
                     }

@@ -14,7 +14,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 
 namespace StarMathLib
 {
@@ -31,11 +30,9 @@ namespace StarMathLib
         /// <param name="initialGuess">The initial guess.</param>
         /// <param name="IsASymmetric">The is a symmetric.</param>
         /// <returns>System.Double[].</returns>
-        /// <exception cref="System.ArithmeticException">
-        /// Spare Matrix must be square to solve Ax = b.
+        /// <exception cref="System.ArithmeticException">Spare Matrix must be square to solve Ax = b.
         /// or
-        /// Sparse Matrix must be have the same number of rows as the vector, b.
-        /// </exception>
+        /// Sparse Matrix must be have the same number of rows as the vector, b.</exception>
         /// <exception cref="ArithmeticException">Spare Matrix must be square to solve Ax = b.
         /// or
         /// Sparse Matrix must be have the same number of rows as the vector, b.</exception>
@@ -62,72 +59,6 @@ namespace StarMathLib
         /// <param name="potentialDiagonals">The potential diagonals.</param>
         /// <returns>System.Double[].</returns>
         /// <exception cref="NotImplementedException"></exception>
-        public double[] SolveAnalyticallyCSRApproach(IList<double> b, bool IsASymmetric = false,
-            List<int>[] potentialDiagonals = null)
-        {
-            if (IsASymmetric)
-            {
-                double[] D;
-                List<double>[] L;
-                List<int>[] LIndices;
-                CholeskyDecompositionCSRApproach(out L, out LIndices, out D);
-                return solveFromCholeskyFactorizationCSRApproach(b, L, LIndices, D, NumCols);
-            }
-            else
-            {
-                throw new NotImplementedException();
-                //double[,] C;
-                //double[] d;
-                //if (needToReorder(A, length, 0.0))
-                //{
-                //    if (potentialDiagonals == null &&
-                //        !findPotentialDiagonals(A, out potentialDiagonals, length, 0.0))
-                //        return null;
-                //    var order = reorderMatrixForDiagonalDominance(A, length, potentialDiagonals);
-                //    if (order == null) return null;
-                //    C = new double[length, length];
-                //    d = new double[length];
-                //    for (var i = 0; i < length; i++)
-                //    {
-                //        d[i] = b[order[i]];
-                //        SetRow(i, C, GetRow(order[i], A));
-                //    }
-                //}
-                //else
-                //{
-                //    C = (double[,]) A.Clone();
-                //    d = b.ToArray();
-                //}
-                //var LU = LUDecomposition(C, length);
-                //var x = new double[length];
-                //// forward substitution
-                //for (int i = 0; i < length; i++)
-                //{
-                //    var sumFromKnownTerms = 0.0;
-                //    for (int j = 0; j < i; j++)
-                //        sumFromKnownTerms += LU[i, j]*x[j];
-                //    x[i] = (d[i] - sumFromKnownTerms)/LU[i, i];
-                //}
-                //// backward substitution
-                //for (int i = length - 1; i >= 0; i--)
-                //{
-                //    var sumFromKnownTerms = 0.0;
-                //    for (int j = i + 1; j < length; j++)
-                //        sumFromKnownTerms += LU[i, j]*x[j];
-                //    x[i] -= sumFromKnownTerms;
-                //}
-                //return x;
-            }
-        }
-
-        /// <summary>
-        /// Solves the system of equations analytically.
-        /// </summary>
-        /// <param name="b">The b.</param>
-        /// <param name="IsASymmetric">if set to <c>true</c> [a is symmetric].</param>
-        /// <param name="potentialDiagonals">The potential diagonals.</param>
-        /// <returns>System.Double[].</returns>
-        /// <exception cref="NotImplementedException"></exception>
         public double[] SolveAnalytically(IList<double> b, bool IsASymmetric = false,
             List<int>[] potentialDiagonals = null)
         {
@@ -139,52 +70,14 @@ namespace StarMathLib
             }
             else
             {
-                throw new NotImplementedException();
-                //double[,] C;
-                //double[] d;
-                //if (needToReorder(A, length, 0.0))
-                //{
-                //    if (potentialDiagonals == null &&
-                //        !findPotentialDiagonals(A, out potentialDiagonals, length, 0.0))
-                //        return null;
-                //    var order = reorderMatrixForDiagonalDominance(A, length, potentialDiagonals);
-                //    if (order == null) return null;
-                //    C = new double[length, length];
-                //    d = new double[length];
-                //    for (var i = 0; i < length; i++)
-                //    {
-                //        d[i] = b[order[i]];
-                //        SetRow(i, C, GetRow(order[i], A));
-                //    }
-                //}
-                //else
-                //{
-                //    C = (double[,]) A.Clone();
-                //    d = b.ToArray();
-                //}
-                //var LU = LUDecomposition(C, length);
-                //var x = new double[length];
-                //// forward substitution
-                //for (int i = 0; i < length; i++)
-                //{
-                //    var sumFromKnownTerms = 0.0;
-                //    for (int j = 0; j < i; j++)
-                //        sumFromKnownTerms += LU[i, j]*x[j];
-                //    x[i] = (d[i] - sumFromKnownTerms)/LU[i, i];
-                //}
-                //// backward substitution
-                //for (int i = length - 1; i >= 0; i--)
-                //{
-                //    var sumFromKnownTerms = 0.0;
-                //    for (int j = i + 1; j < length; j++)
-                //        sumFromKnownTerms += LU[i, j]*x[j];
-                //    x[i] -= sumFromKnownTerms;
-                //}
-                //return x;
+                var LU = Copy();
+                LU.LUDecomposition();
+                return LU.solveFromLUDecomposition(b, NumCols);
+
             }
         }
-        
-        private double[] solveFromCholeskyFactorization(IList<double> b, int length)
+
+        private double[] solveFromLUDecomposition(IList<double> b, int length)
         {
             var x = new double[length];
             // forward substitution
@@ -197,10 +90,8 @@ namespace StarMathLib
                     sumFromKnownTerms += startCell.Value * x[startCell.ColIndex];
                     startCell = startCell.Right;
                 }
-                x[i] = (b[i] - sumFromKnownTerms);
+                x[i] = (b[i] - sumFromKnownTerms) / Diagonals[i].Value;
             }
-            for (int i = 0; i < length; i++)
-                x[i] /= Diagonals[i].Value;
 
             // backward substitution
             for (int i = length - 1; i >= 0; i--)
@@ -215,6 +106,83 @@ namespace StarMathLib
                 x[i] -= sumFromKnownTerms;
             }
             return x;
+        }
+
+        private void LUDecomposition()
+        {
+            if (NumCols != NumRows)
+                throw new ArithmeticException("LU Decomposition can only be determined for square matrices.");
+            var furthestDownCells = new SparseCell[NumCols];
+            // normalize row 0 
+            var topCell = RowFirsts[0];
+            var cell = topCell.Right;
+            while (cell != null)
+            {
+                cell.Value /= topCell.Value;
+                cell = cell.Right;
+            }
+            for (var i = 0; i < NumRows; i++)
+            {
+                double sum;
+                var startCellColI = ColFirsts[i];
+                for (var j = 0; j < i; j++)
+                {
+                    var cellColI = startCellColI;
+                    var cellRowJ = RowFirsts[j];
+                    sum = 0.0;
+                    while (cellColI.RowIndex < i && cellRowJ.ColIndex < i)
+                    {
+                        if (cellColI.RowIndex == cellRowJ.ColIndex)
+                        {
+                            sum += cellColI.Value * cellRowJ.Value;
+                            cellColI = cellColI.Down;
+                            cellRowJ = cellRowJ.Right;
+                        }
+                        else if (cellColI.RowIndex < cellRowJ.ColIndex)
+                            cellColI = cellColI.Down;
+                        else cellRowJ = cellRowJ.Right;
+                    }
+                    var alreadyExists = TrySearchRightToCell(i, ref cellRowJ);
+                    if (!alreadyExists && sum.IsNegligible()) continue;
+                    // what's up with this furthestDownCells?! It turns out the the AddCell function
+                    // was too slow when it was done on the basis of just the [i,j] indices. This "fat"
+                    // approach to encoding sparse matrices is bad for that. To avoid, this - the
+                    // special function "AddCellToTheLeftOfAndBelow" was created. It has a significant
+                    // improvemnt on time.
+                    if (!alreadyExists && !sum.IsNegligible())
+                        cellRowJ = AddCellToTheLeftOfAndBelow(cellRowJ, cellColI, j, i, 0.0);
+                    cellRowJ.Value -= sum;
+                }
+                var startCellRowI = RowFirsts[i];
+                for (var j = i + 1; j < NumRows; j++)
+                {
+                    var cellRowI = startCellRowI;
+                    var cellColJ = ColFirsts[j];
+                    sum = 0.0;
+                    while (cellRowI.ColIndex < i && cellColJ.RowIndex < i)
+                    {
+                        if (cellRowI.ColIndex == cellColJ.RowIndex)
+                        {
+                            sum += cellRowI.Value * cellColJ.Value;
+                            cellRowI = cellRowI.Right;
+                            cellColJ = cellColJ.Down;
+                        }
+                        else if (cellRowI.ColIndex < cellColJ.RowIndex)
+                            cellRowI = cellRowI.Right;
+                        else cellColJ = cellColJ.Down;
+                    }
+                    var alreadyExists = TrySearchRightToCell(j, ref cellRowI);
+                    if (!alreadyExists && sum.IsNegligible()) continue;
+                    // what's up with this furthestDownCells?! It turns out the the AddCell function
+                    // was too slow when it was done on the basis of just the [i,j] indices. This "fat"
+                    // approach to encoding sparse matrices is bad for that. To avoid, this - the
+                    // special function "AddCellToTheLeftOfAndBelow" was created. It has a significant
+                    // improvemnt on time.
+                    if (!alreadyExists && !sum.IsNegligible())
+                        cellRowI = AddCellToTheLeftOfAndBelow(cellRowI, cellColJ, i, j, 0.0);
+                    cellRowI.Value = (sum + cellRowI.Value) / Diagonals[i].Value;
+                }
+            }
         }
 
         /// <summary>
@@ -285,6 +253,55 @@ namespace StarMathLib
             }
         }
 
+        /// <summary>
+        /// Solves from cholesky factorization.
+        /// </summary>
+        /// <param name="b">The b.</param>
+        /// <param name="length">The length.</param>
+        /// <returns>System.Double[].</returns>
+        private double[] solveFromCholeskyFactorization(IList<double> b, int length)
+        {
+            var x = new double[length];
+            // forward substitution
+            for (int i = 0; i < length; i++)
+            {
+                var sumFromKnownTerms = 0.0;
+                var startCell = RowFirsts[i];
+                while (startCell != null && startCell.ColIndex < i)
+                {
+                    sumFromKnownTerms += startCell.Value * x[startCell.ColIndex];
+                    startCell = startCell.Right;
+                }
+                x[i] = (b[i] - sumFromKnownTerms);
+            }
+            for (int i = 0; i < length; i++)
+                x[i] /= Diagonals[i].Value;
+
+            // backward substitution
+            for (int i = length - 1; i >= 0; i--)
+            {
+                var sumFromKnownTerms = 0.0;
+                var startCell = ColLasts[i];  // this is because it is the transposed one
+                while (startCell != null && startCell.RowIndex > i)
+                {
+                    sumFromKnownTerms += startCell.Value * x[startCell.RowIndex];
+                    startCell = startCell.Up;
+                }
+                x[i] -= sumFromKnownTerms;
+            }
+            return x;
+        }
+
+
+        /// <summary>
+        /// Adds the cell to the left of and below.
+        /// </summary>
+        /// <param name="cellToTheRight">The cell to the right.</param>
+        /// <param name="cellToTheUp">The cell to the up.</param>
+        /// <param name="rowI">The row i.</param>
+        /// <param name="colI">The col i.</param>
+        /// <param name="value">The value.</param>
+        /// <returns>SparseCell.</returns>
         private SparseCell AddCellToTheLeftOfAndBelow(SparseCell cellToTheRight, SparseCell cellToTheUp, int rowI, int colI, double value)
         {
             var cell = new SparseCell(rowI, colI, value);
@@ -337,11 +354,27 @@ namespace StarMathLib
         }
 
 
+        /// <summary>
+        /// Finds the potential diagonals.
+        /// </summary>
+        /// <param name="potentialDiagonals">The potential diagonals.</param>
+        /// <param name="length">The length.</param>
+        /// <param name="minimalConsideration">The minimal consideration.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        /// <exception cref="System.NotImplementedException"></exception>
         private bool findPotentialDiagonals(out List<int>[] potentialDiagonals, int length, double minimalConsideration)
         {
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// Determines whether [is gauss seidel appropriate] [the specified b].
+        /// </summary>
+        /// <param name="b">The b.</param>
+        /// <param name="potentialDiagonals">The potential diagonals.</param>
+        /// <param name="initialGuess">The initial guess.</param>
+        /// <returns><c>true</c> if [is gauss seidel appropriate] [the specified b]; otherwise, <c>false</c>.</returns>
+        /// <exception cref="System.NotImplementedException"></exception>
         private bool isGaussSeidelAppropriate(IList<double> b, out List<int>[] potentialDiagonals,
             ref IList<double> initialGuess)
         {
@@ -364,6 +397,7 @@ namespace StarMathLib
         /// <param name="initialGuess">The initial guess.</param>
         /// <param name="potentialDiagonals">The potential diagonals.</param>
         /// <returns>System.Double[].</returns>
+        /// <exception cref="System.NotImplementedException"></exception>
         /// <exception cref="NotImplementedException"></exception>
         public double[] solveIteratively(IList<double> b, IList<double> initialGuess = null,
             List<int>[] potentialDiagonals = null)

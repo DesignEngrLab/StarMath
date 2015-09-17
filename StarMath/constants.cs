@@ -52,7 +52,7 @@ namespace StarMathLib
         /// <summary>
         ///     The gauss seidel minimum matrix size
         /// </summary>
-        private const int GaussSeidelMinimumMatrixSize = 55;
+        private const int GaussSeidelMinimumMatrixSize = 200;
 
         /// <summary>
         ///     The gauss seidel maximum iteration factor

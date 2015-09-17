@@ -25,13 +25,13 @@ namespace StarMathLib
         /// <param name="A">The A.</param>
         /// <param name="b">The b.</param>
         /// <param name="initialGuess">The initial guess.</param>
-        /// <param name="AIsSymmeticPositiveDefinite">Is A known to by Symmetric and Positive-Definite?</param>
+        /// <param name="IsASymmetric">Is matrix A symmetric.</param>
         /// <returns>System.Double[].</returns>
         /// <exception cref="System.ArithmeticException">Matrix, A, must be square.
         /// or
         /// Matrix, A, must be have the same number of rows as the vector, b.</exception>
         public static double[] solve(double[,] A, IList<double> b, IList<double> initialGuess = null,
-            Boolean AIsSymmeticPositiveDefinite = false)
+            Boolean IsASymmetric = false)
         {
             var length = A.GetLength(0);
             if (length != A.GetLength(1))
@@ -43,7 +43,7 @@ namespace StarMathLib
                 return solveIteratively(A, b, initialGuess, length, potentialDiagonals);
             /****** need code to determine when to switch between *****
              ****** this analytical approach and the SOR approach *****/
-            return SolveAnalytically(A, b, AIsSymmeticPositiveDefinite, potentialDiagonals);
+            return SolveAnalytically(A, b, IsASymmetric, potentialDiagonals);
         }
 
         /// <summary>
@@ -106,7 +106,7 @@ namespace StarMathLib
         /// </summary>
         /// <param name="A">a.</param>
         /// <param name="b">The b.</param>
-        /// <param name="IsASymmetric">Is A known to by Symmetric and Positive-Definite?</param>
+        /// <param name="IsASymmetric">Is A known to be Symmetric?</param>
         /// <param name="potentialDiagonals">The potential diagonals.</param>
         /// <returns>System.Double[].</returns>
         public static double[] SolveAnalytically(double[,] A, IList<double> b, bool IsASymmetric = false, List<int>[] potentialDiagonals = null)
@@ -127,7 +127,7 @@ namespace StarMathLib
 
                 for (int i = 0; i < length; i++)
                     x[i] /= L[i, i];
-            
+
                 // backward substitution
                 for (int i = length - 1; i >= 0; i--)
                 {
@@ -142,7 +142,7 @@ namespace StarMathLib
             {
                 double[,] C;
                 double[] d;
-                if (needToReorder(A, length, 0.0))
+                if (Enumerable.Range(0, length).Any(i => A[i, i].IsNegligible()))
                 {
                     if (potentialDiagonals == null &&
                         !findPotentialDiagonals(A, out potentialDiagonals, length, 0.0))
@@ -228,10 +228,7 @@ namespace StarMathLib
                         potentialIndices.Add(j);
                 if (potentialIndices.Count == 0) return false;
                 potentialDiagonals[i] = potentialIndices;
-            }  //todo: this is not a great function! first off is this n^2 operation beneficial?
-               // it would be better to sort the potential indices as opposed to choosing a cutoff
-               // since large matrices will have a problem having any that meet the "minimalConsideration"
-               // sorting would then remove a constant (which is always a good idea).
+            }  
             return potentialDiagonals.SelectMany(x => x).Distinct().Count() == length;
         }
 
@@ -248,8 +245,8 @@ namespace StarMathLib
             IList<double> initialGuess = null, int length = -1, List<int>[] potentialDiagonals = null)
         {
             if (length < 0) length = b.Count;
-            double[,] C;
-            double[] d;
+            //double[,] C;
+            //double[] d;
 
             var x = new double[length];
             if (initialGuess == null)
@@ -257,29 +254,15 @@ namespace StarMathLib
             for (var i = 0; i < length; i++)
                 x[i] = initialGuess[i];
 
-            if (needToReorder(A, length, GaussSeidelDiagonalDominanceRatio))
-            {
-                if (potentialDiagonals == null &&
-                    !findPotentialDiagonals(A, out potentialDiagonals, length, GaussSeidelDiagonalDominanceRatio))
-                    return null;
-                var order = reorderMatrixForDiagonalDominance(A, length, potentialDiagonals);
-                if (order == null) return null;
-                C = new double[length, length];
-                d = new double[length];
-                for (var i = 0; i < length; i++)
-                {
-                    d[i] = b[order[i]];
-                    SetRow(i, C, GetRow(order[i], A));
-                }
-            }
-            else
-            {
-                C = (double[,])A.Clone();
-                d = b.ToArray();
-            }
-
-            var cNorm1 = norm1(d);
-            var error = norm1(subtract(d, multiply(C, x, length, length), length)) / cNorm1;
+            if (potentialDiagonals == null &&
+                !findPotentialDiagonals(A, out potentialDiagonals, length, GaussSeidelDiagonalDominanceRatio))
+                return null;
+            var order = Enumerable.Range(0, length).ToArray();
+            if (!order.All(rowIndex => potentialDiagonals[rowIndex].Contains(rowIndex)))
+                order = reorderMatrixForDiagonalDominance(A, length, potentialDiagonals);
+            if (order == null) return null;
+            var bNorm1 = norm1(b);
+            var error = norm1(subtract(b, multiply(A, x, length, length), length)) / bNorm1;
             var success = error <= GaussSeidelMaxError;
             var xWentNaN = false;
             var iteration = length * length * GaussSeidelMaxIterationFactor;
@@ -287,15 +270,15 @@ namespace StarMathLib
             {
                 for (var i = 0; i < length; i++)
                 {
-                    var adjust = d[i];
+                    var adjust = b[order[i]];
                     for (var j = 0; j < length; j++)
                         if (i != j)
-                            adjust -= C[i, j] * x[j];
+                            adjust -= A[order[i], j] * x[j];
                     x[i] = (1 - GaussSeidelRelaxationOmega) * x[i] +
-                           GaussSeidelRelaxationOmega * adjust / C[i, i];
+                           GaussSeidelRelaxationOmega * adjust / A[order[i], i];
                 }
                 xWentNaN = x.Any(double.IsNaN);
-                error = norm1(subtract(d, multiply(C, x, length, length), length)) / cNorm1;
+                error = norm1(subtract(b, multiply(A, x, length, length), length)) / bNorm1;
                 success = error <= GaussSeidelMaxError;
             }
             if (!success) return null;
@@ -312,31 +295,9 @@ namespace StarMathLib
         private static double[] makeInitialGuess(double[,] A, IList<double> b, int length)
         {
             var initialGuess = new double[length];
-            var initGuessValue = sum(b) / sum(A);
+            var initGuessValue = SumAllElements(b) / SumAllElements(A);
             for (var i = 0; i < length; i++) initialGuess[i] = initGuessValue;
             return initialGuess;
-        }
-
-        /// <summary>
-        /// Needs to reorder.
-        /// </summary>
-        /// <param name="A">a.</param>
-        /// <param name="length">The length.</param>
-        /// <param name="minimalConsideration">The minimal consideration.</param>
-        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-        private static bool needToReorder(double[,] A, int length, double minimalConsideration)
-        {
-            for (var i = 0; i < length; i++)
-            {
-                if (A[i, i] == 0.0) return true;
-                var rowSum = 0.0;
-                for (var j = 0; j < length; j++)
-                    if (i != j)
-                        rowSum += Math.Abs(A[i, j]);
-                if (Math.Abs(A[i, i] / rowSum) < minimalConsideration)
-                    return true;
-            }
-            return false;
         }
 
         // what about this:

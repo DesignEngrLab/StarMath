@@ -17,7 +17,6 @@ namespace StarMathLib
     public static partial class StarMath
     {
         #region Matrix Inversion
-
         /// <summary>
         /// Inverses the matrix A only if the matrix has already been
         /// "triangularized" - meaning there are no elements in the bottom
@@ -269,17 +268,18 @@ namespace StarMathLib
                 for (var j = i; j < length; j++)
                 {
                     // do a column of L
+                    var sum = 0.0;
                     for (var k = 0; k < i; k++)
-                        B[j, i] -= B[j, k] * B[k, i];
+                        sum -= B[j, k] * B[k, i];
+                    B[j, i] += sum;
                 }
-                if (i == length - 1) continue;
                 for (var j = i + 1; j < length; j++)
                 {
                     // do a row of U
-                    var sum = B[i, j];
+                    var sum = 0.0;
                     for (var k = 0; k < i; k++)
                         sum -= B[i, k] * B[k, j];
-                    B[i, j] = (sum == 0.0) ? 0.0 : sum / B[i, i];
+                    B[i, j] = (sum + B[i, j]) / B[i, i];
                 }
             }
             return B;
@@ -357,15 +357,15 @@ namespace StarMathLib
         #endregion
 
         #region Cholesky Decomposition
-        // this is intended only for symmetric  matrices
         /// <summary>
-        /// Returns the Cholesky decomposition of A in a new matrix.
+        /// Returns the Cholesky decomposition of A in a new matrix. The new matrix is a lower triangular matrix, and
+        /// the diagonals are the D matrix in the L-D-LT formulation. To get the L-LT format.
         /// </summary>
         /// <param name="A">The matrix to invert. This matrix is unchanged by this function.</param>
         /// <returns>System.Double[].</returns>
         /// <exception cref="System.ArithmeticException">Matrix cannot be inverted. Can only invert square matrices.</exception>
         /// <exception cref="ArithmeticException">Cholesky Decomposition can only be determined for square matrices.</exception>
-        public static double[,] CholeskyDecomposition(double[,] A)
+        public static double[,] CholeskyDecomposition(double[,] A, bool NoSeparateDiagonal = false)
         {
             var length = A.GetLength(0);
             if (length != A.GetLength(1))
@@ -386,29 +386,32 @@ namespace StarMathLib
                 for (int k = 0; k < i; k++)
                     sum += L[i, k] * L[i, k] * L[k, k];
                 L[i, i] -= sum;
-                 for (int j = i + 1; j < length; j++)
+                for (int j = i + 1; j < length; j++)
                     L[i, j] = 0.0;
             }
+            if (NoSeparateDiagonal)
+                for (int i = 0; i < length; i++)
+                {
+                    if (L[i, i] < 0) throw new ArithmeticException("Cannot complete L-LT Cholesky Decomposition due to indefinite matrix (must be positive semidefinite).");
+                    L[i, i] = Math.Sqrt(L[i, i]);
+                }
+
             return L;
         }
-        // this is intended only for symmetric matrices
         /// <summary>
-        /// Returns the Cholesky decomposition of A in a new matrix.
+        /// Returns the Cholesky decomposition of A in a new matrix. The new matrix is a lower triangular matrix, and
+        /// the diagonals are the D matrix in the L-D-LT formulation. To get the L-LT format.
         /// </summary>
         /// <param name="A">The matrix to invert. This matrix is unchanged by this function.</param>
         /// <returns>System.Double[].</returns>
-        /// <exception cref="System.ArithmeticException">Cholesky Decomposition can only be determined for square matrices.
-        /// or
-        /// Matrix is not positive definite. Cannot complete Cholesky decomposition.</exception>
-        /// <exception cref="ArithmeticException">Cholesky Decomposition can only be determined for square matrices.
-        /// or
-        /// Matrix is not positive definite. Cannot complete Cholesky decomposition.</exception>
-        public static double[,] CholeskyDecomposition(int[,] A)
+        /// <exception cref="System.ArithmeticException">Matrix cannot be inverted. Can only invert square matrices.</exception>
+        /// <exception cref="ArithmeticException">Cholesky Decomposition can only be determined for square matrices.</exception>
+        public static double[,] CholeskyDecomposition(int[,] A, bool NoSeparateDiagonal = false)
         {
             var length = A.GetLength(0);
             if (length != A.GetLength(1))
                 throw new ArithmeticException("Cholesky Decomposition can only be determined for square matrices.");
-            var L = new double[length, length];
+            var L = (double[,])A.Clone();
 
             for (var i = 0; i < length; i++)
             {
@@ -427,6 +430,13 @@ namespace StarMathLib
                 for (int j = i + 1; j < length; j++)
                     L[i, j] = 0.0;
             }
+            if (NoSeparateDiagonal)
+                for (int i = 0; i < length; i++)
+                {
+                    if (L[i, i] < 0) throw new ArithmeticException("Cannot complete L-LT Cholesky Decomposition due to indefinite matrix (must be positive semidefinite).");
+                    L[i, i] = Math.Sqrt(L[i, i]);
+                }
+
             return L;
         }
 

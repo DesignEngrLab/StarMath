@@ -505,7 +505,6 @@ namespace StarMathLib
                     C[i, j] = A[i, j] - B[i, j];
             return C;
         }
-
         #endregion
     }
 }

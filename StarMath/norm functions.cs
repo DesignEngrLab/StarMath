@@ -127,29 +127,29 @@ namespace StarMathLib
         /// Returns to 1-norm (sum of absolute values of all terms)
         /// of the matrix, A.
         /// </summary>
-        /// <param name="A">The matrix, A.</param>
+        /// <param name="a">The matrix, A.</param>
         /// <returns>Scalar value of 1-norm.</returns>
         /// <exception cref="System.ArithmeticException">The matrix, A, is null.</exception>
-        public static double norm1(this double[,] A)
+        public static double norm1(this double[,] a)
         {
-            if (A == null) throw new ArithmeticException("The matrix, A, is null.");
-            return norm1(A, A.GetLength(0), A.GetLength(1));
+            if (a == null) throw new ArithmeticException("The matrix, A, is null.");
+            return norm1(a, a.GetLength(0), a.GetLength(1));
         }
 
         /// <summary>
         /// Returns to 1-norm (sum of absolute values of all terms)
         /// of the matrix, A.
         /// </summary>
-        /// <param name="A">The matrix, A.</param>
+        /// <param name="a">The matrix, A.</param>
         /// <param name="numRows">The number of rows.</param>
         /// <param name="numCols">The number of columns.</param>
         /// <returns>Scalar value of 1-norm.</returns>
-        public static double norm1(this double[,] A, int numRows, int numCols)
+        public static double norm1(this double[,] a, int numRows, int numCols)
         {
             var norm = 0.0;
             for (var i = 0; i != numRows; i++)
                 for (var j = 0; j != numCols; j++)
-                    norm += Math.Abs(A[i, j]);
+                    norm += Math.Abs(a[i, j]);
             return norm;
         }
 
@@ -158,29 +158,29 @@ namespace StarMathLib
         /// Returns to 1-norm (sum of absolute values of all terms)
         /// of the matrix, A.
         /// </summary>
-        /// <param name="A">The matrix, A.</param>
+        /// <param name="a">The matrix, A.</param>
         /// <returns>Scalar value of 1-norm.</returns>
         /// <exception cref="System.ArithmeticException">The matrix, A, is null.</exception>
-        public static int norm1(this int[,] A)
+        public static int norm1(this int[,] a)
         {
-            if (A == null) throw new ArithmeticException("The matrix, A, is null.");
-            return norm1(A, A.GetLength(0), A.GetLength(1));
+            if (a == null) throw new ArithmeticException("The matrix, A, is null.");
+            return norm1(a, a.GetLength(0), a.GetLength(1));
         }
 
         /// <summary>
         /// Returns to 1-norm (sum of absolute values of all terms)
         /// of the matrix, A.
         /// </summary>
-        /// <param name="A">The matrix, A.</param>
+        /// <param name="a">The matrix, A.</param>
         /// <param name="numRows">The number of rows.</param>
         /// <param name="numCols">The number of columns.</param>
         /// <returns>Scalar value of 1-norm.</returns>
-        public static int norm1(this int[,] A, int numRows, int numCols)
+        public static int norm1(this int[,] a, int numRows, int numCols)
         {
             var norm = 0;
             for (var i = 0; i != numRows; i++)
                 for (var j = 0; j != numCols; j++)
-                    norm += Math.Abs(A[i, j]);
+                    norm += Math.Abs(a[i, j]);
             return norm;
         }
 
@@ -301,31 +301,31 @@ namespace StarMathLib
         /// Returns to 2-norm (square root of the sum of squares of all terms)
         /// of the matrix, A.
         /// </summary>
-        /// <param name="A">The matrix, A.</param>
+        /// <param name="a">The matrix, A.</param>
         /// <param name="dontDoSqrt">if set to <c>true</c> [don't take the square root].</param>
         /// <returns>Scalar value of 2-norm.</returns>
         /// <exception cref="System.ArithmeticException">The matrix, A, is null.</exception>
-        public static double norm2(this double[,] A, Boolean dontDoSqrt = false)
+        public static double norm2(this double[,] a, Boolean dontDoSqrt = false)
         {
-            if (A == null) throw new ArithmeticException("The matrix, A, is null.");
-            return norm2(A, A.GetLength(0), A.GetLength(1), dontDoSqrt);
+            if (a == null) throw new ArithmeticException("The matrix, A, is null.");
+            return norm2(a, a.GetLength(0), a.GetLength(1), dontDoSqrt);
         }
 
         /// <summary>
         /// Returns to 2-norm (square root of the sum of squares of all terms)
         /// of the matrix, A.
         /// </summary>
-        /// <param name="A">The matrix, A.</param>
+        /// <param name="a">The matrix, A.</param>
         /// <param name="numRows">The number of rows.</param>
         /// <param name="numCols">The number of columns.</param>
         /// <param name="dontDoSqrt">if set to <c>true</c> [don't take the square root].</param>
         /// <returns>Scalar value of 2-norm.</returns>
-        public static double norm2(this double[,] A, int numRows, int numCols, Boolean dontDoSqrt = false)
+        public static double norm2(this double[,] a, int numRows, int numCols, Boolean dontDoSqrt = false)
         {
             var norm = 0.0;
             for (var i = 0; i != numRows; i++)
                 for (var j = 0; j != numCols; j++)
-                    norm += (A[i, j]*A[i, j]);
+                    norm += (a[i, j]*a[i, j]);
             return dontDoSqrt ? norm : Math.Sqrt(norm);
         }
 
@@ -333,31 +333,31 @@ namespace StarMathLib
         /// Returns to 2-norm (square root of the sum of squares of all terms)
         /// of the matrix, A.
         /// </summary>
-        /// <param name="A">The matrix, A.</param>
+        /// <param name="a">The matrix, A.</param>
         /// <param name="dontDoSqrt">if set to <c>true</c> [don't take the square root].</param>
         /// <returns>Scalar value of 2-norm.</returns>
         /// <exception cref="System.ArithmeticException">The matrix, A, is null.</exception>
-        public static double norm2(this int[,] A, Boolean dontDoSqrt = false)
+        public static double norm2(this int[,] a, Boolean dontDoSqrt = false)
         {
-            if (A == null) throw new ArithmeticException("The matrix, A, is null.");
-            return norm2(A, A.GetLength(0), A.GetLength(1), dontDoSqrt);
+            if (a == null) throw new ArithmeticException("The matrix, A, is null.");
+            return norm2(a, a.GetLength(0), a.GetLength(1), dontDoSqrt);
         }
 
         /// <summary>
         /// Returns to 2-norm (square root of the sum of squares of all terms)
         /// of the matrix, A.
         /// </summary>
-        /// <param name="A">The matrix, A.</param>
+        /// <param name="a">The matrix, A.</param>
         /// <param name="numRows">The number of rows.</param>
         /// <param name="numCols">The number of columns.</param>
         /// <param name="dontDoSqrt">if set to <c>true</c> [don't take the square root].</param>
         /// <returns>Scalar value of 2-norm.</returns>
-        public static double norm2(this int[,] A, int numRows, int numCols, Boolean dontDoSqrt = false)
+        public static double norm2(this int[,] a, int numRows, int numCols, Boolean dontDoSqrt = false)
         {
             var norm = 0.0;
             for (var i = 0; i != numRows; i++)
                 for (var j = 0; j != numCols; j++)
-                    norm += (A[i, j]*A[i, j]);
+                    norm += (a[i, j]*a[i, j]);
             return dontDoSqrt ? norm : Math.Sqrt(norm);
         }
 
@@ -397,64 +397,64 @@ namespace StarMathLib
         /// <summary>
         /// Returns to p-norm (p-root of the sum of each term raised to the p power)
         /// </summary>
-        /// <param name="A">The matrix, A.</param>
+        /// <param name="a">The matrix, A.</param>
         /// <param name="p">The power, p.</param>
         /// <param name="dontDoPRoot">if set to <c>true</c> [don't take the P-root].</param>
         /// <returns>Scalar value of P-norm.</returns>
         /// <exception cref="System.ArithmeticException">The matrix, A, is null.</exception>
-        public static double normP(this double[,] A, double p, Boolean dontDoPRoot = false)
+        public static double normP(this double[,] a, double p, Boolean dontDoPRoot = false)
         {
-            if (A == null) throw new ArithmeticException("The matrix, A, is null.");
-            return normP(A, p, A.GetLength(0), A.GetLength(1), dontDoPRoot);
+            if (a == null) throw new ArithmeticException("The matrix, A, is null.");
+            return normP(a, p, a.GetLength(0), a.GetLength(1), dontDoPRoot);
         }
 
         /// <summary>
         /// Returns to p-norm (p-root of the sum of each term raised to the p power)
         /// </summary>
-        /// <param name="A">The matrix, A.</param>
+        /// <param name="a">The matrix, A.</param>
         /// <param name="p">The power, p.</param>
         /// <param name="numRows">The number of rows.</param>
         /// <param name="numCols">The number of columns.</param>
         /// <param name="dontDoPRoot">if set to <c>true</c> [don't take the P-root].</param>
         /// <returns>Scalar value of P-norm.</returns>
-        public static double normP(this double[,] A, double p, int numRows, int numCols, Boolean dontDoPRoot = false)
+        public static double normP(this double[,] a, double p, int numRows, int numCols, Boolean dontDoPRoot = false)
         {
             var norm = 0.0;
             for (var i = 0; i != numRows; i++)
                 for (var j = 0; j != numCols; j++)
-                    norm += Math.Pow(A[i, j], p);
+                    norm += Math.Pow(a[i, j], p);
             return dontDoPRoot ? norm : Math.Pow(norm, 1/p);
         }
 
         /// <summary>
         /// Returns to p-norm (p-root of the sum of each term raised to the p power)
         /// </summary>
-        /// <param name="A">The matrix, A.</param>
+        /// <param name="a">The matrix, A.</param>
         /// <param name="p">The power, p.</param>
         /// <param name="dontDoPRoot">if set to <c>true</c> [don't take the P-root].</param>
         /// <returns>Scalar value of P-norm.</returns>
         /// <exception cref="System.ArithmeticException">The matrix, A, is null.</exception>
-        public static double normP(this int[,] A, double p, Boolean dontDoPRoot = false)
+        public static double normP(this int[,] a, double p, Boolean dontDoPRoot = false)
         {
-            if (A == null) throw new ArithmeticException("The matrix, A, is null.");
-            return normP(A, p, A.GetLength(0), A.GetLength(1), dontDoPRoot);
+            if (a == null) throw new ArithmeticException("The matrix, A, is null.");
+            return normP(a, p, a.GetLength(0), a.GetLength(1), dontDoPRoot);
         }
 
         /// <summary>
         /// Returns to p-norm (p-root of the sum of each term raised to the p power)
         /// </summary>
-        /// <param name="A">The matrix, A.</param>
+        /// <param name="a">The matrix, A.</param>
         /// <param name="p">The power, p.</param>
         /// <param name="numRows">The number of rows.</param>
         /// <param name="numCols">The number of columns.</param>
         /// <param name="dontDoPRoot">if set to <c>true</c> [don't take the P-root].</param>
         /// <returns>Scalar value of 2-norm.</returns>
-        public static double normP(this int[,] A, double p, int numRows, int numCols, Boolean dontDoPRoot = false)
+        public static double normP(this int[,] a, double p, int numRows, int numCols, Boolean dontDoPRoot = false)
         {
             var norm = 0.0;
             for (var i = 0; i != numRows; i++)
                 for (var j = 0; j != numCols; j++)
-                    norm += Math.Pow(A[i, j], p);
+                    norm += Math.Pow(a[i, j], p);
             return dontDoPRoot ? norm : Math.Pow(norm, 1/p);
         }
 
@@ -518,75 +518,142 @@ namespace StarMathLib
         /// <summary>
         /// Sum up all the elements of a given matrix
         /// </summary>
-        /// <param name="B">Matrix (1D double) whose parameters need to be summed up</param>
+        /// <param name="b">Matrix (1D double) whose parameters need to be summed up</param>
         /// <returns>Returns the total (double)</returns>
-        public static double sum(this IEnumerable<double> B)
+        public static double SumAllElements(this IEnumerable<double> b)
         {
-            return B.Sum();
+            return b.Sum();
         }
 
         /// <summary>
         /// Sum up all the elements of a given matrix
         /// </summary>
-        /// <param name="B">Matrix (1D int) whose parameters need to be summed up</param>
+        /// <param name="b">Matrix (1D int) whose parameters need to be summed up</param>
         /// <returns>Returns the total (int)</returns>
-        public static double sum(this IEnumerable<int> B)
+        public static double SumAllElements(this IEnumerable<int> b)
         {
-            return B.Sum();
+            return b.Sum();
         }
 
         /// <summary>
         /// Sum up all the elements of a given matrix
         /// </summary>
-        /// <param name="B">Matrix (2D double) whose parameters need to be summed up</param>
+        /// <param name="b">Matrix (2D double) whose parameters need to be summed up</param>
         /// <returns>Returns the total (double)</returns>
-        public static double sum(this double[,] B)
+        public static double SumAllElements(this double[,] b)
         {
-            return sum(B, B.GetLength(0), B.GetLength(1));
+            return SumAllElements(b, b.GetLength(0), b.GetLength(1));
         }
 
         /// <summary>
         /// Sum up all the elements of a given matrix
         /// </summary>
-        /// <param name="B">Matrix (2D double) whose parameters need to be summed up</param>
+        /// <param name="b">Matrix (2D double) whose parameters need to be summed up</param>
         /// <param name="numRows">The number of rows.</param>
         /// <param name="numCols">The number of cols.</param>
         /// <returns>Returns the total (double)</returns>
-        private static double sum(this double[,] B, int numRows, int numCols)
+        private static double SumAllElements(this double[,] b, int numRows, int numCols)
         {
             var sumValue = 0.0;
             for (var i = 0; i < numRows; i++)
                 for (var j = 0; j < numCols; j++)
-                    sumValue += B[i, j];
+                    sumValue += b[i, j];
             return sumValue;
         }
 
         /// <summary>
         /// Sum up all the elements of a given matrix
         /// </summary>
-        /// <param name="B">Matrix (2D double) whose parameters need to be summed up</param>
+        /// <param name="b">Matrix (2D double) whose parameters need to be summed up</param>
         /// <returns>Returns the total (int)</returns>
-        public static double sum(this int[,] B)
+        public static double SumAllElements(this int[,] b)
         {
-            return sum(B, B.GetLength(0), B.GetLength(1));
+            return SumAllElements(b, b.GetLength(0), b.GetLength(1));
         }
 
         /// <summary>
         /// Sum up all the elements of a given matrix
         /// </summary>
-        /// <param name="B">Matrix (2D double) whose parameters need to be summed up</param>
+        /// <param name="b">Matrix (2D double) whose parameters need to be summed up</param>
         /// <param name="numRows">The number of rows.</param>
         /// <param name="numCols">The number of cols.</param>
         /// <returns>Returns the total (double)</returns>
-        private static int sum(this int[,] B, int numRows, int numCols)
+        private static int SumAllElements(this int[,] b, int numRows, int numCols)
         {
             var sumValue = 0;
             for (var i = 0; i < numRows; i++)
                 for (var j = 0; j < numCols; j++)
-                    sumValue += B[i, j];
+                    sumValue += b[i, j];
             return sumValue;
         }
 
+        /// <summary>
+        /// Sums all of the rows into a 1D array.
+        /// </summary>
+        /// <returns>System.Double[].</returns>
+        public static double[] SumAllRows(this double[,] A)
+        {
+            var numRows = A.GetLength(0);
+            var numCols = A.GetLength(1);
+            var rowSums = new double[numRows];
+            for (int i = 0; i < numRows; i++)
+                rowSums[i] = A.SumRow(i,numCols);
+            return rowSums;
+        }
+        public static double SumRow(this double[,] A, int index)
+        {
+           return SumRow(A,index,A.GetLength(1));
+        }
+        /// <summary>
+        /// Sums the values of a specified row.
+        /// </summary>
+        /// <returns>System.Double[].</returns>
+        public static double SumRow(this double[,] A, int index, int numCols)
+        {
+            var sum = 0.0;
+            for (var j = 0; j < numCols; j++)
+                sum += A[index, j];
+            return sum;
+        }
+        /// <summary>
+        /// Sums all of the columns into a 1D array.
+        /// </summary>
+        /// <param name="A">a.</param>
+        /// <returns>System.Double[].</returns>
+        public static double[] SumAllColumns(this double[,] A)
+        {
+            var numRows = A.GetLength(0);
+            var numCols = A.GetLength(1);
+            var colSums = new double[numCols];
+            for (int i = 0; i < numCols; i++)
+                colSums[i] = SumColumn(A,i);
+            return colSums;
+        }
+        /// <summary>
+        /// Sums the values of a specified column.
+        /// </summary>
+        /// <param name="A">a.</param>
+        /// <param name="index">The index.</param>
+        /// <param name="numRows">The number rows.</param>
+        /// <returns>System.Double[].</returns>
+        public static double SumColumn(this double[,] A, int index)
+        {
+            return SumColumn(A, index, A.GetLength(0));
+        }
+        /// <summary>
+        /// Sums the values of a specified column.
+        /// </summary>
+        /// <param name="A">a.</param>
+        /// <param name="index">The index.</param>
+        /// <param name="numRows">The number rows.</param>
+        /// <returns>System.Double[].</returns>
+        public static double SumColumn(this double[,] A, int index, int numRows)
+        {
+            var sum = 0.0;
+            for (var i = 0; i < numRows; i++)
+                sum += A[i, index];
+            return sum;
+        }
         #endregion
 
         #region Standard Deviation
@@ -618,21 +685,21 @@ namespace StarMathLib
         /// <summary>
         /// Calculates the standard deviation assuming the whole population is provided (not sample st. dev.).
         /// </summary>
-        /// <param name="A">A matrix in integers, A.</param>
+        /// <param name="a">A matrix in integers, A.</param>
         /// <returns>System.Double.</returns>
-        public static double standardDeviation(this int[,] A)
+        public static double standardDeviation(this int[,] a)
         {
-            return standardDeviation(JoinMatrixColumnsIntoVector(A));
+            return standardDeviation(JoinMatrixColumnsIntoVector(a));
         }
 
         /// <summary>
         /// Calculates the standard deviation assuming the whole population is provided (not sample st. dev.).
         /// </summary>
-        /// <param name="A">A matrix in doubles, A.</param>
+        /// <param name="a">A matrix in doubles, A.</param>
         /// <returns>System.Double.</returns>
-        public static double standardDeviation(this double[,] A)
+        public static double standardDeviation(this double[,] a)
         {
-            return standardDeviation(JoinMatrixColumnsIntoVector(A));
+            return standardDeviation(JoinMatrixColumnsIntoVector(a));
         }
 
         #endregion

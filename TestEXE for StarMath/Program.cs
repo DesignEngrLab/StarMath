@@ -15,10 +15,11 @@ namespace TestEXE_for_StarMath
     {
         private static void Main()
         {
+            SparseFunctionTest();
             // testStackFunctions();
             //testLUfunctions();
             //benchMarkMatrixInversion();
-            compareSolvers_Inversion_to_GaussSeidel();
+            //compareSolvers_Inversion_to_GaussSeidel();
             //checkEigen();
             Console.WriteLine("Press any key to close.");
             Console.ReadLine();
@@ -104,7 +105,7 @@ namespace TestEXE_for_StarMath
                     #region ALGlib
 
                     Console.WriteLine("\n\n\nALGlib: start invert check for matrix of size: " + size);
-
+               
                     int info;
                     alglib.matinvreport rep;
                     watch.Restart();
@@ -118,7 +119,6 @@ namespace TestEXE_for_StarMath
                     #region Dot Numerics
 
                     Console.WriteLine("\n\n\nDot Numerics: start invert check for matrix of size: " + size);
-
                     var A_DN = new DotNum.Matrix(A);
                     watch.Restart();
                     var B_DN = A_DN.Inverse();
@@ -141,7 +141,6 @@ namespace TestEXE_for_StarMath
                     #region Math.Net
 
                     Console.WriteLine("\n\n\nMath.Net: start invert check for matrix of size: " + size);
-
                     var A_MD = MathDot.Matrix.Create(A);
                     watch.Restart();
                     var B_MD = A_MD.Inverse();
@@ -206,8 +205,55 @@ namespace TestEXE_for_StarMath
             var results = new List<List<string>>();
 
             var r = new Random();
+            var fractionDiag = new double[] { 1.0, 0.5, 0.3, 0.1 };
+            var matrixSize = new int[] { 180, 200,  220,  240 };
+            for (var i = 0; i < matrixSize.GetLength(0); i++)
+            {
+                for (int j = 0; j < fractionDiag.GetLength(0); j++)
+                {
+                    int size = matrixSize[i];
+                    const int numTrials = 10;
+                    for (var k = 0; k <= numTrials; k++)
+                    {
+                        var A = new double[size, size];
+                        var b = new double[size];
+                        for (var ii = 0; ii < size; ii++)
+                        {
+                            b[ii] = (200 * r.NextDouble()) - 100.0;
+                            for (var jj = 0; jj < size; jj++)
+                                A[ii, jj] = (200 * r.NextDouble()) - 100.0;
+                            if (A[ii, ii] > 0) A[ii, ii] = A.GetRow(ii).norm1();
+                            else A[ii, ii] = 2 * A[ii, ii] - A.GetRow(ii).norm1();
+                            A[ii, ii] *= fractionDiag[j];
+                        }
+                        var result = new List<string> { k.ToString(), size.ToString(), fractionDiag[j].ToString() };
+
+                        watch.Restart();
+                        //var x = StarMath.solve(A, b);
+                        var x = StarMath.SolveAnalytically(A, b);
+                        watch.Stop();
+                        recordResults(result, A, x, b, watch);
+                        watch.Restart();
+                        x = StarMath.solveIteratively(A, b);
+                        watch.Stop();
+                        recordResults(result, A, x, b, watch);
+                        Console.WriteLine(result.Aggregate((resultString, next) =>
+                      resultString + " " + next));
+                        results.Add(result);
+                    }
+                }
+            }
+            SaveResultsToCSV("results.csv", results);
+        }
+        private static void SparseFunctionTest()
+        {
+            var watch = new Stopwatch();
+            double error;
+            var results = new List<List<string>>();
+
+            var r = new Random();
             var numberPerRow = new[] { 3, 6, 12, 24, 48 };
-            var matrixSize = new[] { 10, 20,  40,  80 };
+            var matrixSize = new[] { 10, 20, 40, 80 };
             for (var i = 0; i < matrixSize.GetLength(0); i++)
             {
                 for (int j = 0; j < numberPerRow.GetLength(0); j++)
@@ -249,7 +295,7 @@ namespace TestEXE_for_StarMath
                                 formerRandomPositions.Add(randomPosition);
                                 var value = (200 * r.NextDouble()) - 100.0;
                                 // A[ii, jj] = value;
-                                AValues.Add(value); 
+                                AValues.Add(value);
                                 rows.Add(ii);
                                 cols.Add(randomPosition);
                             }
@@ -267,13 +313,9 @@ namespace TestEXE_for_StarMath
                         ATranspose.Transpose();
                         SparseA.addInPlace(ATranspose);
                         watch.Restart();
-                        var x = SparseA.SolveAnalytically(b, true);
+                        var x = SparseA.SolveAnalytically(b, false);
                         watch.Stop();
                         recordResults(result, SparseA, x, b, watch);
-                        //watch.Restart();
-                        //x = SparseA.SolveAnalyticallyCSRApproach(b, true);
-                        //watch.Stop();
-                        //recordResults(result, SparseA, x, b, watch);
                         Console.WriteLine(result.Aggregate((resultString, next) =>
                         resultString + " " + next));
                         results.Add(result);

@@ -97,11 +97,11 @@ namespace StarMathLib
             for (int i = length - 1; i >= 0; i--)
             {
                 var sumFromKnownTerms = 0.0;
-                var startCell = ColLasts[i];  // this is because it is the transposed one
-                while (startCell != null && startCell.RowIndex > i)
+                var startCell = RowLasts[i];  // this is because it is the transposed one
+                while (startCell != null && startCell.ColIndex > i)
                 {
-                    sumFromKnownTerms += startCell.Value * x[startCell.RowIndex];
-                    startCell = startCell.Up;
+                    sumFromKnownTerms += startCell.Value * x[startCell.ColIndex];
+                    startCell = startCell.Left;
                 }
                 x[i] -= sumFromKnownTerms;
             }
@@ -142,6 +142,8 @@ namespace StarMathLib
                             cellColI = cellColI.Down;
                         else cellRowJ = cellRowJ.Right;
                     }
+                    while (cellColI != null && cellColI.RowIndex <= j)
+                        cellColI = cellColI.Down;
                     var alreadyExists = TrySearchRightToCell(i, ref cellRowJ);
                     if (!alreadyExists && sum.IsNegligible()) continue;
                     // what's up with this furthestDownCells?! It turns out the the AddCell function
@@ -171,6 +173,8 @@ namespace StarMathLib
                             cellRowI = cellRowI.Right;
                         else cellColJ = cellColJ.Down;
                     }
+                    while (cellColJ != null && cellColJ.RowIndex <= i)
+                        cellColJ = cellColJ.Down;
                     var alreadyExists = TrySearchRightToCell(j, ref cellRowI);
                     if (!alreadyExists && sum.IsNegligible()) continue;
                     // what's up with this furthestDownCells?! It turns out the the AddCell function

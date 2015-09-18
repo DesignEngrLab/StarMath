@@ -19,7 +19,7 @@ namespace TestEXE_for_StarMath
             // testStackFunctions();
             //testLUfunctions();
             //benchMarkMatrixInversion();
-            compareSolvers_Inversion_to_GaussSeidel();
+            //  compareSolvers_Inversion_to_GaussSeidel();
             //checkEigen();
             Console.WriteLine("Press any key to close.");
             Console.ReadLine();
@@ -105,7 +105,7 @@ namespace TestEXE_for_StarMath
                     #region ALGlib
 
                     Console.WriteLine("\n\n\nALGlib: start invert check for matrix of size: " + size);
-               
+
                     int info;
                     alglib.matinvreport rep;
                     watch.Restart();
@@ -206,7 +206,7 @@ namespace TestEXE_for_StarMath
 
             var r = new Random();
             var fractionDiag = new double[] { 1.0, 0.5, 0.3, 0.1 };
-            var matrixSize = new int[] { 180, 200,  220,  240 };
+            var matrixSize = new int[] { 180, 200, 220, 240 };
             for (var i = 0; i < matrixSize.GetLength(0); i++)
             {
                 for (int j = 0; j < fractionDiag.GetLength(0); j++)
@@ -258,11 +258,11 @@ namespace TestEXE_for_StarMath
             {
                 for (int j = 0; j < numberPerRow.GetLength(0); j++)
                 {
-                    int size = 1 * matrixSize[i];
+                    int size = 10 * matrixSize[i];
                     const int numTrials = 0;
                     for (var k = 0; k <= numTrials; k++)
                     {
-                        //  var A = new double[size, size];
+                        var A = new double[size, size];
                         var AValues = new List<double>();
                         var rows = new List<int>();
                         var cols = new List<int>();
@@ -270,9 +270,10 @@ namespace TestEXE_for_StarMath
                         for (var ii = 0; ii < size; ii++)
                         {
                             b[ii] = (200 * r.NextDouble()) - 100.0;
-                            //for (int jj = ii; jj < size; jj++)
+                            //for (int jj = 0; jj < size; jj++)
                             //{
                             //    var value = (200 * r.NextDouble()) - 100.0;
+                            //    A[ii, jj] = value;
                             //    AValues.Add(value);
                             //    rows.Add(ii);
                             //    cols.Add(jj);
@@ -281,6 +282,7 @@ namespace TestEXE_for_StarMath
                             //    cols.Add(ii);
                             //}
                             var diagvalue = (200 * r.NextDouble()) - 100.0;
+                            A[ii, ii] = diagvalue;
                             AValues.Add(diagvalue);
                             rows.Add(ii);
                             cols.Add(ii);
@@ -294,7 +296,7 @@ namespace TestEXE_for_StarMath
                                 } while (ii == randomPosition || formerRandomPositions.Contains(randomPosition));
                                 formerRandomPositions.Add(randomPosition);
                                 var value = (200 * r.NextDouble()) - 100.0;
-                                // A[ii, jj] = value;
+                                A[ii, randomPosition] = value;
                                 AValues.Add(value);
                                 rows.Add(ii);
                                 cols.Add(randomPosition);
@@ -303,17 +305,17 @@ namespace TestEXE_for_StarMath
 
                         var result = new List<string> { k.ToString(), size.ToString(), (numberPerRow[j] / (double)size).ToString() };
 
-                        //watch.Restart();
-                        //var x = StarMath.SolveAnalytically(A, b, true);
-                        //watch.Stop();
-                        //recordResults(result, A, x, b, watch);
-                        //var SparseA = A.ConvertDenseToSparseMatrix();
-                        var SparseA = new SparseMatrix(rows, cols, AValues, size, size);
-                        var ATranspose = SparseA.Copy();
-                        ATranspose.Transpose();
-                        SparseA.addInPlace(ATranspose);
                         watch.Restart();
-                        var x = SparseA.SolveAnalytically(b, false);
+                        var x = StarMath.SolveAnalytically(A, b, false);
+                        watch.Stop();
+                        recordResults(result, A, x, b, watch);
+                        // var SparseA = A.ConvertDenseToSparseMatrix();
+                        var SparseA = new SparseMatrix(rows, cols, AValues, size, size);
+                        // var ATranspose = SparseA.Copy();
+                        // ATranspose.Transpose();
+                        // SparseA.addInPlace(ATranspose);
+                        watch.Restart();
+                        x = SparseA.SolveAnalytically(b, false);
                         watch.Stop();
                         recordResults(result, SparseA, x, b, watch);
                         Console.WriteLine(result.Aggregate((resultString, next) =>

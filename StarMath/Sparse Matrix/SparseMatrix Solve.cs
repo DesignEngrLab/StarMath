@@ -112,7 +112,7 @@ namespace StarMathLib
         {
             if (NumCols != NumRows)
                 throw new ArithmeticException("LU Decomposition can only be determined for square matrices.");
-            var furthestDownCells = new SparseCell[NumCols];
+
             // normalize row 0 
             var topCell = RowFirsts[0];
             var cell = topCell.Right;
@@ -121,16 +121,16 @@ namespace StarMathLib
                 cell.Value /= topCell.Value;
                 cell = cell.Right;
             }
-            for (var i = 0; i < NumRows; i++)
+            for (var i = 1; i < NumRows; i++)
             {
                 double sum;
                 var startCellColI = ColFirsts[i];
-                for (var j = 0; j < i; j++)
+                for (var j = i; j < NumRows; j++)
                 {
                     var cellColI = startCellColI;
                     var cellRowJ = RowFirsts[j];
                     sum = 0.0;
-                    while (cellColI.RowIndex < i && cellRowJ.ColIndex < i)
+                    while (cellColI != null && cellRowJ != null && cellColI.RowIndex < i && cellRowJ.ColIndex < i)
                     {
                         if (cellColI.RowIndex == cellRowJ.ColIndex)
                         {
@@ -150,7 +150,7 @@ namespace StarMathLib
                     // special function "AddCellToTheLeftOfAndBelow" was created. It has a significant
                     // improvemnt on time.
                     if (!alreadyExists && !sum.IsNegligible())
-                        cellRowJ = AddCellToTheLeftOfAndBelow(cellRowJ, cellColI, j, i, 0.0);
+                        cellRowJ = AddCellToTheLeftOfAndAbove(cellRowJ, cellColI, j, i, 0.0);
                     cellRowJ.Value -= sum;
                 }
                 var startCellRowI = RowFirsts[i];
@@ -159,11 +159,11 @@ namespace StarMathLib
                     var cellRowI = startCellRowI;
                     var cellColJ = ColFirsts[j];
                     sum = 0.0;
-                    while (cellRowI.ColIndex < i && cellColJ.RowIndex < i)
+                    while (cellRowI != null && cellColJ != null && cellRowI.ColIndex < i && cellColJ.RowIndex < i)
                     {
                         if (cellRowI.ColIndex == cellColJ.RowIndex)
                         {
-                            sum += cellRowI.Value * cellColJ.Value;
+                            sum -= cellRowI.Value * cellColJ.Value;
                             cellRowI = cellRowI.Right;
                             cellColJ = cellColJ.Down;
                         }
@@ -179,7 +179,7 @@ namespace StarMathLib
                     // special function "AddCellToTheLeftOfAndBelow" was created. It has a significant
                     // improvemnt on time.
                     if (!alreadyExists && !sum.IsNegligible())
-                        cellRowI = AddCellToTheLeftOfAndBelow(cellRowI, cellColJ, i, j, 0.0);
+                        cellRowI = AddCellToTheLeftOfAndAbove(cellRowI, cellColJ, i, j, 0.0);
                     cellRowI.Value = (sum + cellRowI.Value) / Diagonals[i].Value;
                 }
             }
@@ -344,6 +344,66 @@ namespace StarMathLib
                 cell.Down = cellToTheUp.Down;
                 cell.Down.Up = cell;
                 cellToTheUp.Down = cell;
+
+            }
+            if (rowI == colI) Diagonals[rowI] = cell;
+            cellsRowbyRow.Add(cell);
+            NumNonZero++;
+
+            return cell;
+        }
+
+        /// <summary>
+        /// Adds the cell to the left of and below.
+        /// </summary>
+        /// <param name="cellToTheRight">The cell to the right.</param>
+        /// <param name="cellToTheUp">The cell to the up.</param>
+        /// <param name="rowI">The row i.</param>
+        /// <param name="colI">The col i.</param>
+        /// <param name="value">The value.</param>
+        /// <returns>SparseCell.</returns>
+        private SparseCell AddCellToTheLeftOfAndAbove(SparseCell cellToTheRight, SparseCell cellToTheDown, int rowI, int colI, double value)
+        {
+            var cell = new SparseCell(rowI, colI, value);
+            // stitch it into the rows
+            if (RowFirsts[rowI].ColIndex > colI)
+            {
+                cell.Right = RowFirsts[rowI];
+                RowFirsts[rowI].Left = cell;
+                RowFirsts[rowI] = cell;
+            }
+            else if (RowLasts[rowI].ColIndex < colI)
+            {
+                cell.Left = RowLasts[rowI];
+                RowLasts[rowI].Right = cell;
+                RowLasts[rowI] = cell;
+            }
+            else
+            {
+                cell.Right = cellToTheRight;
+                cell.Left = cellToTheRight.Left;
+                cell.Left.Right = cell;
+                cellToTheRight.Left = cell;
+            }
+            // stitch it into the colums
+            if (ColFirsts[colI].RowIndex > rowI)
+            {
+                cell.Down = ColFirsts[colI];
+                ColFirsts[colI].Up = cell;
+                ColFirsts[colI] = cell;
+            }
+            else if (ColLasts[colI].RowIndex < rowI)
+            {
+                cell.Up = ColLasts[colI];
+                ColLasts[colI].Down = cell;
+                ColLasts[colI] = cell;
+            }
+            else
+            {
+                cell.Down = cellToTheDown;
+                cell.Up = cellToTheDown.Up;
+                cell.Up.Down = cell;
+                cellToTheDown.Up = cell;
 
             }
             if (rowI == colI) Diagonals[rowI] = cell;

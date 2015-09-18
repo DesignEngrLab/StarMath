@@ -278,8 +278,8 @@ namespace StarMathLib
                     // do a row of U
                     var sum = 0.0;
                     for (var k = 0; k < i; k++)
-                        sum -= B[i, k] * B[k, j];
-                    B[i, j] = (sum + B[i, j]) / B[i, i];
+                        sum += B[i, k] * B[k, j];
+                    B[i, j] = (-sum + B[i, j]) / B[i, i];
                 }
             }
             return B;

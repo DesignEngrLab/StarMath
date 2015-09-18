@@ -19,7 +19,7 @@ namespace TestEXE_for_StarMath
             // testStackFunctions();
             //testLUfunctions();
             //benchMarkMatrixInversion();
-            //compareSolvers_Inversion_to_GaussSeidel();
+            compareSolvers_Inversion_to_GaussSeidel();
             //checkEigen();
             Console.WriteLine("Press any key to close.");
             Console.ReadLine();
@@ -258,7 +258,7 @@ namespace TestEXE_for_StarMath
             {
                 for (int j = 0; j < numberPerRow.GetLength(0); j++)
                 {
-                    int size = 20 * matrixSize[i];
+                    int size = 1 * matrixSize[i];
                     const int numTrials = 0;
                     for (var k = 0; k <= numTrials; k++)
                     {

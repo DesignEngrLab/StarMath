@@ -195,6 +195,25 @@ namespace StarMathLib
         }
         #endregion
 
+        /// <summary>
+        /// Converts the sparse matrix to a dense matrix.
+        /// </summary>
+        /// <returns>System.Double[].</returns>
+        public double[,] ConvertSparseToDenseMatrix()
+        {
+            var A = new double[NumRows, NumCols];
+            for (int i = 0; i < NumRows; i++)
+            {
+                var cell = RowFirsts[i];
+                while (cell != null)
+                {
+                    A[i, cell.ColIndex] = cell.Value;
+                    cell = cell.Right;
+                }
+            }
+            return A;
+        }
+
         #region Finding Cell(s) Methods
         /// <summary>
         /// Gets or sets the <see cref="System.Double" /> with the specified row i.

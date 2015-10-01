@@ -41,9 +41,8 @@ namespace StarMathLib
             List<int>[] potentialDiagonals;
             if (isGaussSeidelAppropriate(A, b, out potentialDiagonals, ref initialGuess, length))
                 return solveIteratively(A, b, initialGuess, length, potentialDiagonals);
-            /****** need code to determine when to switch between *****
-             ****** this analytical approach and the SOR approach *****/
-            return SolveAnalytically(A, b, IsASymmetric, potentialDiagonals);
+
+            return SolveAnalytically(A, b, IsASymmetric);
         }
 
         /// <summary>
@@ -109,7 +108,7 @@ namespace StarMathLib
         /// <param name="IsASymmetric">Is A known to be Symmetric?</param>
         /// <param name="potentialDiagonals">The potential diagonals.</param>
         /// <returns>System.Double[].</returns>
-        public static double[] SolveAnalytically(double[,] A, IList<double> b, bool IsASymmetric = false, List<int>[] potentialDiagonals = null)
+        public static double[] SolveAnalytically(double[,] A, IList<double> b, bool IsASymmetric = false)
         {
             var length = b.Count;
             if (IsASymmetric)
@@ -140,44 +139,23 @@ namespace StarMathLib
             }
             else
             {
-                double[,] C;
-                double[] d;
-                if (Enumerable.Range(0, length).Any(i => A[i, i].IsNegligible()))
-                {
-                    if (potentialDiagonals == null &&
-                        !findPotentialDiagonals(A, out potentialDiagonals, length, 0.0))
-                        return null;
-                    var order = reorderMatrixForDiagonalDominance(A, length, potentialDiagonals);
-                    if (order == null) return null;
-                    C = new double[length, length];
-                    d = new double[length];
-                    for (var i = 0; i < length; i++)
-                    {
-                        d[i] = b[order[i]];
-                        SetRow(i, C, GetRow(order[i], A));
-                    }
-                }
-                else
-                {
-                    C = (double[,])A.Clone();
-                    d = b.ToArray();
-                }
-                var LU = LUDecomposition(C, length);
+                int[] permutationVector;
+                var LU = LUDecomposition(A, out permutationVector, length);
                 var x = new double[length];
                 // forward substitution
                 for (int i = 0; i < length; i++)
                 {
                     var sumFromKnownTerms = 0.0;
                     for (int j = 0; j < i; j++)
-                        sumFromKnownTerms += LU[i, j] * x[j];
-                    x[i] = (d[i] - sumFromKnownTerms) / LU[i, i];
+                        sumFromKnownTerms += LU[permutationVector[i], j] * x[j];
+                    x[i] = (b[permutationVector[i]] - sumFromKnownTerms) / LU[permutationVector[i], i];
                 }
                 // backward substitution
                 for (int i = length - 1; i >= 0; i--)
                 {
                     var sumFromKnownTerms = 0.0;
                     for (int j = i + 1; j < length; j++)
-                        sumFromKnownTerms += LU[i, j] * x[j];
+                        sumFromKnownTerms += LU[permutationVector[i], j] * x[j];
                     x[i] -= sumFromKnownTerms;
                 }
                 return x;
@@ -228,7 +206,7 @@ namespace StarMathLib
                         potentialIndices.Add(j);
                 if (potentialIndices.Count == 0) return false;
                 potentialDiagonals[i] = potentialIndices;
-            }  
+            }
             return potentialDiagonals.SelectMany(x => x).Distinct().Count() == length;
         }
 
@@ -307,7 +285,7 @@ namespace StarMathLib
 
 
         /// <summary>
-        /// Reorders the matrix for diagonal dominance.
+        /// Reorders the matrix for diagonal dominance and returns the permutation vector.
         /// </summary>
         /// <param name="A">a.</param>
         /// <param name="length">The length.</param>

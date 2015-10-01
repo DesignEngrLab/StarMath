@@ -15,11 +15,11 @@ namespace TestEXE_for_StarMath
     {
         private static void Main()
         {
-            SparseFunctionTest();
+           // SparseFunctionTest();
             // testStackFunctions();
             //testLUfunctions();
             //benchMarkMatrixInversion();
-            //  compareSolvers_Inversion_to_GaussSeidel();
+              compareSolvers_Inversion_to_GaussSeidel();
             //checkEigen();
             Console.WriteLine("Press any key to close.");
             Console.ReadLine();
@@ -35,19 +35,21 @@ namespace TestEXE_for_StarMath
 
         private static void testLUfunctions()
         {
-            const int size = 9;
+            const int size = 4;
             var r = new Random();
 
             var A = new double[size, size];
             for (var i = 0; i < size; i++)
                 for (var j = 0; j < size; j++)
+                    if (i!=j)
                     A[i, j] = (200 * r.NextDouble()) - 100.0;
             Console.WriteLine("A =");
             Console.WriteLine(A.MakePrintString());
 
 
             double[,] L, U;
-            StarMath.LUDecomposition(A, out L, out U);
+            int[] permute;
+            StarMath.LUDecomposition(A, out L, out U,out permute);
             Console.WriteLine(" L = ");
             Console.WriteLine(L.MakePrintString());
             Console.WriteLine(" U = ");
@@ -206,7 +208,7 @@ namespace TestEXE_for_StarMath
 
             var r = new Random();
             var fractionDiag = new double[] { 1.0, 0.5, 0.3, 0.1 };
-            var matrixSize = new int[] { 180, 200, 220, 240 };
+            var matrixSize = new int[] {5 ,180, 200, 220, 240 };
             for (var i = 0; i < matrixSize.GetLength(0); i++)
             {
                 for (int j = 0; j < fractionDiag.GetLength(0); j++)
@@ -226,6 +228,7 @@ namespace TestEXE_for_StarMath
                             else A[ii, ii] = 2 * A[ii, ii] - A.GetRow(ii).norm1();
                             A[ii, ii] *= fractionDiag[j];
                         }
+                        A[size-1,size-1] = 0.0;
                         var result = new List<string> { k.ToString(), size.ToString(), fractionDiag[j].ToString() };
 
                         watch.Restart();

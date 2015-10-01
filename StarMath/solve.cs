@@ -40,7 +40,7 @@ namespace StarMathLib
                 throw new ArithmeticException("Matrix, A, must be have the same number of rows as the vector, b.");
             List<int>[] potentialDiagonals;
             if (isGaussSeidelAppropriate(A, b, out potentialDiagonals, ref initialGuess, length))
-                return solveIteratively(A, b, initialGuess, length, potentialDiagonals);
+                return SolveIteratively(A, b, initialGuess, length, potentialDiagonals);
 
             return SolveAnalytically(A, b, IsASymmetric);
         }
@@ -219,7 +219,7 @@ namespace StarMathLib
         /// <param name="length">The length.</param>
         /// <param name="potentialDiagonals">The potential indices.</param>
         /// <returns>System.Double[].</returns>
-        public static double[] solveIteratively(double[,] A, IList<double> b,
+        public static double[] SolveIteratively(double[,] A, IList<double> b,
             IList<double> initialGuess = null, int length = -1, List<int>[] potentialDiagonals = null)
         {
             if (length < 0) length = b.Count;
@@ -277,13 +277,7 @@ namespace StarMathLib
             for (var i = 0; i < length; i++) initialGuess[i] = initGuessValue;
             return initialGuess;
         }
-
-        // what about this:
-        // find a condition number for each column -> divide the smallest by the largest
-        // (and take absolute value). Address columns with lowest values first - especially
-        // the columns that yield zero!
-
-
+        
         /// <summary>
         /// Reorders the matrix for diagonal dominance and returns the permutation vector.
         /// </summary>
@@ -291,7 +285,7 @@ namespace StarMathLib
         /// <param name="length">The length.</param>
         /// <param name="potentialIndices">The potential indices.</param>
         /// <returns>System.Int32[].</returns>
-        public static int[] reorderMatrixForDiagonalDominance(double[,] A, int length, List<int>[] potentialIndices)
+        private static int[] reorderMatrixForDiagonalDominance(double[,] A, int length, List<int>[] potentialIndices)
         {
             var popularity = new int[length];
             for (var i = 0; i < length; i++)

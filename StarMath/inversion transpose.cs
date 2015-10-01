@@ -411,8 +411,10 @@ namespace StarMathLib
                     for (int j = 0; j < length; j++)
                         if (A[i, j] == 0) lastZeroIndices[i] = j;
             }
-
-            var B = (double[,])A.Clone();
+            var B = new double[length, length];
+            for (var i = 0; i < length; i++)
+                for (var j = 0; j < length; j++)
+                    B[i, j] = A[i, j];
             permutationVector = Enumerable.Range(0, length).ToArray();
             // normalize row 0
             for (var i = 0; i < length; i++)

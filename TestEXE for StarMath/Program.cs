@@ -237,7 +237,7 @@ namespace TestEXE_for_StarMath
                         watch.Stop();
                         recordResults(result, A, x, b, watch);
                         watch.Restart();
-                        x = StarMath.solveIteratively(A, b);
+                        x = StarMath.SolveIteratively(A, b);
                         watch.Stop();
                         recordResults(result, A, x, b, watch);
                         Console.WriteLine(result.Aggregate((resultString, next) =>

@@ -198,8 +198,9 @@ namespace StarMathLib
         /// Converts the 2D double array to a Sparse matrix.
         /// </summary>
         /// <param name="A">a.</param>
+        /// <param name="optionalTolerance">An optional tolerance.</param>
         /// <returns>SparseMatrix.</returns>
-        public static SparseMatrix ConvertDenseToSparseMatrix(this double[,] A)
+        public static SparseMatrix ConvertDenseToSparseMatrix(this double[,] A, double optionalTolerance = EqualityTolerance)
         {
             var numRows = A.GetLength(0);
             var numCols = A.GetLength(1);
@@ -209,7 +210,7 @@ namespace StarMathLib
             for (int i = 0; i < numRows; i++)
                 for (int j = 0; j < numCols; j++)
                 {
-                    if (!A[i, j].IsNegligible())
+                    if (!A[i, j].IsNegligible(optionalTolerance))
                     {
                         rowIndices.Add(i);
                         colIndices.Add(j);
@@ -218,32 +219,6 @@ namespace StarMathLib
                 }
             return new SparseMatrix(rowIndices, colIndices, values, numRows, numCols);
         }
-        /// <summary>
-        /// Converts the 2D double array to a Sparse matrix.
-        /// </summary>
-        /// <param name="A">a.</param>
-        /// <param name="tolerance">The tolerance.</param>
-        /// <returns>SparseMatrix.</returns>
-        public static SparseMatrix ConvertDenseToSparseMatrix(this double[,] A, double tolerance)
-        {
-            var numRows = A.GetLength(0);
-            var numCols = A.GetLength(1);
-            List<int> rowIndices = new List<int>();
-            List<int> colIndices = new List<int>();
-            List<double> values = new List<double>();
-            for (int i = 0; i < numRows; i++)
-                for (int j = 0; j < numCols; j++)
-                {
-                    if (Math.Abs(A[i, j]) > tolerance)
-                    {
-                        rowIndices.Add(i);
-                        colIndices.Add(j);
-                        values.Add(A[i, j]);
-                    }
-                }
-            return new SparseMatrix(rowIndices, colIndices, values, numRows, numCols);
-        }
-
 
         #region Get/Set/Remove parts of a matrix
 

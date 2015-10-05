@@ -20,109 +20,19 @@ namespace StarMathLib
     {
         #region Matrix Inversion
         /// <summary>
-        /// Inverses the matrix A only if the matrix has already been
-        /// "triangularized" - meaning there are no elements in the bottom
-        /// triangle - A[i,j]=0.0 where j>i
-        /// </summary>
-        /// <param name="A">The matrix to invert. This matrix is unchanged by this function.</param>
-        /// <returns>The inverted matrix, A^-1.</returns>
-        /// <exception cref="System.ArithmeticException">Matrix cannnot be inverted. Can only invert sqare matrices.</exception>
-        public static double[,] inverseUpper(double[,] A)
-        {
-            var length = A.GetLength(0);
-            if (length != A.GetLength(1))
-                throw new ArithmeticException("Matrix cannnot be inverted. Can only invert sqare matrices.");
-
-            var B = new double[length, length];
-            var t = new double[length];
-
-            for (var j = 0; j < length; j++)
-            {
-                B[j, j] = 1 / A[j, j];
-                for (var i = 0; i < j; i++)
-                    B[i, j] = A[i, j];
-            }
-            for (var j = 1; j < length; j++)
-            {
-                var Bjj = -B[j, j];
-                for (var i = 0; i < j; i++)
-                    t[i] = B[i, j];
-                for (var i = 0; i < j; i++)
-                {
-                    double v;
-                    if (i < j - 1)
-                    {
-                        v = 0.0;
-                        for (var jj = i + 1; jj < j; jj++)
-                            v += B[i, jj] * t[jj];
-                    }
-                    else v = 0;
-                    B[i, j] = v + B[i, i] * t[i];
-                }
-                for (var ii = 0; ii < j; ii++)
-                    B[ii, j] = Bjj * B[ii, j];
-            }
-            return B;
-        }
-
-        /// <summary>
-        /// Inverses the matrix A only if the matrix has already been
-        /// "triangularized" - meaning there are no elements in the bottom
-        /// triangle - A[i,j]=0.0 where j&gt;i
-        /// </summary>
-        /// <param name="A">The matrix to invert. This matrix is unchanged by this function.</param>
-        /// <returns>The inverted matrix, A^-1.</returns>
-        /// <exception cref="System.ArithmeticException">Matrix cannnot be inverted. Can only invert sqare matrices.</exception>
-        public static double[,] inverseUpper(int[,] A)
-        {
-            var length = A.GetLength(0);
-            if (length != A.GetLength(1))
-                throw new ArithmeticException("Matrix cannnot be inverted. Can only invert sqare matrices.");
-            var B = new double[length, length];
-            var t = new double[length];
-
-            for (var j = 0; j < length; j++)
-            {
-                B[j, j] = 1 / (double)A[j, j];
-                for (var i = 0; i < j; i++)
-                    B[i, j] = A[i, j];
-            }
-            for (var j = 1; j < length; j++)
-            {
-                var Bjj = -B[j, j];
-                for (var i = 0; i < j; i++)
-                    t[i] = B[i, j];
-                for (var i = 0; i < j; i++)
-                {
-                    double v;
-                    if (i < j - 1)
-                    {
-                        v = 0.0;
-                        for (var jj = i + 1; jj < j; jj++)
-                            v += B[i, jj] * t[jj];
-                    }
-                    else v = 0;
-                    B[i, j] = v + B[i, i] * t[i];
-                }
-                for (var ii = 0; ii < j; ii++)
-                    B[ii, j] = Bjj * B[ii, j];
-            }
-            return B;
-        }
-
-        /// <summary>
         /// Inverses the matrix A only if the diagonal is all non-zero.
         /// A[i,i] != 0.0
         /// </summary>
         /// <param name="A">The matrix to invert. This matrix is unchanged by this function.</param>
         /// <returns>The inverted matrix, A^-1.</returns>
         /// <exception cref="System.ArithmeticException">Matrix cannnot be inverted. Can only invert sqare matrices.</exception>
-        public static double[,] inverse(this double[,] A)
+        public static double[,] inverse(this double[,] A) // need bool IsSymmetric to switch to Cholesky
         {
             var length = A.GetLength(0);
             if (length != A.GetLength(1))
                 throw new ArithmeticException("Matrix cannnot be inverted. Can only invert sqare matrices.");
             if (length == 1) return new[,] { { 1 / A[0, 0] } };
+
             int[] permutationVector;
             var LU = LUDecomposition(A, out permutationVector, length);
             return inverseWithLUResult(LU, permutationVector, length);
@@ -134,7 +44,7 @@ namespace StarMathLib
         /// </summary>
         /// <param name="A">The matrix to invert. This matrix is unchanged by this function.</param>
         /// <returns>The inverted matrix, A^-1.</returns>
-        /// <exception cref="System.ArithmeticException">Matrix cannnot be inverted. Can only invert sqare matrices.</exception>
+        /// <exception cref="ArithmeticException">Matrix cannnot be inverted. Can only invert sqare matrices.</exception>
         public static double[,] inverse(this int[,] A)
         {
             var length = A.GetLength(0);
@@ -142,7 +52,7 @@ namespace StarMathLib
                 throw new ArithmeticException("Matrix cannnot be inverted. Can only invert sqare matrices.");
             if (length == 1) return new[,] { { 1 / (double)A[0, 0] } };
             int[] permute;
-            var LU = LUDecomposition(A, out permute, length);
+            var LU = LUDecomposition(A, out permute, length); 
             return inverseWithLUResult(LU, permute, length);
         }
 
@@ -154,22 +64,20 @@ namespace StarMathLib
         /// <returns>System.Double[].</returns>
         private static double[,] inverseWithLUResult(double[,] B, int[] permute, int length)
         {
-            // one constraint/caveat in this function is that the diagonal elts. cannot
-            // be zero.
             // if the matrix is not square or is less than B 2x2, 
             // then this function won't work
-
+            //todo: need to fix to take care of permute
             #region invert L
 
             for (var i = 0; i < length; i++)
             {
-                B[i, i] = 1.0 / B[i, i];
+                B[permute[i], i] = 1.0 / B[permute[i], i];
                 for (var j = i + 1; j < length; j++)
                 {
                     var sum = 0.0;
                     for (var k = i; k < j; k++)
-                        sum -= B[j, k] * B[k, i];
-                    B[j, i] = (sum == 0) ? 0.0 : sum / B[j, j];
+                        sum -= B[permute[j], k] * B[permute[k], i];
+                    B[permute[j], i] = (sum == 0) ? 0.0 : sum / B[permute[j], j];
                 }
             }
 
@@ -180,10 +88,10 @@ namespace StarMathLib
             for (var i = 0; i < length; i++)
                 for (var j = i + 1; j < length; j++)
                 {
-                    var sum = -B[i, j];
+                    var sum = -B[permute[i], j];
                     for (var k = i + 1; k < j; k++)
-                        sum -= B[k, j] * B[i, k];
-                    B[i, j] = sum;
+                        sum -= B[permute[k], j] * B[permute[i], k];
+                    B[permute[i], j] = sum;
                 }
 
             #endregion
@@ -195,30 +103,34 @@ namespace StarMathLib
                 {
                     if (j == i)
                     {
-                        var sum = B[i, i];
+                        var sum = B[permute[i], i];
                         for (var k = i + 1; k < length; k++)
-                            sum += B[i, k] * B[k, i];
-                        B[i, i] = sum;
+                            sum += B[permute[i], k] * B[permute[k], i];
+                        B[permute[i], i] = sum;
                     }
                     else if (j < i)
                     {
                         var sum = 0.0;
                         for (var k = i; k < length; k++)
-                            sum += B[j, k] * B[k, i];
-                        B[j, i] = sum;
+                            sum += B[permute[j], k] * B[permute[k], i];
+                        B[permute[j], i] = sum;
                     }
                     else // then i<j
                     {
-                        var sum = B[j, i];
+                        var sum = B[permute[j], i];
                         for (var k = j + 1; k < length; k++)
-                            sum += B[j, k] * B[k, i];
-                        B[j, i] = sum;
+                            sum += B[permute[j], k] * B[permute[k], i];
+                        B[permute[j], i] = sum;
                     }
                 }
 
             #endregion
 
-            return B;
+            var C = new double[length, length];
+            for (int i = 0; i < length; i++)
+                for (int j = 0; j < length; j++)
+                    C[i, j] = B[i,permute[ j]];
+            return C;
         }
 
         #endregion

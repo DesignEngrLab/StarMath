@@ -23,12 +23,12 @@ namespace StarMathLib
         /// <summary>
         ///     The cell width
         /// </summary>
-        private const int cellWidth = 10;
+        private const int CellWidth = 10;
 
         /// <summary>
         ///     The number decimals
         /// </summary>
-        private const int numDecimals = 3;
+        private const int NumDecimals = 3;
 
         /// <summary>
         ///     The maximum error for using gauss seidel
@@ -67,7 +67,7 @@ namespace StarMathLib
         /// <summary>
         ///     The maximum sv diter
         /// </summary>
-        private const int maxSVDiter = 1000;
+        private const int MaxSvDiter = 1000;
 
         /// <summary>
         ///     The starting carol seed
@@ -75,70 +75,60 @@ namespace StarMathLib
         private const int StartingCarolSeed = 3;
 
         /// <summary>
-        ///     The random
-        /// </summary>
-        private static readonly Random random = new Random();
-
-        /// <summary>
-        ///     The _equality tolerance
-        /// </summary>
-        private static double _equalityTolerance = 1e-15;
-
-        /// <summary>
         ///     Gets or sets the  tolerance for the equality functions: IsPracticallySame, IsNegligible, IsGreaterThanNonNegligible
         ///     IsLessThanNonNegligible.
         /// </summary>
         /// <value>The equality tolerance.</value>
-        public static double EqualityTolerance
-        {
-            get { return _equalityTolerance; }
-            set { _equalityTolerance = value; }
-        }
+        public const double EqualityTolerance = 1e-15;
 
         /// <summary>
-        ///     Determines whether [is practically same] [the specified x].
-        ///     the norm is within 1e-15
+        /// Determines whether [is practically same] [the specified x].
+        /// the norm is within 1e-15
         /// </summary>
         /// <param name="x">The x.</param>
         /// <param name="y">The y.</param>
+        /// <param name="optionalTolerance">An optional tolerance.</param>
         /// <returns><c>true</c> if [is practically same] [the specified x]; otherwise, <c>false</c>.</returns>
-        public static bool IsPracticallySame(this double x, double y)
+        public static bool IsPracticallySame(this double x, double y, double optionalTolerance = EqualityTolerance)
         {
-            return IsNegligible(x - y);
+            return IsNegligible(x - y, optionalTolerance);
         }
 
         /// <summary>
-        ///     Determines whether [is practically same] [the specified x].
-        ///     the norm is within 1e-15
+        /// Determines whether [is practically same] [the specified x].
+        /// the norm is within 1e-15
         /// </summary>
         /// <param name="x">The x.</param>
         /// <param name="y">The y.</param>
+        /// <param name="optionalTolerance">An optional tolerance.</param>
         /// <returns><c>true</c> if [is practically same] [the specified x]; otherwise, <c>false</c>.</returns>
-        public static bool IsPracticallySame(this double[] x, double[] y)
+        public static bool IsPracticallySame(this double[] x, double[] y, double optionalTolerance = EqualityTolerance)
         {
             var n = x.GetLength(0);
             if (n != y.GetLength(0)) return false;
-            return IsNegligible(x.subtract(y));
+            return IsNegligible(x.subtract(y), optionalTolerance);
         }
 
         /// <summary>
-        ///     Determines whether the specified x is negligible (|x| lte 1e-15).
+        /// Determines whether the specified x is negligible (|x| lte 1e-15).
         /// </summary>
         /// <param name="x">The x.</param>
+        /// <param name="optionalTolerance">An optional tolerance.</param>
         /// <returns><c>true</c> if the specified x is negligible; otherwise, <c>false</c>.</returns>
-        public static bool IsNegligible(this double[] x)
+        public static bool IsNegligible(this double[] x, double optionalTolerance = EqualityTolerance)
         {
-            return (x.norm2(true) <= EqualityTolerance);
+            return (x.norm2(true) <= optionalTolerance);
         }
 
         /// <summary>
-        ///     Determines whether the specified x is negligible (|x| lte 1e-15).
+        /// Determines whether the specified x is negligible (|x| lte 1e-15).
         /// </summary>
         /// <param name="x">The x.</param>
+        /// <param name="optionalTolerance">An optional tolerance.</param>
         /// <returns><c>true</c> if the specified x is negligible; otherwise, <c>false</c>.</returns>
-        public static bool IsNegligible(this double x)
+        public static bool IsNegligible(this double x, double optionalTolerance = EqualityTolerance)
         {
-            return (Math.Abs(x) <= EqualityTolerance);
+            return (Math.Abs(x) <= optionalTolerance);
         }
 
         /// <summary>

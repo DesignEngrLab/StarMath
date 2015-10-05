@@ -11,7 +11,9 @@
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
+
 namespace StarMathLib
 {
     public static partial class StarMath
@@ -19,78 +21,78 @@ namespace StarMathLib
         #region 3D Coordinate Transforms
 
         /// <summary>
-        /// Creates a translated coordinate frame.
+        ///     Creates a translated coordinate frame.
         /// </summary>
-        /// <param name="Tx">Amount of translation in x.</param>
-        /// <param name="Ty">Amount of translation in y.</param>
-        /// <param name="Tz">Amount of translation in z.</param>
+        /// <param name="tx">Amount of translation in x.</param>
+        /// <param name="ty">Amount of translation in y.</param>
+        /// <param name="tz">Amount of translation in z.</param>
         /// <returns>4-by-4 matrix translated by the amount specified.</returns>
-        public static double[,] Translate(double Tx, double Ty, double Tz)
+        public static double[,] Translate(double tx, double ty, double tz)
         {
             var T = makeIdentity(4);
 
-            T[0, 3] = Tx;
-            T[1, 3] = Ty;
-            T[2, 3] = Tz;
+            T[0, 3] = tx;
+            T[1, 3] = ty;
+            T[2, 3] = tz;
 
             return T;
         }
 
         /// <summary>
-        /// Creates a rotation matrix about the X-axis.
+        ///     Creates a rotation matrix about the X-axis.
         /// </summary>
         /// <param name="angle">The amount of angle in degrees (positive is counter-clockwise).</param>
         /// <param name="inRadians">if set to <c>true</c> [in radians].</param>
         /// <returns>4-by-4 matrix rotated by the amount specified.</returns>
-        public static double[,] RotationX(double angle, Boolean inRadians = false)
+        public static double[,] RotationX(double angle, bool inRadians = false)
         {
-            var ROTX = makeIdentity(4);
+            var rotx = makeIdentity(4);
             if (!inRadians)
                 angle = (Math.PI*angle)/180;
 
-            ROTX[1, 1] = ROTX[2, 2] = Math.Cos(angle);
-            ROTX[1, 2] = -Math.Sin(angle);
-            ROTX[2, 1] = Math.Sin(angle);
+            rotx[1, 1] = rotx[2, 2] = Math.Cos(angle);
+            rotx[1, 2] = -Math.Sin(angle);
+            rotx[2, 1] = Math.Sin(angle);
 
-            return ROTX;
+            return rotx;
         }
 
         /// <summary>
-        /// Creates a rotation matrix about the Y-axis.
+        ///     Creates a rotation matrix about the Y-axis.
         /// </summary>
         /// <param name="angle">The amount of angle in degrees (positive is counter-clockwise).</param>
         /// <param name="inRadians">if set to <c>true</c> [in radians].</param>
         /// <returns>4-by-4 matrix rotated by the amount specified.</returns>
-        public static double[,] RotationY(double angle, Boolean inRadians = false)
+        public static double[,] RotationY(double angle, bool inRadians = false)
         {
-            var ROTY = makeIdentity(4);
+            var roty = makeIdentity(4);
             if (!inRadians)
                 angle = (Math.PI*angle)/180;
 
-            ROTY[0, 0] = ROTY[2, 2] = Math.Cos(angle);
-            ROTY[2, 0] = -Math.Sin(angle);
-            ROTY[0, 2] = Math.Sin(angle);
+            roty[0, 0] = roty[2, 2] = Math.Cos(angle);
+            roty[2, 0] = -Math.Sin(angle);
+            roty[0, 2] = Math.Sin(angle);
 
-            return ROTY;
+            return roty;
         }
 
         /// <summary>
-        /// Creates a rotation matrix about the Z-axis.
+        ///     Creates a rotation matrix about the Z-axis.
         /// </summary>
         /// <param name="angle">The amount of angle in degrees (positive is counter-clockwise).</param>
         /// <param name="inRadians">if set to <c>true</c> [in radians].</param>
         /// <returns>4-by-4 matrix rotated by the amount specified.</returns>
-        public static double[,] RotationZ(double angle, Boolean inRadians = false)
+        public static double[,] RotationZ(double angle, bool inRadians = false)
         {
-            var ROTZ = makeIdentity(4);
+            var rotz = makeIdentity(4);
             if (!inRadians)
                 angle = (Math.PI*angle)/180;
 
-            ROTZ[0, 0] = ROTZ[1, 1] = Math.Cos(angle);
-            ROTZ[1, 0] = Math.Sin(angle);
-            ROTZ[0, 1] = -Math.Sin(angle);
+            rotz[0, 0] = rotz[1, 1] = Math.Cos(angle);
+            rotz[1, 0] = Math.Sin(angle);
+            rotz[0, 1] = -Math.Sin(angle);
 
-            return ROTZ;
+            return rotz;
         }
 
         #endregion

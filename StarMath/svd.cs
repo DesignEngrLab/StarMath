@@ -315,7 +315,7 @@ namespace StarMathLib
             {
                 // Quit if all the singular values have been found.
                 // If too many iterations have been performed throw exception.
-                if (iter >= maxSVDiter)
+                if (iter >= MaxSvDiter)
                 {
                     throw new ArithmeticException("SVD did not converge.");
                 }

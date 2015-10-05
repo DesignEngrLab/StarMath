@@ -78,7 +78,7 @@ namespace StarMathLib
                 for (var i = m; i <= high; i++)
                     scale += Math.Abs(B[mm1, i]);
 
-                if (scale != 0.0)
+                if (!scale.IsNegligible())
                 {
                     // Compute Householder transformation.
                     var h = 0.0;
@@ -498,7 +498,7 @@ namespace StarMathLib
                     }
                     else
                     {
-                        var res = complexNumberDivide(0.0, -B[n, nm1], B[nm1, nm1] - p, q);
+                        var res = ComplexNumberDivide(0.0, -B[n, nm1], B[nm1, nm1] - p, q);
                         B[nm1, nm1] = res[0];
                         B[n, nm1] = res[1];
                     }
@@ -529,7 +529,7 @@ namespace StarMathLib
                             l = i;
                             if (eigenvaluesImag[i].IsNegligible())
                             {
-                                var res = complexNumberDivide(-ra, -sa, w, q);
+                                var res = ComplexNumberDivide(-ra, -sa, w, q);
                                 B[nm1, i] = res[0];
                                 B[n, i] = res[1];
                             }
@@ -544,7 +544,7 @@ namespace StarMathLib
                                 var vi = (eigenvaluesReal[i] - p)*2.0*q;
                                 if ((vr.IsNegligible()) && (vi.IsNegligible()))
                                     vr = eps*norm*(Math.Abs(w) + Math.Abs(q) + Math.Abs(x) + Math.Abs(y) + Math.Abs(z));
-                                var res = complexNumberDivide((x*r) - (z*ra) + (q*sa), (x*s) - (z*sa) - (q*ra), vr,
+                                var res = ComplexNumberDivide((x*r) - (z*ra) + (q*sa), (x*s) - (z*sa) - (q*ra), vr,
                                     vi);
                                 B[nm1, i] = res[0];
                                 B[n, i] = res[1];
@@ -555,7 +555,7 @@ namespace StarMathLib
                                 }
                                 else
                                 {
-                                    res = complexNumberDivide(-r - (y*B[nm1, i]), -s - (y*B[n, i]), z, q);
+                                    res = ComplexNumberDivide(-r - (y*B[nm1, i]), -s - (y*B[n, i]), z, q);
                                     B[nm1, ip1] = res[0];
                                     B[n, ip1] = res[1];
                                 }
@@ -593,7 +593,7 @@ namespace StarMathLib
             return new[] {eigenvaluesReal, eigenvaluesImag};
         }
 
-        private static double[] complexNumberDivide(double xreal, double ximag, double yreal, double yimag)
+        private static double[] ComplexNumberDivide(double xreal, double ximag, double yreal, double yimag)
         {
             if (Math.Abs(yimag) < Math.Abs(yreal))
             {

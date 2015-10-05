@@ -11,9 +11,11 @@
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
+
 namespace StarMathLib
 {
     public static partial class StarMath
@@ -21,7 +23,7 @@ namespace StarMathLib
         #region Add Vector-to-Vector and Matrix-to-Matrix
 
         /// <summary>
-        /// Adds arrays A and B
+        ///     Adds arrays A and B
         /// </summary>
         /// <param name="A">1D double array 1</param>
         /// <param name="B">1D double array 2</param>
@@ -29,13 +31,13 @@ namespace StarMathLib
         /// <exception cref="System.ArithmeticException">Matrix sizes do not match</exception>
         public static double[] add(this IList<double> A, IList<double> B)
         {
-            var length = A.Count();
-            if (length != B.Count()) throw new ArithmeticException("Matrix sizes do not match");
+            var length = A.Count;
+            if (length != B.Count) throw new ArithmeticException("Matrix sizes do not match");
             return add(A, B, length);
         }
 
         /// <summary>
-        /// Adds arrays A and B
+        ///     Adds arrays A and B
         /// </summary>
         /// <param name="A">1D int array 1</param>
         /// <param name="B">1D double array 2</param>
@@ -49,7 +51,7 @@ namespace StarMathLib
         }
 
         /// <summary>
-        /// Adds arrays A and B
+        ///     Adds arrays A and B
         /// </summary>
         /// <param name="A">1D int array 1</param>
         /// <param name="B">1D int array 2</param>
@@ -63,14 +65,16 @@ namespace StarMathLib
         }
 
         /// <summary>
-        /// Adds arrays A and B
+        ///     Adds arrays A and B
         /// </summary>
         /// <param name="A">2D double array 1</param>
         /// <param name="B">2D double array 2</param>
         /// <returns>2D double array that contains sum of vectros A and B</returns>
-        /// <exception cref="System.ArithmeticException">Matrix row count do not match
-        /// or
-        /// Matrix column count do not match</exception>
+        /// <exception cref="System.ArithmeticException">
+        ///     Matrix row count do not match
+        ///     or
+        ///     Matrix column count do not match
+        /// </exception>
         public static double[,] add(this double[,] A, double[,] B)
         {
             var numRows = A.GetLength(0);
@@ -84,14 +88,16 @@ namespace StarMathLib
         }
 
         /// <summary>
-        /// Adds arrays A and B
+        ///     Adds arrays A and B
         /// </summary>
         /// <param name="A">2D double array 1</param>
         /// <param name="B">2D int array 2</param>
         /// <returns>2D double array that contains sum of vectros A and B</returns>
-        /// <exception cref="System.ArithmeticException">Matrix row count do not match
-        /// or
-        /// Matrix column count do not match</exception>
+        /// <exception cref="System.ArithmeticException">
+        ///     Matrix row count do not match
+        ///     or
+        ///     Matrix column count do not match
+        /// </exception>
         public static double[,] add(this int[,] A, double[,] B)
         {
             var numRows = A.GetLength(0);
@@ -105,14 +111,16 @@ namespace StarMathLib
         }
 
         /// <summary>
-        /// Adds arrays A and B
+        ///     Adds arrays A and B
         /// </summary>
         /// <param name="A">2D integer array 1</param>
         /// <param name="B">2D integer array 2</param>
         /// <returns>2D integer array that contains sum of vectros A and B</returns>
-        /// <exception cref="System.ArithmeticException">Matrix row count do not match
-        /// or
-        /// Matrix column count do not match</exception>
+        /// <exception cref="System.ArithmeticException">
+        ///     Matrix row count do not match
+        ///     or
+        ///     Matrix column count do not match
+        /// </exception>
         public static int[,] add(this int[,] A, int[,] B)
         {
             var numRows = A.GetLength(0);
@@ -127,7 +135,7 @@ namespace StarMathLib
 
 
         /// <summary>
-        /// Adds arrays A and B
+        ///     Adds arrays A and B
         /// </summary>
         /// <param name="A">1D double array 1</param>
         /// <param name="B">1D double array 2</param>
@@ -142,7 +150,7 @@ namespace StarMathLib
         }
 
         /// <summary>
-        /// Adds arrays A and B
+        ///     Adds arrays A and B
         /// </summary>
         /// <param name="A">1D int array 1</param>
         /// <param name="B">1D double array 2</param>
@@ -157,7 +165,7 @@ namespace StarMathLib
         }
 
         /// <summary>
-        /// Adds arrays A and B
+        ///     Adds arrays A and B
         /// </summary>
         /// <param name="A">1D int array 1</param>
         /// <param name="B">1D int array 2</param>
@@ -172,7 +180,7 @@ namespace StarMathLib
         }
 
         /// <summary>
-        /// Adds arrays A and B
+        ///     Adds arrays A and B
         /// </summary>
         /// <param name="A">2D double array 1</param>
         /// <param name="B">2D double array 2</param>
@@ -190,7 +198,7 @@ namespace StarMathLib
         }
 
         /// <summary>
-        /// Adds arrays A and B
+        ///     Adds arrays A and B
         /// </summary>
         /// <param name="A">2D double array 1</param>
         /// <param name="B">2D int array 2</param>
@@ -208,7 +216,7 @@ namespace StarMathLib
         }
 
         /// <summary>
-        /// Adds arrays A and B
+        ///     Adds arrays A and B
         /// </summary>
         /// <param name="A">2D integer array 1</param>
         /// <param name="B">2D integer array 2</param>
@@ -230,7 +238,7 @@ namespace StarMathLib
         #region Subtract Vector-to-Vector and Matrix-to-Matrix
 
         /// <summary>
-        /// Subtracts one vector (B) from the other (A). C = A - B.
+        ///     Subtracts one vector (B) from the other (A). C = A - B.
         /// </summary>
         /// <param name="A">The minuend vector, A (1D double)</param>
         /// <param name="B">The subtrahend vector, B (1D double)</param>
@@ -238,14 +246,14 @@ namespace StarMathLib
         /// <exception cref="System.ArithmeticException">Matrix sizes do not match</exception>
         public static double[] subtract(this IList<double> A, IList<double> B)
         {
-            var length = A.Count();
-            if (length != B.Count())
+            var length = A.Count;
+            if (length != B.Count)
                 throw new ArithmeticException("Matrix sizes do not match");
             return subtract(A, B, length);
         }
 
         /// <summary>
-        /// Subtracts one vector (B) from the other (A). C = A - B.
+        ///     Subtracts one vector (B) from the other (A). C = A - B.
         /// </summary>
         /// <param name="A">The minuend vector, A (1D int)</param>
         /// <param name="B">The subtrahend vector, B (1D double)</param>
@@ -253,14 +261,14 @@ namespace StarMathLib
         /// <exception cref="System.ArithmeticException">Matrix sizes do not match</exception>
         public static double[] subtract(this IList<int> A, IList<double> B)
         {
-            var length = A.Count();
-            if (length != B.Count())
+            var length = A.Count;
+            if (length != B.Count)
                 throw new ArithmeticException("Matrix sizes do not match");
             return subtract(A, B, length);
         }
 
         /// <summary>
-        /// Subtracts one vector (B) from the other (A). C = A - B.
+        ///     Subtracts one vector (B) from the other (A). C = A - B.
         /// </summary>
         /// <param name="A">The minuend vector, A (1D double)</param>
         /// <param name="B">The subtrahend vector, B (1D int)</param>
@@ -268,14 +276,14 @@ namespace StarMathLib
         /// <exception cref="System.ArithmeticException">Matrix sizes do not match</exception>
         public static double[] subtract(this IList<double> A, IList<int> B)
         {
-            var length = A.Count();
-            if (length != B.Count())
+            var length = A.Count;
+            if (length != B.Count)
                 throw new ArithmeticException("Matrix sizes do not match");
             return subtract(A, B, length);
         }
 
         /// <summary>
-        /// Subtracts one vector (B) from the other (A). C = A - B.
+        ///     Subtracts one vector (B) from the other (A). C = A - B.
         /// </summary>
         /// <param name="A">The minuend vector, A (1D int)</param>
         /// <param name="B">The subtrahend vector, B (1D int)</param>
@@ -283,21 +291,23 @@ namespace StarMathLib
         /// <exception cref="System.ArithmeticException">Matrix sizes do not match</exception>
         public static int[] subtract(this IList<int> A, IList<int> B)
         {
-            var length = A.Count();
-            if (length != B.Count())
+            var length = A.Count;
+            if (length != B.Count)
                 throw new ArithmeticException("Matrix sizes do not match");
             return subtract(A, B, length);
         }
 
         /// <summary>
-        /// Subtracts one matrix (B) from the other (A). C = A - B.
+        ///     Subtracts one matrix (B) from the other (A). C = A - B.
         /// </summary>
         /// <param name="A">The minuend matrix, A (2D double).</param>
         /// <param name="B">The subtrahend matrix, B (2D double).</param>
         /// <returns>Returns the difference matrix, C (2D double)</returns>
-        /// <exception cref="System.ArithmeticException">Matrix row count do not match
-        /// or
-        /// Matrix column count do not match</exception>
+        /// <exception cref="System.ArithmeticException">
+        ///     Matrix row count do not match
+        ///     or
+        ///     Matrix column count do not match
+        /// </exception>
         public static double[,] subtract(this double[,] A, double[,] B)
         {
             var numRows = A.GetLength(0);
@@ -311,14 +321,16 @@ namespace StarMathLib
         }
 
         /// <summary>
-        /// Subtracts one matrix (B) from the other (A). C = A - B.
+        ///     Subtracts one matrix (B) from the other (A). C = A - B.
         /// </summary>
         /// <param name="A">The minuend matrix, A (2D int).</param>
         /// <param name="B">The subtrahend matrix, B (2D double).</param>
         /// <returns>Returns the difference matrix, C (2D double)</returns>
-        /// <exception cref="System.ArithmeticException">Matrix row count do not match
-        /// or
-        /// Matrix column count do not match</exception>
+        /// <exception cref="System.ArithmeticException">
+        ///     Matrix row count do not match
+        ///     or
+        ///     Matrix column count do not match
+        /// </exception>
         public static double[,] subtract(this int[,] A, double[,] B)
         {
             var numRows = A.GetLength(0);
@@ -332,14 +344,16 @@ namespace StarMathLib
         }
 
         /// <summary>
-        /// Subtracts one matrix (B) from the other (A). C = A - B.
+        ///     Subtracts one matrix (B) from the other (A). C = A - B.
         /// </summary>
         /// <param name="A">The minuend matrix, A (2D double).</param>
         /// <param name="B">The subtrahend matrix, B (2D int).</param>
         /// <returns>Returns the difference matrix, C (2D double)</returns>
-        /// <exception cref="System.ArithmeticException">Matrix row count do not match
-        /// or
-        /// Matrix column count do not match</exception>
+        /// <exception cref="System.ArithmeticException">
+        ///     Matrix row count do not match
+        ///     or
+        ///     Matrix column count do not match
+        /// </exception>
         public static double[,] subtract(this double[,] A, int[,] B)
         {
             var numRows = A.GetLength(0);
@@ -353,14 +367,16 @@ namespace StarMathLib
         }
 
         /// <summary>
-        /// Subtracts one matrix (B) from the other (A). C = A - B.
+        ///     Subtracts one matrix (B) from the other (A). C = A - B.
         /// </summary>
         /// <param name="A">The minuend matrix, A (2D integer).</param>
         /// <param name="B">The subtrahend matrix, B (2D integer).</param>
         /// <returns>Returns the difference matrix, C (2D integer)</returns>
-        /// <exception cref="System.ArithmeticException">Matrix row count do not match
-        /// or
-        /// Matrix column count do not match</exception>
+        /// <exception cref="System.ArithmeticException">
+        ///     Matrix row count do not match
+        ///     or
+        ///     Matrix column count do not match
+        /// </exception>
         public static int[,] subtract(this int[,] A, int[,] B)
         {
             var numRows = A.GetLength(0);
@@ -375,7 +391,7 @@ namespace StarMathLib
 
 
         /// <summary>
-        /// Subtracts one vector (B) from the other (A). C = A - B.
+        ///     Subtracts one vector (B) from the other (A). C = A - B.
         /// </summary>
         /// <param name="A">The minuend vector, A (1D double)</param>
         /// <param name="B">The subtrahend vector, B (1D double)</param>
@@ -390,7 +406,7 @@ namespace StarMathLib
         }
 
         /// <summary>
-        /// Subtracts one vector (B) from the other (A). C = A - B.
+        ///     Subtracts one vector (B) from the other (A). C = A - B.
         /// </summary>
         /// <param name="A">The minuend vector, A (1D int)</param>
         /// <param name="B">The subtrahend vector, B (1D double)</param>
@@ -405,7 +421,7 @@ namespace StarMathLib
         }
 
         /// <summary>
-        /// Subtracts one vector (B) from the other (A). C = A - B.
+        ///     Subtracts one vector (B) from the other (A). C = A - B.
         /// </summary>
         /// <param name="A">The minuend vector, A (1D double)</param>
         /// <param name="B">The subtrahend vector, B (1D int)</param>
@@ -420,7 +436,7 @@ namespace StarMathLib
         }
 
         /// <summary>
-        /// Subtracts one vector (B) from the other (A). C = A - B.
+        ///     Subtracts one vector (B) from the other (A). C = A - B.
         /// </summary>
         /// <param name="A">The minuend vector, A (1D int)</param>
         /// <param name="B">The subtrahend vector, B (1D int)</param>
@@ -435,7 +451,7 @@ namespace StarMathLib
         }
 
         /// <summary>
-        /// Subtracts one matrix (B) from the other (A). C = A - B.
+        ///     Subtracts one matrix (B) from the other (A). C = A - B.
         /// </summary>
         /// <param name="A">The minuend matrix, A (2D double).</param>
         /// <param name="B">The subtrahend matrix, B (2D double).</param>
@@ -453,7 +469,7 @@ namespace StarMathLib
         }
 
         /// <summary>
-        /// Subtracts one matrix (B) from the other (A). C = A - B.
+        ///     Subtracts one matrix (B) from the other (A). C = A - B.
         /// </summary>
         /// <param name="A">The minuend matrix, A (2D int).</param>
         /// <param name="B">The subtrahend matrix, B (2D double).</param>
@@ -471,7 +487,7 @@ namespace StarMathLib
         }
 
         /// <summary>
-        /// Subtracts one matrix (B) from the other (A). C = A - B.
+        ///     Subtracts one matrix (B) from the other (A). C = A - B.
         /// </summary>
         /// <param name="A">The minuend matrix, A (2D double).</param>
         /// <param name="B">The subtrahend matrix, B (2D int).</param>
@@ -489,7 +505,7 @@ namespace StarMathLib
         }
 
         /// <summary>
-        /// Subtracts one matrix (B) from the other (A). C = A - B.
+        ///     Subtracts one matrix (B) from the other (A). C = A - B.
         /// </summary>
         /// <param name="A">The minuend matrix, A (2D integer).</param>
         /// <param name="B">The subtrahend matrix, B (2D integer).</param>
@@ -505,6 +521,7 @@ namespace StarMathLib
                     C[i, j] = A[i, j] - B[i, j];
             return C;
         }
+
         #endregion
     }
 }

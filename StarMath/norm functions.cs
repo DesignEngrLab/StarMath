@@ -600,6 +600,12 @@ namespace StarMathLib
                 rowSums[i] = A.SumRow(i,numCols);
             return rowSums;
         }
+        /// <summary>
+        /// Sums the row of the matrix.
+        /// </summary>
+        /// <param name="A">a.</param>
+        /// <param name="index">The index.</param>
+        /// <returns>System.Double.</returns>
         public static double SumRow(this double[,] A, int index)
         {
            return SumRow(A,index,A.GetLength(1));
@@ -634,7 +640,6 @@ namespace StarMathLib
         /// </summary>
         /// <param name="A">a.</param>
         /// <param name="index">The index.</param>
-        /// <param name="numRows">The number rows.</param>
         /// <returns>System.Double[].</returns>
         public static double SumColumn(this double[,] A, int index)
         {

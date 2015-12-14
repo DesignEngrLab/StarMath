@@ -60,6 +60,7 @@ namespace StarMathLib
         /// Inverses the with lu result.
         /// </summary>
         /// <param name="B">The b.</param>
+        /// <param name="permute">The permute.</param>
         /// <param name="length">The length.</param>
         /// <returns>System.Double[].</returns>
         private static double[,] inverseWithLUResult(double[,] B, int[] permute, int length)
@@ -143,8 +144,9 @@ namespace StarMathLib
         /// <param name="A">The matrix to invert. This matrix is unchanged by this function.</param>
         /// <param name="L">The L matrix is output where the diagonal elements are included and not (necessarily) equal to one.</param>
         /// <param name="U">The U matrix is output where the diagonal elements are all equal to one.</param>
-        /// <exception cref="ArithmeticException">LU Decomposition can only be determined for square matrices.</exception>
+        /// <param name="permute">The permute.</param>
         /// <exception cref="System.ArithmeticException">Matrix cannot be inverted. Can only invert sqyare matrices.</exception>
+        /// <exception cref="ArithmeticException">LU Decomposition can only be determined for square matrices.</exception>
         public static void LUDecomposition(double[,] A, out double[,] L, out double[,] U, out int[] permute)
         {
             var length = A.GetLength(0);
@@ -190,6 +192,7 @@ namespace StarMathLib
             if (lastZeroIndices == null)
             {
                 lastZeroIndices = new int[length];
+                for (int i = 0; i < length; i++) lastZeroIndices[i] = -1;
                 for (int i = 0; i < length; i++)
                     for (int j = 0; j < length; j++)
                         if (A[i, j].IsNegligible()) lastZeroIndices[i] = j;
@@ -209,7 +212,7 @@ namespace StarMathLib
                     // this will only recurse once (essentially just reducing duplicate code with this recursion.
                     return LUDecomposition(A, out permutationVector, length, true, lastZeroIndices);
 
-                // continue with the main boy of Crout's LU decomp approach
+                // continue with the main body of Crout's LU decomp approach
                 var pI = permutationVector[i];
                 for (var j = i; j < length; j++)
                 {
@@ -275,8 +278,9 @@ namespace StarMathLib
         /// <param name="A">The matrix to invert. This matrix is unchanged by this function.</param>
         /// <param name="L">The L matrix is output where the diagonal elements are included and not (necessarily) equal to one.</param>
         /// <param name="U">The U matrix is output where the diagonal elements are all equal to one.</param>
-        /// <exception cref="ArithmeticException">LU Decomposition can only be determined for square matrices.</exception>
+        /// <param name="permute">The permute.</param>
         /// <exception cref="System.ArithmeticException">LU Decomposition can only be determined for square matrices.</exception>
+        /// <exception cref="ArithmeticException">LU Decomposition can only be determined for square matrices.</exception>
         public static void LUDecomposition(int[,] A, out double[,] L, out double[,] U, out int[] permute)
         {
             var length = A.GetLength(0);
@@ -364,9 +368,10 @@ namespace StarMathLib
         /// the diagonals are the D matrix in the L-D-LT formulation. To get the L-LT format.
         /// </summary>
         /// <param name="A">The matrix to invert. This matrix is unchanged by this function.</param>
+        /// <param name="NoSeparateDiagonal">if set to <c>true</c> [no separate diagonal].</param>
         /// <returns>System.Double[].</returns>
         /// <exception cref="System.ArithmeticException">Matrix cannot be inverted. Can only invert square matrices.</exception>
-        /// <exception cref="ArithmeticException">Cholesky Decomposition can only be determined for square matrices.</exception>
+        /// <exception cref="ArithmeticException">Matrix cannot be inverted. Can only invert square matrices.</exception>
         public static double[,] CholeskyDecomposition(double[,] A, bool NoSeparateDiagonal = false)
         {
             var length = A.GetLength(0);

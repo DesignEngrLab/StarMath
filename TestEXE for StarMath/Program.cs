@@ -15,6 +15,7 @@ namespace TestEXE_for_StarMath
     {
         private static void Main()
         {
+            testRBF();
             // SparseFunctionTest();
             // testStackFunctions();
             //testLUfunctions();
@@ -23,6 +24,51 @@ namespace TestEXE_for_StarMath
             //checkEigen();
             Console.WriteLine("Press any key to close.");
             Console.ReadLine();
+        }
+
+        static void testRBF()
+        {
+            var NumPoints = 3;
+            var Values = new[] {43.0, 16.4, 88.9};// ,91.2, 23.4};
+            var EpsilonSquared = 3.0;
+            var NodePositions = new[]
+            {
+                new[] { 1.3, 2.1, 3.0}, new[] { 1.0, 0.4, 2.9}, new[] { 7.3, 5.5, 2.8}
+               // , new[] { 0.2, 6.3, 8.1}, new[] { 10.2,8.3, 2.1}
+            };
+            var size = NumPoints + 3 + 1;
+            var A = new double[size, size];
+            /* x is comprised of the coeffs1 on the inverse quadric terms followed by the slopes
+             * followed by the offset */
+            var b = new double[size];
+            /* the first row is that the sum of weights should equal zero. */
+            for (int i = 0; i < NumPoints; i++)
+                A[0, i] = 1.0;
+            /* the next n rows are for the main basis functions */
+            for (int i = 0; i < NumPoints; i++)
+            {
+                b[i + 1] = Values[i];
+                for (int j = 0; j < NumPoints; j++)
+                    A[i + 1, j] = 1 / (Math.Sqrt(EpsilonSquared + NodePositions[i].norm2(NodePositions[j], true)));
+                for (int j = 0; j < 3; j++)
+                    A[i + 1, j + NumPoints] = NodePositions[i][j];
+                A[i + 1, NumPoints + 3] = 1;
+            }
+            /* the following three equations are needed to solve for the slope terms even though slope is not
+             * included. */
+            for (int i = 0; i < 3; i++)
+            {
+                for (int j = 0; j < NumPoints; j++)
+                    A[i + 1 + NumPoints, j] = NodePositions[j][i];
+            }
+            var x = StarMath.solve(A, b);
+         var   Coefficients = new double[NumPoints];
+         var   Slope = new double[3];
+            for (int i = 0; i < NumPoints; i++)
+                Coefficients[i] = x[i];
+            for (int i = 0; i < 3; i++)
+                Slope[i] = x[i + NumPoints];
+           var Offset = x[NumPoints + 3];
         }
 
         private static void testStackFunctions()
@@ -94,7 +140,7 @@ namespace TestEXE_for_StarMath
             for (var index = 0; index < limits.GetLength(1); index++)
             {
                 int size = limits[0, index];
-                int numTrials = limits[1, index];
+                int numTrials = 1;//limits[1, index];
                 var probZero = 0.2;
                 var rnd = new Random();
                 for (var k = 0; k <= numTrials; k++)

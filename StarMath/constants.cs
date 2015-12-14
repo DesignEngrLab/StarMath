@@ -102,8 +102,9 @@ namespace StarMathLib
         /// <param name="y">The y.</param>
         /// <param name="optionalTolerance">An optional tolerance.</param>
         /// <returns><c>true</c> if [is practically same] [the specified x]; otherwise, <c>false</c>.</returns>
-        public static bool IsPracticallySame(this double[] x, double[] y, double optionalTolerance = EqualityTolerance)
+        public static bool IsPracticallySame(this double[] x, double[] y, double optionalTolerance = double.NaN)
         {
+            if (double.IsNaN(optionalTolerance)) optionalTolerance = EqualityTolerance;
             var n = x.GetLength(0);
             if (n != y.GetLength(0)) return false;
             return IsNegligible(x.subtract(y), optionalTolerance);

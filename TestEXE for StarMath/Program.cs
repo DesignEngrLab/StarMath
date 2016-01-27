@@ -15,21 +15,40 @@ namespace TestEXE_for_StarMath
     {
         private static void Main()
         {
-            testRBF();
+            //  testRBF();
             // SparseFunctionTest();
             // testStackFunctions();
             //testLUfunctions();
-            benchMarkMatrixInversion();
-          //  compareSolvers_Inversion_to_GaussSeidel();
+            testSVD();
+            //benchMarkMatrixInversion();
+            //  compareSolvers_Inversion_to_GaussSeidel();
             //checkEigen();
             Console.WriteLine("Press any key to close.");
             Console.ReadLine();
+
+        }
+
+        private static void testSVD()
+        {
+            var watch = new Stopwatch();
+            double[,] A = new double[,] { { 1, 2 }, { 4, 5 } };
+            //  double[,] A = new double[,] { { 1, 2 }, { 3, 4 }, { 5, 6 } };
+            double[,] U, V;
+            watch.Restart();
+            double[] sigma = A.SingularValueDecomposition(out U, out V);
+            var sigMatrix = new double[U.GetLength(0), V.GetLength(0)];
+            for (int i = 0; i < sigma.Length; i++)
+                sigMatrix[i, i] = sigma[i];
+            watch.Stop();
+            var B = U.multiply(sigMatrix.multiply(V.transpose()));
+            var error = B.subtract(A).norm1() / A.norm1();
+            Console.WriteLine(error);
         }
 
         static void testRBF()
         {
             var NumPoints = 3;
-            var Values = new[] {43.0, 16.4, 88.9};// ,91.2, 23.4};
+            var Values = new[] { 43.0, 16.4, 88.9 };// ,91.2, 23.4};
             var EpsilonSquared = 3.0;
             var NodePositions = new[]
             {
@@ -62,13 +81,13 @@ namespace TestEXE_for_StarMath
                     A[i + 1 + NumPoints, j] = NodePositions[j][i];
             }
             var x = StarMath.solve(A, b);
-         var   Coefficients = new double[NumPoints];
-         var   Slope = new double[3];
+            var Coefficients = new double[NumPoints];
+            var Slope = new double[3];
             for (int i = 0; i < NumPoints; i++)
                 Coefficients[i] = x[i];
             for (int i = 0; i < 3; i++)
                 Slope[i] = x[i + NumPoints];
-           var Offset = x[NumPoints + 3];
+            var Offset = x[NumPoints + 3];
         }
 
         private static void testStackFunctions()

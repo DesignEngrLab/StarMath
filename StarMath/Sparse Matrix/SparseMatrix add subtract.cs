@@ -245,6 +245,14 @@ namespace StarMathLib
         }
 
         /// <summary>
+        /// Sums all elements.
+        /// </summary>
+        /// <returns>System.Double.</returns>
+        public double SumAllElements()
+        {
+            return SumAllRows().Sum();
+        }
+        /// <summary>
         /// Sums all of the rows.
         /// </summary>
         /// <returns>System.Double[].</returns>

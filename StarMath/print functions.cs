@@ -26,7 +26,7 @@ namespace StarMathLib
         public static string MakePrintString(this double[,] A)
         {
             if (A == null) return "<null>";
-            var format = "{0:F" + NumDecimals + "}";
+            var format = "{0:F" + PrintNumDecimals + "}";
             var p = "";
             for (var i = 0; i < A.GetLength(0); i++)
             {
@@ -48,7 +48,7 @@ namespace StarMathLib
         public static string MakePrintString(this IEnumerable<double> A)
         {
             if (A == null) return "<null>";
-            var format = "{0:F" + NumDecimals + "}";
+            var format = "{0:F" + PrintNumDecimals + "}";
             var p = "{ ";
             foreach (var d in A)
                 p += formatCell(format, d) + ",";
@@ -107,9 +107,9 @@ namespace StarMathLib
             var numStr = string.Format(format, p);
             numStr = numStr.TrimEnd('0');
             numStr = numStr.TrimEnd('.');
-            var padAmt = ((double) (CellWidth - numStr.Length))/2;
+            var padAmt = ((double) (PrintCellWidth - numStr.Length))/2;
             numStr = numStr.PadLeft((int) Math.Floor(padAmt + numStr.Length));
-            numStr = numStr.PadRight(CellWidth);
+            numStr = numStr.PadRight(PrintCellWidth);
             return numStr;
         }
     }

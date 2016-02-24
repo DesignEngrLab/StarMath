@@ -14,6 +14,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace StarMathLib
 {
@@ -45,7 +46,7 @@ namespace StarMathLib
                 throw new ArithmeticException("Sparse Matrix must be have the same number of rows as the vector, b.");
             List<int>[] potentialDiagonals;
             if (isGaussSeidelAppropriate(b, out potentialDiagonals, ref initialGuess))
-                return solveIteratively(b, initialGuess, potentialDiagonals);
+                return SolveIteratively(b, initialGuess, potentialDiagonals);
             /****** need code to determine when to switch between *****
              ****** this analytical approach and the SOR approach *****/
             return SolveAnalytically(b, IsASymmetric, potentialDiagonals);
@@ -66,22 +67,22 @@ namespace StarMathLib
             {
                 var L = Copy();
                 L.CholeskyDecomposition();
-                return L.solveFromCholeskyFactorization(b, NumCols);
+                return L.solveFromCholeskyFactorization(b);
             }
             else
             {
                 var LU = Copy();
                 LU.LUDecomposition();
-                return LU.solveFromLUDecomposition(b, NumCols);
+                return LU.solveFromLUDecomposition(b);
 
             }
         }
 
-        private double[] solveFromLUDecomposition(IList<double> b, int length)
+        private double[] solveFromLUDecomposition(IList<double> b)
         {
-            var x = new double[length];
+            var x = new double[NumRows];
             // forward substitution
-            for (int i = 0; i < length; i++)
+            for (int i = 0; i < NumRows; i++)
             {
                 var sumFromKnownTerms = 0.0;
                 var startCell = RowFirsts[i];
@@ -94,7 +95,7 @@ namespace StarMathLib
             }
 
             // backward substitution
-            for (int i = length - 1; i >= 0; i--)
+            for (int i = NumRows - 1; i >= 0; i--)
             {
                 var sumFromKnownTerms = 0.0;
                 var startCell = RowLasts[i];  // this is because it is the transposed one
@@ -261,13 +262,12 @@ namespace StarMathLib
         /// Solves from cholesky factorization.
         /// </summary>
         /// <param name="b">The b.</param>
-        /// <param name="length">The length.</param>
         /// <returns>System.Double[].</returns>
-        private double[] solveFromCholeskyFactorization(IList<double> b, int length)
+        private double[] solveFromCholeskyFactorization(IList<double> b)
         {
-            var x = new double[length];
+            var x = new double[NumRows];
             // forward substitution
-            for (int i = 0; i < length; i++)
+            for (int i = 0; i < NumRows; i++)
             {
                 var sumFromKnownTerms = 0.0;
                 var startCell = RowFirsts[i];
@@ -278,11 +278,11 @@ namespace StarMathLib
                 }
                 x[i] = (b[i] - sumFromKnownTerms);
             }
-            for (int i = 0; i < length; i++)
+            for (int i = 0; i < NumRows; i++)
                 x[i] /= Diagonals[i].Value;
 
             // backward substitution
-            for (int i = length - 1; i >= 0; i--)
+            for (int i = NumRows - 1; i >= 0; i--)
             {
                 var sumFromKnownTerms = 0.0;
                 var startCell = ColLasts[i];  // this is because it is the transposed one
@@ -417,56 +417,220 @@ namespace StarMathLib
             return cell;
         }
 
+        #region Gauss-Seidel or Successive Over-Relaxation
 
-        /// <summary>
-        /// Finds the potential diagonals.
-        /// </summary>
-        /// <param name="potentialDiagonals">The potential diagonals.</param>
-        /// <param name="length">The length.</param>
-        /// <param name="minimalConsideration">The minimal consideration.</param>
-        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-        /// <exception cref="System.NotImplementedException"></exception>
-        private bool findPotentialDiagonals(out List<int>[] potentialDiagonals, int length, double minimalConsideration)
-        {
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// Determines whether [is gauss seidel appropriate] [the specified b].
-        /// </summary>
-        /// <param name="b">The b.</param>
-        /// <param name="potentialDiagonals">The potential diagonals.</param>
-        /// <param name="initialGuess">The initial guess.</param>
-        /// <returns><c>true</c> if [is gauss seidel appropriate] [the specified b]; otherwise, <c>false</c>.</returns>
-        /// <exception cref="System.NotImplementedException"></exception>
         private bool isGaussSeidelAppropriate(IList<double> b, out List<int>[] potentialDiagonals,
             ref IList<double> initialGuess)
         {
             potentialDiagonals = null;
-            return false;
-            throw new NotImplementedException();
-            //potentialDiagonals = null;
-            //if (length < StarMath.GaussSeidelMinimumMatrixSize) return false;
-            //if (initialGuess == null)
-            //    initialGuess = makeInitialGuess(A, b, length);
-            //var error = StarMath.norm1(StarMath.subtract(b, StarMath.multiply(A, initialGuess, length, length), length)) / StarMath.norm1(b);
-            //if (error > StarMath.MaxErrorForUsingGaussSeidel) return false;
-            //return findPotentialDiagonals(out potentialDiagonals, length, StarMath.GaussSeidelDiagonalDominanceRatio);
+            if (NumRows < StarMath.GaussSeidelMinimumMatrixSize) return false;
+            if (initialGuess == null)
+                initialGuess = makeInitialGuess(b);
+            var error = StarMath.norm1(StarMath.subtract(b, multiply(initialGuess))) / b.norm1();
+            if (error > StarMath.MaxErrorForUsingGaussSeidel) return false;
+            return findPotentialDiagonals(out potentialDiagonals, StarMath.GaussSeidelDiagonalDominanceRatio);
         }
 
-        /// <summary>
-        /// Solves the system of equations iteratively.
-        /// </summary>
-        /// <param name="b">The b.</param>
-        /// <param name="initialGuess">The initial guess.</param>
-        /// <param name="potentialDiagonals">The potential diagonals.</param>
-        /// <returns>System.Double[].</returns>
-        /// <exception cref="System.NotImplementedException"></exception>
-        /// <exception cref="NotImplementedException"></exception>
-        public double[] solveIteratively(IList<double> b, IList<double> initialGuess = null,
-            List<int>[] potentialDiagonals = null)
+        private bool findPotentialDiagonals(out List<int>[] potentialDiagonals,
+            double minimalConsideration)
         {
-            throw new NotImplementedException();
+            potentialDiagonals = new List<int>[NumRows];
+            for (var i = 0; i < NumRows; i++)
+            {
+                var cell = RowFirsts[i];
+                var norm1 = 0.0;
+                do
+                {
+                    norm1 += Math.Abs(cell.Value);
+                    cell = cell.Right;
+                } while (cell != null);
+                var potentialIndices = new List<int>();
+                cell = RowFirsts[i];
+                do
+                {
+                    if (Math.Abs(cell.Value) / (norm1 - cell.Value) > minimalConsideration)
+                        potentialIndices.Add(cell.ColIndex);
+                    cell = cell.Right;
+                } while (cell != null);
+                if (potentialIndices.Count == 0) return false;
+                potentialDiagonals[i] = potentialIndices;
+            }
+            return potentialDiagonals.SelectMany(x => x).Distinct().Count() == NumRows;
         }
+
+        public double[] SolveIteratively(IList<double> b,
+            IList<double> initialGuess = null, List<int>[] potentialDiagonals = null)
+            //, Boolean symmetric = false)
+        {
+            //if (false && symmetric)
+            //    return SymmetricSuccessiveOverrelaxation(b, initialGuess);
+            //else
+                return SuccessiveOverrelaxation(b, initialGuess, potentialDiagonals);
+        }
+
+        /* SSOR method is commented out. It doesn't seem to offer any speed advantages. */
+        //private double[] SymmetricSuccessiveOverrelaxation(IList<double> b, IList<double> initialGuess)
+        //{
+        //    double adjust;
+        //    SparseCell cell;
+        //    var halfX = initialGuess.ToArray();
+        //    var x = initialGuess.ToArray();
+        //    var bNorm1 = StarMath.norm1(b);
+        //    var error = StarMath.norm1(StarMath.subtract(b, multiply(x))) / bNorm1;
+        //    var success = error <= StarMath.GaussSeidelMaxError;
+        //    var xWentNaN = false;
+        //    var iteration = NumRows * StarMath.GaussSeidelMaxIterationFactor;
+        //    while (!xWentNaN && !success && iteration-- > 0)
+        //    {
+        //        // Forward sweep (result = oldest, work = halfiterate)
+        //        for (int i = 0; i < NumCols; ++i)
+        //        {
+        //            adjust = b[i];
+        //            cell = ColFirsts[i];
+        //            while (cell != null && cell.RowIndex < i)
+        //            {
+        //                adjust -= cell.Value * halfX[cell.RowIndex];
+        //                cell = cell.Down;
+        //            }
+        //            cell = Diagonals[i].Down;
+        //            while (cell != null)
+        //            {
+        //                adjust -= cell.Value * x[cell.RowIndex];
+        //                cell = cell.Down;
+        //            }
+        //            halfX[i] = (1 - StarMath.GaussSeidelRelaxationOmega) * x[i] +
+        //                StarMath.GaussSeidelRelaxationOmega * adjust / Diagonals[i].Value;
+        //        }
+        //        iteration--;
+        //        // Backward sweep (work = oldest, result = halfiterate)
+        //        for (int i = NumCols - 1; i >= 0; --i)
+        //        {
+        //            adjust = b[i];
+        //            cell = ColFirsts[i];
+        //            while (cell != null && cell.RowIndex < i)
+        //            {
+        //                adjust -= cell.Value * halfX[cell.RowIndex];
+        //                cell = cell.Down;
+        //            }
+        //            cell = Diagonals[i].Down;
+        //            while (cell != null)
+        //            {
+        //                adjust -= cell.Value * x[cell.RowIndex];
+        //                cell = cell.Down;
+        //            }
+        //            x[i] = (1 - StarMath.GaussSeidelRelaxationOmega) * halfX[i] +
+        //                    StarMath.GaussSeidelRelaxationOmega * adjust / Diagonals[i].Value;
+        //        }
+        //        xWentNaN = x.Any(double.IsNaN);
+        //        error = StarMath.norm1(StarMath.subtract(b, multiply(x))) / bNorm1;
+        //        success = error <= StarMath.GaussSeidelMaxError;
+        //    }
+        //    if (!success) return null;
+
+        //    return x;
+        //}
+
+        public double[] SuccessiveOverrelaxation(IList<double> b,
+            IList<double> initialGuess = null, List<int>[] potentialDiagonals = null)
+        {
+            double[] x;
+            if (initialGuess == null)
+                x = makeInitialGuess(b);
+            else x = initialGuess.ToArray();
+
+            if (potentialDiagonals == null &&
+                !findPotentialDiagonals(out potentialDiagonals, StarMath.GaussSeidelDiagonalDominanceRatio))
+                return null;
+            var order = Enumerable.Range(0, NumRows).ToArray();
+            if (!order.All(rowIndex => potentialDiagonals[rowIndex].Contains(rowIndex)))
+                order = reorderMatrixForDiagonalDominance(NumRows, potentialDiagonals);
+            if (order == null) return null;
+            var bNorm1 = StarMath.norm1(b);
+            var error = StarMath.norm1(StarMath.subtract(b, multiply(x))) / bNorm1;
+            var success = error <= StarMath.GaussSeidelMaxError;
+            var xWentNaN = false;
+            var iteration = NumRows * StarMath.GaussSeidelMaxIterationFactor;
+            while (!xWentNaN && !success && iteration-- > 0)
+            {
+                for (var i = 0; i < NumRows; i++)
+                {
+                    var rowI = order[i];
+                    var diagCell = Diagonals[i];
+                    var adjust = b[rowI];
+                    var cell = RowFirsts[rowI];
+                    do
+                    {
+                        if (cell != diagCell)
+                            adjust -= cell.Value * x[cell.ColIndex];
+                        cell = cell.Right;
+                    } while (cell != null);
+                    x[rowI] = (1 - StarMath.GaussSeidelRelaxationOmega) * x[rowI] +
+                           StarMath.GaussSeidelRelaxationOmega * adjust / this[rowI, i];
+                }
+                xWentNaN = x.Any(double.IsNaN);
+                error = StarMath.norm1(StarMath.subtract(b, multiply(x))) / bNorm1;
+                success = error <= StarMath.GaussSeidelMaxError;
+            }
+            if (!success) return null;
+
+            return x;
+        }
+
+        private double[] makeInitialGuess(IList<double> b)
+        {
+            var initialGuess = new double[NumRows];
+            var initGuessValue = StarMath.SumAllElements(b) / SumAllElements();
+            for (var i = 0; i < NumRows; i++) initialGuess[i] = initGuessValue;
+            return initialGuess;
+        }
+        private int[] reorderMatrixForDiagonalDominance(int length, List<int>[] potentialIndices)
+        {
+            var popularity = new int[length];
+            for (var i = 0; i < length; i++)
+                popularity[i] = potentialIndices.Count(r => r.Contains(i));
+            var orderToAddress = StarMath.makeLinearProgression(length, 1).OrderBy(x => popularity[x]).ToList();
+            var stack = new Stack<int[]>();
+            var seed = new int[length];
+            int[] candidate;
+            var solutionFound = false;
+            for (var i = 0; i < length; i++) seed[i] = -1;
+            stack.Push(seed);
+            do
+            {
+                candidate = stack.Pop();
+                var numToFill = candidate.Count(x => x == -1);
+                if (numToFill == 0) solutionFound = true;
+                else
+                {
+                    var colIndex = orderToAddress[length - numToFill];
+                    var possibleIndicesForRow = new List<int>();
+                    for (var oldRowIndex = 0; oldRowIndex < length; oldRowIndex++)
+                    {
+                        if (!potentialIndices[oldRowIndex].Contains(colIndex)) continue;
+                        if (candidate.Contains(oldRowIndex)) continue;
+                        possibleIndicesForRow.Add(oldRowIndex);
+                    }
+                    if (possibleIndicesForRow.Count == 1)
+                    {
+                        candidate[colIndex] = possibleIndicesForRow[0];
+                        stack.Push(candidate);
+                    }
+                    else
+                    {
+                        possibleIndicesForRow = possibleIndicesForRow.OrderBy(r => Math.Abs(this[r, colIndex])).ToList();
+                        foreach (var i in possibleIndicesForRow)
+                        {
+                            var child = (int[])candidate.Clone();
+                            child[colIndex] = i;
+                            stack.Push(child);
+                        }
+                    }
+                }
+            } while (!solutionFound && stack.Any());
+            if (solutionFound) return candidate;
+            return null;
+        }
+
+        #endregion
     }
 }

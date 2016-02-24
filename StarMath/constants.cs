@@ -15,7 +15,7 @@ using System;
 namespace StarMathLib
 {
     /// <summary>
-    /// The one and only class in the StarMathLib. All functions are static
+    /// The main class in the StarMathLib. All functions are static
     /// functions located here.
     /// </summary>
     public static partial class StarMath
@@ -23,27 +23,27 @@ namespace StarMathLib
         /// <summary>
         ///     The cell width
         /// </summary>
-        private const int CellWidth = 10;
+        public static int PrintCellWidth { get; set; } = 10;
 
         /// <summary>
         ///     The number decimals
         /// </summary>
-        private const int NumDecimals = 3;
+        internal static int PrintNumDecimals { get; set; } = 3;
 
         /// <summary>
         ///     The maximum error for using gauss seidel
         /// </summary>
-        private const double MaxErrorForUsingGaussSeidel = 3.0;
+        internal static double MaxErrorForUsingGaussSeidel { get; set; } = 3.0;
 
         /// <summary>
         ///     The gauss seidel maximum error
         /// </summary>
-        private const double GaussSeidelMaxError = 1e-12;
+        internal static double GaussSeidelMaxError { get; set; } = 1e-9;
 
         /// <summary>
         ///     The gauss seidel diagonal dominance ratio
         /// </summary>
-        private const double GaussSeidelDiagonalDominanceRatio = 0.3;
+        internal static double GaussSeidelDiagonalDominanceRatio { get; set; } = 0.3;
 
         /* in some simple studies, GaussSeidel failed when ALL diagonals were lower than 0.3 (and higher than -0.5)
          * so it may seem imprudent to set the diagonal dominance ratio so high. But this is only to throw out
@@ -52,35 +52,35 @@ namespace StarMathLib
         /// <summary>
         ///     The gauss seidel minimum matrix size
         /// </summary>
-        private const int GaussSeidelMinimumMatrixSize = 200;
+        internal static int GaussSeidelMinimumMatrixSize { get; set; } = 200;
 
         /// <summary>
         ///     The gauss seidel maximum iteration factor
         /// </summary>
-        private const int GaussSeidelMaxIterationFactor = 1;
+        internal static int GaussSeidelMaxIterationFactor { get; set; } = 1;
 
         /// <summary>
         ///     The gauss seidel relaxation omega
         /// </summary>
-        private const double GaussSeidelRelaxationOmega = 1.2;
+        internal static double GaussSeidelRelaxationOmega { get; set; } = 1.25;
 
         /// <summary>
         ///     The maximum sv diter
         /// </summary>
-        private const int MaxSvDiter = 1000;
+        internal static int MaxSvDiter { get; set; } = 1000;
 
         /// <summary>
         ///     The starting carol seed
         /// </summary>
-        private const int StartingCarolSeed = 3;
+        internal static int StartingCarolSeed { get; set; } = 3;
 
         /// <summary>
         ///     Gets or sets the  tolerance for the equality functions: IsPracticallySame, IsNegligible, IsGreaterThanNonNegligible
         ///     IsLessThanNonNegligible.
         /// </summary>
         /// <value>The equality tolerance.</value>
-        public const double EqualityTolerance = 1e-15;
-
+        public static double EqualityTolerance { get; set; } = DefaultEqualityTolerance;
+        private const double DefaultEqualityTolerance  = 1e-15;
         /// <summary>
         /// Determines whether [is practically same] [the specified x].
         /// the norm is within 1e-15
@@ -89,7 +89,7 @@ namespace StarMathLib
         /// <param name="y">The y.</param>
         /// <param name="optionalTolerance">An optional tolerance.</param>
         /// <returns><c>true</c> if [is practically same] [the specified x]; otherwise, <c>false</c>.</returns>
-        public static bool IsPracticallySame(this double x, double y, double optionalTolerance = EqualityTolerance)
+        public static bool IsPracticallySame(this double x, double y, double optionalTolerance = DefaultEqualityTolerance)
         {
             return IsNegligible(x - y, optionalTolerance);
         }
@@ -116,7 +116,7 @@ namespace StarMathLib
         /// <param name="x">The x.</param>
         /// <param name="optionalTolerance">An optional tolerance.</param>
         /// <returns><c>true</c> if the specified x is negligible; otherwise, <c>false</c>.</returns>
-        public static bool IsNegligible(this double[] x, double optionalTolerance = EqualityTolerance)
+        public static bool IsNegligible(this double[] x, double optionalTolerance = DefaultEqualityTolerance)
         {
             return (x.norm2(true) <= optionalTolerance);
         }
@@ -127,7 +127,7 @@ namespace StarMathLib
         /// <param name="x">The x.</param>
         /// <param name="optionalTolerance">An optional tolerance.</param>
         /// <returns><c>true</c> if the specified x is negligible; otherwise, <c>false</c>.</returns>
-        public static bool IsNegligible(this double x, double optionalTolerance = EqualityTolerance)
+        public static bool IsNegligible(this double x, double optionalTolerance = DefaultEqualityTolerance)
         {
             return (Math.Abs(x) <= optionalTolerance);
         }

@@ -24,7 +24,7 @@ namespace StarMathLib
     public partial class SparseMatrix
     {
         #region Fields and Properties
-        private readonly HashSet<SparseCell> cellsRowbyRow;
+        private readonly List<SparseCell> cellsRowbyRow;
 
         /// <summary>
         /// The first non-zero cell in each row.
@@ -126,7 +126,7 @@ namespace StarMathLib
         /// <param name="numCols">The number cols.</param>
         public SparseMatrix(int numRows, int numCols)
         {
-            cellsRowbyRow = new HashSet<SparseCell>();
+            cellsRowbyRow = new List<SparseCell>();
             NumRows = numRows;
             NumCols = numCols;
             Diagonals = new SparseCell[numRows];
@@ -236,7 +236,7 @@ namespace StarMathLib
                 else c.Value = value;
             }
         }
-
+        
         private SparseCell CellAt(int rowI, int colI)
         {
             if (rowI == colI) return Diagonals[rowI];

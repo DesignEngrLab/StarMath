@@ -13,7 +13,6 @@
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 namespace StarMathLib
 {
@@ -200,7 +199,7 @@ namespace StarMathLib
         /// <param name="A">a.</param>
         /// <param name="optionalTolerance">An optional tolerance.</param>
         /// <returns>SparseMatrix.</returns>
-        public static SparseMatrix ConvertDenseToSparseMatrix(this double[,] A, double optionalTolerance = EqualityTolerance)
+        public static SparseMatrix ConvertDenseToSparseMatrix(this double[,] A, double optionalTolerance = DefaultEqualityTolerance)
         {
             var numRows = A.GetLength(0);
             var numCols = A.GetLength(1);

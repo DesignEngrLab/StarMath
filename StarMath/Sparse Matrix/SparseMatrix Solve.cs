@@ -15,6 +15,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using StarMathLib.CSparse;
 
 namespace StarMathLib
 {
@@ -59,25 +60,71 @@ namespace StarMathLib
         /// <param name="IsASymmetric">if set to <c>true</c> [a is symmetric].</param>
         /// <param name="potentialDiagonals">The potential diagonals.</param>
         /// <returns>System.Double[].</returns>
-        /// <exception cref="NotImplementedException"></exception>
         public double[] SolveAnalytically(IList<double> b, bool IsASymmetric = false,
-            List<int>[] potentialDiagonals = null)
+           List<int>[] potentialDiagonals = null)
         {
             if (IsASymmetric)
             {
+                var ccs = convertToCCS(this);
+                var S = Main.SymbolicAnalysisLDL(ccs);
+                double[] D;
+                CompressedColumnStorage L;
+                Main.FactorizeLDL(ccs, S, out D, out L);
+                return Main.SolveLDL(b, L, D, S);
+
+                /*** old code
                 var L = Copy();
                 L.CholeskyDecomposition();
                 return L.solveFromCholeskyFactorization(b);
+                ***/
             }
             else
             {
+                var ccs = convertToCCS(this);
+                var S = Main.SymbolicAnalysisLU(ccs);
+                CompressedColumnStorage L, U;
+                int[] pinv;
+                // Numeric LU factorization
+                Main.FactorizeLU(ccs, S, out L, out U, out pinv);
+                var x = Main.ApplyInverse(pinv, b, NumCols); // x = b(p)
+                Main.SolveLower(L, x); // x = L\x.
+                Main.SolveUpper(U, x); // x = U\x.
+                return Main.ApplyInverse(S.q, x, NumCols); // b(q) = x
+                /*** old code
                 var LU = Copy();
                 LU.LUDecomposition();
                 return LU.solveFromLUDecomposition(b);
-
+                ***/
             }
         }
+        private static CompressedColumnStorage convertToCCS(SparseMatrix sparseMatrix)
+        {
+            var cellCounter = 0;
+            var colCounter = 0;
+            var ccs = new CompressedColumnStorage(sparseMatrix.NumRows, sparseMatrix.NumCols, sparseMatrix.NumNonZero);
+            var columnPointers = new int[sparseMatrix.NumCols + 1];
+            columnPointers[0] = cellCounter;
+            var rowIndices = new int[sparseMatrix.NumNonZero];
+            var values = new double[sparseMatrix.NumNonZero];
 
+            foreach (var topcell in sparseMatrix.ColFirsts)
+            {
+                var cell = topcell;
+                while (cell != null)
+                {
+                    values[cellCounter] = cell.Value;
+                    rowIndices[cellCounter] = cell.RowIndex;
+                    cell = cell.Down;
+                    cellCounter++;
+                }
+                columnPointers[++colCounter] = cellCounter;
+            }
+            ccs.ColumnPointers = columnPointers;
+            ccs.RowIndices = rowIndices;
+            ccs.Values = values;
+            return ccs;
+        }
+        #region Old Methods - someday one needs to rewrite to avoid CCS and use thesse methods
         private double[] solveFromLUDecomposition(IList<double> b)
         {
             var x = new double[NumRows];
@@ -416,7 +463,7 @@ namespace StarMathLib
 
             return cell;
         }
-
+        #endregion
         #region Gauss-Seidel or Successive Over-Relaxation
 
         private bool isGaussSeidelAppropriate(IList<double> b, out List<int>[] potentialDiagonals,
@@ -459,78 +506,6 @@ namespace StarMathLib
         }
 
         public double[] SolveIteratively(IList<double> b,
-            IList<double> initialGuess = null, List<int>[] potentialDiagonals = null)
-            //, Boolean symmetric = false)
-        {
-            //if (false && symmetric)
-            //    return SymmetricSuccessiveOverrelaxation(b, initialGuess);
-            //else
-                return SuccessiveOverrelaxation(b, initialGuess, potentialDiagonals);
-        }
-
-        /* SSOR method is commented out. It doesn't seem to offer any speed advantages. */
-        //private double[] SymmetricSuccessiveOverrelaxation(IList<double> b, IList<double> initialGuess)
-        //{
-        //    double adjust;
-        //    SparseCell cell;
-        //    var halfX = initialGuess.ToArray();
-        //    var x = initialGuess.ToArray();
-        //    var bNorm1 = StarMath.norm1(b);
-        //    var error = StarMath.norm1(StarMath.subtract(b, multiply(x))) / bNorm1;
-        //    var success = error <= StarMath.GaussSeidelMaxError;
-        //    var xWentNaN = false;
-        //    var iteration = NumRows * StarMath.GaussSeidelMaxIterationFactor;
-        //    while (!xWentNaN && !success && iteration-- > 0)
-        //    {
-        //        // Forward sweep (result = oldest, work = halfiterate)
-        //        for (int i = 0; i < NumCols; ++i)
-        //        {
-        //            adjust = b[i];
-        //            cell = ColFirsts[i];
-        //            while (cell != null && cell.RowIndex < i)
-        //            {
-        //                adjust -= cell.Value * halfX[cell.RowIndex];
-        //                cell = cell.Down;
-        //            }
-        //            cell = Diagonals[i].Down;
-        //            while (cell != null)
-        //            {
-        //                adjust -= cell.Value * x[cell.RowIndex];
-        //                cell = cell.Down;
-        //            }
-        //            halfX[i] = (1 - StarMath.GaussSeidelRelaxationOmega) * x[i] +
-        //                StarMath.GaussSeidelRelaxationOmega * adjust / Diagonals[i].Value;
-        //        }
-        //        iteration--;
-        //        // Backward sweep (work = oldest, result = halfiterate)
-        //        for (int i = NumCols - 1; i >= 0; --i)
-        //        {
-        //            adjust = b[i];
-        //            cell = ColFirsts[i];
-        //            while (cell != null && cell.RowIndex < i)
-        //            {
-        //                adjust -= cell.Value * halfX[cell.RowIndex];
-        //                cell = cell.Down;
-        //            }
-        //            cell = Diagonals[i].Down;
-        //            while (cell != null)
-        //            {
-        //                adjust -= cell.Value * x[cell.RowIndex];
-        //                cell = cell.Down;
-        //            }
-        //            x[i] = (1 - StarMath.GaussSeidelRelaxationOmega) * halfX[i] +
-        //                    StarMath.GaussSeidelRelaxationOmega * adjust / Diagonals[i].Value;
-        //        }
-        //        xWentNaN = x.Any(double.IsNaN);
-        //        error = StarMath.norm1(StarMath.subtract(b, multiply(x))) / bNorm1;
-        //        success = error <= StarMath.GaussSeidelMaxError;
-        //    }
-        //    if (!success) return null;
-
-        //    return x;
-        //}
-
-        public double[] SuccessiveOverrelaxation(IList<double> b,
             IList<double> initialGuess = null, List<int>[] potentialDiagonals = null)
         {
             double[] x;

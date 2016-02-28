@@ -37,11 +37,11 @@
     <DocumentationFile>bin\Release\StarMath.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <!-- A reference to the entire .NET Framework is automatically included -->
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="multiply divide.cs" />
     <Compile Include="constants.cs" />
+    <Compile Include="Sparse Matrix\CSparse\CSparseClasses.cs" />
+    <Compile Include="Sparse Matrix\CSparse\ApproximateMinimumDegree.cs" />
+    <Compile Include="Sparse Matrix\CSparse\CSparseNetMain.cs" />
     <Compile Include="Sparse Matrix\SparseMatrix add subtract.cs" />
     <Compile Include="Sparse Matrix\SparseMatrix multiply.cs" />
     <Compile Include="Sparse Matrix\SparseMatrix Main.cs" />
@@ -58,6 +58,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="solve.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

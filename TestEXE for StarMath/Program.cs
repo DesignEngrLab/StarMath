@@ -16,10 +16,10 @@ namespace TestEXE_for_StarMath
         private static void Main()
         {
             //  testRBF();
-            // SparseFunctionTest();
+             SparseFunctionTest();
             // testStackFunctions();
             //testLUfunctions();
-            testSVD();
+            //testSVD();
             //benchMarkMatrixInversion();
             //  compareSolvers_Inversion_to_GaussSeidel();
             //checkEigen();

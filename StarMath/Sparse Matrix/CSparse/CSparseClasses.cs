@@ -18,47 +18,28 @@ namespace StarMathLib.CSparse
 {
     internal class SymbolicFactorization
     {
-        internal int[] cp; // column pointers for Cholesky, row counts for QR
-        internal int[] leftmost; // leftmost[i] = min(find(A(i,:))), for QR
-        internal int lnz; // # entries in L for LU or Cholesky; in V for QR
-        internal int m2; // # of rows for QR, after adding fictitious rows
-        internal int[] parent; // elimination tree for Cholesky and QR
-        internal int[] pinv; // inverse row perm. for QR, fill red. perm for Chol
-        internal int[] q; // fill-reducing column permutation for LU and QR
-        internal int unz; // # entries in U for LU; in R for QR
+        internal int[] ColumnPointers; // column pointers for Cholesky
+        internal int NumNonZeroInLower; // # entries in L for LU or Cholesky
+        internal int[] ParentIndices; // elimination tree for Cholesky 
+        internal int[] InversePermute; // inverse row perm. for Chol
+        internal int[] ColumnPermutation; // fill-reducing column permutation for LU 
+        internal int NumNonZeroInUpper; // # entries in U for LU
     }
 
     internal class CompressedColumnStorage
     {
         internal readonly int ncols;
-
-        internal readonly int NonZerosCount;
-
         internal readonly int nrows;
-
-        /// <summary>
-        ///     Row pointers with last entry equal number of non-zeros (size = RowCount + 1)
-        /// </summary>
         internal int[] ColumnPointers;
-
-        /// <summary>
-        ///     Column indices (size >= NonZerosCount)
-        /// </summary>
         internal int[] RowIndices;
-
-        /// <summary>
-        ///     Numerical values (size >= NonZerosCount)
-        /// </summary>
         internal double[] Values;
-
-        /// <inheritdoc />
+        
         internal CompressedColumnStorage(int rowCount, int columnCount, int valueCount)
         {
             ColumnPointers = new int[columnCount + 1];
             RowIndices = new int[valueCount];
             nrows = rowCount;
             ncols = columnCount;
-            NonZerosCount = valueCount;
             if (valueCount > 0)
             {
                 Values = new double[valueCount];
@@ -91,55 +72,26 @@ namespace StarMathLib.CSparse
     /// </remarks>
     internal class SymbolicColumnStorage
     {
-        internal readonly int ncols;
-        internal readonly int nrows;
-
-        /// <summary>
-        ///     Column pointers with last entry equal number of non-zeros (size = ColumnCount + 1)
-        /// </summary>
+        private readonly int ncols;
+        private readonly int nrows;
         internal int[] ColumnPointers;
-
-        /// <summary>
-        ///     Row indices (size = NonZerosCount)
-        /// </summary>
         internal int[] RowIndices;
 
-
-        internal SymbolicColumnStorage(CompressedColumnStorage mat)
+        private SymbolicColumnStorage(CompressedColumnStorage mat)
         {
             nrows = mat.nrows;
             ncols = mat.ncols;
             ColumnPointers = mat.ColumnPointers;
             RowIndices = mat.RowIndices;
         }
-
-        internal SymbolicColumnStorage(int rowCount, int columnCount, int valueCount)
+        
+        public SymbolicColumnStorage(int ncols, int nrows, int[] colPointers, int[] rowIndices)
         {
-            // Explicitly allow m or n = 0 (may occur in Dulmage-Mendelsohn decomposition).
-            if (rowCount < 0 || columnCount < 0)
-            {
-                throw new ArgumentOutOfRangeException();
-            }
-
-            nrows = rowCount;
-            ncols = columnCount;
-
-            if (valueCount > 0)
-            {
-                ColumnPointers = new int[columnCount + 1];
-                RowIndices = new int[valueCount];
-            }
+            this.ncols = ncols;
+            this.nrows = nrows;
+            ColumnPointers = colPointers;
+            RowIndices = rowIndices;
         }
-
-
-        /// <summary>
-        ///     Gets the number of non-zero entries.
-        /// </summary>
-        internal int NonZerosCount
-        {
-            get { return ColumnPointers[ncols]; }
-        }
-
 
         /// <summary>
         ///     Change the max # of entries sparse matrix
@@ -164,38 +116,28 @@ namespace StarMathLib.CSparse
         /// <returns>Transposed matrix, C = A'</returns>
         internal SymbolicColumnStorage Transpose()
         {
-            int j, k, p;
-            var result = new SymbolicColumnStorage(ncols, nrows, 0);
+            var colPointers = new int[nrows + 1];
+            var rowIndices = new int[RowIndices.Length];
+            var workspace = new int[nrows];
 
-            var ci = new int[nrows + 1];
-            var cj = new int[RowIndices.Length];
-
-            var w = new int[nrows];
-
-            for (p = 0; p < ColumnPointers[ncols]; p++)
+            for (int p = 0; p < ColumnPointers[ncols]; p++)
             {
                 // Row counts.
-                w[RowIndices[p]]++;
+                workspace[RowIndices[p]]++;
             }
-
             // Column pointers.
-            CumulativeSum(ci, w, nrows);
+            CumulativeSum(colPointers, workspace, nrows);
 
-            for (j = 0; j < ncols; j++)
+            for (int j = 0; j < ncols; j++)
             {
-                for (p = ColumnPointers[j]; p < ColumnPointers[j + 1]; p++)
+                for (int p = ColumnPointers[j]; p < ColumnPointers[j + 1]; p++)
                 {
-                    k = w[RowIndices[p]]++;
-
+                  int  k = workspace[RowIndices[p]]++;
                     // Place A(i,j) as entry C(j,i)
-                    cj[k] = j;
+                    rowIndices[k] = j;
                 }
             }
-
-            result.ColumnPointers = ci;
-            result.RowIndices = cj;
-
-            return result;
+            return new SymbolicColumnStorage(ncols, nrows, colPointers, rowIndices);
         }
 
         /// <summary>
@@ -241,60 +183,32 @@ namespace StarMathLib.CSparse
         /// </summary>
         /// <param name="other">column-compressed matrix</param>
         /// <returns>Sum C = A + B</returns>
-        internal SymbolicColumnStorage Add(SymbolicColumnStorage other)
+        private SymbolicColumnStorage Add(SymbolicColumnStorage other)
         {
-            int j, nz = 0;
-
-            // check inputs
-            if (nrows != other.nrows || ncols != other.ncols)
-            {
-                throw new ArgumentException();
-            }
-
-            var m = nrows;
-            var n = other.ncols;
-
-            var bi = other.ColumnPointers;
-
-            var anz = ColumnPointers[ncols];
-            var bnz = bi[n];
-
-            // Workspace
-            var w = new int[m];
-
+            var workspace = new int[this.nrows];
             // Allocate result: (anz + bnz) is an upper bound
-            var cp = new int[bi.Length];
-            var ci = new int[anz + bnz];
-
-            for (j = 0; j < n; j++)
+            var columnPointers = new int[other.ColumnPointers.Length];
+            var rowIndices = new int[ColumnPointers[ncols] + other.ColumnPointers[other.ncols]];
+            int nz = 0;
+            for (int j = 0; j < other.ncols; j++)
             {
                 // Column j of result starts here
-                cp[j] = nz;
-                nz = Scatter(j, w, j + 1, ci, nz); // A(:,j)
-                nz = other.Scatter(j, w, j + 1, ci, nz); // B(:,j)
+                columnPointers[j] = nz;
+                nz = Scatter(j, workspace, j + 1, rowIndices, nz); // A(:,j)
+                nz = other.Scatter(j, workspace, j + 1, rowIndices, nz); // B(:,j)
             }
-
             // Finalize the last column
-            cp[n] = nz;
+            columnPointers[other.ncols] = nz;
 
             // Remove extra space
-            Array.Resize(ref ci, nz);
+            Array.Resize(ref rowIndices, nz);
 
-            var result = new SymbolicColumnStorage(m, n, 0);
-
-            result.ColumnPointers = cp;
-            result.RowIndices = ci;
-
-            return result;
+            return new SymbolicColumnStorage(this.nrows, other.ncols, columnPointers,
+                rowIndices);
         }
 
 
-        /// <summary>
-        ///     Drops entries from a sparse matrix
-        /// </summary>
-        /// <param name="func">Drop element a_{i,j} if func(i, j) is false.</param>
-        /// <returns>New number of entries in A.</returns>
-        internal int Keep()
+        private int Keep()
         {
             int i, j, nz = 0;
 
@@ -336,11 +250,9 @@ namespace StarMathLib.CSparse
         /// <returns>new value of nz</returns>
         private int Scatter(int j, int[] work, int mark, int[] ci, int nz)
         {
-            int i, p;
-
-            for (p = ColumnPointers[j]; p < ColumnPointers[j + 1]; p++)
+             for (int p = ColumnPointers[j]; p < ColumnPointers[j + 1]; p++)
             {
-                i = RowIndices[p]; // A(i,j) is nonzero
+              int  i = RowIndices[p]; // A(i,j) is nonzero
                 if (work[i] < mark)
                 {
                     work[i] = mark; // i is new entry in column j

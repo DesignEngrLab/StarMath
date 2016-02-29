@@ -70,7 +70,7 @@ namespace StarMathLib
                 double[] D;
                 CompressedColumnStorage L;
                 Main.FactorizeLDL(ccs, S, out D, out L);
-                return Main.SolveLDL(b, L, D, S);
+                return Main.SolveLDL(b, L, D, S.InversePermute);
 
                 /*** old code
                 var L = Copy();
@@ -81,15 +81,15 @@ namespace StarMathLib
             else
             {
                 var ccs = convertToCCS(this);
-                var S = Main.SymbolicAnalysisLU(ccs);
+                var columnPermutation = ApproximateMinimumDegree.Generate(ccs);
                 CompressedColumnStorage L, U;
                 int[] pinv;
                 // Numeric LU factorization
-                Main.FactorizeLU(ccs, S, out L, out U, out pinv);
+                Main.FactorizeLU(ccs, columnPermutation, out L, out U, out pinv);
                 var x = Main.ApplyInverse(pinv, b, NumCols); // x = b(p)
                 Main.SolveLower(L, x); // x = L\x.
                 Main.SolveUpper(U, x); // x = U\x.
-                return Main.ApplyInverse(S.q, x, NumCols); // b(q) = x
+                return Main.ApplyInverse(columnPermutation, x, NumCols); // b(q) = x
                 /*** old code
                 var LU = Copy();
                 LU.LUDecomposition();

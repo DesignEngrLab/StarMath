@@ -78,11 +78,18 @@ namespace StarMathLib
         public SparseMatrix(IList<int> rowIndices, IList<int> colIndices, IList<double> values, int numRows, int numCols) : this(numRows, numCols)
         {
             var indices = Enumerable.Range(0, values.Count).OrderBy(i => rowIndices[i] * numCols + colIndices[i]).ToList();
-            var orederedRowByRowIndices = indices.Select(i => rowIndices[i] * numCols + colIndices[i]).ToArray();
+            var orderedRowByRowIndices = indices.Select(i => rowIndices[i] * numCols + colIndices[i]).ToArray();
             var orderedRowByRowValues = indices.Select(i => values[i]).ToArray();
-            FillInSparseMatrix(this, orederedRowByRowIndices, orderedRowByRowValues);
+            FillInSparseMatrix(this, orderedRowByRowIndices, orderedRowByRowValues);
         }
 
+        public void UpdateValues(IList<int> rowIndices, IList<int> colIndices, IList<double> values)
+        {
+            var indices = Enumerable.Range(0, values.Count).OrderBy(i => rowIndices[i] * NumCols + colIndices[i]).ToList();
+            var orderedRowByRowValues = indices.Select(i => values[i]).ToArray();
+            for (int i = 0; i < NumNonZero; i++)
+                cellsRowbyRow[i].Value = orderedRowByRowValues[i];
+        }
         public SparseMatrix(IList<int> rowByRowIndices, IList<double> values, int numRows, int numCols) : this(numRows, numCols)
         {
             var indices = Enumerable.Range(0, values.Count).OrderBy(i => rowByRowIndices[i]).ToList();
@@ -616,6 +623,7 @@ namespace StarMathLib
             //    }
             //}
         }
+
     }
 
     /// <summary>

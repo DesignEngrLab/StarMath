@@ -637,9 +637,10 @@ namespace StarMathLib
                                     + numRows + ".");
             var B = new double[numRows - 1, numCols];
             var j = 0;
-            for (var i = 0; i < numRows; i++)
-                if (i != rowIndex)
-                    B.SetRow(j++, A.GetRow(i));
+            for (var i = 0; i < rowIndex; i++)
+                B.SetRow(i, A.GetRow(i));
+            for (var i = rowIndex + 1; i < numRows; i++)
+                B.SetRow(i - 1, A.GetRow(i));
             return B;
         }
 
@@ -664,9 +665,10 @@ namespace StarMathLib
                                     + numRows + ".");
             var B = new int[numRows - 1, numCols];
             var j = 0;
-            for (var i = 0; i < numRows; i++)
-                if (i != rowIndex)
-                    B.SetRow(j++, A.GetRow(i));
+            for (var i = 0; i < rowIndex; i++)
+                B.SetRow(i, A.GetRow(i));
+            for (var i = rowIndex + 1; i < numRows; i++)
+                B.SetRow(i - 1, A.GetRow(i));
             return B;
         }
 
@@ -692,9 +694,10 @@ namespace StarMathLib
                                     + numCols + ".");
             var B = new double[numRows, numCols - 1];
             var j = 0;
-            for (var i = 0; i < numRows; i++)
-                if (i != colIndex)
-                    B.SetColumn(j++, A.GetColumn(i));
+            for (var i = 0; i < colIndex; i++)
+                B.SetColumn(i, A.GetColumn(i));
+            for (var i = colIndex + 1; i < numCols; i++)
+                B.SetColumn(i - 1, A.GetColumn(i));
             return B;
         }
 
@@ -719,9 +722,10 @@ namespace StarMathLib
                                     + numCols + ".");
             var B = new int[numRows, numCols - 1];
             var j = 0;
-            for (var i = 0; i < numRows; i++)
-                if (i != colIndex)
-                    B.SetColumn(j++, A.GetColumn(i));
+            for (var i = 0; i < colIndex; i++)
+                B.SetColumn(i, A.GetColumn(i));
+            for (var i = colIndex + 1; i < numCols; i++)
+                B.SetColumn(i - 1, A.GetColumn(i));
             return B;
         }
 
@@ -746,6 +750,7 @@ namespace StarMathLib
         {
             var numRows = A.GetLength(0);
             var numCols = A.GetLength(1);
+            var numToRemove = rowIndices.Count;
             if (rowIndices.Max() >= numRows)
                 throw new ArithmeticException("StarMath Size Error: A row index, with value " + rowIndices.Max() +
                                     ", in the provided rowIndices for RemoveRows exceeds the number of rows (number of rows = " +
@@ -756,11 +761,13 @@ namespace StarMathLib
                                     rowIndices.Count +
                                     ") than there are rows in the matrix provided to RemoveRows (number of rows = " +
                                     numRows + ").");
-            var B = new double[numRows - rowIndices.Count, numCols];
-            var j = 0;
+            var sortedRowIndices = rowIndices.OrderBy(x => x).ToArray();
+            var B = new double[numRows - numToRemove, numCols];
+
+            var k = 0; //rowIndices position
             for (var i = 0; i < numRows; i++)
-                if (!rowIndices.Contains(i))
-                    B.SetRow(j++, A.GetRow(i));
+                if (k < numToRemove && sortedRowIndices[k] == i) k++;
+                else B.SetRow(i - k, A.GetRow(i));
             return B;
         }
 
@@ -791,6 +798,7 @@ namespace StarMathLib
         {
             var numRows = A.GetLength(0);
             var numCols = A.GetLength(1);
+            var numToRemove = rowIndices.Count;
             if (rowIndices.Max() >= numRows)
                 throw new ArithmeticException("StarMath Size Error: A row index, with value " + rowIndices.Max() +
                                     ", in the provided rowIndices for RemoveRows exceeds the number of rows (number of rows = " +
@@ -801,11 +809,13 @@ namespace StarMathLib
                                     rowIndices.Count +
                                     ") than there are rows in the matrix provided to RemoveRows (number of rows = " +
                                     numRows + ").");
-            var B = new int[numRows - rowIndices.Count, numCols];
-            var j = 0;
+            var sortedRowIndices = rowIndices.OrderBy(x => x).ToArray();
+            var B = new int[numRows - numToRemove, numCols];
+
+            var k = 0; //rowIndices position
             for (var i = 0; i < numRows; i++)
-                if (!rowIndices.Contains(i))
-                    B.SetRow(j++, A.GetRow(i));
+                if (k < numToRemove && sortedRowIndices[k] == i) k++;
+                else B.SetRow(i - k, A.GetRow(i));
             return B;
         }
 
@@ -838,6 +848,7 @@ namespace StarMathLib
         {
             var numRows = A.GetLength(0);
             var numCols = A.GetLength(1);
+            var numToRemove = colIndices.Count;
             if (colIndices.Max() >= numCols)
                 throw new ArithmeticException("StarMath Size Error: A row index, with value " + colIndices.Max() +
                                     ", in the provided rowIndices for RemoveColumns exceeds the number of rows (number of rows = " +
@@ -849,10 +860,11 @@ namespace StarMathLib
                                     ") than there are rows in the matrix provided to RemoveColumns (number of rows = " +
                                     numCols + ").");
             var B = new double[numRows, numCols - colIndices.Count];
-            var j = 0;
+         var sortedColIndices = colIndices.OrderBy(x => x).ToArray();
+           var k = 0; //colIndices position
             for (var i = 0; i < numCols; i++)
-                if (!colIndices.Contains(i))
-                    B.SetColumn(j++, A.GetColumn(i));
+                if (k < numToRemove && sortedColIndices[k] == i) k++;
+                else B.SetColumn(i - k, A.GetColumn(i));
             return B;
         }
 
@@ -884,6 +896,7 @@ namespace StarMathLib
         {
             var numRows = A.GetLength(0);
             var numCols = A.GetLength(1);
+            var numToRemove = colIndices.Count;
             if (colIndices.Max() >= numCols)
                 throw new ArithmeticException("StarMath Size Error: A row index, with value " + colIndices.Max() +
                                     ", in the provided rowIndices for RemoveColumns exceeds the number of rows (number of rows = " +
@@ -895,10 +908,11 @@ namespace StarMathLib
                                     ") than there are rows in the matrix provided to RemoveColumns (number of rows = " +
                                     numCols + ").");
             var B = new int[numRows, numCols - colIndices.Count];
-            var j = 0;
+            var sortedColIndices = colIndices.OrderBy(x => x).ToArray();
+            var k = 0; //colIndices position
             for (var i = 0; i < numCols; i++)
-                if (!colIndices.Contains(i))
-                    B.SetColumn(j++, A.GetColumn(i));
+                if (k < numToRemove && sortedColIndices[k] == i) k++;
+                else B.SetColumn(i - k, A.GetColumn(i));
             return B;
         }
 
@@ -954,12 +968,9 @@ namespace StarMathLib
                                     + index
                                     + " for RemoveVectorCell is not in required range from 0 up to (but not including) "
                                     + length + ".");
-            var B = new double[length - 1];
-            var j = 0;
-            for (var i = 0; i < length; i++)
-                if (i != index)
-                    B[j++] = A[i];
-            return B;
+            var B = new List<double>(A);
+            B.RemoveAt(index);
+            return B.ToArray();
         }
 
         /// <summary>
@@ -984,12 +995,9 @@ namespace StarMathLib
                                     + index
                                     + " for RemoveVectorCell is not in required range from 0 up to (but not including) "
                                     + length + ".");
-            var B = new int[length - 1];
-            var j = 0;
-            for (var i = 0; i < length; i++)
-                if (i != index)
-                    B[j++] = A[i];
-            return B;
+            var B = new List<int>(A);
+            B.RemoveAt(index);
+            return B.ToArray();
         }
 
 
@@ -1027,10 +1035,11 @@ namespace StarMathLib
                                     ") than there are cells in the vector provided to RemoveVectorCells (Count = " +
                                     length + ").");
             var B = new double[length - numToRemove];
-            var j = 0;
+            var sortedRowIndices = indices.OrderBy(x => x).ToArray();
+            var k = 0; //rowIndices position
             for (var i = 0; i < length; i++)
-                if (!indices.Contains(i))
-                    B[j++] = A[i];
+                if (k < numToRemove && sortedRowIndices[k] == i) k++;
+                else B[i - k] = A[i];
             return B;
         }
 
@@ -1068,10 +1077,11 @@ namespace StarMathLib
                                     ") than there are cells in the vector provided to RemoveVectorCells (Count = " +
                                     length + ").");
             var B = new int[length - numToRemove];
-            var j = 0;
+            var sortedRowIndices = indices.OrderBy(x => x).ToArray();
+            var k = 0; //rowIndices position
             for (var i = 0; i < length; i++)
-                if (!indices.Contains(i))
-                    B[j++] = A[i];
+                if (k < numToRemove && sortedRowIndices[k] == i) k++;
+                else B[i - k] = A[i];
             return B;
         }
 

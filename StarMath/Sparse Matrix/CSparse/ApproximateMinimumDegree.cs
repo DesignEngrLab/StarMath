@@ -35,9 +35,8 @@ namespace StarMathLib.CSparse
         /// </remarks>
         internal static int[] Generate(CompressedColumnStorage A)
         {
-            //  int[] W, nv, next, head, elen, degree, w, hhead;
-
-            int d, e, i, j, k;
+          //  int  e, i, j, k;
+            int   j, k;
             int lemax = 0;
             int mindeg = 0;
             int nel = 0;
@@ -71,7 +70,7 @@ namespace StarMathLib.CSparse
             var nzmax = C.RowIndices.Length;
             var Ci = C.RowIndices;
 
-            for (i = 0; i <= n; i++)
+            for (int i = 0; i <= n; i++)
             {
                 P[i] = -1;
                 w[i] = 1; // node i is alive
@@ -94,9 +93,9 @@ namespace StarMathLib.CSparse
             w[n] = 0; // n is a dead element
 
             // Initialize degree lists
-            for (i = 0; i < n; i++)
+            for (int i = 0; i < n; i++)
             {
-                d = degree[i];
+              int  d = degree[i];
                 if (d == 0) // node i is empty
                 {
                     elen[i] = -2; // element i is dead
@@ -169,7 +168,7 @@ namespace StarMathLib.CSparse
                 int nvi;
                 for (k1 = 1; k1 <= elenk + 1; k1++)
                 {
-                    int pj;
+                    int pj,e;
                     if (k1 > elenk)
                     {
                         e = k; // search the nodes in k
@@ -185,7 +184,7 @@ namespace StarMathLib.CSparse
                     int k2;
                     for (k2 = 1; k2 <= ln; k2++)
                     {
-                        i = Ci[pj++];
+                      int  i = Ci[pj++];
                         if ((nvi = nv[i]) <= 0) continue; // node i dead, or seen
                         dk += nvi; // degree[Lk] += size of node i
                         nv[i] = -nvi; // negate nv[i] to denote i in Lk
@@ -218,13 +217,13 @@ namespace StarMathLib.CSparse
                 int eln;
                 for (pk = pk1; pk < pk2; pk++) // scan 1: find |Le\Lk|
                 {
-                    i = Ci[pk];
+                   int i = Ci[pk];
                     if ((eln = elen[i]) <= 0) continue; // skip if elen[i] empty
                     nvi = -nv[i]; // nv [i] was negated
                     var wnvi = mark - nvi;
                     for (p = Cp[i]; p <= Cp[i] + eln - 1; p++) // scan Ei
                     {
-                        e = Ci[p];
+                      int  e = Ci[p];
                         if (w[e] >= mark)
                         {
                             w[e] -= nvi; // decrement |Le\Lk|
@@ -240,13 +239,14 @@ namespace StarMathLib.CSparse
                 int h;
                 for (pk = pk1; pk < pk2; pk++) // scan2: degree update
                 {
-                    i = Ci[pk]; // consider node i in Lk
+                  int   i = Ci[pk]; // consider node i in Lk
                     var p1 = Cp[i];
                     var p2 = p1 + elen[i] - 1;
                     var pn = p1;
+                    var d = 0;
                     for (h = 0, d = 0, p = p1; p <= p2; p++) // scan Ei
                     {
-                        e = Ci[p];
+                        int e = Ci[p];
                         if (w[e] != 0) // e is an unabsorbed element
                         {
                             var dext = w[e] - mark;
@@ -305,7 +305,7 @@ namespace StarMathLib.CSparse
                 // Supernode detection
                 for (pk = pk1; pk < pk2; pk++)
                 {
-                    i = Ci[pk];
+                   int i = Ci[pk];
                     if (nv[i] >= 0) continue; // skip if i is dead
                     h = P[i]; // scan hash bucket of node i
                     i = hhead[h];
@@ -344,10 +344,10 @@ namespace StarMathLib.CSparse
                 // Finalize new element
                 for (p = pk1, pk = pk1; pk < pk2; pk++) // finalize Lk
                 {
-                    i = Ci[pk];
+                   int i = Ci[pk];
                     if ((nvi = -nv[i]) <= 0) continue; // skip if i is dead
                     nv[i] = nvi; // restore nv[i]
-                    d = degree[i] + dk - nvi; // compute external degree(i)
+                    int d = degree[i] + dk - nvi; // compute external degree(i)
                     d = Math.Min(d, n - nel - nvi);
                     if (head[d] != -1) P[head[d]] = i;
                     next[i] = head[d]; // put i back in degree list
@@ -367,7 +367,7 @@ namespace StarMathLib.CSparse
             }
 
             // Postordering
-            for (i = 0; i < n; i++) Cp[i] = -(Cp[i] + 2); // fix assembly tree // FLIP(Cp[i])
+            for (int i = 0; i < n; i++) Cp[i] = -(Cp[i] + 2); // fix assembly tree // FLIP(Cp[i])
             for (j = 0; j <= n; j++) head[j] = -1;
             for (j = n; j >= 0; j--) // place unordered nodes in lists
             {
@@ -375,7 +375,7 @@ namespace StarMathLib.CSparse
                 next[j] = head[Cp[j]]; // place j in list of its parent
                 head[Cp[j]] = j;
             }
-            for (e = n; e >= 0; e--) // place elements in lists
+            for (int e = n; e >= 0; e--) // place elements in lists
             {
                 if (nv[e] <= 0) continue; // skip unless e is an element
                 if (Cp[e] != -1)
@@ -384,12 +384,11 @@ namespace StarMathLib.CSparse
                     head[Cp[e]] = e;
                 }
             }
-            for (k = 0, i = 0; i <= n; i++) // postorder the assembly tree
+            k = 0;
+            for (int i = 0; i <= n; i++) // postorder the assembly tree
             {
                 if (Cp[i] == -1)
-                {
                     k = TreeDepthFirstSearch(i, k, head, next, P, w);
-                }
             }
             return P;
         }
@@ -407,9 +406,7 @@ namespace StarMathLib.CSparse
                 for (k = 0; k < n; k++)
                 {
                     if (w[k] != 0)
-                    {
                         w[k] = 1;
-                    }
                 }
                 mark = 2;
             }
@@ -418,32 +415,31 @@ namespace StarMathLib.CSparse
 
         // xi [top...n-1] = nodes reachable from graph of G*P' via nodes in B(:,k).
         // xi [n...2n-1] used as workspace
+        /// <summary>
+        /// Reaches the specified gp.
+        /// </summary>
+        /// <param name="Gp">The gp.</param>
+        /// <param name="Gi">The gi.</param>
+        /// <param name="Bp">The bp.</param>
+        /// <param name="Bi">The bi.</param>
+        /// <param name="n">The n.</param>
+        /// <param name="k">The k.</param>
+        /// <param name="xi">The xi.</param>
+        /// <param name="pinv">The pinv.</param>
+        /// <returns>System.Int32.</returns>
         internal static int Reach(int[] Gp, int[] Gi, int[] Bp, int[] Bi, int n, int k, int[] xi, int[] pinv)
         {
-            if (xi == null) return -1; // check inputs
-
-            int p, top = n;
-
-            for (p = Bp[k]; p < Bp[k + 1]; p++)
-            {
-                //if (!CS_MARKED(Gp, Bi[p]))
+            int top = n;
+            for (int p = Bp[k]; p < Bp[k + 1]; p++) //if (!CS_MARKED(Gp, Bi[p]))
                 if (!(Gp[Bi[p]] < 0)) // start a dfs at unmarked node i
-                {
                     top = DepthFirstSearch(Bi[p], Gp, Gi, top, xi, xi, n, pinv);
-                }
-            }
-
-            for (p = top; p < n; p++)
-            {
-                //CS_MARK(Gp, xi[p]);
+            for (int p = top; p < n; p++) //CS_MARK(Gp, xi[p]);
                 Gp[xi[p]] = -Gp[xi[p]] - 2; // restore G
-            }
-
             return top;
         }
 
         /// <summary>
-        ///     Depth-first-search of the graph of a matrix, starting at node j.
+        /// Depth-first-search of the graph of a matrix, starting at node j.
         /// </summary>
         /// <param name="j">starting node</param>
         /// <param name="Gp">graph to search (modified, then restored)</param>
@@ -502,7 +498,7 @@ namespace StarMathLib.CSparse
 
 
         /// <summary>
-        ///     Depth-first search and postorder of a tree rooted at node j
+        /// Depth-first search and postorder of a tree rooted at node j
         /// </summary>
         /// <param name="j">postorder of a tree rooted at node j</param>
         /// <param name="k">number of nodes ordered so far</param>
@@ -514,10 +510,6 @@ namespace StarMathLib.CSparse
         private static int TreeDepthFirstSearch(int j, int k, int[] head, int[] next, int[] post, int[] stack)
         {
             var top = 0;
-
-            if (head == null || next == null || post == null || stack == null)
-                return -1; // check inputs
-
             stack[0] = j; // place j on the stack
             while (top >= 0) // while (stack is not empty)
             {

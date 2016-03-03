@@ -24,6 +24,7 @@ namespace StarMathLib
     public partial class SparseMatrix
     {
         #region Fields and Properties
+
         private readonly List<SparseCell> cellsRowbyRow;
 
         /// <summary>
@@ -55,14 +56,17 @@ namespace StarMathLib
         /// The number non zero
         /// </summary>
         public int NumNonZero { get; private set; }
+
         /// <summary>
         /// The number cols
         /// </summary>
         public int NumCols { get; private set; }
+
         /// <summary>
         /// The number rows
         /// </summary>
         public int NumRows { get; private set; }
+
         #endregion
 
         #region Constructors
@@ -75,27 +79,89 @@ namespace StarMathLib
         /// <param name="values">The values.</param>
         /// <param name="numRows">The number rows.</param>
         /// <param name="numCols">The number cols.</param>
-        public SparseMatrix(IList<int> rowIndices, IList<int> colIndices, IList<double> values, int numRows, int numCols) : this(numRows, numCols)
+        public SparseMatrix(IList<int> rowIndices, IList<int> colIndices, IList<double> values, int numRows, int numCols)
+            : this(numRows, numCols)
         {
-            var indices = Enumerable.Range(0, values.Count).OrderBy(i => rowIndices[i] * numCols + colIndices[i]).ToList();
-            var orderedRowByRowIndices = indices.Select(i => rowIndices[i] * numCols + colIndices[i]).ToArray();
-            var orderedRowByRowValues = indices.Select(i => values[i]).ToArray();
-            FillInSparseMatrix(this, orderedRowByRowIndices, orderedRowByRowValues);
+            var count = values.Count;
+            var indices = Enumerable.Range(0, count).OrderBy(i => rowIndices[i] * numCols + colIndices[i]);
+            var orderedRowByRowIndices = new int[count];
+            var orderedRowByRowValues = new double[count];
+            var k = 0;
+            foreach (var index in indices)
+            {
+                orderedRowByRowIndices[k] = rowIndices[index] * numCols + colIndices[index];
+                orderedRowByRowValues[k] = values[index];
+                k++;
+            }
+            FillInSparseMatrix(orderedRowByRowIndices, orderedRowByRowValues);
         }
 
+        /// <summary>
+        /// Updates the values.
+        /// </summary>
+        /// <param name="rowIndices">The row indices.</param>
+        /// <param name="colIndices">The col indices.</param>
+        /// <param name="values">The values.</param>
         public void UpdateValues(IList<int> rowIndices, IList<int> colIndices, IList<double> values)
         {
-            var indices = Enumerable.Range(0, values.Count).OrderBy(i => rowIndices[i] * NumCols + colIndices[i]).ToList();
+            var indices = Enumerable.Range(0, values.Count).OrderBy(i => rowIndices[i] * NumCols + colIndices[i]);
             var orderedRowByRowValues = indices.Select(i => values[i]).ToArray();
             for (int i = 0; i < NumNonZero; i++)
                 cellsRowbyRow[i].Value = orderedRowByRowValues[i];
         }
-        public SparseMatrix(IList<int> rowByRowIndices, IList<double> values, int numRows, int numCols) : this(numRows, numCols)
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SparseMatrix"/> class.
+        /// </summary>
+        /// <param name="rowByRowIndices">The row by row indices.</param>
+        /// <param name="values">The values.</param>
+        /// <param name="numRows">The number rows.</param>
+        /// <param name="numCols">The number cols.</param>
+        /// <param name="InRowOrder">The in row order.</param>
+        public SparseMatrix(IList<int> rowByRowIndices, IList<double> values, int numRows, int numCols,
+            Boolean InRowOrder = true) : this(numRows, numCols)
         {
-            var indices = Enumerable.Range(0, values.Count).OrderBy(i => rowByRowIndices[i]).ToList();
-            var orderedRowByRowIndices = indices.Select(i => rowByRowIndices[i]).ToArray();
+            if (InRowOrder)
+            {
+                FillInSparseMatrix(rowByRowIndices, values);
+            }
+            else
+            {
+                var count = values.Count;
+                var indices = Enumerable.Range(0, values.Count).OrderBy(i => rowByRowIndices[i]);
+                //var orderedRowByRowIndices = indices.Select(i => rowByRowIndices[i]).ToArray();
+                //var orderedRowByRowValues = indices.Select(i => values[i]).ToArray();
+                var orderedRowByRowIndices = new int[count];
+                var orderedRowByRowValues = new double[count];
+                var k = 0;
+                foreach (var index in indices)
+                {
+                    orderedRowByRowIndices[k] = rowByRowIndices[index];
+                    orderedRowByRowValues[k] = values[index];
+                    k++;
+                }
+                FillInSparseMatrix(orderedRowByRowIndices, orderedRowByRowValues);
+            }
+        }
+
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SparseMatrix" /> class.
+        /// </summary>
+        /// <param name="rowByRowIndices">The row by row indices.</param>
+        /// <param name="values">The values.</param>
+        /// <param name="InRowOrder">The in row order.</param>
+        public void UpdateValues(IList<int> rowByRowIndices, IList<double> values, Boolean InRowOrder = true)
+        {
+            if (InRowOrder)
+            {
+                for (int i = 0; i < NumNonZero; i++)
+                    cellsRowbyRow[i].Value = values[i];
+            }
+            var indices = Enumerable.Range(0, values.Count).OrderBy(i => rowByRowIndices[i]);
             var orderedRowByRowValues = indices.Select(i => values[i]).ToArray();
-            FillInSparseMatrix(this, orderedRowByRowIndices, orderedRowByRowValues);
+            for (int i = 0; i < NumNonZero; i++)
+                cellsRowbyRow[i].Value = orderedRowByRowValues[i];
         }
 
         /// <summary>
@@ -106,24 +172,20 @@ namespace StarMathLib
         /// <param name="numCols">The number cols.</param>
         public SparseMatrix(Dictionary<int[], double> cellDictionary, int numRows, int numCols) : this(numRows, numCols)
         {
+            var count = cellDictionary.Count;
             var orderedCellDictionary = cellDictionary.OrderBy(x => x.Key[0] * numCols + x.Key[1]);
             var rowByRowIndices = orderedCellDictionary.Select(x => x.Key[0] * numCols + x.Key[1]).ToArray();
             var rowByRowValues = orderedCellDictionary.Select(x => x.Value).ToArray();
-            FillInSparseMatrix(this, rowByRowIndices, rowByRowValues);
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SparseMatrix"/> class.
-        /// </summary>
-        /// <param name="cellDictionary">The cell dictionary with keys as single row-by-row indices.</param>
-        /// <param name="numRows">The number rows.</param>
-        /// <param name="numCols">The number cols.</param>
-        public SparseMatrix(Dictionary<int, double> cellDictionary, int numRows, int numCols) : this(numRows, numCols)
-        {
-            var orderedCellDictionary = cellDictionary.OrderBy(x => x.Key);
-            var rowByRowIndices = orderedCellDictionary.Select(x => x.Key).ToArray();
-            var rowByRowValues = orderedCellDictionary.Select(x => x.Value).ToArray();
-            FillInSparseMatrix(this, rowByRowIndices, rowByRowValues);
+            var orderedRowByRowIndices = new int[count];
+            var orderedRowByRowValues = new double[count];
+            var k = 0;
+            foreach (var entry in orderedCellDictionary)
+            {
+                orderedRowByRowIndices[k] = entry.Key[0] * numCols + entry.Key[1];
+                orderedRowByRowValues[k] = entry.Value;
+                k++;
+            }
+            FillInSparseMatrix(rowByRowIndices, rowByRowValues);
         }
 
         /// <summary>
@@ -148,11 +210,11 @@ namespace StarMathLib
         /// <param name="newMatrix">The new matrix.</param>
         /// <param name="rowByRowIndices">The row by row indices.</param>
         /// <param name="rowByRowValues">The row by row values.</param>
-        private static void FillInSparseMatrix(SparseMatrix newMatrix, IList<int> rowByRowIndices, IList<double> rowByRowValues)
+        private void FillInSparseMatrix(IList<int> rowByRowIndices, IList<double> rowByRowValues)
         {
             var rowI = 0;
             var rowLowerLimit = 0;
-            var rowUpperLimit = newMatrix.NumCols;
+            var rowUpperLimit = NumCols;
             var newRow = true;
             for (var i = 0; i < rowByRowValues.Count; i++)
             {
@@ -167,38 +229,38 @@ namespace StarMathLib
                 {
                     newRow = true;
                     rowI++;
-                    rowLowerLimit += newMatrix.NumCols;
-                    rowUpperLimit += newMatrix.NumCols;
+                    rowLowerLimit += NumCols;
+                    rowUpperLimit += NumCols;
                 }
                 var colI = index - rowLowerLimit;
                 var cell = new SparseCell(rowI, colI, value);
-                if (rowI == colI) newMatrix.Diagonals[rowI] = cell;
-                newMatrix.cellsRowbyRow.Add(cell);
+                if (rowI == colI) Diagonals[rowI] = cell;
+                cellsRowbyRow.Add(cell);
                 if (newRow)
                 {
-                    newMatrix.RowFirsts[rowI] = cell;
-                    newMatrix.RowLasts[rowI] = cell;
+                    RowFirsts[rowI] = cell;
+                    RowLasts[rowI] = cell;
                     newRow = false;
                 }
                 else
                 {
-                    cell.Left = newMatrix.RowLasts[rowI];
-                    newMatrix.RowLasts[rowI].Right = cell;
-                    newMatrix.RowLasts[rowI] = cell;
+                    cell.Left = RowLasts[rowI];
+                    RowLasts[rowI].Right = cell;
+                    RowLasts[rowI] = cell;
                 }
-                if (newMatrix.ColFirsts[colI] == null)
+                if (ColFirsts[colI] == null)
                 {
-                    newMatrix.ColFirsts[colI] = cell;
-                    newMatrix.ColLasts[colI] = cell;
+                    ColFirsts[colI] = cell;
+                    ColLasts[colI] = cell;
                 }
                 else
                 {
-                    cell.Up = newMatrix.ColLasts[colI];
-                    newMatrix.ColLasts[colI].Down = cell;
-                    newMatrix.ColLasts[colI] = cell;
+                    cell.Up = ColLasts[colI];
+                    ColLasts[colI].Down = cell;
+                    ColLasts[colI] = cell;
                 }
             }
-            newMatrix.NumNonZero = newMatrix.cellsRowbyRow.Count;
+            NumNonZero = cellsRowbyRow.Count;
         }
         #endregion
 
@@ -243,7 +305,7 @@ namespace StarMathLib
                 else c.Value = value;
             }
         }
-        
+
         private SparseCell CellAt(int rowI, int colI)
         {
             if (rowI == colI) return Diagonals[rowI];
@@ -305,7 +367,7 @@ namespace StarMathLib
         public SparseMatrix Copy()
         {
             return new SparseMatrix(cellsRowbyRow.Select(x => x.RowIndex * NumCols + x.ColIndex).ToArray(),
-                cellsRowbyRow.Select(c => c.Value).ToArray(),NumRows,NumCols);
+                cellsRowbyRow.Select(c => c.Value).ToArray(), NumRows, NumCols);
         }
 
         private void RemoveCell(SparseCell cell)
@@ -392,41 +454,41 @@ namespace StarMathLib
         /// <returns>System.Int32.</returns>
         //private int FindInsertionIndex(SparseCell cell)
         //{
-           //int i= cellsRowbyRow.IndexOf(cell);
-           // if (i >= 0) return i;
-            //var averageCellPerRow = NumNonZero / NumRows;
-            //var index = Math.Min(averageCellPerRow * cell.RowIndex + cell.ColIndex, NumNonZero - 1);
-            //int step = averageCellPerRow;
-            //do
-            //{
-            //    if (cell.RowIndex < cellsRowbyRow[index].RowIndex
-            //        || (cell.RowIndex == cellsRowbyRow[index].RowIndex
-            //        && cell.ColIndex < cellsRowbyRow[index].ColIndex))
-            //    {
-            //        if (index == 0 || step == 1) step = 0;
-            //        else if (step > 0) step = -step / 2;
-            //    }
-            //    else if (cell.RowIndex > cellsRowbyRow[index].RowIndex
-            //        || (cell.RowIndex == cellsRowbyRow[index].RowIndex
-            //        && cell.ColIndex > cellsRowbyRow[index].ColIndex))
-            //    {
-            //        if (index == NumNonZero - 1 || step == -1) step = 0;
-            //        else if (step < 0) step = -step / 2;
-            //    }
-            //    else step = 0;
-            //    index += step;
-            //    if (index < 0)
-            //    {
-            //        step -= index;
-            //        index = 0;
-            //    }
-            //    else if (index >= NumNonZero)
-            //    {
-            //        step = index - (NumNonZero - 1);
-            //        index = NumNonZero - 1;
-            //    }
-            //} while (step != 0);
-            //return index;
+        //int i= cellsRowbyRow.IndexOf(cell);
+        // if (i >= 0) return i;
+        //var averageCellPerRow = NumNonZero / NumRows;
+        //var index = Math.Min(averageCellPerRow * cell.RowIndex + cell.ColIndex, NumNonZero - 1);
+        //int step = averageCellPerRow;
+        //do
+        //{
+        //    if (cell.RowIndex < cellsRowbyRow[index].RowIndex
+        //        || (cell.RowIndex == cellsRowbyRow[index].RowIndex
+        //        && cell.ColIndex < cellsRowbyRow[index].ColIndex))
+        //    {
+        //        if (index == 0 || step == 1) step = 0;
+        //        else if (step > 0) step = -step / 2;
+        //    }
+        //    else if (cell.RowIndex > cellsRowbyRow[index].RowIndex
+        //        || (cell.RowIndex == cellsRowbyRow[index].RowIndex
+        //        && cell.ColIndex > cellsRowbyRow[index].ColIndex))
+        //    {
+        //        if (index == NumNonZero - 1 || step == -1) step = 0;
+        //        else if (step < 0) step = -step / 2;
+        //    }
+        //    else step = 0;
+        //    index += step;
+        //    if (index < 0)
+        //    {
+        //        step -= index;
+        //        index = 0;
+        //    }
+        //    else if (index >= NumNonZero)
+        //    {
+        //        step = index - (NumNonZero - 1);
+        //        index = NumNonZero - 1;
+        //    }
+        //} while (step != 0);
+        //return index;
         //}
 
 

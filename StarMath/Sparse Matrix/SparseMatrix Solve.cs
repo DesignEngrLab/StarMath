@@ -86,10 +86,10 @@ namespace StarMathLib
                 int[] pinv;
                 // Numeric LU factorization
                 Main.FactorizeLU(ccs, columnPermutation, out L, out U, out pinv);
-                var x = Main.ApplyInverse(pinv, b, NumCols); // x = b(p)
+                var x = Main.ApplyInversePermute(pinv, b, NumCols); // x = b(p)
                 Main.SolveLower(L, x); // x = L\x.
                 Main.SolveUpper(U, x); // x = U\x.
-                return Main.ApplyInverse(columnPermutation, x, NumCols); // b(q) = x
+                return Main.ApplyInversePermute(columnPermutation, x, NumCols); // b(q) = x
                 /*** old code
                 var LU = Copy();
                 LU.LUDecomposition();

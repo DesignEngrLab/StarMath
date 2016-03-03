@@ -374,7 +374,7 @@ namespace StarMathLib.CSparse
             int[] inversePermute)
         {          
             var n = L.ncols;
-            var x = ApplyInverse(inversePermute, b, n); // x = P*b
+            var x = ApplyInversePermute(inversePermute, b, n); // x = P*b
             var lValues = L.Values;
             var lColPointers = L.ColumnPointers;
             var lRowIndices = L.RowIndices;
@@ -395,7 +395,7 @@ namespace StarMathLib.CSparse
                 for (var p = lColPointers[i]; p < end; p++)
                     x[i] -= lValues[p] * x[lRowIndices[p]];
             }
-            return Apply(inversePermute, x, n); // b = P'*x
+            return ApplyPermute(inversePermute, x, n); // b = P'*x
         }
         #endregion
 
@@ -409,7 +409,7 @@ namespace StarMathLib.CSparse
         /// <param name="n">Length of p, b and x.</param>
         /// <returns>System.Double[].</returns>
         /// <remarks>p = null denotes identity.</remarks>
-        internal static double[] Apply(int[] p, IList<double> b, int n)
+        internal static double[] ApplyPermute(int[] p, IList<double> b, int n)
         {
             var x = new double[n];
             for (var k = 0; k < n; k++)
@@ -425,7 +425,7 @@ namespace StarMathLib.CSparse
         /// <param name="n">Length of p, b, and x.</param>
         /// <returns>System.Double[].</returns>
         /// <remarks>p = null denotes identity.</remarks>
-        internal static double[] ApplyInverse(int[] p, IList<double> b, int n)
+        internal static double[] ApplyInversePermute(int[] p, IList<double> b, int n)
         {
             var x = new double[n];
             for (var k = 0; k < n; k++)

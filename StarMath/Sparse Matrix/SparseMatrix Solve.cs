@@ -38,7 +38,7 @@ namespace StarMathLib
         /// <exception cref="ArithmeticException">Spare Matrix must be square to solve Ax = b.
         /// or
         /// Sparse Matrix must be have the same number of rows as the vector, b.</exception>
-        public double[] solve(IList<double> b, IList<double> initialGuess = null,
+        public IList<double> solve(IList<double> b, IList<double> initialGuess = null,
             bool IsASymmetric = false)
         {
             if (NumRows != NumCols)
@@ -88,22 +88,25 @@ namespace StarMathLib
         /// <param name="IsASymmetric">if set to <c>true</c> [a is symmetric].</param>
         /// <param name="potentialDiagonals">The potential diagonals.</param>
         /// <returns>System.Double[].</returns>
-        public double[] SolveAnalytically(IList<double> b, bool IsASymmetric = false)
+        public IList<double> SolveAnalytically(IList<double> b, bool IsASymmetric = false)
         {
             if (IsASymmetric)
             {
                 var ccs = convertToCCS(this);
                 var S = Main.SymbolicAnalysisLDL(ccs);
                 double[] D;
-                CompressedColumnStorage L;
-                Main.FactorizeLDL(ccs, S, out D, out L);
-                return Main.SolveLDL(b, L, D, S.InversePermute);
+                //CompressedColumnStorage L;
+                //Main.FactorizeLDL(ccs, S, out D, out L);
+                //return Main.SolveLDL(b, L, D, S.InversePermute);
 
-                /*** old code
-                var L = Copy();
-                L.CholeskyDecomposition();
-                return L.solveFromCholeskyFactorization(b);
-                ***/
+                /*** old code*/
+                var permutationVector = S.InversePermute;
+               var  L = CholeskyDecomposition(this, permutationVector);
+                var x = ApplyPermutation(b, permutationVector, NumCols);
+                x = SolveLowerTriangularMatrix(x, true, true);
+                x = SolveUpperTriangularMatrix(x, true, false);
+                return ApplyInversePermutation(x, permutationVector, NumCols);
+                /**/
             }
             else
             {
@@ -326,19 +329,7 @@ namespace StarMathLib
             return L;
         }
 
-        /// <summary>
-        /// Solves from cholesky factorization.
-        /// </summary>
-        /// <param name="b">The b.</param>
-        /// <returns>System.Double[].</returns>
-        private IList<double> solveFromCholeskyFactorization(IList<double> b, int[] permutationVector, int length)
-        {
-            var x = ApplyPermutation(b, permutationVector, length);
-            x = SolveLowerTriangularMatrix(x, true, true);
-            x = SolveUpperTriangularMatrix(x, true, false);
-            return ApplyInversePermutation(x, permutationVector, length);
-        }
-
+     
         private static IList<double> ApplyPermutation(IList<double> b, int[] permutationVector, int length)
         {
             var x = new double[length];

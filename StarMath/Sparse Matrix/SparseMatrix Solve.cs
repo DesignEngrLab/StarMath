@@ -39,7 +39,7 @@ namespace StarMathLib
         /// or
         /// Sparse Matrix must be have the same number of rows as the vector, b.</exception>
         public double[] solve(IList<double> b, IList<double> initialGuess = null,
-            Boolean IsASymmetric = false)
+            bool IsASymmetric = false)
         {
             if (NumRows != NumCols)
                 throw new ArithmeticException("Spare Matrix must be square to solve Ax = b.");
@@ -50,7 +50,35 @@ namespace StarMathLib
                 return SolveIteratively(b, initialGuess, potentialDiagonals);
             /****** need code to determine when to switch between *****
              ****** this analytical approach and the SOR approach *****/
-            return SolveAnalytically(b, IsASymmetric, potentialDiagonals);
+            return SolveAnalytically(b, IsASymmetric);
+        }
+
+        public double[] solve(IList<double> bValues, IList<int> bIndices, IList<double> initialGuess = null,
+    bool IsASymmetric = false)
+        {
+            if (NumRows != NumCols)
+                throw new ArithmeticException("Spare Matrix must be square to solve Ax = b.");
+            List<int>[] potentialDiagonals;
+            if (isGaussSeidelAppropriate(bValues, bIndices, out potentialDiagonals, ref initialGuess))
+                return SolveIteratively(bValues, bIndices, initialGuess, potentialDiagonals);
+            /****** need code to determine when to switch between *****
+             ****** this analytical approach and the SOR approach *****/
+            return SolveAnalytically(bValues, bIndices, IsASymmetric);
+        }
+
+        private double[] SolveIteratively(IList<double> bValues, IList<int> bIndices, IList<double> initialGuess, List<int>[] potentialDiagonals)
+        {
+            throw new NotImplementedException();
+        }
+
+        private bool isGaussSeidelAppropriate(IList<double> bValues, IList<int> bIndices, out List<int>[] potentialDiagonals, ref IList<double> initialGuess)
+        {
+            throw new NotImplementedException();
+        }
+
+        private double[] SolveAnalytically(IList<double> bValues, IList<int> bIndices, bool isASymmetric)
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -60,8 +88,7 @@ namespace StarMathLib
         /// <param name="IsASymmetric">if set to <c>true</c> [a is symmetric].</param>
         /// <param name="potentialDiagonals">The potential diagonals.</param>
         /// <returns>System.Double[].</returns>
-        public double[] SolveAnalytically(IList<double> b, bool IsASymmetric = false,
-           List<int>[] potentialDiagonals = null)
+        public double[] SolveAnalytically(IList<double> b, bool IsASymmetric = false)
         {
             if (IsASymmetric)
             {
@@ -86,10 +113,10 @@ namespace StarMathLib
                 int[] pinv;
                 // Numeric LU factorization
                 Main.FactorizeLU(ccs, columnPermutation, out L, out U, out pinv);
-                var x = Main.ApplyInversePermute(pinv, b, NumCols); // x = b(p)
+                var x = Main.ApplyInverse(pinv, b, NumCols); // x = b(p)
                 Main.SolveLower(L, x); // x = L\x.
                 Main.SolveUpper(U, x); // x = U\x.
-                return Main.ApplyInversePermute(columnPermutation, x, NumCols); // b(q) = x
+                return Main.ApplyInverse(columnPermutation, x, NumCols); // b(q) = x
                 /*** old code
                 var LU = Copy();
                 LU.LUDecomposition();
@@ -97,6 +124,8 @@ namespace StarMathLib
                 ***/
             }
         }
+
+
         private static CompressedColumnStorage convertToCCS(SparseMatrix sparseMatrix)
         {
             var cellCounter = 0;
@@ -125,42 +154,54 @@ namespace StarMathLib
             return ccs;
         }
         #region Old Methods - someday one needs to rewrite to avoid CCS and use thesse methods
-        private double[] solveFromLUDecomposition(IList<double> b)
+        private IList<double> solveFromLUDecomposition(IList<double> b, bool CanOverWriteB)
         {
-            var x = new double[NumRows];
-            // forward substitution
-            for (int i = 0; i < NumRows; i++)
-            {
-                var sumFromKnownTerms = 0.0;
-                var startCell = RowFirsts[i];
-                while (startCell != null && startCell.ColIndex < i)
-                {
-                    sumFromKnownTerms += startCell.Value * x[startCell.ColIndex];
-                    startCell = startCell.Right;
-                }
-                x[i] = (b[i] - sumFromKnownTerms) / Diagonals[i].Value;
-            }
+            var x = SolveLowerTriangularMatrix(b, CanOverWriteB, true);
+            return SolveUpperTriangularMatrix(x, CanOverWriteB, false);
+        }
 
-            // backward substitution
-            for (int i = NumRows - 1; i >= 0; i--)
+        private IList<double> SolveLowerTriangularMatrix(IList<double> b, bool CanOverWriteB, bool IncludeDiagonal)
+        {
+            var x = CanOverWriteB ? b : b.ToArray();
+            var i = 0;
+            while (x[i] == 0.0) i++;
+            for (; i < NumRows; i++)
             {
-                var sumFromKnownTerms = 0.0;
-                var startCell = RowLasts[i];  // this is because it is the transposed one
-                while (startCell != null && startCell.ColIndex > i)
+                if (x[i] == 0.0) continue;
+                var diag = Diagonals[i];
+                if (IncludeDiagonal && diag != null) x[i] /= diag.Value;
+                var cell = ColLasts[i];
+                while (cell != diag)
                 {
-                    sumFromKnownTerms += startCell.Value * x[startCell.ColIndex];
-                    startCell = startCell.Left;
+                    x[cell.RowIndex] -= cell.Value * x[cell.ColIndex];
+                    cell = cell.Up;
                 }
-                x[i] -= sumFromKnownTerms;
             }
             return x;
         }
 
+        private IList<double> SolveUpperTriangularMatrix(IList<double> b, bool CanOverWriteB, bool IncludeDiagonal)
+        {
+            var x = CanOverWriteB ? b : b.ToArray();
+            var i = NumRows - 1;
+            while (x[i] == 0.0) i--;
+            for (; i >= 0; i--)
+            {
+                if (x[i] == 0.0) continue;
+                var diag = Diagonals[i];
+                if (IncludeDiagonal && diag != null) x[i] /= diag.Value;
+                var cell = ColFirsts[i];
+                while (cell != diag)
+                {
+                    x[cell.RowIndex] -= cell.Value * x[cell.ColIndex];
+                    cell = cell.Down;
+                }
+            }
+            return x.ToArray();
+        }
+
         private void LUDecomposition()
         {
-            if (NumCols != NumRows)
-                throw new ArithmeticException("LU Decomposition can only be determined for square matrices.");
-
             // normalize row 0 
             var topCell = RowFirsts[0];
             var cell = topCell.Right;
@@ -244,65 +285,45 @@ namespace StarMathLib
         /// <returns>SparseMatrix.</returns>
         /// <exception cref="System.ArithmeticException">Cholesky Decomposition can only be determined for square matrices.</exception>
         /// <exception cref="ArithmeticException">Cholesky Decomposition can only be determined for square matrices.</exception>
-        public void CholeskyDecomposition()
+        public static SparseMatrix CholeskyDecomposition(SparseMatrix A, IList<int> permutationVector)
         {
-            if (NumCols != NumRows)
-                throw new ArithmeticException("Cholesky Decomposition can only be determined for square matrices.");
-            var furthestDownCells = new SparseCell[NumCols];
-            for (var i = 0; i < NumRows; i++)
+            // D_i = A_ii -sum
+            var n = A.NumRows;
+            var L = new SparseMatrix(n, n);
+            for (int i = 0; i < n; i++)
             {
-                double sum;
-                var startCellRowI = RowFirsts[i];
-                SparseCell cellRowI;
-                for (var j = 0; j < i; j++)
+                var AIndex = permutationVector[i];
+                var diagCell = new SparseCell(i, i, A.Diagonals[AIndex].Value);
+                L.cellsRowbyRow.Add(diagCell);
+                L.Diagonals[i] = L.ColFirsts[i] = L.ColLasts[i] = L.RowFirsts[i] = L.RowLasts[i] = diagCell;
+                L.NumNonZero++;
+                var cell = A.ColFirsts[AIndex];
+                var rowsToUpdate = new List<int>();
+                while (cell != null)
                 {
-                    cellRowI = startCellRowI;
-                    var cellRowJ = RowFirsts[j];
-                    sum = 0.0;
-                    while (cellRowI.ColIndex < j && cellRowJ.ColIndex < j)
+                    // this just collects cells of A that should be
+                    // mirrored in L
+                    var rowIndex = permutationVector[cell.RowIndex];
+                    if (rowIndex > i)
                     {
-                        if (cellRowI.ColIndex == cellRowJ.ColIndex)
-                        {
-                            sum += cellRowI.Value * cellRowJ.Value
-                                * Diagonals[cellRowI.ColIndex].Value;
-                            cellRowI = cellRowI.Right;
-                            cellRowJ = cellRowJ.Right;
-                        }
-                        else if (cellRowI.ColIndex < cellRowJ.ColIndex)
-                            cellRowI = cellRowI.Right;
-                        else cellRowJ = cellRowJ.Right;
+                        L[rowIndex, i] += cell.Value;
+                        rowsToUpdate.Add(rowIndex);
                     }
-                    var alreadyExists = TrySearchRightToCell(j, ref cellRowI);
-                    if (!alreadyExists && sum.IsNegligible()) continue;
-                    // what's up with this furthestDownCells?! It turns out the the AddCell function
-                    // was too slow when it was done on the basis of just the [i,j] indices. This "fat"
-                    // approach to encoding sparse matrices is bad for that. To avoid, this - the
-                    // special function "AddCellToTheLeftOfAndBelow" was created. It has a significant
-                    // improvemnt on time.
-                    if (!alreadyExists && !sum.IsNegligible())
-                        cellRowI = AddCellToTheLeftOfAndBelow(cellRowI, furthestDownCells[j], i, j, 0.0);
-                    cellRowI.Value = (cellRowI.Value - sum) / Diagonals[j].Value;
+                    cell = cell.Down;
                 }
+                for (int j = 0; j < rowsToUpdate.Count; j++)
+                    for (int k = j + 1; k < rowsToUpdate.Count; k++)
+                        L[k, j] -= L[k, i]*L[j, i]*L.Diagonals[i].Value;
 
-                cellRowI = startCellRowI;
-                sum = 0.0;
-                while (cellRowI.ColIndex < i)
+                cell = diagCell.Left;
+                while (cell != null)
                 {
-                    sum += cellRowI.Value * cellRowI.Value * Diagonals[cellRowI.ColIndex].Value;
-                    cellRowI = cellRowI.Right;
-                    furthestDownCells[cellRowI.ColIndex] = cellRowI;
-                }
-                cellRowI.Value -= sum;
-                // delete the rest of the entries on the row
-                RowLasts[i] = cellRowI;
-                while (cellRowI.Right != null)
-                {
-                    cellRowI = cellRowI.Right;
-                    cellRowI.Left.Right = null;
-                    ColFirsts[cellRowI.ColIndex] = cellRowI.Down;
-                    cellRowI.Down.Up = null;
+                    var colDiagValue = L.Diagonals[cell.ColIndex].Value;
+                    cell.Value /= colDiagValue;
+                    diagCell.Value -= cell.Value*cell.Value*colDiagValue;
                 }
             }
+            return L;
         }
 
         /// <summary>
@@ -310,36 +331,27 @@ namespace StarMathLib
         /// </summary>
         /// <param name="b">The b.</param>
         /// <returns>System.Double[].</returns>
-        private double[] solveFromCholeskyFactorization(IList<double> b)
+        private IList<double> solveFromCholeskyFactorization(IList<double> b, int[] permutationVector, int length)
         {
-            var x = new double[NumRows];
-            // forward substitution
-            for (int i = 0; i < NumRows; i++)
-            {
-                var sumFromKnownTerms = 0.0;
-                var startCell = RowFirsts[i];
-                while (startCell != null && startCell.ColIndex < i)
-                {
-                    sumFromKnownTerms += startCell.Value * x[startCell.ColIndex];
-                    startCell = startCell.Right;
-                }
-                x[i] = (b[i] - sumFromKnownTerms);
-            }
-            for (int i = 0; i < NumRows; i++)
-                x[i] /= Diagonals[i].Value;
+            var x = ApplyPermutation(b, permutationVector, length);
+            x = SolveLowerTriangularMatrix(x, true, true);
+            x = SolveUpperTriangularMatrix(x, true, false);
+            return ApplyInversePermutation(x, permutationVector, length);
+        }
 
-            // backward substitution
-            for (int i = NumRows - 1; i >= 0; i--)
-            {
-                var sumFromKnownTerms = 0.0;
-                var startCell = ColLasts[i];  // this is because it is the transposed one
-                while (startCell != null && startCell.RowIndex > i)
-                {
-                    sumFromKnownTerms += startCell.Value * x[startCell.RowIndex];
-                    startCell = startCell.Up;
-                }
-                x[i] -= sumFromKnownTerms;
-            }
+        private static IList<double> ApplyPermutation(IList<double> b, int[] permutationVector, int length)
+        {
+            var x = new double[length];
+            for (var i = 0; i < length; i++)
+                x[i] = b[permutationVector[i]];
+            return x;
+        }
+
+        private static IList<double> ApplyInversePermutation(IList<double> b, int[] permutationVector, int length)
+        {
+            var x = new double[length];
+            for (var i = 0; i < length; i++)
+                x[permutationVector[i]] = b[i];
             return x;
         }
 

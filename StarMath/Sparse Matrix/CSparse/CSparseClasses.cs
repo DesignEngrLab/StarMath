@@ -34,15 +34,15 @@ namespace StarMathLib.CSparse
         internal int[] RowIndices;
         internal double[] Values;
         
-        internal CompressedColumnStorage(int rowCount, int columnCount, int valueCount)
+        internal CompressedColumnStorage(int rowCount, int columnCount, int numNonZero)
         {
             ColumnPointers = new int[columnCount + 1];
-            RowIndices = new int[valueCount];
+            RowIndices = new int[numNonZero];
             nrows = rowCount;
             ncols = columnCount;
-            if (valueCount > 0)
+            if (numNonZero > 0)
             {
-                Values = new double[valueCount];
+                Values = new double[numNonZero];
             }
         }
 

@@ -35,14 +35,16 @@ namespace StarMathLib.CSparse
         /// </remarks>
         internal static int[] Generate(CompressedColumnStorage A)
         {
-          //  int  e, i, j, k;
-            int   j, k;
+            return Generate(SymbolicColumnStorage.ConstructMatrix(A), A.ncols);
+        }
+
+        internal static int[] Generate(SymbolicColumnStorage C, int n)
+        {
+            //  int  e, i, j, k;
+            int j, k;
             int lemax = 0;
             int mindeg = 0;
             int nel = 0;
-
-            var n = A.ncols;
-            var C = SymbolicColumnStorage.ConstructMatrix(A);
 
             var Cp = C.ColumnPointers;
             var cnz = Cp[n];
@@ -95,7 +97,7 @@ namespace StarMathLib.CSparse
             // Initialize degree lists
             for (int i = 0; i < n; i++)
             {
-              int  d = degree[i];
+                int d = degree[i];
                 if (d == 0) // node i is empty
                 {
                     elen[i] = -2; // element i is dead
@@ -168,7 +170,7 @@ namespace StarMathLib.CSparse
                 int nvi;
                 for (k1 = 1; k1 <= elenk + 1; k1++)
                 {
-                    int pj,e;
+                    int pj, e;
                     if (k1 > elenk)
                     {
                         e = k; // search the nodes in k
@@ -184,7 +186,7 @@ namespace StarMathLib.CSparse
                     int k2;
                     for (k2 = 1; k2 <= ln; k2++)
                     {
-                      int  i = Ci[pj++];
+                        int i = Ci[pj++];
                         if ((nvi = nv[i]) <= 0) continue; // node i dead, or seen
                         dk += nvi; // degree[Lk] += size of node i
                         nv[i] = -nvi; // negate nv[i] to denote i in Lk
@@ -217,13 +219,13 @@ namespace StarMathLib.CSparse
                 int eln;
                 for (pk = pk1; pk < pk2; pk++) // scan 1: find |Le\Lk|
                 {
-                   int i = Ci[pk];
+                    int i = Ci[pk];
                     if ((eln = elen[i]) <= 0) continue; // skip if elen[i] empty
                     nvi = -nv[i]; // nv [i] was negated
                     var wnvi = mark - nvi;
                     for (p = Cp[i]; p <= Cp[i] + eln - 1; p++) // scan Ei
                     {
-                      int  e = Ci[p];
+                        int e = Ci[p];
                         if (w[e] >= mark)
                         {
                             w[e] -= nvi; // decrement |Le\Lk|
@@ -239,7 +241,7 @@ namespace StarMathLib.CSparse
                 int h;
                 for (pk = pk1; pk < pk2; pk++) // scan2: degree update
                 {
-                  int   i = Ci[pk]; // consider node i in Lk
+                    int i = Ci[pk]; // consider node i in Lk
                     var p1 = Cp[i];
                     var p2 = p1 + elen[i] - 1;
                     var pn = p1;
@@ -305,7 +307,7 @@ namespace StarMathLib.CSparse
                 // Supernode detection
                 for (pk = pk1; pk < pk2; pk++)
                 {
-                   int i = Ci[pk];
+                    int i = Ci[pk];
                     if (nv[i] >= 0) continue; // skip if i is dead
                     h = P[i]; // scan hash bucket of node i
                     i = hhead[h];
@@ -344,7 +346,7 @@ namespace StarMathLib.CSparse
                 // Finalize new element
                 for (p = pk1, pk = pk1; pk < pk2; pk++) // finalize Lk
                 {
-                   int i = Ci[pk];
+                    int i = Ci[pk];
                     if ((nvi = -nv[i]) <= 0) continue; // skip if i is dead
                     nv[i] = nvi; // restore nv[i]
                     int d = degree[i] + dk - nvi; // compute external degree(i)

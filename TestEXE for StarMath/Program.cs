@@ -330,14 +330,14 @@ namespace TestEXE_for_StarMath
             {
                 for (int j = 0; j < numberPerRow.GetLength(0); j++)
                 {
-                    int size = 10 * matrixSize[i];
+                    int size = 1 * matrixSize[i];
                     const int numTrials = 0;
                     for (var k = 0; k <= numTrials; k++)
                     {
-                        var A = new double[size, size];
-                        var AValues = new List<double>();
-                        var rows = new List<int>();
-                        var cols = new List<int>();
+                        var A = new SparseMatrix(size, size);
+                        //var AValues = new List<double>();
+                        //var rows = new List<int>();
+                        //var cols = new List<int>();
                         var b = new double[size];
                         for (var ii = 0; ii < size; ii++)
                         {
@@ -355,9 +355,9 @@ namespace TestEXE_for_StarMath
                             //}
                             var diagvalue = (200 * r.NextDouble()) - 100.0;
                             A[ii, ii] = diagvalue;
-                            AValues.Add(diagvalue);
-                            rows.Add(ii);
-                            cols.Add(ii);
+                            //AValues.Add(diagvalue);
+                            //rows.Add(ii);
+                            //cols.Add(ii);
                             var formerRandomPositions = new List<int>();
                             for (var jj = 0; jj < numberPerRow[j]; jj++)
                             {
@@ -368,28 +368,28 @@ namespace TestEXE_for_StarMath
                                 } while (ii == randomPosition || formerRandomPositions.Contains(randomPosition));
                                 formerRandomPositions.Add(randomPosition);
                                 var value = (200 * r.NextDouble()) - 100.0;
-                                A[ii, randomPosition] = value;
-                                AValues.Add(value);
-                                rows.Add(ii);
-                                cols.Add(randomPosition);
+                                A[ii, randomPosition] = A[randomPosition,ii] = value;
+                                //AValues.Add(value);
+                                //rows.Add(ii);
+                                //cols.Add(randomPosition);
                             }
                         }
 
                         var result = new List<string> { k.ToString(), size.ToString(), (numberPerRow[j] / (double)size).ToString() };
 
                         watch.Restart();
-                        var x = StarMath.SolveAnalytically(A, b, false);
+                        var x = A.SolveAnalytically(b, true).ToArray();
                         watch.Stop();
                         recordResults(result, A, x, b, watch);
                         // var SparseA = A.ConvertDenseToSparseMatrix();
-                        var SparseA = new SparseMatrix(rows, cols, AValues, size, size);
+                       // var SparseA = new SparseMatrix(rows, cols, AValues, size, size);
                         // var ATranspose = SparseA.Copy();
                         // ATranspose.Transpose();
                         // SparseA.addInPlace(ATranspose);
                         watch.Restart();
-                        x = SparseA.SolveAnalytically(b, false);
+                        x = A.SolveAnalytically2(b, true).ToArray();
                         watch.Stop();
-                        recordResults(result, SparseA, x, b, watch);
+                        recordResults(result, A, x, b, watch);
                         Console.WriteLine(result.Aggregate((resultString, next) =>
                         resultString + " " + next));
                         results.Add(result);

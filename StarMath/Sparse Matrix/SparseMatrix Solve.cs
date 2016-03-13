@@ -15,7 +15,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using StarMathLib.CSparse;
+using StarMathLib.CSparseClasses;
 
 namespace StarMathLib
 {
@@ -93,33 +93,34 @@ namespace StarMathLib
             if (IsASymmetric)
             {
                 var ccs = convertToCCS(this);
-                var S = Main.SymbolicAnalysisLDL(ccs);
+                var S = CSparse.SymbolicAnalysisLDL(ccs);
                 double[] D;
-                //CompressedColumnStorage L;
-                //Main.FactorizeLDL(ccs, S, out D, out L);
-                //return Main.SolveLDL(b, L, D, S.InversePermute);
+                CompressedColumnStorage L;
+                CSparse.FactorizeLDL(ccs, S, out D, out L);
+                return CSparse.SolveLDL(b, L, D, S.InversePermutation);
 
-                /*** old code*/
+                /*** old code
                 var permutationVector = S.InversePermute;
-               var  L = CholeskyDecomposition(this, permutationVector);
+                var L = CholeskyDecomposition(this, permutationVector);
                 var x = ApplyPermutation(b, permutationVector, NumCols);
                 x = SolveLowerTriangularMatrix(x, true, true);
                 x = SolveUpperTriangularMatrix(x, true, false);
                 return ApplyInversePermutation(x, permutationVector, NumCols);
-                /**/
+                */
             }
             else
             {
                 var ccs = convertToCCS(this);
-                var columnPermutation = ApproximateMinimumDegree.Generate(ccs);
+                var columnPermutation = CSparse.ApproximateMinimumDegreeSearch(
+                    new SymbolicColumnStorage(ccs), NumCols);
                 CompressedColumnStorage L, U;
                 int[] pinv;
                 // Numeric LU factorization
-                Main.FactorizeLU(ccs, columnPermutation, out L, out U, out pinv);
-                var x = Main.ApplyInverse(pinv, b, NumCols); // x = b(p)
-                Main.SolveLower(L, x); // x = L\x.
-                Main.SolveUpper(U, x); // x = U\x.
-                return Main.ApplyInverse(columnPermutation, x, NumCols); // b(q) = x
+                CSparse.FactorizeLU(ccs, columnPermutation, out L, out U, out pinv);
+                var x = CSparse.ApplyInverse(pinv, b, NumCols); // x = b(p)
+                CSparse.SolveLower(L, x); // x = L\x.
+                CSparse.SolveUpper(U, x); // x = U\x.
+                return CSparse.ApplyInverse(columnPermutation, x, NumCols); // b(q) = x
                 /*** old code
                 var LU = Copy();
                 LU.LUDecomposition();
@@ -127,7 +128,47 @@ namespace StarMathLib
                 ***/
             }
         }
+        public IList<double> SolveAnalytically2(IList<double> b, bool IsASymmetric = false)
+        {
+            if (IsASymmetric)
+            {
+                var ccs = convertToCCS(this);
+                var S = CSparse.SymbolicAnalysisLDL(ccs);
+                double[] D;
+                //CompressedColumnStorage L;
+                //Main.FactorizeLDL(ccs, S, out D, out L);
+                //return Main.SolveLDL(b, L, D, S.InversePermute);
 
+                /*** old code*/
+                //var invPermutationVector = S.InversePermute;
+                var invPermutationVector = Enumerable.Range(0, NumCols).ToArray();
+                var permutationVector = InvertPermutation(invPermutationVector, NumCols);
+                var L = FactorizeLDL(this, invPermutationVector);
+                var x = ApplyPermutation(b, permutationVector, NumCols);
+                x = L.SolveLowerTriangularMatrix(x, true, true);
+                x = L.SolveUpperTriangularMatrix(x, true, false);
+                return ApplyPermutation(x, invPermutationVector, NumCols);
+                /**/
+            }
+            else
+            {
+                var ccs = convertToCCS(this);
+                var columnPermutation = CSparse.ApproximateMinimumDegreeSearch(new SymbolicColumnStorage(ccs), NumCols);
+                CompressedColumnStorage L, U;
+                int[] pinv;
+                // Numeric LU factorization
+                CSparse.FactorizeLU(ccs, columnPermutation, out L, out U, out pinv);
+                var x = CSparse.ApplyInverse(pinv, b, NumCols); // x = b(p)
+                CSparse.SolveLower(L, x); // x = L\x.
+                CSparse.SolveUpper(U, x); // x = U\x.
+                return CSparse.ApplyInverse(columnPermutation, x, NumCols); // b(q) = x
+                /*** old code
+                var LU = Copy();
+                LU.LUDecomposition();
+                return LU.solveFromLUDecomposition(b);
+                ***/
+            }
+        }
 
         private static CompressedColumnStorage convertToCCS(SparseMatrix sparseMatrix)
         {
@@ -282,13 +323,13 @@ namespace StarMathLib
         }
 
         /// <summary>
-        /// Overwrites the matrix with its Cholesky decomposition (i.e. it is destructive).
+        /// Returns the L+D Sparse Matrix via Cholesky decomposition (i.e. it is destructive).
         /// This is based on: https://en.wikipedia.org/wiki/Cholesky_decomposition#LDL_decomposition_2
         /// </summary>
         /// <returns>SparseMatrix.</returns>
         /// <exception cref="System.ArithmeticException">Cholesky Decomposition can only be determined for square matrices.</exception>
         /// <exception cref="ArithmeticException">Cholesky Decomposition can only be determined for square matrices.</exception>
-        public static SparseMatrix CholeskyDecomposition(SparseMatrix A, IList<int> permutationVector)
+        public static SparseMatrix FactorizeLDL(SparseMatrix A, IList<int> permutationVector)
         {
             // D_i = A_ii -sum
             var n = A.NumRows;
@@ -300,12 +341,16 @@ namespace StarMathLib
                 L.cellsRowbyRow.Add(diagCell);
                 L.Diagonals[i] = L.ColFirsts[i] = L.ColLasts[i] = L.RowFirsts[i] = L.RowLasts[i] = diagCell;
                 L.NumNonZero++;
+            }
+            for (int i = 0; i < n; i++)
+            {
+                var AIndex = permutationVector[i];
+                var diagCell = L.Diagonals[i];
                 var cell = A.ColFirsts[AIndex];
                 var rowsToUpdate = new List<int>();
                 while (cell != null)
                 {
-                    // this just collects cells of A that should be
-                    // mirrored in L
+                    // this just collects cells of A that should be mirrored in L
                     var rowIndex = permutationVector[cell.RowIndex];
                     if (rowIndex > i)
                     {
@@ -314,22 +359,22 @@ namespace StarMathLib
                     }
                     cell = cell.Down;
                 }
-                for (int j = 0; j < rowsToUpdate.Count; j++)
-                    for (int k = j + 1; k < rowsToUpdate.Count; k++)
-                        L[k, j] -= L[k, i]*L[j, i]*L.Diagonals[i].Value;
-
                 cell = diagCell.Left;
                 while (cell != null)
                 {
                     var colDiagValue = L.Diagonals[cell.ColIndex].Value;
                     cell.Value /= colDiagValue;
-                    diagCell.Value -= cell.Value*cell.Value*colDiagValue;
+                    diagCell.Value -= cell.Value * cell.Value * colDiagValue;
+                    cell = cell.Left;
                 }
+                for (int j = 0; j < rowsToUpdate.Count; j++)
+                    for (int k = j + 1; k < rowsToUpdate.Count; k++)
+                        L[rowsToUpdate[k], rowsToUpdate[j]] -= L[rowsToUpdate[k], i] * L[rowsToUpdate[j], i] * L.Diagonals[i].Value;
             }
             return L;
         }
 
-     
+
         private static IList<double> ApplyPermutation(IList<double> b, int[] permutationVector, int length)
         {
             var x = new double[length];
@@ -337,13 +382,14 @@ namespace StarMathLib
                 x[i] = b[permutationVector[i]];
             return x;
         }
-
-        private static IList<double> ApplyInversePermutation(IList<double> b, int[] permutationVector, int length)
+        private int[] InvertPermutation(int[] p, int n)
         {
-            var x = new double[length];
-            for (var i = 0; i < length; i++)
-                x[permutationVector[i]] = b[i];
-            return x;
+            var pinv = new int[n];
+            // Invert the permutation.
+            for (int i = 0; i < n; i++)
+                pinv[p[i]] = i;
+
+            return pinv;
         }
 
 

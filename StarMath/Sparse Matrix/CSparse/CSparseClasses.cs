@@ -14,7 +14,7 @@
 
 using System;
 
-namespace StarMathLib.CSparse
+namespace StarMathLib
 {
     internal class SymbolicFactorization
     {
@@ -77,7 +77,7 @@ namespace StarMathLib.CSparse
         internal int[] ColumnPointers;
         internal int[] RowIndices;
 
-        private SymbolicColumnStorage(CompressedColumnStorage mat)
+        public SymbolicColumnStorage(CompressedColumnStorage mat)
         {
             nrows = mat.nrows;
             ncols = mat.ncols;

@@ -14,7 +14,7 @@
 
 using System;
 
-namespace StarMathLib.CSparse
+namespace StarMathLib
 {
     /// <summary>
     ///     Approximate Minimum Degree ordering.

@@ -14,9 +14,9 @@
 using System;
 using System.Collections.Generic;
 
-namespace StarMathLib.CSparse
+namespace StarMathLib
 {
-    internal static class Main
+    internal static class CSparse
     {
         private const double tol = 1.0;
 

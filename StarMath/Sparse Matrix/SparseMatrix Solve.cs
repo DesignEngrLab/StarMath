@@ -15,7 +15,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using StarMathLib.CSparseClasses;
+//using StarMathLib.CSparse;
+
+//using StarMathLib.CSparseClasses;
 
 namespace StarMathLib
 {
@@ -97,7 +99,7 @@ namespace StarMathLib
                 double[] D;
                 CompressedColumnStorage L;
                 CSparse.FactorizeLDL(ccs, S, out D, out L);
-                return CSparse.SolveLDL(b, L, D, S.InversePermutation);
+                return CSparse.SolveLDL(b, L, D, S.InversePermute);
 
                 /*** old code
                 var permutationVector = S.InversePermute;
@@ -111,7 +113,7 @@ namespace StarMathLib
             else
             {
                 var ccs = convertToCCS(this);
-                var columnPermutation = CSparse.ApproximateMinimumDegreeSearch(
+                var columnPermutation = ApproximateMinimumDegree.Generate(
                     new SymbolicColumnStorage(ccs), NumCols);
                 CompressedColumnStorage L, U;
                 int[] pinv;
@@ -153,7 +155,7 @@ namespace StarMathLib
             else
             {
                 var ccs = convertToCCS(this);
-                var columnPermutation = CSparse.ApproximateMinimumDegreeSearch(new SymbolicColumnStorage(ccs), NumCols);
+                var columnPermutation = ApproximateMinimumDegree.Generate(new SymbolicColumnStorage(ccs), NumCols);
                 CompressedColumnStorage L, U;
                 int[] pinv;
                 // Numeric LU factorization

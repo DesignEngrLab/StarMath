@@ -325,12 +325,12 @@ namespace TestEXE_for_StarMath
 
             var r = new Random();
             var numberPerRow = new[] { 3, 6, 12, 24, 48 };
-            var matrixSize = new[] { 10, 20, 40, 80 };
+            var matrixSize = new[] { 4, 20, 40, 80 };
             for (var i = 0; i < matrixSize.GetLength(0); i++)
             {
                 for (int j = 0; j < numberPerRow.GetLength(0); j++)
                 {
-                    int size = 1 * matrixSize[i];
+                    int size = 10 * matrixSize[i];
                     const int numTrials = 0;
                     for (var k = 0; k <= numTrials; k++)
                     {
@@ -366,7 +366,7 @@ namespace TestEXE_for_StarMath
                                 {
                                     randomPosition = r.Next(size);
                                 } while (ii == randomPosition || formerRandomPositions.Contains(randomPosition));
-                                formerRandomPositions.Add(randomPosition);
+                               // formerRandomPositions.Add(randomPosition);
                                 var value = (200 * r.NextDouble()) - 100.0;
                                 A[ii, randomPosition] = A[randomPosition,ii] = value;
                                 //AValues.Add(value);
@@ -386,10 +386,10 @@ namespace TestEXE_for_StarMath
                         // var ATranspose = SparseA.Copy();
                         // ATranspose.Transpose();
                         // SparseA.addInPlace(ATranspose);
-                        watch.Restart();
-                        x = A.SolveAnalytically2(b, true).ToArray();
-                        watch.Stop();
-                        recordResults(result, A, x, b, watch);
+                        //watch.Restart();
+                        //x = A.SolveAnalytically2(b, true).ToArray();
+                        //watch.Stop();
+                        //recordResults(result, A, x, b, watch);
                         Console.WriteLine(result.Aggregate((resultString, next) =>
                         resultString + " " + next));
                         results.Add(result);

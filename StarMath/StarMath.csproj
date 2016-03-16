@@ -42,7 +42,9 @@
     <Compile Include="Sparse Matrix\CSparse\CSparseClasses.cs" />
     <Compile Include="Sparse Matrix\CSparse\ApproximateMinimumDegree.cs" />
     <Compile Include="Sparse Matrix\CSparse\CSparseNetMain.cs" />
+    <Compile Include="Sparse Matrix\SortedCellList.cs" />
     <Compile Include="Sparse Matrix\SparseMatrix add subtract.cs" />
+    <Compile Include="Sparse Matrix\SparseCellClasses.cs" />
     <Compile Include="Sparse Matrix\SparseMatrix multiply.cs" />
     <Compile Include="Sparse Matrix\SparseMatrix Main.cs" />
     <Compile Include="Sparse Matrix\SparseMatrix Solve.cs" />

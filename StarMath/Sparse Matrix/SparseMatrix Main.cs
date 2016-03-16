@@ -25,7 +25,12 @@ namespace StarMathLib
     {
         #region Fields and Properties
 
+        public bool TopologyChanged { get; private set; } = true;
+        public bool ValuesChanged { get; private set; } = true;
+        internal SparseMatrix FactorizationMatrix;
         private readonly List<SparseCell> cellsRowbyRow;
+        private int[] invPermutationVector;
+        private int[] permutationVector;
 
         /// <summary>
         /// The first non-zero cell in each row.
@@ -102,6 +107,7 @@ namespace StarMathLib
             if (InRowOrder)
             {
                 #region Fill-in In Order
+
                 /* this is an elaborate method to speed up the stitching together of new cells */
                 var rowI = 0;
                 var rowLowerLimit = 0;
@@ -151,6 +157,7 @@ namespace StarMathLib
                         ColLasts[colI] = cell;
                     }
                 }
+
                 #endregion
             }
             else
@@ -242,8 +249,8 @@ namespace StarMathLib
                 for (int i = 0; i < count; i++)
                 {
                     var index = rowByRowIndices[i];
-                    var rowI = index / NumCols;
-                    var colI = index % NumCols;
+                    var rowI = index/NumCols;
+                    var colI = index%NumCols;
                     this[rowI, colI] += values[i];
                 }
             }
@@ -272,6 +279,7 @@ namespace StarMathLib
         }
 
         #region Finding Cell(s) Methods
+
         /// <summary>
         /// Gets or sets the <see cref="System.Double" /> with the specified row i.
         /// </summary>
@@ -317,6 +325,7 @@ namespace StarMathLib
                 startCell = startCell.Right;
             } while (true);
         }
+
         /// <summary>
         /// Searches the left to.
         /// </summary>
@@ -333,6 +342,7 @@ namespace StarMathLib
                 startCell = startCell.Right;
             } while (true);
         }
+
         /// <summary>
         /// Searches down to.
         /// </summary>
@@ -350,11 +360,12 @@ namespace StarMathLib
                 startCell = startCell.Down;
             } while (true);
         }
+
         #endregion
 
         public SparseMatrix Copy()
         {
-            return new SparseMatrix(cellsRowbyRow.Select(x => x.RowIndex * NumCols + x.ColIndex).ToArray(),
+            return new SparseMatrix(cellsRowbyRow.Select(x => x.RowIndex*NumCols + x.ColIndex).ToArray(),
                 cellsRowbyRow.Select(c => c.Value).ToArray(), NumRows, NumCols);
         }
 
@@ -523,6 +534,7 @@ namespace StarMathLib
             RowFirsts = newRowFirsts;
             RowLasts = newRowLasts;
         }
+
         /// <summary>
         /// Removes the column.
         /// </summary>
@@ -562,6 +574,7 @@ namespace StarMathLib
             ColFirsts = newColFirsts;
             ColLasts = newColLasts;
         }
+
         /// <summary>
         /// Removes the rows.
         /// </summary>
@@ -602,6 +615,7 @@ namespace StarMathLib
             RowFirsts = newRowFirsts;
             RowLasts = newRowLasts;
         }
+
         /// <summary>
         /// Removes the columns.
         /// </summary>
@@ -678,59 +692,5 @@ namespace StarMathLib
             //}
         }
 
-    }
-
-    /// <summary>
-    /// Class SparseCell.
-    /// </summary>
-    internal class SparseCell
-    {
-        /// <summary>
-        /// The col index
-        /// </summary>
-        internal int ColIndex;
-
-        /// <summary>
-        /// Down
-        /// </summary>
-        internal SparseCell Down;
-
-        /// <summary>
-        /// The left
-        /// </summary>
-        internal SparseCell Left;
-
-        /// <summary>
-        /// The right
-        /// </summary>
-        internal SparseCell Right;
-
-        /// <summary>
-        /// The row index
-        /// </summary>
-        internal int RowIndex;
-
-        /// <summary>
-        /// Up
-        /// </summary>
-        internal SparseCell Up;
-
-        /// <summary>
-        /// The value
-        /// </summary>
-        internal double Value;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SparseCell" /> class.
-        /// </summary>
-        /// <param name="rowIndex">Index of the row.</param>
-        /// <param name="colIndex">Index of the col.</param>
-        /// <param name="value">The value.</param>
-        public SparseCell(int rowIndex, int colIndex, double value)
-        {
-            RowIndex = rowIndex;
-            ColIndex = colIndex;
-            Value = value;
-        }
     }
 }

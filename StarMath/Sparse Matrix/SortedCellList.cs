@@ -44,14 +44,22 @@ namespace StarMathLib.Sparse_Matrix
             }
             else //inserting time at some intermediate value
             {
-                var upper = LastIndex;
-                var lower = FirstIndex;
-                var i = (int)Math.Round(Count * (double)(index - lower) / (upper - lower), 0);
+                var upper = Count - 1;
+                var lower = 0;
+                var i = lower + (upper - lower) / 2;
                 while (true)
                 {
-                    if (index > IndexKeys[i]) upper = i;
+                    if (index > IndexKeys[i])
+                    {
+                        if (lower == i)
+                        {
+                            i++;
+                            break;
+                        }
+                        lower = i;
+                    }
                     else if (index > IndexKeys[i - 1]) break;
-                    else lower = i;
+                    else upper = i;
                     i = lower + (upper - lower) / 2;
                 }
                 IndexKeys.Insert(i, index);
@@ -65,6 +73,8 @@ namespace StarMathLib.Sparse_Matrix
             var top = new KeyValuePair<int, SparseCell>(IndexKeys[0], Cells[0]);
             IndexKeys.RemoveAt(0);
             Cells.RemoveAt(0);
+            Count--;
+            if (Count>0) FirstIndex = IndexKeys[0];
             return top;
         }
 
@@ -102,24 +112,31 @@ namespace StarMathLib.Sparse_Matrix
             }
             else //inserting time at some intermediate value
             {
-                var upper = LastIndex;
-                var lower = FirstIndex;
-                var i = (int)Math.Round(Count * (double)(searchIndex - lower) / (upper - lower), 0);
+                var upper = Count-1;
+                var lower = 0;
                 while (true)
                 {
+                  var  i = lower + (upper - lower) / 2;
                     if (searchIndex == IndexKeys[i])
                     {
                         position = i;
                         return true;
                     }
-                    if (searchIndex > IndexKeys[i]) upper = i;
+                    if (searchIndex > IndexKeys[i])
+                    {
+                        if (lower == i)
+                        {
+                            position = i+1;
+                            return false;
+                        }
+                        lower = i;
+                    }
                     else if (searchIndex > IndexKeys[i - 1])
                     {
                         position = i;
                         return false;
                     }
-                    else lower = i;
-                    i = lower + (upper - lower) / 2;
+                    else upper = i;
                 }
             }
         }
@@ -128,6 +145,8 @@ namespace StarMathLib.Sparse_Matrix
 
         internal void Insert(int position, int newColIndex, CholeskyLCell newCell)
         {
+            if (position == 0) FirstIndex = newColIndex;
+            if (position == Count) LastIndex = newColIndex;
             IndexKeys.Insert(position, newColIndex);
             Cells.Insert(position, newCell);
             Count++;

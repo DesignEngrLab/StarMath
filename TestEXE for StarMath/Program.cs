@@ -334,7 +334,8 @@ namespace TestEXE_for_StarMath
                     const int numTrials = 0;
                     for (var k = 0; k <= numTrials; k++)
                     {
-                        var A = new SparseMatrix(size, size);
+                        var A = new double[size, size];
+                        //var A = new SparseMatrix(size, size);
                         var b = new double[size];
                         for (var ii = 0; ii < size; ii++)
                         {
@@ -355,21 +356,27 @@ namespace TestEXE_for_StarMath
                             }
                         }
 
+                        var sparseA = A.ConvertDenseToSparseMatrix();
                         var result = new List<string> { k.ToString(), size.ToString(), (numberPerRow[j] / (double)size).ToString() };
 
                         watch.Restart();
-                        var x = A.SolveAnalytically2(b, true).ToArray();
+                        var x = sparseA.SolveAnalytically(b, true).ToArray();
+                        sparseA[0, 0] *= 1.0;
                         watch.Stop();
                         recordResults(result, A, x, b, watch);
-                        // var SparseA = A.ConvertDenseToSparseMatrix();
-                       // var SparseA = new SparseMatrix(rows, cols, AValues, size, size);
-                        // var ATranspose = SparseA.Copy();
+                        watch.Restart();
+                         x = sparseA.SolveAnalytically2(b, true).ToArray();
+                        sparseA[0, 0] *= 2.0;
+                        watch.Stop();
+                        recordResults(result, A, x, b, watch);
+                        //var SparseA = new SparseMatrix(rows, cols, AValues, size, size);
+                        //var ATranspose = SparseA.Copy();
                         // ATranspose.Transpose();
-                        // SparseA.addInPlace(ATranspose);
-                        //watch.Restart();
-                        //x = A.SolveAnalytically2(b, true).ToArray();
-                        //watch.Stop();
-                        //recordResults(result, A, x, b, watch);
+                        //SparseA.addInPlace(ATranspose);
+                        watch.Restart();
+                        x = sparseA.SolveAnalytically2(b, true).ToArray();
+                        watch.Stop();
+                        recordResults(result, A, x, b, watch);
                         Console.WriteLine(result.Aggregate((resultString, next) =>
                         resultString + " " + next));
                         results.Add(result);

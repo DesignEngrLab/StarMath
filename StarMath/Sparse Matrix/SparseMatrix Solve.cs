@@ -102,15 +102,6 @@ namespace StarMathLib
                 CompressedColumnStorage L;
                 CSparse.FactorizeLDL(ccs, S, out D, out L);
                 return CSparse.SolveLDL(b, L, D, S.InversePermute);
-
-                /*** old code
-                var permutationVector = S.InversePermute;
-                var L = CholeskyDecomposition(this, permutationVector);
-                var x = ApplyPermutation(b, permutationVector, NumCols);
-                x = SolveLowerTriangularMatrix(x, true, true);
-                x = SolveUpperTriangularMatrix(x, true, false);
-                return ApplyInversePermutation(x, permutationVector, NumCols);
-                */
             }
             else
             {
@@ -140,10 +131,10 @@ namespace StarMathLib
                 {
                     var ccs = convertToCCS(this);
                     var S = CSparse.SymbolicAnalysisLDL(ccs);
-                    // invPermutationVector = S.InversePermute;
-                    invPermutationVector = Enumerable.Range(0, NumCols).ToArray();
+                     invPermutationVector = S.InversePermute;
+                    //invPermutationVector = Enumerable.Range(0, NumCols).ToArray();
                     permutationVector = InvertPermutation(invPermutationVector, NumCols);
-                    CreateLDLFactorization(invPermutationVector);
+                    CreateLDLFactorization(permutationVector, invPermutationVector);
                     SolveFactorization();
                     ValuesChanged = false;
                     TopologyChanged = false;
@@ -222,7 +213,6 @@ namespace StarMathLib
             {
                 if (x[i] == 0.0) continue;
                 var diag = Diagonals[i];
-                if (IncludeDiagonal && diag != null) x[i] /= diag.Value;
                 var cell = ColLasts[i];
                 while (cell != diag)
                 {
@@ -230,6 +220,12 @@ namespace StarMathLib
                     cell = cell.Up;
                 }
             }
+            if (IncludeDiagonal)
+                for (i = 0; i < NumRows; i++)
+                {
+                    if (x[i] == 0.0) continue;
+                    x[i] /= Diagonals[i].Value;
+                }
             return x;
         }
 
@@ -242,15 +238,20 @@ namespace StarMathLib
             {
                 if (x[i] == 0.0) continue;
                 var diag = Diagonals[i];
-                if (IncludeDiagonal && diag != null) x[i] /= diag.Value;
-                var cell = ColFirsts[i];
+                var cell = RowFirsts[i];
                 while (cell != diag)
                 {
-                    x[cell.RowIndex] -= cell.Value * x[cell.ColIndex];
-                    cell = cell.Down;
+                    x[cell.ColIndex] -= cell.Value * x[cell.RowIndex];
+                    cell = cell.Right;
                 }
             }
-            return x.ToArray();
+            if (IncludeDiagonal)
+                for (i = 0; i < NumRows; i++)
+                {
+                    if (x[i] == 0.0) continue;
+                    x[i] /= Diagonals[i].Value;
+                }
+            return x;
         }
 
         private void LUDecomposition()
@@ -338,7 +339,7 @@ namespace StarMathLib
         /// <returns>SparseMatrix.</returns>
         /// <exception cref="System.ArithmeticException">Cholesky Decomposition can only be determined for square matrices.</exception>
         /// <exception cref="ArithmeticException">Cholesky Decomposition can only be determined for square matrices.</exception>
-        public void CreateLDLFactorization(IList<int> permutationVector)
+        public void CreateLDLFactorization(IList<int> permutationVector, IList<int> invPermutationVector)
         {
             var n = NumRows;
             FactorizationMatrix = new SparseMatrix(n, n);
@@ -350,11 +351,11 @@ namespace StarMathLib
                 while (cellA != null)
                 {
                     // this just collects cells of A that should be mirrored in L
-                    var colIndex = permutationVector[cellA.ColIndex];
+                    var colIndex = invPermutationVector[cellA.ColIndex];
                     if (colIndex == rowIndex)
                         diagCell = new CholeskyDCell(rowIndex, rowIndex, cellA);
                     else if (colIndex < rowIndex)
-                        sortedCells.Add(colIndex, new CholeskyLCell(colIndex, rowIndex, cellA, FactorizationMatrix.Diagonals[colIndex]));
+                        sortedCells.Add(colIndex, new CholeskyLCell(rowIndex, colIndex, cellA, FactorizationMatrix.Diagonals[colIndex]));
                     cellA = cellA.Right;
                 }
                 while (sortedCells.Any())
@@ -366,7 +367,7 @@ namespace StarMathLib
                     var anchorsDiagonal = FactorizationMatrix.Diagonals[colIndex];
                     diagCell.AddDoubletTerm(anchorCell, anchorsDiagonal);
                     var cell = anchorCell.Up;
-                    while (cell.RowIndex > rowIndex)
+                    while (cell.RowIndex > colIndex)
                     {
                         var newColIndex = cell.RowIndex;
                         CholeskyLCell newCell;
@@ -379,6 +380,7 @@ namespace StarMathLib
                             sortedCells.Insert(position, newColIndex, newCell);
                         }
                         newCell.AddTripletTerm(anchorCell, cell, anchorsDiagonal);
+                        cell = cell.Up;
                     }
                 }
                 AddCellRightAndBelow(FactorizationMatrix, diagCell, rowIndex, rowIndex);

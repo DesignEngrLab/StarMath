@@ -166,8 +166,8 @@ namespace StarMathLib
                 for (int i = 0; i < count; i++)
                 {
                     var index = indices[i];
-                    var rowI = index/NumCols;
-                    var colI = index%NumCols;
+                    var rowI = index / NumCols;
+                    var colI = index % NumCols;
                     this[rowI, colI] += values[i];
                 }
             }
@@ -213,6 +213,7 @@ namespace StarMathLib
         /// <param name="values">The values.</param>
         public void UpdateValues(IList<int> rowIndices, IList<int> colIndices, IList<double> values)
         {
+            ValuesChanged = true;
             foreach (var sparseCell in cellsRowbyRow)
                 sparseCell.Value = 0;
             var count = values.Count;
@@ -229,6 +230,7 @@ namespace StarMathLib
         /// <param name="InRowOrder">The in row order.</param>
         public void UpdateValues(IList<int> rowByRowIndices, IList<double> values, bool InRowOrder)
         {
+            ValuesChanged = true;
             foreach (var sparseCell in cellsRowbyRow)
                 sparseCell.Value = 0;
             var count = values.Count;
@@ -249,8 +251,8 @@ namespace StarMathLib
                 for (int i = 0; i < count; i++)
                 {
                     var index = rowByRowIndices[i];
-                    var rowI = index/NumCols;
-                    var colI = index%NumCols;
+                    var rowI = index / NumCols;
+                    var colI = index % NumCols;
                     this[rowI, colI] += values[i];
                 }
             }
@@ -299,6 +301,7 @@ namespace StarMathLib
                 var c = CellAt(rowI, colI);
                 if (c == null) AddCell(rowI, colI, value);
                 else c.Value = value;
+                ValuesChanged = true;
             }
         }
 
@@ -365,7 +368,7 @@ namespace StarMathLib
 
         public SparseMatrix Copy()
         {
-            return new SparseMatrix(cellsRowbyRow.Select(x => x.RowIndex*NumCols + x.ColIndex).ToArray(),
+            return new SparseMatrix(cellsRowbyRow.Select(x => x.RowIndex * NumCols + x.ColIndex).ToArray(),
                 cellsRowbyRow.Select(c => c.Value).ToArray(), NumRows, NumCols);
         }
 
@@ -386,6 +389,7 @@ namespace StarMathLib
             else cell.Down.Up = cell.Up;
             cellsRowbyRow.Remove(cell);
             NumNonZero--;
+            TopologyChanged = true;
         }
 
         private SparseCell AddCell(int rowI, int colI, double value = Double.NaN)
@@ -444,6 +448,7 @@ namespace StarMathLib
             if (rowI == colI) Diagonals[rowI] = cell;
             cellsRowbyRow.Add(cell);
             NumNonZero++;
+            TopologyChanged = true;
 
             return cell;
         }
@@ -501,6 +506,7 @@ namespace StarMathLib
         /// <param name="rowIndexToRemove">The row index to remove.</param>
         public void RemoveRow(int rowIndexToRemove)
         {
+            TopologyChanged = true;
             var thisCell = RowFirsts[rowIndexToRemove];
             while (thisCell != null)
             {
@@ -541,6 +547,7 @@ namespace StarMathLib
         /// <param name="colIndexToRemove">The col index to remove.</param>
         public void RemoveColumn(int colIndexToRemove)
         {
+            TopologyChanged = true;
             var thisCell = ColFirsts[colIndexToRemove];
             while (thisCell != null)
             {
@@ -581,6 +588,7 @@ namespace StarMathLib
         /// <param name="rowIndicesToRemove">The row indices to remove.</param>
         public void RemoveRows(IList<int> rowIndicesToRemove)
         {
+            TopologyChanged = true;
             var numToRemove = rowIndicesToRemove.Count;
             var removeIndices = rowIndicesToRemove.OrderBy(i => i).ToArray();
             for (int i = 0; i < numToRemove; i++)
@@ -622,6 +630,7 @@ namespace StarMathLib
         /// <param name="colIndicesToRemove">The col indices to remove.</param>
         public void RemoveColumns(IList<int> colIndicesToRemove)
         {
+            TopologyChanged = true;
             var numToRemove = colIndicesToRemove.Count;
             var removeIndices = colIndicesToRemove.OrderBy(i => i).ToArray();
             for (int i = 0; i < numToRemove; i++)
@@ -659,6 +668,7 @@ namespace StarMathLib
 
         public void Transpose()
         {
+            TopologyChanged = true;
             var tempArray = RowFirsts;
             RowFirsts = ColFirsts;
             ColFirsts = tempArray;

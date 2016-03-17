@@ -2,9 +2,9 @@
 // Assembly         : StarMath
 // Author           : Matthew I. Campbell
 // Created          : 02-28-2016
-// Modified from    : Timothy A. Davis, 2006-2014
-// Last Modified By : Matt
-// Last Modified On : 02-28-2016
+// Originally Modified from    : Timothy A. Davis's CSparse code, 2006-2014
+// Last Modified By : Matt Campbell
+// Last Modified On : 03-17-2016
 // ***********************************************************************
 // <copyright file="CSparseClasses.cs" company="Design Engineering Lab -- MICampbell">
 //     2014
@@ -16,24 +16,69 @@ using System;
 
 namespace StarMathLib
 {
+    /// <summary>
+    /// Class SymbolicFactorization.
+    /// </summary>
     internal class SymbolicFactorization
     {
-        internal int[] ColumnPointers; // column pointers for Cholesky
-        internal int NumNonZeroInLower; // # entries in L for LU or Cholesky
-        internal int[] ParentIndices; // elimination tree for Cholesky 
-        internal int[] InversePermute; // inverse row perm. for Chol
-        internal int[] ColumnPermutation; // fill-reducing column permutation for LU 
-        internal int NumNonZeroInUpper; // # entries in U for LU
+        /// <summary>
+        /// The column pointers
+        /// </summary>
+        internal int[] ColumnPointers;
+        /// <summary>
+        /// The number non zero in lower
+        /// </summary>
+        internal int NumNonZeroInLower;
+        /// <summary>
+        /// The number non zero in upper
+        /// </summary>
+        internal int NumNonZeroInUpper;
+        /// <summary>
+        /// The parent indices used in the elimination tree for Cholesky
+        /// </summary>
+        internal int[] ParentIndices;
+        /// <summary>
+        /// The inverse permute
+        /// </summary>
+        internal int[] InversePermute;
+        /// <summary>
+        /// The permutation vector
+        /// </summary>
+        internal int[] PermutationVector;
     }
 
+    /// <summary>
+    /// Class CompressedColumnStorage.
+    /// </summary>
     internal class CompressedColumnStorage
     {
+        /// <summary>
+        /// The ncols
+        /// </summary>
         internal readonly int ncols;
+        /// <summary>
+        /// The nrows
+        /// </summary>
         internal readonly int nrows;
+        /// <summary>
+        /// The column pointers
+        /// </summary>
         internal int[] ColumnPointers;
+        /// <summary>
+        /// The row indices
+        /// </summary>
         internal int[] RowIndices;
+        /// <summary>
+        /// The values
+        /// </summary>
         internal double[] Values;
-        
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CompressedColumnStorage"/> class.
+        /// </summary>
+        /// <param name="rowCount">The row count.</param>
+        /// <param name="columnCount">The column count.</param>
+        /// <param name="numNonZero">The number non zero.</param>
         internal CompressedColumnStorage(int rowCount, int columnCount, int numNonZero)
         {
             ColumnPointers = new int[columnCount + 1];
@@ -47,10 +92,10 @@ namespace StarMathLib
         }
 
         /// <summary>
-        ///     Change the max # of entries sparse matrix
+        /// Change the max # of entries sparse matrix
         /// </summary>
-        /// <param name="size"></param>
-        /// <returns></returns>
+        /// <param name="size">The size.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         internal bool Resize(int size)
         {
             if (size <= 0)
@@ -65,18 +110,32 @@ namespace StarMathLib
     }
 
     /// <summary>
-    ///     Represents the nonzero pattern of a column-compressed matrix.
+    /// Represents the nonzero pattern of a column-compressed matrix.
     /// </summary>
-    /// <remarks>
-    ///     Used for ordering and symbolic factorization.
-    /// </remarks>
+    /// <remarks>Used for ordering and symbolic factorization.</remarks>
     internal class SymbolicColumnStorage
     {
+        /// <summary>
+        /// The ncols
+        /// </summary>
         private readonly int ncols;
+        /// <summary>
+        /// The nrows
+        /// </summary>
         private readonly int nrows;
+        /// <summary>
+        /// The column pointers
+        /// </summary>
         internal int[] ColumnPointers;
+        /// <summary>
+        /// The row indices
+        /// </summary>
         internal int[] RowIndices;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SymbolicColumnStorage"/> class.
+        /// </summary>
+        /// <param name="mat">The mat.</param>
         public SymbolicColumnStorage(CompressedColumnStorage mat)
         {
             nrows = mat.nrows;
@@ -84,7 +143,14 @@ namespace StarMathLib
             ColumnPointers = mat.ColumnPointers;
             RowIndices = mat.RowIndices;
         }
-        
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SymbolicColumnStorage"/> class.
+        /// </summary>
+        /// <param name="ncols">The ncols.</param>
+        /// <param name="nrows">The nrows.</param>
+        /// <param name="colPointers">The col pointers.</param>
+        /// <param name="rowIndices">The row indices.</param>
         public SymbolicColumnStorage(int ncols, int nrows, int[] colPointers, int[] rowIndices)
         {
             this.ncols = ncols;
@@ -94,10 +160,10 @@ namespace StarMathLib
         }
 
         /// <summary>
-        ///     Change the max # of entries sparse matrix
+        /// Change the max # of entries sparse matrix
         /// </summary>
-        /// <param name="size"></param>
-        /// <returns></returns>
+        /// <param name="size">The size.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         internal bool Resize(int size)
         {
             if (size <= 0)
@@ -111,7 +177,7 @@ namespace StarMathLib
         }
 
         /// <summary>
-        ///     Computes the transpose of a sparse matrix, C = A';
+        /// Computes the transpose of a sparse matrix, C = A';
         /// </summary>
         /// <returns>Transposed matrix, C = A'</returns>
         internal SymbolicColumnStorage Transpose()
@@ -141,7 +207,7 @@ namespace StarMathLib
         }
 
         /// <summary>
-        ///     Cumulative sum of given array.
+        /// Cumulative sum of given array.
         /// </summary>
         /// <param name="sum">Output: cumulative sum of counts</param>
         /// <param name="counts">input array, overwritten with sum</param>
@@ -165,6 +231,11 @@ namespace StarMathLib
 
         #region for AMD Generate (ConstructMatrix uses subsequent 3 functions)
 
+        /// <summary>
+        /// Constructs the matrix.
+        /// </summary>
+        /// <param name="a">a.</param>
+        /// <returns>SymbolicColumnStorage.</returns>
         internal static SymbolicColumnStorage ConstructMatrix(CompressedColumnStorage a)
         {
             var A = new SymbolicColumnStorage(a);
@@ -179,7 +250,7 @@ namespace StarMathLib
         }
 
         /// <summary>
-        ///     Symbolic sum C = A + B
+        /// Symbolic sum C = A + B
         /// </summary>
         /// <param name="other">column-compressed matrix</param>
         /// <returns>Sum C = A + B</returns>
@@ -208,6 +279,10 @@ namespace StarMathLib
         }
 
 
+        /// <summary>
+        /// Keeps this instance.
+        /// </summary>
+        /// <returns>System.Int32.</returns>
         private int Keep()
         {
             int i, j, nz = 0;
@@ -240,7 +315,7 @@ namespace StarMathLib
         }
 
         /// <summary>
-        ///     Scatters and sums a sparse vector A(:,j) into a dense vector, x = x + beta * A(:,j).
+        /// Scatters and sums a sparse vector A(:,j) into a dense vector, x = x + beta * A(:,j).
         /// </summary>
         /// <param name="j">the column of A to use</param>
         /// <param name="work">size m, node i is marked if w[i] = mark</param>

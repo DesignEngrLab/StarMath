@@ -249,7 +249,7 @@ namespace StarMathLib
             for (int j = i + 1; j < length; j++)
             {
                 if (!B[permutationVector[j], i].IsNegligible() &&
-                    lastZeroIndices[permutationVector[j]] > largestLastIndex)
+                    lastZeroIndices[permutationVector[j]] >= largestLastIndex)
                 {
                     largestLastIndex = lastZeroIndices[permutationVector[j]];
                     newI = j;

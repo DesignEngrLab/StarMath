@@ -364,19 +364,6 @@ namespace TestEXE_for_StarMath
                         sparseA[0, 0] *= 1.0;
                         watch.Stop();
                         recordResults(result, A, x, b, watch);
-                        watch.Restart();
-                         x = sparseA.SolveAnalytically2(b, true).ToArray();
-                        sparseA[0, 0] *= 2.0;
-                        watch.Stop();
-                        recordResults(result, A, x, b, watch);
-                        //var SparseA = new SparseMatrix(rows, cols, AValues, size, size);
-                        //var ATranspose = SparseA.Copy();
-                        // ATranspose.Transpose();
-                        //SparseA.addInPlace(ATranspose);
-                        watch.Restart();
-                        x = sparseA.SolveAnalytically2(b, true).ToArray();
-                        watch.Stop();
-                        recordResults(result, A, x, b, watch);
                         Console.WriteLine(result.Aggregate((resultString, next) =>
                         resultString + " " + next));
                         results.Add(result);

@@ -58,13 +58,13 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\StarMath\StarMath.csproj">
-      <Project>{6d899048-f44f-430b-b66a-a75ecf68a986}</Project>
-      <Name>StarMath</Name>
-    </ProjectReference>
+    <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Properties\" />
+    <ProjectReference Include="..\StarMath\StarMath.4.5.csproj">
+      <Project>{6d899048-f44f-430b-b66a-a75ecf68a986}</Project>
+      <Name>StarMath.4.5</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

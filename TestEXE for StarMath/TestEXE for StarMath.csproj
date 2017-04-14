@@ -33,14 +33,11 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ALGLib">
-      <HintPath>..\Similar Libraries\ALGLib.dll</HintPath>
+    <Reference Include="DotNumerics, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\DotNumerics.1.1\lib\DotNumerics.dll</HintPath>
     </Reference>
-    <Reference Include="DotNumerics">
-      <HintPath>..\Similar Libraries\DotNumerics.dll</HintPath>
-    </Reference>
-    <Reference Include="MathNet.Iridium">
-      <HintPath>..\Similar Libraries\MathNet.Iridium.dll</HintPath>
+    <Reference Include="MathNet.Numerics, Version=3.18.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MathNet.Numerics.3.18.0\lib\net40\MathNet.Numerics.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -56,14 +53,15 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\StarMath\StarMath.4.5.csproj">
-      <Project>{6d899048-f44f-430b-b66a-a75ecf68a986}</Project>
-      <Name>StarMath.4.5</Name>
+    <ProjectReference Include="..\StarMath.NET Standard\StarMath.NET Standard.csproj">
+      <Project>{3447aec1-70c3-4106-b3fc-1f64be66ca54}</Project>
+      <Name>StarMath.NET Standard</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

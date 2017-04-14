@@ -8,7 +8,7 @@
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Design Engineering Lab -- MICampbell")]
 [assembly: AssemblyProduct("StarMath")]
-[assembly: AssemblyCopyright("2014")]
+[assembly: AssemblyCopyright("2017")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -22,5 +22,5 @@
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("2.0.14.1114")]
-[assembly: AssemblyFileVersion("2.0.14.1114")]
+[assembly: AssemblyVersion("2.0.17.0413")]
+[assembly: AssemblyFileVersion("2.0.17.0413")]

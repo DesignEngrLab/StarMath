@@ -2,9 +2,9 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard1.0</TargetFramework>
-    <AssemblyVersion>1.0.17.0413</AssemblyVersion>
-    <FileVersion>1.0.17.0413</FileVersion>
-    <Version>1.0.17.0413</Version>
+    <AssemblyVersion>1.0.17.0725</AssemblyVersion>
+    <FileVersion>1.0.17.0725</FileVersion>
+    <Version>1.0.17.0725</Version>
     <Authors>Matt Campbell</Authors>
     <Company>Design Engineering Lab</Company>
     <PackageId>StarMath</PackageId>

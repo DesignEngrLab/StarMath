@@ -1,0 +1,105 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <MinimumVisualStudioVersion>11.0</MinimumVisualStudioVersion>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{C3AAF59F-8DF0-4604-AB33-DEC08089CE25}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>StarMathLib</RootNamespace>
+    <AssemblyName>StarMath.NET4.5</AssemblyName>
+    <DefaultLanguage>en-US</DefaultLanguage>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <TargetFrameworkProfile>Profile7</TargetFrameworkProfile>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <!-- A reference to the entire .NET Framework is automatically included -->
+    <Compile Include="..\StarMath\3D transforms.cs">
+      <Link>3D transforms.cs</Link>
+    </Compile>
+    <Compile Include="..\StarMath\add subtract.cs">
+      <Link>add subtract.cs</Link>
+    </Compile>
+    <Compile Include="..\StarMath\constants.cs">
+      <Link>constants.cs</Link>
+    </Compile>
+    <Compile Include="..\StarMath\eigen.cs">
+      <Link>eigen.cs</Link>
+    </Compile>
+    <Compile Include="..\StarMath\find functions.cs">
+      <Link>find functions.cs</Link>
+    </Compile>
+    <Compile Include="..\StarMath\inversion transpose.cs">
+      <Link>inversion transpose.cs</Link>
+    </Compile>
+    <Compile Include="..\StarMath\make extract.cs">
+      <Link>make extract.cs</Link>
+    </Compile>
+    <Compile Include="..\StarMath\multiply divide.cs">
+      <Link>multiply divide.cs</Link>
+    </Compile>
+    <Compile Include="..\StarMath\norm functions.cs">
+      <Link>norm functions.cs</Link>
+    </Compile>
+    <Compile Include="..\StarMath\print functions.cs">
+      <Link>print functions.cs</Link>
+    </Compile>
+    <Compile Include="..\StarMath\Properties\AssemblyInfo.cs">
+      <Link>Properties\AssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\StarMath\solve.cs">
+      <Link>solve.cs</Link>
+    </Compile>
+    <Compile Include="..\StarMath\Sparse Matrix\CSparse\ApproximateMinimumDegree.cs">
+      <Link>Sparse Matrix\CSparse\ApproximateMinimumDegree.cs</Link>
+    </Compile>
+    <Compile Include="..\StarMath\Sparse Matrix\CSparse\CSparseClasses.cs">
+      <Link>Sparse Matrix\CSparse\CSparseClasses.cs</Link>
+    </Compile>
+    <Compile Include="..\StarMath\Sparse Matrix\CSparse\CSparseNetMain.cs">
+      <Link>Sparse Matrix\CSparse\CSparseNetMain.cs</Link>
+    </Compile>
+    <Compile Include="..\StarMath\Sparse Matrix\SortedCellList.cs">
+      <Link>Sparse Matrix\SortedCellList.cs</Link>
+    </Compile>
+    <Compile Include="..\StarMath\Sparse Matrix\SparseCellClasses.cs">
+      <Link>Sparse Matrix\SparseCellClasses.cs</Link>
+    </Compile>
+    <Compile Include="..\StarMath\Sparse Matrix\SparseMatrix add subtract.cs">
+      <Link>Sparse Matrix\SparseMatrix add subtract.cs</Link>
+    </Compile>
+    <Compile Include="..\StarMath\Sparse Matrix\SparseMatrix Main.cs">
+      <Link>Sparse Matrix\SparseMatrix Main.cs</Link>
+    </Compile>
+    <Compile Include="..\StarMath\Sparse Matrix\SparseMatrix multiply.cs">
+      <Link>Sparse Matrix\SparseMatrix multiply.cs</Link>
+    </Compile>
+    <Compile Include="..\StarMath\Sparse Matrix\SparseMatrix Solve.cs">
+      <Link>Sparse Matrix\SparseMatrix Solve.cs</Link>
+    </Compile>
+    <Compile Include="..\StarMath\svd.cs">
+      <Link>svd.cs</Link>
+    </Compile>
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
+</Project>

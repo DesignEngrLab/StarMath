@@ -15,7 +15,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using StarMathLib.Sparse_Matrix;
 
 //using StarMathLib.CSparse;
 
@@ -346,7 +345,9 @@ namespace StarMathLib
             for (int rowIndex = 0; rowIndex < n; rowIndex++)
             {
                 var cellA = RowFirsts[permutationVector[rowIndex]];
-                var sortedCells = new SortedCellList();
+                //clork var sortedCells = new SortedCellList();
+                var sortedCells = new SortedDictionary<int, SparseCell>();
+                var cellHash = new HashSet<int>();
                 CholeskyDCell diagCell = null;
                 while (cellA != null)
                 {
@@ -355,14 +356,19 @@ namespace StarMathLib
                     if (colIndex == rowIndex)
                         diagCell = new CholeskyDCell(rowIndex, rowIndex, cellA);
                     else if (colIndex < rowIndex)
+                    {
+                        cellHash.Add(colIndex);
                         sortedCells.Add(colIndex, new CholeskyLCell(rowIndex, colIndex, cellA, FactorizationMatrix.Diagonals[colIndex]));
+                    }
                     cellA = cellA.Right;
                 }
                 while (sortedCells.Any())
                 {
-                    var lowestEntry = sortedCells.Pop();
+                    //clork var lowestEntry = sortedCells.Pop();
+                    var lowestEntry = sortedCellsPop(sortedCells);
                     var colIndex = lowestEntry.Key;
                     var anchorCell = lowestEntry.Value;
+                    cellHash.Remove(colIndex);
                     AddCellRightAndBelow(FactorizationMatrix, anchorCell, rowIndex, colIndex);
                     var anchorsDiagonal = FactorizationMatrix.Diagonals[colIndex];
                     diagCell.AddDoubletTerm(anchorCell, anchorsDiagonal);
@@ -372,12 +378,17 @@ namespace StarMathLib
                         var newColIndex = cell.RowIndex;
                         CholeskyLCell newCell;
                         int position;
-                        if (sortedCells.PositionIfExists(newColIndex, out position))
-                            newCell = (CholeskyLCell)sortedCells[position];
+                        // clork if (sortedCells. PositionIfExists(newColIndex, out position))
+                        if (cellHash.Contains(newColIndex))
+                                //newCell = (CholeskyLCell)sortedCells[position];
+                                newCell = (CholeskyLCell)sortedCells[newColIndex];
                         else
                         {
                             newCell = new CholeskyLCell(rowIndex, newColIndex, null, FactorizationMatrix.Diagonals[newColIndex]);
-                            sortedCells.Insert(position, newColIndex, newCell);
+                            //clork sortedCells.Insert(position, newColIndex, newCell);
+                            //sortedCells.Add(position, newCell);
+                            cellHash.Add(newColIndex);
+                            sortedCells.Add(newColIndex, newCell);
                         }
                         newCell.AddTripletTerm(anchorCell, cell, anchorsDiagonal);
                         cell = cell.Up;
@@ -385,6 +396,14 @@ namespace StarMathLib
                 }
                 AddCellRightAndBelow(FactorizationMatrix, diagCell, rowIndex, rowIndex);
             }
+        }
+
+        private KeyValuePair<int, SparseCell> sortedCellsPop(SortedDictionary<int, SparseCell> sortedCells)
+        {
+
+            var top = sortedCells.First();
+            sortedCells.Remove(top.Key);
+            return top;
         }
 
         private void AddCellRightAndBelow(SparseMatrix matrix, SparseCell cell, int rowIndex, int colIndex)

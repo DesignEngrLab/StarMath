@@ -131,7 +131,6 @@ namespace TestEXE_for_StarMath
         private static void benchMarkMatrixInversion()
         {
             var watch = new Stopwatch();
-            double error;
             var results = new List<List<string>>
             {
                 new List<string>
@@ -273,7 +272,6 @@ namespace TestEXE_for_StarMath
         private static void compareSolvers_Inversion_to_GaussSeidel()
         {
             var watch = new Stopwatch();
-            double error;
             var results = new List<List<string>>();
 
             var r = new Random();
@@ -320,7 +318,6 @@ namespace TestEXE_for_StarMath
         private static void SparseFunctionTest()
         {
             var watch = new Stopwatch();
-            double error;
             var results = new List<List<string>>();
 
             var r = new Random();

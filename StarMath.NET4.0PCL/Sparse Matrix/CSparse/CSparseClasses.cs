@@ -25,14 +25,7 @@ namespace StarMathLib
         /// The column pointers
         /// </summary>
         internal int[] ColumnPointers;
-        /// <summary>
-        /// The number non zero in lower
-        /// </summary>
-        internal int NumNonZeroInLower;
-        /// <summary>
-        /// The number non zero in upper
-        /// </summary>
-        internal int NumNonZeroInUpper;
+
         /// <summary>
         /// The parent indices used in the elimination tree for Cholesky
         /// </summary>

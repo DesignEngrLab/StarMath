@@ -21,27 +21,27 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="..\StarMath\3D transforms.cs" Link="3D transforms.cs" />
-    <Compile Include="..\StarMath\add subtract.cs" Link="add subtract.cs" />
-    <Compile Include="..\StarMath\constants.cs" Link="constants.cs" />
-    <Compile Include="..\StarMath\eigen.cs" Link="eigen.cs" />
-    <Compile Include="..\StarMath\find functions.cs" Link="find functions.cs" />
-    <Compile Include="..\StarMath\inversion transpose.cs" Link="inversion transpose.cs" />
-    <Compile Include="..\StarMath\make extract.cs" Link="make extract.cs" />
-    <Compile Include="..\StarMath\multiply divide.cs" Link="multiply divide.cs" />
-    <Compile Include="..\StarMath\norm functions.cs" Link="norm functions.cs" />
-    <Compile Include="..\StarMath\print functions.cs" Link="print functions.cs" />
-    <Compile Include="..\StarMath\solve.cs" Link="solve.cs" />
-    <Compile Include="..\StarMath\Sparse Matrix\CSparse\ApproximateMinimumDegree.cs" Link="Sparse Matrix\CSparse\ApproximateMinimumDegree.cs" />
-    <Compile Include="..\StarMath\Sparse Matrix\CSparse\CSparseClasses.cs" Link="Sparse Matrix\CSparse\CSparseClasses.cs" />
-    <Compile Include="..\StarMath\Sparse Matrix\CSparse\CSparseNetMain.cs" Link="Sparse Matrix\CSparse\CSparseNetMain.cs" />
-    <Compile Include="..\StarMath\Sparse Matrix\SortedCellList.cs" Link="Sparse Matrix\SortedCellList.cs" />
-    <Compile Include="..\StarMath\Sparse Matrix\SparseCellClasses.cs" Link="Sparse Matrix\SparseCellClasses.cs" />
-    <Compile Include="..\StarMath\Sparse Matrix\SparseMatrix add subtract.cs" Link="Sparse Matrix\SparseMatrix add subtract.cs" />
-    <Compile Include="..\StarMath\Sparse Matrix\SparseMatrix Main.cs" Link="Sparse Matrix\SparseMatrix Main.cs" />
-    <Compile Include="..\StarMath\Sparse Matrix\SparseMatrix multiply.cs" Link="Sparse Matrix\SparseMatrix multiply.cs" />
-    <Compile Include="..\StarMath\Sparse Matrix\SparseMatrix Solve.cs" Link="Sparse Matrix\SparseMatrix Solve.cs" />
-    <Compile Include="..\StarMath\svd.cs" Link="svd.cs" />
+    <Compile Include="..\StarMath.NET4.0PCL\3D transforms.cs" Link="3D transforms.cs" />
+    <Compile Include="..\StarMath.NET4.0PCL\add subtract.cs" Link="add subtract.cs" />
+    <Compile Include="..\StarMath.NET4.0PCL\constants.cs" Link="constants.cs" />
+    <Compile Include="..\StarMath.NET4.0PCL\eigen.cs" Link="eigen.cs" />
+    <Compile Include="..\StarMath.NET4.0PCL\find functions.cs" Link="find functions.cs" />
+    <Compile Include="..\StarMath.NET4.0PCL\inversion transpose.cs" Link="inversion transpose.cs" />
+    <Compile Include="..\StarMath.NET4.0PCL\make extract.cs" Link="make extract.cs" />
+    <Compile Include="..\StarMath.NET4.0PCL\multiply divide.cs" Link="multiply divide.cs" />
+    <Compile Include="..\StarMath.NET4.0PCL\norm functions.cs" Link="norm functions.cs" />
+    <Compile Include="..\StarMath.NET4.0PCL\print functions.cs" Link="print functions.cs" />
+    <Compile Include="..\StarMath.NET4.0PCL\solve.cs" Link="solve.cs" />
+    <Compile Include="..\StarMath.NET4.0PCL\Sparse Matrix\CSparse\ApproximateMinimumDegree.cs" Link="Sparse Matrix\CSparse\ApproximateMinimumDegree.cs" />
+    <Compile Include="..\StarMath.NET4.0PCL\Sparse Matrix\CSparse\CSparseClasses.cs" Link="Sparse Matrix\CSparse\CSparseClasses.cs" />
+    <Compile Include="..\StarMath.NET4.0PCL\Sparse Matrix\CSparse\CSparseNetMain.cs" Link="Sparse Matrix\CSparse\CSparseNetMain.cs" />
+    <Compile Include="..\StarMath.NET4.0PCL\Sparse Matrix\SortedCellList.cs" Link="Sparse Matrix\SortedCellList.cs" />
+    <Compile Include="..\StarMath.NET4.0PCL\Sparse Matrix\SparseCellClasses.cs" Link="Sparse Matrix\SparseCellClasses.cs" />
+    <Compile Include="..\StarMath.NET4.0PCL\Sparse Matrix\SparseMatrix add subtract.cs" Link="Sparse Matrix\SparseMatrix add subtract.cs" />
+    <Compile Include="..\StarMath.NET4.0PCL\Sparse Matrix\SparseMatrix Main.cs" Link="Sparse Matrix\SparseMatrix Main.cs" />
+    <Compile Include="..\StarMath.NET4.0PCL\Sparse Matrix\SparseMatrix multiply.cs" Link="Sparse Matrix\SparseMatrix multiply.cs" />
+    <Compile Include="..\StarMath.NET4.0PCL\Sparse Matrix\SparseMatrix Solve.cs" Link="Sparse Matrix\SparseMatrix Solve.cs" />
+    <Compile Include="..\StarMath.NET4.0PCL\svd.cs" Link="svd.cs" />
   </ItemGroup>
 
   <ItemGroup>

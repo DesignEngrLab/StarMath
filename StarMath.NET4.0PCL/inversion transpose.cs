@@ -12,6 +12,7 @@
 // <summary></summary>
 // ***********************************************************************
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace StarMathLib
@@ -52,7 +53,7 @@ namespace StarMathLib
                 throw new ArithmeticException("Matrix cannnot be inverted. Can only invert sqare matrices.");
             if (length == 1) return new[,] { { 1 / (double)A[0, 0] } };
             int[] permute;
-            var LU = LUDecomposition(A, out permute, length); 
+            var LU = LUDecomposition(A, out permute, length);
             return inverseWithLUResult(LU, permute, length);
         }
 
@@ -130,7 +131,7 @@ namespace StarMathLib
             var C = new double[length, length];
             for (int i = 0; i < length; i++)
                 for (int j = 0; j < length; j++)
-                    C[i, j] = B[i,permute[ j]];
+                    C[i, j] = B[i, permute[j]];
             return C;
         }
 
@@ -181,7 +182,7 @@ namespace StarMathLib
         /// elements are all 1.</returns>
         /// <exception cref="ArithmeticException">LU Decomposition can only be determined for square matrices.</exception>
         private static double[,] LUDecomposition(double[,] A, out int[] permutationVector, int length = -1,
-            bool robustReorder = false, int[] lastZeroIndices = null)
+            bool robustReorder = false, List<int>[] lastZeroIndices = null)
         {
             // This is an implementation of Crout’s LU Decomposition Algorithm
             if (length == -1) length = A.GetLength(0);
@@ -191,13 +192,14 @@ namespace StarMathLib
             // negligible. It is used to determine what other row to swap with, if the current row has a zero diagonal.
             if (lastZeroIndices == null)
             {
-                lastZeroIndices = new int[length];
-                for (int i = 0; i < length; i++) lastZeroIndices[i] = -1;
+                lastZeroIndices = new List<int>[length];
                 for (int i = 0; i < length; i++)
+                {
+                    lastZeroIndices[i] = new List<int>();
                     for (int j = 0; j < length; j++)
-                        if (A[i, j].IsNegligible()) lastZeroIndices[i] = j;
+                        if (A[i, j].IsNegligible()) lastZeroIndices[i].Add(j);
+                }
             }
-
             var B = (double[,])A.Clone();
             // start with the permutation vector as a simple count - this is equivalent to an identity permutation matrix
             permutationVector = Enumerable.Range(0, length).ToArray();
@@ -212,7 +214,7 @@ namespace StarMathLib
                     // this will only recurse once (essentially just reducing duplicate code with this recursion.
                     return LUDecomposition(A, out permutationVector, length, true, lastZeroIndices);
 
-                // continue with the main body of Crout's LU decomp approach
+                // continue with the main body of Crout's LU decomposition approach
                 var pI = permutationVector[i];
                 for (var j = i; j < length; j++)
                 {
@@ -235,24 +237,35 @@ namespace StarMathLib
             return B;
         }
 
-        private static bool findAndPivotRows(double[,] B, int[] permutationVector, int[] lastZeroIndices, int i,
+        private static bool findAndPivotRows(double[,] B, int[] permutationVector, List<int>[] lastZeroIndices, int i,
             int length, bool robustReorder = false)
         {
             // if robustReorder is false, then this whole reorder process may be skipped if the diagonal is nonzero.
             if (!robustReorder && !B[permutationVector[i], i].IsNegligible()) return true;
 
-            // the following 11 lines simply chosen the subsequent row that has a nonzero candidate for this row's 
-            // diagonal and has the farthest zeros along in the row. This latter idea (all my own, but likely explored
-            // somewhere in the literature) seems like a robust and quick way to avoid further problems in later row swaps.
+            // the following 13 lines chose the subsequent row that has a nonzero candidate for this row's 
+            // diagonal and has the most zeroes that are farthest along in the row. This metric is essentially,
+            // (num of remaining zeroes in row)*(the average position of zeroes in this row). Multiplying these
+            // two results in simply summing the positions of the remaining zeroes in the row. So, for a pair of rows:
+            // [0 3 4 0 0 0 1 7]
+            // [6 4 3 9 0 0 4 0] 
+            // for the third position (i = 2), the first row would receive a score of 12 (3 + 4 + 5) while the second
+            // row would get a score of 16 (4 + 5 + 7). This would mean use the second row first!
+            // Is this a wacky idea? I'm not sure. It is all my own, but likely explored somewhere in the literature. 
+            // Such a heuristic is not uncommon. In lieu of search the n! ways to recombine the rows, this is a shortcut
+            // that seems to lead to some robustness. It is intended to be a quick way to avoid further problems in later row swaps.
             var newI = -1;
-            var largestLastIndex = -1;
+            var indexOfLargestSum = -1;
             for (int j = i + 1; j < length; j++)
             {
-                if (!B[permutationVector[j], i].IsNegligible() &&
-                    lastZeroIndices[permutationVector[j]] > largestLastIndex)
+                if (!B[permutationVector[j], i].IsNegligible())
                 {
-                    largestLastIndex = lastZeroIndices[permutationVector[j]];
-                    newI = j;
+                    var sumOfColumnsWhereZeroesExist = lastZeroIndices[permutationVector[j]].Sum(x => x > i ? x : 0);
+                    if (sumOfColumnsWhereZeroesExist >= indexOfLargestSum)
+                    {
+                        indexOfLargestSum = sumOfColumnsWhereZeroesExist;
+                        newI = j;
+                    }
                 }
             }
             if (newI == -1)
@@ -308,24 +321,27 @@ namespace StarMathLib
         /// <param name="length">The length/order/number of rows of matrix, A.</param>
         /// <param name="robustReorder">if set to <c>true</c> [robust reorder]. But this is an internal recursive call
         /// and should not be set outside.</param>
-        /// <param name="lastZeroIndices">The last zero indices - is calculated in this function, but if it is already
+        /// <param name="zeroIndices">The last zero indices - is calculated in this function, but if it is already
         /// known, then...by all means.</param>
         /// <returns>A matrix of equal size to A that combines the L and U. Here the diagonals belongs to L and the U's diagonal
         /// elements are all 1.</returns>
         /// <exception cref="ArithmeticException">LU Decomposition can only be determined for square matrices.</exception>
         private static double[,] LUDecomposition(int[,] A, out int[] permutationVector, int length = -1,
-            bool robustReorder = false, int[] lastZeroIndices = null)
+            bool robustReorder = false, List<int>[] zeroIndices = null)
         {
             // This is an implementation of Crout’s LU Decomposition Algorithm
             if (length == -1) length = A.GetLength(0);
             if (length != A.GetLength(1))
                 throw new ArithmeticException("LU Decomposition can only be determined for square matrices.");
-            if (lastZeroIndices == null)
+            if (zeroIndices == null)
             {
-                lastZeroIndices = new int[length];
+                zeroIndices = new List<int>[length];
                 for (int i = 0; i < length; i++)
+                {
+                    zeroIndices[i]= new List<int>();
                     for (int j = 0; j < length; j++)
-                        if (A[i, j] == 0) lastZeroIndices[i] = j;
+                        if (A[i, j] == 0) zeroIndices[i].Add(j);
+                }
             }
             var B = new double[length, length];
             for (var i = 0; i < length; i++)
@@ -335,8 +351,8 @@ namespace StarMathLib
             // normalize row 0
             for (var i = 0; i < length; i++)
             {
-                if (!findAndPivotRows(B, permutationVector, lastZeroIndices, i, length, robustReorder))
-                    return LUDecomposition(A, out permutationVector, length, true, lastZeroIndices);
+                if (!findAndPivotRows(B, permutationVector, zeroIndices, i, length, robustReorder))
+                    return LUDecomposition(A, out permutationVector, length, true, zeroIndices);
 
                 var pI = permutationVector[i];
                 for (var j = i; j < length; j++)

@@ -636,7 +636,6 @@ namespace StarMathLib
                                     + " for RemoveRow is not in required range from 0 up to (but not including) "
                                     + numRows + ".");
             var B = new double[numRows - 1, numCols];
-            var j = 0;
             for (var i = 0; i < rowIndex; i++)
                 B.SetRow(i, A.GetRow(i));
             for (var i = rowIndex + 1; i < numRows; i++)
@@ -664,7 +663,6 @@ namespace StarMathLib
                                     + " for RemoveRow is not in required range from 0 up to (but not including) "
                                     + numRows + ".");
             var B = new int[numRows - 1, numCols];
-            var j = 0;
             for (var i = 0; i < rowIndex; i++)
                 B.SetRow(i, A.GetRow(i));
             for (var i = rowIndex + 1; i < numRows; i++)
@@ -693,7 +691,6 @@ namespace StarMathLib
                                     + " for RemoveColumn is not in required range from 0 up to (but not including) "
                                     + numCols + ".");
             var B = new double[numRows, numCols - 1];
-            var j = 0;
             for (var i = 0; i < colIndex; i++)
                 B.SetColumn(i, A.GetColumn(i));
             for (var i = colIndex + 1; i < numCols; i++)
@@ -721,7 +718,6 @@ namespace StarMathLib
                                     + " for RemoveColumn is not in required range from 0 up to (but not including) "
                                     + numCols + ".");
             var B = new int[numRows, numCols - 1];
-            var j = 0;
             for (var i = 0; i < colIndex; i++)
                 B.SetColumn(i, A.GetColumn(i));
             for (var i = colIndex + 1; i < numCols; i++)

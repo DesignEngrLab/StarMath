@@ -2,42 +2,42 @@
 // Assembly         : StarMath
 // Author           : Matthew I. Campbell
 // Created          : 02-28-2016
-// Modified from    : Timothy A. Davis, 2006-2014
-// Last Modified By : Matt
-// Last Modified On : 02-28-2016
+// Originally Modified from    : Timothy A. Davis's CSparse code, 2006-2014
+// Last Modified By : Matt Campbell
+// Last Modified On : 03-15-2016
 // ***********************************************************************
 // <copyright file="ApproximateMinimumDegree.cs" company="Design Engineering Lab -- MICampbell">
 //     2014
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-
 using System;
-
 namespace StarMathLib
 {
     /// <summary>
-    ///     Approximate Minimum Degree ordering.
+    /// Approximate Minimum Degree ordering.
     /// </summary>
     internal static class ApproximateMinimumDegree
     {
         /// <summary>
-        ///     Generate minimum degree ordering of A+A' (if A is symmetric) or A'A.
+        /// Generate minimum degree ordering of A+A' (if A is symmetric) or A'A.
         /// </summary>
         /// <param name="A">Column-compressed matrix</param>
-        /// <returns>
-        ///     amd(A+A') if A is symmetric, or amd(A'A) otherwise, null on
-        ///     error or for natural ordering
-        /// </returns>
-        /// <remarks>
-        ///     See Chapter 7.1 (Fill-reducing orderings: Minimum degree ordering) in
-        ///     "Direct Methods for Sparse Linear Systems" by Tim Davis.
-        /// </remarks>
+        /// <returns>amd(A+A') if A is symmetric, or amd(A'A) otherwise, null on
+        /// error or for natural ordering</returns>
+        /// <remarks>See Chapter 7.1 (Fill-reducing orderings: Minimum degree ordering) in
+        /// "Direct Methods for Sparse Linear Systems" by Tim Davis.</remarks>
         internal static int[] Generate(CompressedColumnStorage A)
         {
             return Generate(SymbolicColumnStorage.ConstructMatrix(A), A.ncols);
         }
 
+        /// <summary>
+        /// Generates the specified c.
+        /// </summary>
+        /// <param name="C">The c.</param>
+        /// <param name="n">The n.</param>
+        /// <returns>System.Int32[].</returns>
         internal static int[] Generate(SymbolicColumnStorage C, int n)
         {
             //  int  e, i, j, k;
@@ -395,11 +395,24 @@ namespace StarMathLib
             return P;
         }
 
+        /// <summary>
+        /// Flips the specified i.
+        /// </summary>
+        /// <param name="i">The i.</param>
+        /// <returns>System.Int32.</returns>
         private static int flip(int i)
         {
             return -i - 2;
         }
 
+        /// <summary>
+        /// Clears the specified mark.
+        /// </summary>
+        /// <param name="mark">The mark.</param>
+        /// <param name="lemax">The lemax.</param>
+        /// <param name="w">The w.</param>
+        /// <param name="n">The n.</param>
+        /// <returns>System.Int32.</returns>
         private static int Clear(int mark, int lemax, int[] w, int n)
         {
             if (mark < 2 || (mark + lemax < 0))

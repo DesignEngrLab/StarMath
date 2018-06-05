@@ -27,10 +27,7 @@ namespace StarMathLib
 
         public bool TopologyChanged { get; private set; } = true;
         public bool ValuesChanged { get; private set; } = true;
-        internal SparseMatrix FactorizationMatrix;
         private readonly List<SparseCell> cellsRowbyRow;
-        private int[] invPermutationVector;
-        private int[] permutationVector;
 
         /// <summary>
         /// The first non-zero cell in each row.

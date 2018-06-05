@@ -38,12 +38,54 @@ namespace StarMathLib
                 throw new ArithmeticException("Matrix, A, must be square.");
             if (length != b.Count)
                 throw new ArithmeticException("Matrix, A, must be have the same number of rows as the vector, b.");
+            if (length == 3)
+                return solveViaCramersRule3(A, b);
+            if (length == 2)
+                return solveViaCramersRule2(A, b);
             List<int>[] potentialDiagonals;
             if (isGaussSeidelAppropriate(A, b, out potentialDiagonals, ref initialGuess, length))
                 return SolveIteratively(A, b, initialGuess, length, potentialDiagonals);
 
             return SolveAnalytically(A, b, IsASymmetric);
         }
+
+        private static double[] solveViaCramersRule3(double[,] a, IList<double> b)
+        {
+            var denominator = determinant(a);
+
+            return new[]
+            {
+                ((b[0] * a[1, 1] * a[2, 2])
+                 + (a[0, 1] * a[1, 2] * b[2])
+                 + (a[0, 2] * b[1] * a[2, 1])
+                 - (b[0] * a[1, 2] * a[2, 1])
+                 - (a[0, 1] * b[1] * a[2, 2])
+                 - (a[0, 2] * a[1, 1] * b[2]))/ denominator,
+                ( (a[0, 0] * b[1] * a[2, 2])
+                  + (b[0] * a[1, 2] * a[2, 0])
+                  + (a[0, 2] * a[1, 0] * b[2])
+                  - (a[0, 0] * a[1, 2] * b[2])
+                  - (b[0] * a[1, 0] * a[2, 2])
+                  - (a[0, 2] * b[1] * a[2, 0]))/denominator,
+                ( (a[0, 0] * a[1, 1] * b[2])
+                  + (a[0, 1] * b[1] * a[2, 0])
+                  + (b[0] * a[1, 0] * a[2, 1])
+                  - (a[0, 0] * b[1] * a[2, 1])
+                  - (a[0, 1] * a[1, 0] * b[2])
+                  - (b[0] * a[1, 1] * a[2, 0]))/denominator
+            };
+        }
+
+        private static double[] solveViaCramersRule2(double[,] a, IList<double> b)
+        {
+            var denominator = a[0, 0] * a[1, 1] - a[0, 1] * a[1, 0];
+            return new[]
+            {
+                (b[0]*a[1,1]-b[1]*a[0,1])/denominator,
+                (b[1]*a[0,0]-b[0]*a[1,0])/denominator
+            };
+        }
+
 
         /// <summary>
         /// Solves the specified A.
@@ -277,7 +319,7 @@ namespace StarMathLib
             for (var i = 0; i < length; i++) initialGuess[i] = initGuessValue;
             return initialGuess;
         }
-        
+
         /// <summary>
         /// Reorders the matrix for diagonal dominance and returns the permutation vector.
         /// </summary>

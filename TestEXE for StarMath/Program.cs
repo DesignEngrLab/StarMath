@@ -131,7 +131,6 @@ namespace TestEXE_for_StarMath
         private static void benchMarkMatrixInversion()
         {
             var watch = new Stopwatch();
-            double error;
             var results = new List<List<string>>
             {
                 new List<string>
@@ -273,7 +272,6 @@ namespace TestEXE_for_StarMath
         private static void compareSolvers_Inversion_to_GaussSeidel()
         {
             var watch = new Stopwatch();
-            double error;
             var results = new List<List<string>>();
 
             var r = new Random();
@@ -320,7 +318,6 @@ namespace TestEXE_for_StarMath
         private static void SparseFunctionTest()
         {
             var watch = new Stopwatch();
-            double error;
             var results = new List<List<string>>();
 
             var r = new Random();
@@ -362,19 +359,6 @@ namespace TestEXE_for_StarMath
                         watch.Restart();
                         var x = sparseA.SolveAnalytically(b, true).ToArray();
                         sparseA[0, 0] *= 1.0;
-                        watch.Stop();
-                        recordResults(result, A, x, b, watch);
-                        watch.Restart();
-                         x = sparseA.SolveAnalytically2(b, true).ToArray();
-                        sparseA[0, 0] *= 2.0;
-                        watch.Stop();
-                        recordResults(result, A, x, b, watch);
-                        //var SparseA = new SparseMatrix(rows, cols, AValues, size, size);
-                        //var ATranspose = SparseA.Copy();
-                        // ATranspose.Transpose();
-                        //SparseA.addInPlace(ATranspose);
-                        watch.Restart();
-                        x = sparseA.SolveAnalytically2(b, true).ToArray();
                         watch.Stop();
                         recordResults(result, A, x, b, watch);
                         Console.WriteLine(result.Aggregate((resultString, next) =>

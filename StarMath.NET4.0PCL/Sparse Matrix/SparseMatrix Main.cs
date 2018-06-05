@@ -26,8 +26,11 @@ namespace StarMathLib
         #region Fields and Properties
 
         public bool TopologyChanged { get; private set; } = true;
-        public bool ValuesChanged { get; private set; } = true;
+        public bool ValuesChanged { get;  set; } = true;
         private readonly List<SparseCell> cellsRowbyRow;
+        internal SparseMatrix FactorizationMatrix;
+        private int[] invPermutationVector;
+        private int[] permutationVector;
 
         /// <summary>
         /// The first non-zero cell in each row.

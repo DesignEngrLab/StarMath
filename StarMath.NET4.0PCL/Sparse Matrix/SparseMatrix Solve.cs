@@ -15,7 +15,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using StarMathLib.Sparse_Matrix;
 
 //using StarMathLib.CSparse;
 
@@ -23,19 +22,11 @@ using StarMathLib.Sparse_Matrix;
 
 namespace StarMathLib
 {
-
     /// <summary>
     /// Class SparseMatrix.
     /// </summary>
     public partial class SparseMatrix
     {
-        private SymbolicFactorization symbolicFactorizationMat;
-        double[] D;
-        CompressedColumnStorage FactorizationMatrix;
-        CompressedColumnStorage MatrixInCCS;
-
-
-
         /// <summary>
         /// Solves the system of equations where this Sparse Matrix is 'A' in Ax = b.
         /// The resulting x is returned.
@@ -102,16 +93,14 @@ namespace StarMathLib
         /// <returns>System.Double[].</returns>
         public IList<double> SolveAnalytically(IList<double> b, bool IsASymmetric = false)
         {
-           if (IsASymmetric)
+            if (IsASymmetric)
             {
-                if (ValuesChanged || TopologyChanged)
-                    MatrixInCCS = convertToCCS(this);
-                if (TopologyChanged)
-                    symbolicFactorizationMat = CSparse.SymbolicAnalysisLDL(MatrixInCCS);
-                if (ValuesChanged || TopologyChanged)
-                    CSparse.FactorizeLDL(MatrixInCCS, symbolicFactorizationMat, out D, out FactorizationMatrix);
-                TopologyChanged = ValuesChanged = false;
-                return CSparse.SolveLDL(b, FactorizationMatrix, D, symbolicFactorizationMat.InversePermute);
+                var ccs = convertToCCS(this);
+                var S = CSparse.SymbolicAnalysisLDL(ccs);
+                double[] D;
+                CompressedColumnStorage L;
+                CSparse.FactorizeLDL(ccs, S, out D, out L);
+                return CSparse.SolveLDL(b, L, D, S.InversePermute);
             }
             else
             {
@@ -126,8 +115,59 @@ namespace StarMathLib
                 CSparse.SolveLower(L, x); // x = L\x.
                 CSparse.SolveUpper(U, x); // x = U\x.
                 return CSparse.ApplyInverse(columnPermutation, x, NumCols); // b(q) = x
+                /*** old code
+                var LU = Copy();
+                LU.LUDecomposition();
+                return LU.solveFromLUDecomposition(b);
+                ***/
             }
         }
+        public IList<double> SolveAnalytically2(IList<double> b, bool IsASymmetric = false)
+        {
+            if (IsASymmetric)
+            {
+                if (TopologyChanged)
+                {
+                    var ccs = convertToCCS(this);
+                    var S = CSparse.SymbolicAnalysisLDL(ccs);
+                    invPermutationVector = S.InversePermute;
+                    //invPermutationVector = Enumerable.Range(0, NumCols).ToArray();
+                    permutationVector = InvertPermutation(invPermutationVector, NumCols);
+                    CreateLDLFactorization(permutationVector, invPermutationVector);
+                    SolveFactorization();
+                    ValuesChanged = false;
+                    TopologyChanged = false;
+                }
+                if (ValuesChanged)
+                {
+                    SolveFactorization();
+                    ValuesChanged = false;
+                }
+                var x = ApplyPermutation(b, permutationVector, NumCols);
+                x = FactorizationMatrix.SolveLowerTriangularMatrix(x, true, true);
+                x = FactorizationMatrix.SolveUpperTriangularMatrix(x, true, false);
+                return ApplyPermutation(x, invPermutationVector, NumCols);
+            }
+            else
+            {
+                var ccs = convertToCCS(this);
+                var columnPermutation = ApproximateMinimumDegree.Generate(new SymbolicColumnStorage(ccs), NumCols);
+                CompressedColumnStorage L, U;
+                int[] pinv;
+                // Numeric LU factorization
+                CSparse.FactorizeLU(ccs, columnPermutation, out L, out U, out pinv);
+                var x = CSparse.ApplyInverse(pinv, b, NumCols); // x = b(p)
+                CSparse.SolveLower(L, x); // x = L\x.
+                CSparse.SolveUpper(U, x); // x = U\x.
+                return CSparse.ApplyInverse(columnPermutation, x, NumCols); // b(q) = x
+                /*** old code
+                var LU = Copy();
+                LU.LUDecomposition();
+                return LU.solveFromLUDecomposition(b);
+                ***/
+            }
+        }
+
 
         private static CompressedColumnStorage convertToCCS(SparseMatrix sparseMatrix)
         {
@@ -156,7 +196,383 @@ namespace StarMathLib
             ccs.Values = values;
             return ccs;
         }
+        #region Old Methods - someday one needs to rewrite to avoid CCS and use thesse methods
+        private IList<double> solveFromLUDecomposition(IList<double> b, bool CanOverWriteB)
+        {
+            var x = SolveLowerTriangularMatrix(b, CanOverWriteB, true);
+            return SolveUpperTriangularMatrix(x, CanOverWriteB, false);
+        }
 
+        private IList<double> SolveLowerTriangularMatrix(IList<double> b, bool CanOverWriteB, bool IncludeDiagonal)
+        {
+            var x = CanOverWriteB ? b : b.ToArray();
+            var i = 0;
+            while (x[i] == 0.0) i++;
+            for (; i < NumRows; i++)
+            {
+                if (x[i] == 0.0) continue;
+                var diag = Diagonals[i];
+                var cell = ColLasts[i];
+                while (cell != diag)
+                {
+                    x[cell.RowIndex] -= cell.Value * x[cell.ColIndex];
+                    cell = cell.Up;
+                }
+            }
+            if (IncludeDiagonal)
+                for (i = 0; i < NumRows; i++)
+                {
+                    if (x[i] == 0.0) continue;
+                    x[i] /= Diagonals[i].Value;
+                }
+            return x;
+        }
+
+        private IList<double> SolveUpperTriangularMatrix(IList<double> b, bool CanOverWriteB, bool IncludeDiagonal)
+        {
+            var x = CanOverWriteB ? b : b.ToArray();
+            var i = NumRows - 1;
+            while (x[i] == 0.0) i--;
+            for (; i >= 0; i--)
+            {
+                if (x[i] == 0.0) continue;
+                var diag = Diagonals[i];
+                var cell = RowFirsts[i];
+                while (cell != diag)
+                {
+                    x[cell.ColIndex] -= cell.Value * x[cell.RowIndex];
+                    cell = cell.Right;
+                }
+            }
+            if (IncludeDiagonal)
+                for (i = 0; i < NumRows; i++)
+                {
+                    if (x[i] == 0.0) continue;
+                    x[i] /= Diagonals[i].Value;
+                }
+            return x;
+        }
+
+        private void LUDecomposition()
+        {
+            // normalize row 0 
+            var topCell = RowFirsts[0];
+            var cell = topCell.Right;
+            while (cell != null)
+            {
+                cell.Value /= topCell.Value;
+                cell = cell.Right;
+            }
+            for (var i = 1; i < NumRows; i++)
+            {
+                double sum;
+                var startCellColI = ColFirsts[i];
+                for (var j = i; j < NumRows; j++)
+                {
+                    var cellColI = startCellColI;
+                    var cellRowJ = RowFirsts[j];
+                    sum = 0.0;
+                    while (cellColI != null && cellRowJ != null && cellColI.RowIndex < i && cellRowJ.ColIndex < i)
+                    {
+                        if (cellColI.RowIndex == cellRowJ.ColIndex)
+                        {
+                            sum += cellColI.Value * cellRowJ.Value;
+                            cellColI = cellColI.Down;
+                            cellRowJ = cellRowJ.Right;
+                        }
+                        else if (cellColI.RowIndex < cellRowJ.ColIndex)
+                            cellColI = cellColI.Down;
+                        else cellRowJ = cellRowJ.Right;
+                    }
+                    while (cellColI != null && cellColI.RowIndex <= j)
+                        cellColI = cellColI.Down;
+                    var alreadyExists = TrySearchRightToCell(i, ref cellRowJ);
+                    if (!alreadyExists && sum.IsNegligible()) continue;
+                    // what's up with this furthestDownCells?! It turns out the the AddCell function
+                    // was too slow when it was done on the basis of just the [i,j] indices. This "fat"
+                    // approach to encoding sparse matrices is bad for that. To avoid, this - the
+                    // special function "AddCellToTheLeftOfAndBelow" was created. It has a significant
+                    // improvemnt on time.
+                    if (!alreadyExists && !sum.IsNegligible())
+                        cellRowJ = AddCellToTheLeftOfAndAbove(cellRowJ, cellColI, j, i, 0.0);
+                    cellRowJ.Value -= sum;
+                }
+                var startCellRowI = RowFirsts[i];
+                for (var j = i + 1; j < NumRows; j++)
+                {
+                    var cellRowI = startCellRowI;
+                    var cellColJ = ColFirsts[j];
+                    sum = 0.0;
+                    while (cellRowI != null && cellColJ != null && cellRowI.ColIndex < i && cellColJ.RowIndex < i)
+                    {
+                        if (cellRowI.ColIndex == cellColJ.RowIndex)
+                        {
+                            sum -= cellRowI.Value * cellColJ.Value;
+                            cellRowI = cellRowI.Right;
+                            cellColJ = cellColJ.Down;
+                        }
+                        else if (cellRowI.ColIndex < cellColJ.RowIndex)
+                            cellRowI = cellRowI.Right;
+                        else cellColJ = cellColJ.Down;
+                    }
+                    while (cellColJ != null && cellColJ.RowIndex <= i)
+                        cellColJ = cellColJ.Down;
+                    var alreadyExists = TrySearchRightToCell(j, ref cellRowI);
+                    if (!alreadyExists && sum.IsNegligible()) continue;
+                    // what's up with this furthestDownCells?! It turns out the the AddCell function
+                    // was too slow when it was done on the basis of just the [i,j] indices. This "fat"
+                    // approach to encoding sparse matrices is bad for that. To avoid, this - the
+                    // special function "AddCellToTheLeftOfAndBelow" was created. It has a significant
+                    // improvemnt on time.
+                    if (!alreadyExists && !sum.IsNegligible())
+                        cellRowI = AddCellToTheLeftOfAndAbove(cellRowI, cellColJ, i, j, 0.0);
+                    cellRowI.Value = (sum + cellRowI.Value) / Diagonals[i].Value;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Returns the L+D Sparse Matrix via Cholesky decomposition (i.e. it is destructive).
+        /// This is based on: https://en.wikipedia.org/wiki/Cholesky_decomposition#LDL_decomposition_2
+        /// </summary>
+        /// <returns>SparseMatrix.</returns>
+        /// <exception cref="System.ArithmeticException">Cholesky Decomposition can only be determined for square matrices.</exception>
+        /// <exception cref="ArithmeticException">Cholesky Decomposition can only be determined for square matrices.</exception>
+        public void CreateLDLFactorization(IList<int> permutationVector, IList<int> invPermutationVector)
+        {
+            var n = NumRows;
+            FactorizationMatrix = new SparseMatrix(n, n);
+            for (int rowIndex = 0; rowIndex < n; rowIndex++)
+            {
+                var cellA = RowFirsts[permutationVector[rowIndex]];
+                //clork var sortedCells = new SortedCellList();
+                var sortedCells = new SortedDictionary<int, SparseCell>();
+                var cellHash = new HashSet<int>();
+                CholeskyDCell diagCell = null;
+                while (cellA != null)
+                {
+                    // this just collects cells of A that should be mirrored in L
+                    var colIndex = invPermutationVector[cellA.ColIndex];
+                    if (colIndex == rowIndex)
+                        diagCell = new CholeskyDCell(rowIndex, rowIndex, cellA);
+                    else if (colIndex < rowIndex)
+                    {
+                        cellHash.Add(colIndex);
+                        sortedCells.Add(colIndex, new CholeskyLCell(rowIndex, colIndex, cellA, FactorizationMatrix.Diagonals[colIndex]));
+                    }
+                    cellA = cellA.Right;
+                }
+                while (sortedCells.Any())
+                {
+                    //clork var lowestEntry = sortedCells.Pop();
+                    var lowestEntry = sortedCellsPop(sortedCells);
+                    var colIndex = lowestEntry.Key;
+                    var anchorCell = lowestEntry.Value;
+                    cellHash.Remove(colIndex);
+                    AddCellRightAndBelow(FactorizationMatrix, anchorCell, rowIndex, colIndex);
+                    var anchorsDiagonal = FactorizationMatrix.Diagonals[colIndex];
+                    diagCell.AddDoubletTerm(anchorCell, anchorsDiagonal);
+                    var cell = anchorCell.Up;
+                    while (cell.RowIndex > colIndex)
+                    {
+                        var newColIndex = cell.RowIndex;
+                        CholeskyLCell newCell;
+                        int position;
+                        // clork if (sortedCells. PositionIfExists(newColIndex, out position))
+                        if (cellHash.Contains(newColIndex))
+                            //newCell = (CholeskyLCell)sortedCells[position];
+                            newCell = (CholeskyLCell)sortedCells[newColIndex];
+                        else
+                        {
+                            newCell = new CholeskyLCell(rowIndex, newColIndex, null, FactorizationMatrix.Diagonals[newColIndex]);
+                            //clork sortedCells.Insert(position, newColIndex, newCell);
+                            //sortedCells.Add(position, newCell);
+                            cellHash.Add(newColIndex);
+                            sortedCells.Add(newColIndex, newCell);
+                        }
+                        newCell.AddTripletTerm(anchorCell, cell, anchorsDiagonal);
+                        cell = cell.Up;
+                    }
+                }
+                AddCellRightAndBelow(FactorizationMatrix, diagCell, rowIndex, rowIndex);
+            }
+        }
+
+        private KeyValuePair<int, SparseCell> sortedCellsPop(SortedDictionary<int, SparseCell> sortedCells)
+        {
+
+            var top = sortedCells.First();
+            sortedCells.Remove(top.Key);
+            return top;
+        }
+
+        private void AddCellRightAndBelow(SparseMatrix matrix, SparseCell cell, int rowIndex, int colIndex)
+        {
+            matrix.cellsRowbyRow.Add(cell);
+            if (rowIndex == colIndex) matrix.Diagonals[colIndex] = cell;
+            if (matrix.RowLasts[rowIndex] != null)
+            {
+                cell.Left = matrix.RowLasts[rowIndex];
+                matrix.RowLasts[rowIndex].Right = cell;
+                matrix.RowLasts[rowIndex] = cell;
+            }
+            else matrix.RowFirsts[rowIndex] = matrix.RowLasts[rowIndex] = cell;
+            if (matrix.ColLasts[colIndex] != null)
+            {
+                cell.Up = matrix.ColLasts[colIndex];
+                matrix.ColLasts[colIndex].Down = cell;
+                matrix.ColLasts[colIndex] = cell;
+            }
+            else matrix.ColFirsts[colIndex] = matrix.ColLasts[colIndex] = cell;
+
+            matrix.NumNonZero++;
+        }
+        private void SolveFactorization()
+        {
+            foreach (var sparseCell in FactorizationMatrix.cellsRowbyRow)
+            {
+                sparseCell.Evaluate();
+            }
+        }
+
+        private static IList<double> ApplyPermutation(IList<double> b, int[] permutationVector, int length)
+        {
+            var x = new double[length];
+            for (var i = 0; i < length; i++)
+                x[i] = b[permutationVector[i]];
+            return x;
+        }
+        private int[] InvertPermutation(int[] p, int n)
+        {
+            var pinv = new int[n];
+            // Invert the permutation.
+            for (int i = 0; i < n; i++)
+                pinv[p[i]] = i;
+
+            return pinv;
+        }
+
+
+        /// <summary>
+        /// Adds the cell to the left of and below.
+        /// </summary>
+        /// <param name="cellToTheRight">The cell to the right.</param>
+        /// <param name="cellToTheUp">The cell to the up.</param>
+        /// <param name="rowI">The row i.</param>
+        /// <param name="colI">The col i.</param>
+        /// <param name="value">The value.</param>
+        /// <returns>SparseCell.</returns>
+        private SparseCell AddCellToTheLeftOfAndBelow(SparseCell cellToTheRight, SparseCell cellToTheUp, int rowI, int colI, double value)
+        {
+            var cell = new SparseCell(rowI, colI, value);
+            // stitch it into the rows
+            if (RowFirsts[rowI].ColIndex > colI)
+            {
+                cell.Right = RowFirsts[rowI];
+                RowFirsts[rowI].Left = cell;
+                RowFirsts[rowI] = cell;
+            }
+            else if (RowLasts[rowI].ColIndex < colI)
+            {
+                cell.Left = RowLasts[rowI];
+                RowLasts[rowI].Right = cell;
+                RowLasts[rowI] = cell;
+            }
+            else
+            {
+                cell.Right = cellToTheRight;
+                cell.Left = cellToTheRight.Left;
+                cell.Left.Right = cell;
+                cellToTheRight.Left = cell;
+            }
+            // stitch it into the colums
+            if (ColFirsts[colI].RowIndex > rowI)
+            {
+                cell.Down = ColFirsts[colI];
+                ColFirsts[colI].Up = cell;
+                ColFirsts[colI] = cell;
+            }
+            else if (ColLasts[colI].RowIndex < rowI)
+            {
+                cell.Up = ColLasts[colI];
+                ColLasts[colI].Down = cell;
+                ColLasts[colI] = cell;
+            }
+            else
+            {
+                cell.Up = cellToTheUp;
+                cell.Down = cellToTheUp.Down;
+                cell.Down.Up = cell;
+                cellToTheUp.Down = cell;
+
+            }
+            if (rowI == colI) Diagonals[rowI] = cell;
+            cellsRowbyRow.Add(cell);
+            NumNonZero++;
+
+            return cell;
+        }
+
+        /// <summary>
+        /// Adds the cell to the left of and below.
+        /// </summary>
+        /// <param name="cellToTheRight">The cell to the right.</param>
+        /// <param name="cellToTheUp">The cell to the up.</param>
+        /// <param name="rowI">The row i.</param>
+        /// <param name="colI">The col i.</param>
+        /// <param name="value">The value.</param>
+        /// <returns>SparseCell.</returns>
+        private SparseCell AddCellToTheLeftOfAndAbove(SparseCell cellToTheRight, SparseCell cellToTheDown, int rowI, int colI, double value)
+        {
+            var cell = new SparseCell(rowI, colI, value);
+            // stitch it into the rows
+            if (RowFirsts[rowI].ColIndex > colI)
+            {
+                cell.Right = RowFirsts[rowI];
+                RowFirsts[rowI].Left = cell;
+                RowFirsts[rowI] = cell;
+            }
+            else if (RowLasts[rowI].ColIndex < colI)
+            {
+                cell.Left = RowLasts[rowI];
+                RowLasts[rowI].Right = cell;
+                RowLasts[rowI] = cell;
+            }
+            else
+            {
+                cell.Right = cellToTheRight;
+                cell.Left = cellToTheRight.Left;
+                cell.Left.Right = cell;
+                cellToTheRight.Left = cell;
+            }
+            // stitch it into the colums
+            if (ColFirsts[colI].RowIndex > rowI)
+            {
+                cell.Down = ColFirsts[colI];
+                ColFirsts[colI].Up = cell;
+                ColFirsts[colI] = cell;
+            }
+            else if (ColLasts[colI].RowIndex < rowI)
+            {
+                cell.Up = ColLasts[colI];
+                ColLasts[colI].Down = cell;
+                ColLasts[colI] = cell;
+            }
+            else
+            {
+                cell.Down = cellToTheDown;
+                cell.Up = cellToTheDown.Up;
+                cell.Up.Down = cell;
+                cellToTheDown.Up = cell;
+
+            }
+            if (rowI == colI) Diagonals[rowI] = cell;
+            cellsRowbyRow.Add(cell);
+            NumNonZero++;
+
+            return cell;
+        }
+        #endregion
         #region Gauss-Seidel or Successive Over-Relaxation
 
         private bool isGaussSeidelAppropriate(IList<double> b, out List<int>[] potentialDiagonals,
@@ -302,4 +718,3 @@ namespace StarMathLib
         #endregion
     }
 }
-

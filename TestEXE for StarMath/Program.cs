@@ -23,8 +23,8 @@ namespace TestEXE_for_StarMath
             //benchMarkMatrixInversion();
             //  compareSolvers_Inversion_to_GaussSeidel();
             //checkEigen();
-            Console.WriteLine("Press any key to close.");
-            Console.ReadLine();
+            //Console.WriteLine("Press any key to close.");
+            //Console.ReadLine();
 
         }
 
@@ -321,8 +321,10 @@ namespace TestEXE_for_StarMath
             var results = new List<List<string>>();
 
             var r = new Random();
-            var numberPerRow = new[] { 3, 6, 12, 24, 48 };
-            var matrixSize = new[] { 4, 20, 40, 80 };
+          //  var numberPerRow = new[] { 3, 6, 12, 24, 48 };
+            var numberPerRow = new[] { 3, 6, 12};
+          //  var matrixSize = new[] { 4, 20, 40, 80 };
+            var matrixSize = new[] {  40, 80 };
             for (var i = 0; i < matrixSize.GetLength(0); i++)
             {
                 for (int j = 0; j < numberPerRow.GetLength(0); j++)
@@ -361,10 +363,35 @@ namespace TestEXE_for_StarMath
                         sparseA[0, 0] *= 1.0;
                         watch.Stop();
                         recordResults(result, A, x, b, watch);
-                        Console.WriteLine(result.Aggregate((resultString, next) =>
-                        resultString + " " + next));
                         results.Add(result);
 
+
+                        watch.Restart();
+                        x = sparseA.SolveAnalytically2(b, true).ToArray();
+                        sparseA[0, 0] *= 1.0;
+                        watch.Stop();
+                        recordResults(result, A, x, b, watch);
+                        //Console.WriteLine(result.Aggregate((resultString, next) =>
+                        //    resultString + " " + next));
+                        results.Add(result);
+                        sparseA.ValuesChanged = true;
+
+                        watch.Restart();
+                        x = sparseA.SolveAnalytically(b, true).ToArray();
+                        sparseA[0, 0] *= 1.0;
+                        watch.Stop();
+                        recordResults(result, A, x, b, watch);
+                        results.Add(result);
+
+
+                        watch.Restart();
+                        x = sparseA.SolveAnalytically2(b, true).ToArray();
+                        sparseA[0, 0] *= 1.0;
+                        watch.Stop();
+                        recordResults(result, A, x, b, watch);
+                        Console.WriteLine(result.Aggregate((resultString, next) =>
+                            resultString + " " + next));
+                        results.Add(result);
                     }
                 }
             }

@@ -554,9 +554,12 @@ namespace StarMathLib
             var L = LUDecomposition(A, out permute, length);
             var result = 1.0;
             for (var i = 0; i < length; i++)
+            {
                 if (double.IsNaN(L[permute[i], i]))
                     return 0;
                 else result *= L[permute[i], i];
+                if (permute[i] != i) result *= -1;
+            }
             return result;
         }
 

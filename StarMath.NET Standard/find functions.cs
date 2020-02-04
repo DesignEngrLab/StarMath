@@ -347,7 +347,7 @@ namespace StarMathLib
         /// <returns>IList&lt;System.Int32&gt;.</returns>
         public static IList<int> find(double FindVal, IList<double> A)
         {
-            return A.Select((value, index) => new {Item = value, Position = index})
+            return A.Select((value, index) => new { Item = value, Position = index })
                 .Where(x => x.Item == FindVal).Select(a => a.Position).ToList();
         }
 
@@ -370,7 +370,7 @@ namespace StarMathLib
         /// <returns>IList&lt;System.Int32&gt;.</returns>
         public static IList<int> find(int FindVal, IList<int> A)
         {
-            return A.Select((value, index) => new {Item = value, Position = index})
+            return A.Select((value, index) => new { Item = value, Position = index })
                 .Where(x => x.Item == FindVal).Select(a => a.Position).ToList();
         }
 
@@ -398,7 +398,7 @@ namespace StarMathLib
             for (var i = 0; i < numRows; i++)
                 for (var j = 0; j < numCols; j++)
                     if (FindVal == A[i, j])
-                        return new[] {i, j};
+                        return new[] { i, j };
             return null;
         }
 
@@ -426,7 +426,7 @@ namespace StarMathLib
             for (var i = 0; i < numRows; i++)
                 for (var j = 0; j < numCols; j++)
                     if (FindVal == A[i, j])
-                        return new[] {i, j};
+                        return new[] { i, j };
             return null;
         }
 

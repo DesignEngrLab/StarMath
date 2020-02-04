@@ -35,8 +35,7 @@ namespace StarMathLib
         /// </returns>
         public static double[][] GetEigenValues(this double[,] A)
         {
-            double[][] eigenVectors;
-            return GetEigenValuesAndVectors(A, out eigenVectors);
+            return GetEigenValuesAndVectors(A, out _);
         }
 
         /// <summary>
@@ -60,7 +59,7 @@ namespace StarMathLib
             }
             var eigenvaluesReal = new double[length];
             var eigenvaluesImag = new double[length];
-            var B = (double[,]) A.Clone();
+            var B = (double[,])A.Clone();
 
             #region Reduce to Hessenberg form
 
@@ -84,13 +83,13 @@ namespace StarMathLib
                     var h = 0.0;
                     for (var i = high; i >= m; i--)
                     {
-                        ort[i] = B[mm1, i]/scale;
-                        h += ort[i]*ort[i];
+                        ort[i] = B[mm1, i] / scale;
+                        h += ort[i] * ort[i];
                     }
 
                     var g = Math.Sqrt(h);
                     if (ort[m] > 0) g = -g;
-                    h = h - (ort[m]*g);
+                    h = h - (ort[m] * g);
                     ort[m] = ort[m] - g;
 
                     // Apply Householder similarity transformation
@@ -99,24 +98,24 @@ namespace StarMathLib
                     {
                         var f = 0.0;
                         for (var i = length - 1; i >= m; i--)
-                            f += ort[i]*B[j, i];
-                        f = f/h;
+                            f += ort[i] * B[j, i];
+                        f = f / h;
                         for (var i = m; i <= high; i++)
-                            B[j, i] -= f*ort[i];
+                            B[j, i] -= f * ort[i];
                     }
 
                     for (var i = 0; i <= high; i++)
                     {
                         var f = 0.0;
                         for (var j = high; j >= m; j--)
-                            f += ort[j]*B[j, i];
-                        f = f/h;
+                            f += ort[j] * B[j, i];
+                        f = f / h;
                         for (var j = m; j <= high; j++)
-                            B[j, i] -= f*ort[j];
+                            B[j, i] -= f * ort[j];
                     }
 
-                    ort[m] = scale*ort[m];
-                    B[mm1, m] = scale*g;
+                    ort[m] = scale * ort[m];
+                    B[mm1, m] = scale * g;
                 }
             }
 
@@ -132,11 +131,11 @@ namespace StarMathLib
                     {
                         var g = 0.0;
                         for (var i = m; i <= high; i++)
-                            g += ort[i]*eigenVectors[j][i];
+                            g += ort[i] * eigenVectors[j][i];
                         // Double division avoids possible underflow
-                        g = (g/ort[m])/B[mm1, m];
+                        g = (g / ort[m]) / B[mm1, m];
                         for (var i = m; i <= high; i++)
-                            eigenVectors[j][i] += g*ort[i];
+                            eigenVectors[j][i] += g * ort[i];
                     }
                 }
             }
@@ -169,7 +168,7 @@ namespace StarMathLib
                     var lm1 = l - 1;
                     s = Math.Abs(B[lm1, lm1]) + Math.Abs(B[l, l]);
                     if (s.IsNegligible()) s = norm;
-                    if (Math.Abs(B[lm1, l]) < eps*s)
+                    if (Math.Abs(B[lm1, l]) < eps * s)
                         break;
                     l--;
                 }
@@ -189,9 +188,9 @@ namespace StarMathLib
                 else if (l == n - 1)
                 {
                     var nm1 = n - 1;
-                    w = B[nm1, n]*B[n, nm1];
-                    p = (B[nm1, nm1] - B[n, n])/2.0;
-                    q = (p*p) + w;
+                    w = B[nm1, n] * B[n, nm1];
+                    p = (B[nm1, nm1] - B[n, n]) / 2.0;
+                    q = (p * p) + w;
                     z = Math.Sqrt(Math.Abs(q));
 
                     B[n, n] += exshift;
@@ -205,37 +204,37 @@ namespace StarMathLib
                         eigenvaluesReal[nm1] = x + z;
 
                         eigenvaluesReal[n] = eigenvaluesReal[nm1];
-                        if (!z.IsNegligible()) eigenvaluesReal[n] = x - (w/z);
+                        if (!z.IsNegligible()) eigenvaluesReal[n] = x - (w / z);
                         eigenvaluesImag[n - 1] = 0.0;
                         eigenvaluesImag[n] = 0.0;
                         x = B[nm1, n];
                         s = Math.Abs(x) + Math.Abs(z);
-                        p = x/s;
-                        q = z/s;
-                        r = Math.Sqrt((p*p) + (q*q));
-                        p = p/r;
-                        q = q/r;
+                        p = x / s;
+                        q = z / s;
+                        r = Math.Sqrt((p * p) + (q * q));
+                        p = p / r;
+                        q = q / r;
 
                         // Row modification
                         for (var j = n - 1; j < length; j++)
                         {
                             z = B[j, nm1];
-                            B[j, nm1] = (q*z) + (p*B[j, n]);
-                            B[j, n] = (q*B[j, n]) - (p*z);
+                            B[j, nm1] = (q * z) + (p * B[j, n]);
+                            B[j, n] = (q * B[j, n]) - (p * z);
                         }
                         // Column modification
                         for (var i = 0; i <= n; i++)
                         {
                             z = B[nm1, i];
-                            B[nm1, i] = (q*z) + (p*B[n, i]);
-                            B[n, i] = (q*B[n, i]) - (p*z);
+                            B[nm1, i] = (q * z) + (p * B[n, i]);
+                            B[n, i] = (q * B[n, i]) - (p * z);
                         }
                         // Accumulate transformations
                         for (var i = 0; i < length; i++)
                         {
                             z = eigenVectors[nm1][i];
-                            eigenVectors[nm1][i] = (q*z) + (p*eigenVectors[n][i]);
-                            eigenVectors[n][i] = (q*eigenVectors[n][i]) - (p*z);
+                            eigenVectors[nm1][i] = (q * z) + (p * eigenVectors[n][i]);
+                            eigenVectors[n][i] = (q * eigenVectors[n][i]) - (p * z);
                         }
                         // Complex pair
                     }
@@ -260,7 +259,7 @@ namespace StarMathLib
                     if (l < n)
                     {
                         y = B[nm1, nm1];
-                        w = B[nm1, n]*B[n, nm1];
+                        w = B[nm1, n] * B[n, nm1];
                     }
 
                     // Wilkinson's original ad hoc shift
@@ -269,28 +268,28 @@ namespace StarMathLib
                         exshift += x;
                         for (var i = 0; i <= n; i++) B[i, i] -= x;
                         s = Math.Abs(B[nm1, n]) + Math.Abs(B[(n - 2), nm1]);
-                        x = y = 0.75*s;
-                        w = (-0.4375)*s*s;
+                        x = y = 0.75 * s;
+                        w = (-0.4375) * s * s;
                     }
 
                     // MATLAB's new ad hoc shift
                     if (iter == 30)
                     {
-                        s = (y - x)/2.0;
-                        s = (s*s) + w;
+                        s = (y - x) / 2.0;
+                        s = (s * s) + w;
                         if (s > 0)
                         {
                             s = Math.Sqrt(s);
                             if (y < x) s = -s;
-                            s = x - (w/(((y - x)/2.0) + s));
+                            s = x - (w / (((y - x) / 2.0) + s));
                             for (var i = 0; i <= n; i++) B[i, i] -= s;
                             exshift += s;
                             x = y = w = 0.964;
                         }
                     }
 
-                    iter = iter + 1;
-                    if (iter >= 30*length)
+                    iter++;
+                    if (iter >= 30 * length)
                     {
                         throw new ArithmeticException("Eigen decomposition does not converge.");
                     }
@@ -304,16 +303,16 @@ namespace StarMathLib
                         z = B[m, m];
                         r = x - z;
                         s = y - z;
-                        p = (((r*s) - w)/B[m, mp1]) + B[mp1, m];
+                        p = (((r * s) - w) / B[m, mp1]) + B[mp1, m];
                         q = B[mp1, mp1] - z - r - s;
                         r = B[mp1, (m + 2)];
                         s = Math.Abs(p) + Math.Abs(q) + Math.Abs(r);
-                        p = p/s;
-                        q = q/s;
-                        r = r/s;
+                        p = p / s;
+                        q = q / s;
+                        r = r / s;
 
-                        if ((m == l) || (Math.Abs(B[mm1, m])*(Math.Abs(q) + Math.Abs(r)) <
-                                         eps*(Math.Abs(p)*(Math.Abs(B[mm1, mm1]) + Math.Abs(z) + Math.Abs(B[mp1, mp1])))))
+                        if ((m == l) || (Math.Abs(B[mm1, m]) * (Math.Abs(q) + Math.Abs(r)) <
+                                         eps * (Math.Abs(p) * (Math.Abs(B[mm1, mm1]) + Math.Abs(z) + Math.Abs(B[mp1, mp1])))))
                             break;
                     } while (--m >= l);
 
@@ -339,67 +338,67 @@ namespace StarMathLib
                             x = Math.Abs(p) + Math.Abs(q) + Math.Abs(r);
                             if (x.IsNegligible()) continue;
 
-                            p = p/x;
-                            q = q/x;
-                            r = r/x;
+                            p = p / x;
+                            q = q / x;
+                            r = r / x;
                         }
 
-                        s = Math.Sqrt((p*p) + (q*q) + (r*r));
+                        s = Math.Sqrt((p * p) + (q * q) + (r * r));
                         if (p < 0) s = -s;
 
                         if (!s.IsNegligible())
                         {
-                            if (k != m) B[km1, k] = (-s)*x;
+                            if (k != m) B[km1, k] = (-s) * x;
                             else if (l != m) B[km1, k] = -B[km1, k];
                             p = p + s;
-                            x = p/s;
-                            y = q/s;
-                            z = r/s;
-                            q = q/p;
-                            r = r/p;
+                            x = p / s;
+                            y = q / s;
+                            z = r / s;
+                            q = q / p;
+                            r = r / p;
 
                             // Row modification
                             for (var j = k; j < length; j++)
                             {
-                                p = B[j, k] + (q*B[j, kp1]);
+                                p = B[j, k] + (q * B[j, kp1]);
                                 if (notlast)
                                 {
-                                    p = p + (r*B[j, kp2]);
-                                    B[j, kp2] -= (p*z);
+                                    p = p + (r * B[j, kp2]);
+                                    B[j, kp2] -= (p * z);
                                 }
 
-                                B[j, k] -= (p*x);
-                                B[j, kp1] -= (p*y);
+                                B[j, k] -= (p * x);
+                                B[j, kp1] -= (p * y);
                             }
 
                             // Column modification
                             for (var i = 0; i <= Math.Min(n, k + 3); i++)
                             {
-                                p = (x*B[k, i]) + (y*B[kp1, i]);
+                                p = (x * B[k, i]) + (y * B[kp1, i]);
 
                                 if (notlast)
                                 {
-                                    p = p + (z*B[kp2, i]);
-                                    B[kp2, i] -= (p*r);
+                                    p = p + (z * B[kp2, i]);
+                                    B[kp2, i] -= (p * r);
                                 }
 
                                 B[k, i] -= p;
-                                B[kp1, i] -= (p*q);
+                                B[kp1, i] -= (p * q);
                             }
 
                             // Accumulate transformations
                             for (var i = 0; i < length; i++)
                             {
-                                p = (x*eigenVectors[k][i]) + (y*eigenVectors[kp1][i]);
+                                p = (x * eigenVectors[k][i]) + (y * eigenVectors[kp1][i]);
 
                                 if (notlast)
                                 {
-                                    p = p + (z*eigenVectors[kp2][i]);
-                                    eigenVectors[kp2][i] -= p*r;
+                                    p = p + (z * eigenVectors[kp2][i]);
+                                    eigenVectors[kp2][i] -= p * r;
                                 }
 
                                 eigenVectors[k][i] -= p;
-                                eigenVectors[kp1][i] -= p*q;
+                                eigenVectors[kp1][i] -= p * q;
                             }
                         } // (s != 0)
                     } // k loop
@@ -430,7 +429,7 @@ namespace StarMathLib
                         r = 0.0;
                         for (var j = l; j <= n; j++)
                         {
-                            r = r + (B[j, i]*B[n, j]);
+                            r = r + (B[j, i] * B[n, j]);
                         }
 
                         if (eigenvaluesImag[i].IsLessThanNonNegligible())
@@ -445,11 +444,11 @@ namespace StarMathLib
                             {
                                 if (!w.IsNegligible())
                                 {
-                                    B[n, i] = (-r)/w;
+                                    B[n, i] = (-r) / w;
                                 }
                                 else
                                 {
-                                    B[n, i] = (-r)/(eps*norm);
+                                    B[n, i] = (-r) / (eps * norm);
                                 }
 
                                 // Solve real equations
@@ -458,23 +457,23 @@ namespace StarMathLib
                             {
                                 x = B[ip1, i];
                                 y = B[i, ip1];
-                                q = ((eigenvaluesReal[i] - p)*(eigenvaluesReal[i] - p)) +
-                                    (eigenvaluesImag[i]*eigenvaluesImag[i]);
-                                t = ((x*s) - (z*r))/q;
+                                q = ((eigenvaluesReal[i] - p) * (eigenvaluesReal[i] - p)) +
+                                    (eigenvaluesImag[i] * eigenvaluesImag[i]);
+                                t = ((x * s) - (z * r)) / q;
                                 B[n, i] = t;
                                 if (Math.Abs(x) > Math.Abs(z))
                                 {
-                                    B[n, ip1] = (-r - (w*t))/x;
+                                    B[n, ip1] = (-r - (w * t)) / x;
                                 }
                                 else
                                 {
-                                    B[n, ip1] = (-s - (y*t))/z;
+                                    B[n, ip1] = (-s - (y * t)) / z;
                                 }
                             }
 
                             // Overflow control
                             t = Math.Abs(B[n, i]);
-                            if ((eps*t)*t > 1)
+                            if ((eps * t) * t > 1)
                             {
                                 for (var j = i; j <= n; j++)
                                 {
@@ -493,8 +492,8 @@ namespace StarMathLib
                     // Last vector component imaginary so matrix is triangular
                     if (Math.Abs(B[nm1, n]) > Math.Abs(B[n, nm1]))
                     {
-                        B[nm1, nm1] = q/B[nm1, n];
-                        B[n, nm1] = (-(B[n, n] - p))/B[nm1, n];
+                        B[nm1, nm1] = q / B[nm1, n];
+                        B[n, nm1] = (-(B[n, n] - p)) / B[nm1, n];
                     }
                     else
                     {
@@ -512,8 +511,8 @@ namespace StarMathLib
                         var sa = 0.0;
                         for (var j = l; j <= n; j++)
                         {
-                            ra = ra + (B[j, i]*B[nm1, j]);
-                            sa = sa + (B[j, i]*B[n, j]);
+                            ra = ra + (B[j, i] * B[nm1, j]);
+                            sa = sa + (B[j, i] * B[n, j]);
                         }
 
                         w = B[i, i] - p;
@@ -539,23 +538,23 @@ namespace StarMathLib
                                 x = B[ip1, i];
                                 y = B[i, ip1];
 
-                                var vr = ((eigenvaluesReal[i] - p)*(eigenvaluesReal[i] - p)) +
-                                         (eigenvaluesImag[i]*eigenvaluesImag[i]) - (q*q);
-                                var vi = (eigenvaluesReal[i] - p)*2.0*q;
+                                var vr = ((eigenvaluesReal[i] - p) * (eigenvaluesReal[i] - p)) +
+                                         (eigenvaluesImag[i] * eigenvaluesImag[i]) - (q * q);
+                                var vi = (eigenvaluesReal[i] - p) * 2.0 * q;
                                 if ((vr.IsNegligible()) && (vi.IsNegligible()))
-                                    vr = eps*norm*(Math.Abs(w) + Math.Abs(q) + Math.Abs(x) + Math.Abs(y) + Math.Abs(z));
-                                var res = ComplexNumberDivide((x*r) - (z*ra) + (q*sa), (x*s) - (z*sa) - (q*ra), vr,
+                                    vr = eps * norm * (Math.Abs(w) + Math.Abs(q) + Math.Abs(x) + Math.Abs(y) + Math.Abs(z));
+                                var res = ComplexNumberDivide((x * r) - (z * ra) + (q * sa), (x * s) - (z * sa) - (q * ra), vr,
                                     vi);
                                 B[nm1, i] = res[0];
                                 B[n, i] = res[1];
                                 if (Math.Abs(x) > (Math.Abs(z) + Math.Abs(q)))
                                 {
-                                    B[nm1, ip1] = (-ra - (w*B[nm1, i]) + (q*B[n, i]))/x;
-                                    B[n, ip1] = (-sa - (w*B[n, i]) - (q*B[nm1, i]))/x;
+                                    B[nm1, ip1] = (-ra - (w * B[nm1, i]) + (q * B[n, i])) / x;
+                                    B[n, ip1] = (-sa - (w * B[n, i]) - (q * B[nm1, i])) / x;
                                 }
                                 else
                                 {
-                                    res = ComplexNumberDivide(-r - (y*B[nm1, i]), -s - (y*B[n, i]), z, q);
+                                    res = ComplexNumberDivide(-r - (y * B[nm1, i]), -s - (y * B[n, i]), z, q);
                                     B[nm1, ip1] = res[0];
                                     B[n, ip1] = res[1];
                                 }
@@ -563,7 +562,7 @@ namespace StarMathLib
 
                             // Overflow control
                             t = Math.Max(Math.Abs(B[nm1, i]), Math.Abs(B[n, i]));
-                            if ((eps*t)*t > 1)
+                            if ((eps * t) * t > 1)
                             {
                                 for (var j = i; j <= n; j++)
                                 {
@@ -583,14 +582,14 @@ namespace StarMathLib
                 {
                     z = 0.0;
                     for (var k = 0; k <= j; k++)
-                        z += (eigenVectors[k][i]*B[j, k]);
+                        z += (eigenVectors[k][i] * B[j, k]);
                     eigenVectors[j][i] = z;
                 }
             }
 
             #endregion
 
-            return new[] {eigenvaluesReal, eigenvaluesImag};
+            return new[] { eigenvaluesReal, eigenvaluesImag };
         }
 
         private static double[] ComplexNumberDivide(double xreal, double ximag, double yreal, double yimag)

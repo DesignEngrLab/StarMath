@@ -63,10 +63,10 @@ namespace StarMathLib
         /// The vectors are not the same size.</exception>
         public static double norm1(this IList<double> x, IList<double> y)
         {
-            var xlength = x.Count();
+            var xlength = x.Count;
             if (x == null) throw new ArithmeticException("The vector, x, is null.");
             if (y == null) throw new ArithmeticException("The vector, y, is null.");
-            if (xlength != y.Count()) throw new ArithmeticException("The vectors are not the same size.");
+            if (xlength != y.Count) throw new ArithmeticException("The vectors are not the same size.");
             return norm1(x, y, xlength);
         }
 
@@ -100,10 +100,10 @@ namespace StarMathLib
         /// The vectors are not the same size.</exception>
         public static int norm1(this IList<int> x, IList<int> y)
         {
-            var xlength = x.Count();
+            var xlength = x.Count;
             if (x == null) throw new ArithmeticException("The vector, x, is null.");
             if (y == null) throw new ArithmeticException("The vector, y, is null.");
-            if (xlength != y.Count()) throw new ArithmeticException("The vectors are not the same size.");
+            if (xlength != y.Count) throw new ArithmeticException("The vectors are not the same size.");
             return norm1(x, y, xlength);
         }
 
@@ -203,10 +203,10 @@ namespace StarMathLib
         /// The vectors are not the same size.</exception>
         public static double norm2(this IList<double> x, IList<double> y, Boolean dontDoSqrt = false)
         {
-            var xlength = x.Count();
+            var xlength = x.Count;
             if (x == null) throw new ArithmeticException("The vector, x, is null.");
             if (y == null) throw new ArithmeticException("The vector, y, is null.");
-            if (xlength != y.Count()) throw new ArithmeticException("The vectors are not the same size.");
+            if (xlength != y.Count) throw new ArithmeticException("The vectors are not the same size.");
             return norm2(x, y, xlength, dontDoSqrt);
         }
 
@@ -223,7 +223,7 @@ namespace StarMathLib
         {
             var norm = 0.0;
             for (var i = 0; i != length; i++)
-                norm += (x[i] - y[i])*(x[i] - y[i]);
+                norm += (x[i] - y[i]) * (x[i] - y[i]);
             return dontDoSqrt ? norm : Math.Sqrt(norm);
         }
 
@@ -243,10 +243,10 @@ namespace StarMathLib
         /// The vectors are not the same size.</exception>
         public static double norm2(this IList<int> x, IList<int> y, Boolean dontDoSqrt = false)
         {
-            var xlength = x.Count();
+            var xlength = x.Count;
             if (x == null) throw new ArithmeticException("The vector, x, is null.");
             if (y == null) throw new ArithmeticException("The vector, y, is null.");
-            if (xlength != y.Count()) throw new ArithmeticException("The vectors are not the same size.");
+            if (xlength != y.Count) throw new ArithmeticException("The vectors are not the same size.");
             return norm2(x, y, xlength, dontDoSqrt);
         }
 
@@ -263,7 +263,7 @@ namespace StarMathLib
         {
             var norm = 0.0;
             for (var i = 0; i != length; i++)
-                norm += (x[i] - y[i])*(x[i] - y[i]);
+                norm += (x[i] - y[i]) * (x[i] - y[i]);
             return dontDoSqrt ? norm : Math.Sqrt(norm);
         }
 
@@ -278,7 +278,7 @@ namespace StarMathLib
         public static double norm2(this IEnumerable<double> x, Boolean dontDoSqrt = false)
         {
             if (x == null) throw new ArithmeticException("The vector, x, is null.");
-            return dontDoSqrt ? x.Sum(a => a*a) : Math.Sqrt(x.Sum(a => a*a));
+            return dontDoSqrt ? x.Sum(a => a * a) : Math.Sqrt(x.Sum(a => a * a));
         }
 
 
@@ -293,7 +293,7 @@ namespace StarMathLib
         public static double norm2(this IEnumerable<int> x, Boolean dontDoSqrt = false)
         {
             if (x == null) throw new ArithmeticException("The vector, x, is null.");
-            return dontDoSqrt ? x.Sum(a => a*a) : System.MathF.Sqrt(x.Sum(a => a*a));
+            return dontDoSqrt ? x.Sum(a => a * a) : System.MathF.Sqrt(x.Sum(a => a * a));
         }
 
 
@@ -325,7 +325,7 @@ namespace StarMathLib
             var norm = 0.0;
             for (var i = 0; i != numRows; i++)
                 for (var j = 0; j != numCols; j++)
-                    norm += (a[i, j]*a[i, j]);
+                    norm += (a[i, j] * a[i, j]);
             return dontDoSqrt ? norm : Math.Sqrt(norm);
         }
 
@@ -357,7 +357,7 @@ namespace StarMathLib
             var norm = 0.0;
             for (var i = 0; i != numRows; i++)
                 for (var j = 0; j != numCols; j++)
-                    norm += (a[i, j]*a[i, j]);
+                    norm += (a[i, j] * a[i, j]);
             return dontDoSqrt ? norm : Math.Sqrt(norm);
         }
 
@@ -377,7 +377,7 @@ namespace StarMathLib
         {
             if (x == null) throw new ArithmeticException("The vector, x, is null.");
             var sum = x.Sum(a => Math.Pow(a, p));
-            return dontDoPRoot ? sum : Math.Pow(sum, 1/p);
+            return dontDoPRoot ? sum : Math.Pow(sum, 1 / p);
         }
 
         /// <summary>
@@ -392,7 +392,7 @@ namespace StarMathLib
         {
             if (x == null) throw new ArithmeticException("The vector, x, is null.");
             var sum = x.Sum(a => Math.Pow(a, p));
-            return dontDoPRoot ?sum : Math.Pow(sum, 1/p);
+            return dontDoPRoot ? sum : Math.Pow(sum, 1 / p);
         }
 
 
@@ -425,7 +425,7 @@ namespace StarMathLib
             for (var i = 0; i != numRows; i++)
                 for (var j = 0; j != numCols; j++)
                     norm += Math.Pow(a[i, j], p);
-            return dontDoPRoot ? norm : Math.Pow(norm, 1/p);
+            return dontDoPRoot ? norm : Math.Pow(norm, 1 / p);
         }
 
         /// <summary>
@@ -457,7 +457,7 @@ namespace StarMathLib
             for (var i = 0; i != numRows; i++)
                 for (var j = 0; j != numCols; j++)
                     norm += Math.Pow(a[i, j], p);
-            return dontDoPRoot ? norm : Math.Pow(norm, 1/p);
+            return dontDoPRoot ? norm : Math.Pow(norm, 1 / p);
         }
 
         #endregion
@@ -474,7 +474,7 @@ namespace StarMathLib
         /// <returns>unit vector.</returns>
         public static double[] normalize(this IList<double> x)
         {
-            return normalize(x, x.Count());
+            return normalize(x, x.Count);
         }
 
         /// <summary>
@@ -599,7 +599,7 @@ namespace StarMathLib
             var numCols = A.GetLength(1);
             var rowSums = new double[numRows];
             for (int i = 0; i < numRows; i++)
-                rowSums[i] = A.SumRow(i,numCols);
+                rowSums[i] = A.SumRow(i, numCols);
             return rowSums;
         }
         /// <summary>
@@ -610,7 +610,7 @@ namespace StarMathLib
         /// <returns>System.Double.</returns>
         public static double SumRow(this double[,] A, int index)
         {
-           return SumRow(A,index,A.GetLength(1));
+            return SumRow(A, index, A.GetLength(1));
         }
         /// <summary>
         /// Sums the values of a specified row.
@@ -630,11 +630,10 @@ namespace StarMathLib
         /// <returns>System.Double[].</returns>
         public static double[] SumAllColumns(this double[,] A)
         {
-            var numRows = A.GetLength(0);
             var numCols = A.GetLength(1);
             var colSums = new double[numCols];
             for (int i = 0; i < numCols; i++)
-                colSums[i] = SumColumn(A,i);
+                colSums[i] = SumColumn(A, i);
             return colSums;
         }
         /// <summary>
@@ -673,8 +672,8 @@ namespace StarMathLib
         public static double standardDeviation(this IList<int> A)
         {
             var mean = A.Average();
-            var variance = A.Sum(a => (a - mean)*(a - mean));
-            return Math.Sqrt(variance/A.Count);
+            var variance = A.Sum(a => (a - mean) * (a - mean));
+            return Math.Sqrt(variance / A.Count);
         }
 
         /// <summary>
@@ -685,8 +684,8 @@ namespace StarMathLib
         public static double standardDeviation(this IList<double> A)
         {
             var mean = A.Average();
-            var variance = A.Sum(a => (a - mean)*(a - mean));
-            return Math.Sqrt(variance/A.Count);
+            var variance = A.Sum(a => (a - mean) * (a - mean));
+            return Math.Sqrt(variance / A.Count);
         }
 
         /// <summary>

@@ -45,8 +45,8 @@ namespace StarMathLib
         /// <exception cref="System.ArithmeticException">Matrix sizes do not match</exception>
         public static double[] add(this IList<int> A, IList<double> B)
         {
-            var length = A.Count();
-            if (length != B.Count()) throw new ArithmeticException("Matrix sizes do not match");
+            var length = A.Count;
+            if (length != B.Count) throw new ArithmeticException("Matrix sizes do not match");
             return add(A, B, length);
         }
 
@@ -59,8 +59,8 @@ namespace StarMathLib
         /// <exception cref="System.ArithmeticException">Matrix sizes do not match</exception>
         public static int[] add(this IList<int> A, IList<int> B)
         {
-            var length = A.Count();
-            if (length != B.Count()) throw new ArithmeticException("Matrix sizes do not match");
+            var length = A.Count;
+            if (length != B.Count) throw new ArithmeticException("Matrix sizes do not match");
             return add(A, B, length);
         }
 

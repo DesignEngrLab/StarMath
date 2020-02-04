@@ -45,7 +45,7 @@ namespace StarMathLib
                 x[j] /= values[colPointers[j]];
                 var k = colPointers[j + 1];
                 for (var p = colPointers[j] + 1; p < k; p++)
-                    x[rowIndices[p]] -= values[p]*x[j];
+                    x[rowIndices[p]] -= values[p] * x[j];
             }
         }
 
@@ -65,7 +65,7 @@ namespace StarMathLib
                 x[j] /= values[colPointers[j + 1] - 1];
                 var k = colPointers[j + 1] - 1;
                 for (var p = colPointers[j]; p < k; p++)
-                    x[rowIndices[p]] -= values[p]*x[j];
+                    x[rowIndices[p]] -= values[p] * x[j];
             }
         }
 
@@ -86,12 +86,12 @@ namespace StarMathLib
             var n = A.ncols;
             var x = new double[n];
             int i;
-            var xi = new int[2*n]; // Workspace
+            var xi = new int[2 * n]; // Workspace
             var lnz = 0;
             var unz = 0;
             int[] li;
-            L = new CompressedColumnStorage(n, n, 4*A.ColumnPointers[n] + n);
-            U = new CompressedColumnStorage(n, n, 4*A.ColumnPointers[n] + n);
+            L = new CompressedColumnStorage(n, n, 4 * A.ColumnPointers[n] + n);
+            U = new CompressedColumnStorage(n, n, 4 * A.ColumnPointers[n] + n);
             pinv = new int[n];
             for (i = 0; i < n; i++) // No rows pivotal yet.
                 pinv[i] = -1;
@@ -105,8 +105,8 @@ namespace StarMathLib
                 lp[k] = lnz; // L(:,k) starts here
                 up[k] = unz; // U(:,k) starts here
 
-                if (lnz + n > L.Values.Length) L.Resize(2*L.Values.Length + n);
-                if (unz + n > U.Values.Length) U.Resize(2*U.Values.Length + n);
+                if (lnz + n > L.Values.Length) L.Resize(2 * L.Values.Length + n);
+                if (unz + n > U.Values.Length) U.Resize(2 * U.Values.Length + n);
 
                 li = L.RowIndices;
                 var ui = U.RowIndices;
@@ -138,7 +138,7 @@ namespace StarMathLib
                 }
                 if (ipiv == -1 || a <= 0.0)
                     throw new Exception("No pivot element found.");
-                if (pinv[col] < 0 && Math.Abs(x[col]) >= a*tol)
+                if (pinv[col] < 0 && Math.Abs(x[col]) >= a * tol)
                     ipiv = col;
                 // Divide by pivot
                 var pivot = x[ipiv];
@@ -153,7 +153,7 @@ namespace StarMathLib
                     if (pinv[i] < 0) // x(i) is an entry in L(:,k)
                     {
                         li[lnz] = i; // save unpermuted row in L
-                        lx[lnz++] = x[i]/pivot; // scale pivot column
+                        lx[lnz++] = x[i] / pivot; // scale pivot column
                     }
                     x[i] = 0.0; // x [0..n-1] = 0 for next k
                 }
@@ -214,7 +214,7 @@ namespace StarMathLib
                 var p = lo ? gColPointers[J] + 1 : gColPointers[J]; // lo: L(j,j) 1st entry
                 var q = lo ? gColPointers[J + 1] : gColPointers[J + 1] - 1;
                 for (; p < q; p++)
-                    x[gRowIndices[p]] -= gValues[p]*x[j]; // x(i) -= G(i,j) * x(j)
+                    x[gRowIndices[p]] -= gValues[p] * x[j]; // x(i) -= G(i,j) * x(j)
             }
             // Return top of stack.
             return top;
@@ -360,9 +360,9 @@ namespace StarMathLib
                     p2 = lColPointers[i] + lnz[i];
                     int p;
                     for (p = lColPointers[i]; p < p2; p++)
-                        y[lRowIndices[p]] -= lValues[p]*yi;
-                    var l_ki = yi/D[i];
-                    D[k] -= l_ki*yi;
+                        y[lRowIndices[p]] -= lValues[p] * yi;
+                    var l_ki = yi / D[i];
+                    D[k] -= l_ki * yi;
                     lRowIndices[p] = k; // store L(k,i) in column form of L
                     lValues[p] = l_ki;
                     lnz[i]++; // increment count of nonzeros in col i
@@ -393,7 +393,7 @@ namespace StarMathLib
             {
                 var end = lColPointers[i + 1];
                 for (var p = lColPointers[i]; p < end; p++)
-                    x[lRowIndices[p]] -= lValues[p]*x[i];
+                    x[lRowIndices[p]] -= lValues[p] * x[i];
             }
             // Solve diagonal system, x = D\x.
             for (var i = 0; i < n; i++)
@@ -403,7 +403,7 @@ namespace StarMathLib
             {
                 var end = lColPointers[i + 1];
                 for (var p = lColPointers[i]; p < end; p++)
-                    x[i] -= lValues[p]*x[lRowIndices[p]];
+                    x[i] -= lValues[p] * x[lRowIndices[p]];
             }
             return Apply(inversePermute, x, n); // b = P'*x
         }

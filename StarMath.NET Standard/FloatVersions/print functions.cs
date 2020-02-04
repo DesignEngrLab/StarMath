@@ -13,6 +13,7 @@
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
 namespace StarMathLib
 {
@@ -23,6 +24,7 @@ namespace StarMathLib
         /// </summary>
         /// <param name="A">The matrix, A.</param>
         /// <returns>System.String.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string MakePrintString(this float[,] A)
         {
             if (A == null) return "<null>";
@@ -36,8 +38,7 @@ namespace StarMathLib
                 p = p.Remove(p.Length - 1);
                 p += " |\n";
             }
-            p = p.Remove(p.Length - 1);
-            return p;
+            return p.Remove(p.Length - 1);
         }
 
         /// <summary>
@@ -45,6 +46,7 @@ namespace StarMathLib
         /// </summary>
         /// <param name="A">The A.</param>
         /// <returns>System.String.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string MakePrintString(this IEnumerable<float> A)
         {
             if (A == null) return "<null>";
@@ -67,8 +69,8 @@ namespace StarMathLib
             var numStr = string.Format(format, p);
             numStr = numStr.TrimEnd('0');
             numStr = numStr.TrimEnd('.');
-            var padAmt = ((float) (PrintCellWidth - numStr.Length))/2;
-            numStr = numStr.PadLeft((int) Math.Floor(padAmt + numStr.Length));
+            var padAmt = ((float)(PrintCellWidth - numStr.Length)) / 2;
+            numStr = numStr.PadLeft((int)Math.Floor(padAmt + numStr.Length));
             numStr = numStr.PadRight(PrintCellWidth);
             return numStr;
         }

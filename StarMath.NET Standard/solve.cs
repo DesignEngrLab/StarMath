@@ -42,8 +42,7 @@ namespace StarMathLib
                 return solveViaCramersRule3(A, b);
             if (length == 2)
                 return solveViaCramersRule2(A, b);
-            List<int>[] potentialDiagonals;
-            if (isGaussSeidelAppropriate(A, b, out potentialDiagonals, ref initialGuess, length))
+            if (isGaussSeidelAppropriate(A, b, out var potentialDiagonals, ref initialGuess, length))
                 return SolveIteratively(A, b, initialGuess, length, potentialDiagonals);
 
             return SolveAnalytically(A, b, IsASymmetric);
@@ -181,8 +180,7 @@ namespace StarMathLib
             }
             else
             {
-                int[] permutationVector;
-                var LU = LUDecomposition(A, out permutationVector, length);
+                var LU = LUDecomposition(A, out var permutationVector, length);
                 var x = new double[length];
                 // forward substitution
                 for (int i = 0; i < length; i++)
@@ -370,7 +368,7 @@ namespace StarMathLib
                         }
                     }
                 }
-            } while (!solutionFound && stack.Any());
+            } while (!solutionFound && stack.Count > 0);
             if (solutionFound) return candidate;
             return null;
         }

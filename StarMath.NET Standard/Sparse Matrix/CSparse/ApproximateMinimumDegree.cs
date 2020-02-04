@@ -245,7 +245,7 @@ namespace StarMathLib
                     var p1 = Cp[i];
                     var p2 = p1 + elen[i] - 1;
                     var pn = p1;
-                    var d = 0;
+                    int d;
                     for (h = 0, d = 0, p = p1; p <= p2; p++) // scan Ei
                     {
                         int e = Ci[p];
@@ -446,7 +446,7 @@ namespace StarMathLib
         {
             int top = n;
             for (int p = Bp[k]; p < Bp[k + 1]; p++) //if (!CS_MARKED(Gp, Bi[p]))
-                if (!(Gp[Bi[p]] < 0)) // start a dfs at unmarked node i
+                if (Gp[Bi[p]] >= 0) // start a dfs at unmarked node i
                     top = DepthFirstSearch(Bi[p], Gp, Gi, top, xi, xi, n, pinv);
             for (int p = top; p < n; p++) //CS_MARK(Gp, xi[p]);
                 Gp[xi[p]] = -Gp[xi[p]] - 2; // restore G
@@ -477,7 +477,7 @@ namespace StarMathLib
             {
                 j = xi[head]; // get j from the top of the recursion stack
                 var jnew = pinv != null ? pinv[j] : j;
-                if (!(Gp[j] < 0))
+                if (Gp[j] >= 0)
                 {
                     //CS_MARK(Gp, j);
                     Gp[j] = -Gp[j] - 2; // mark node j as visited

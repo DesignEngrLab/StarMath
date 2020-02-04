@@ -13,6 +13,7 @@
 // ***********************************************************************
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 
 namespace StarMathLib
 {
@@ -25,6 +26,7 @@ namespace StarMathLib
         /// </summary>
         /// <param name="A">The array to be searched for</param>
         /// <returns>A float value that is the maximum of A</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float Max(this float[,] A)
         {
             var max = float.NegativeInfinity;
@@ -43,6 +45,7 @@ namespace StarMathLib
         /// <param name="rowIndex">Index of the row.</param>
         /// <param name="colIndex">Index of the col.</param>
         /// <returns>the maximum value</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float Max(this float[,] A, out int rowIndex, out int colIndex)
         {
             var max = float.NegativeInfinity;
@@ -68,6 +71,7 @@ namespace StarMathLib
         /// </summary>
         /// <param name="A">The array to be searched for</param>
         /// <returns>A float value that is the minimum of A</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float Min(this float[,] A)
         {
             var min = float.PositiveInfinity;
@@ -86,6 +90,7 @@ namespace StarMathLib
         /// <param name="rowIndex">Index of the row.</param>
         /// <param name="colIndex">Index of the col.</param>
         /// <returns>the minimum value</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float Min(this float[,] A, out int rowIndex, out int colIndex)
         {
             var min = float.PositiveInfinity;
@@ -111,6 +116,7 @@ namespace StarMathLib
         /// </summary>
         /// <param name="A">The array to be searched for</param>
         /// <returns>An float value that is the maximum of A</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float Max(this IList<float> A)
         {
             var max = float.NegativeInfinity;
@@ -125,6 +131,7 @@ namespace StarMathLib
         /// </summary>
         /// <param name="A">The array to be searched for</param>
         /// <returns>An float value that is the minimum of A</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float Min(this IList<float> A)
         {
             var min = float.PositiveInfinity;
@@ -140,6 +147,7 @@ namespace StarMathLib
         /// <param name="A">The array to be searched for</param>
         /// <param name="index">The index.</param>
         /// <returns>the minimum value</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float Min(this IList<float> A, out int index)
         {
             index = -1;
@@ -160,6 +168,7 @@ namespace StarMathLib
         /// <param name="A">The array to be searched for</param>
         /// <param name="index">The index.</param>
         /// <returns>the maximum value</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float Max(this IList<float> A, out int index)
         {
             index = -1;
@@ -184,6 +193,7 @@ namespace StarMathLib
         /// <param name="A">The A.</param>
         /// <param name="FindVal">The find value.</param>
         /// <returns>IList&lt;System.Int32&gt;.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static IList<int> find(this IList<float> A, float FindVal)
         {
             return find(FindVal, A);
@@ -195,9 +205,10 @@ namespace StarMathLib
         /// <param name="FindVal">The find value.</param>
         /// <param name="A">The A.</param>
         /// <returns>IList&lt;System.Int32&gt;.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static IList<int> find(float FindVal, IList<float> A)
         {
-            return A.Select((value, index) => new {Item = value, Position = index})
+            return A.Select((value, index) => new { Item = value, Position = index })
                 .Where(x => x.Item == FindVal).Select(a => a.Position).ToList();
         }
 
@@ -208,6 +219,7 @@ namespace StarMathLib
         /// <param name="A">The A.</param>
         /// <param name="FindVal">The find value.</param>
         /// <returns>System.Int32[].</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int[] find(this float[,] A, float FindVal)
         {
             return find(FindVal, A);
@@ -219,6 +231,7 @@ namespace StarMathLib
         /// <param name="FindVal">The find value.</param>
         /// <param name="A">The A.</param>
         /// <returns>System.Int32[].</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int[] find(float FindVal, float[,] A)
         {
             var numRows = A.GetLength(0);
@@ -226,7 +239,7 @@ namespace StarMathLib
             for (var i = 0; i < numRows; i++)
                 for (var j = 0; j < numCols; j++)
                     if (FindVal == A[i, j])
-                        return new[] {i, j};
+                        return new[] { i, j };
             return null;
         }
 

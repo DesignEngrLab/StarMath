@@ -191,7 +191,7 @@ namespace StarMathLib
             {
                 for (int p = ColumnPointers[j]; p < ColumnPointers[j + 1]; p++)
                 {
-                  int  k = workspace[RowIndices[p]]++;
+                    int k = workspace[RowIndices[p]]++;
                     // Place A(i,j) as entry C(j,i)
                     rowIndices[k] = j;
                 }
@@ -318,9 +318,9 @@ namespace StarMathLib
         /// <returns>new value of nz</returns>
         private int Scatter(int j, int[] work, int mark, int[] ci, int nz)
         {
-             for (int p = ColumnPointers[j]; p < ColumnPointers[j + 1]; p++)
+            for (int p = ColumnPointers[j]; p < ColumnPointers[j + 1]; p++)
             {
-              int  i = RowIndices[p]; // A(i,j) is nonzero
+                int i = RowIndices[p]; // A(i,j) is nonzero
                 if (work[i] < mark)
                 {
                     work[i] = mark; // i is new entry in column j

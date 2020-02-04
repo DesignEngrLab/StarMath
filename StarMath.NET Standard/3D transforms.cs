@@ -48,7 +48,7 @@ namespace StarMathLib
         {
             var rotx = makeIdentity(4);
             if (!inRadians)
-                angle = (Math.PI*angle)/180;
+                angle = (Math.PI * angle) / 180;
 
             rotx[1, 1] = rotx[2, 2] = Math.Cos(angle);
             rotx[2, 1] = Math.Sin(angle);
@@ -67,7 +67,7 @@ namespace StarMathLib
         {
             var roty = makeIdentity(4);
             if (!inRadians)
-                angle = (Math.PI*angle)/180;
+                angle = (Math.PI * angle) / 180;
 
             roty[0, 0] = roty[2, 2] = Math.Cos(angle);
             roty[0, 2] = Math.Sin(angle);
@@ -86,7 +86,7 @@ namespace StarMathLib
         {
             var rotz = makeIdentity(4);
             if (!inRadians)
-                angle = (Math.PI*angle)/180;
+                angle = (Math.PI * angle) / 180;
 
             rotz[0, 0] = rotz[1, 1] = Math.Cos(angle);
             rotz[1, 0] = Math.Sin(angle);

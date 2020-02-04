@@ -14,6 +14,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
+
 namespace StarMathLib
 {
     public static partial class StarMath
@@ -25,6 +27,7 @@ namespace StarMathLib
         /// <param name="p">The size (number of both rows and columns).</param>
         /// <returns>an empty (all zeros) square matrix (2D float).</returns>
         /// <exception cref="System.ArithmeticException">The size, p, must be a positive integer.</exception>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float[,] makeZeroFloat(int p)
         {
             if (p <= 0) throw new ArithmeticException("The size, p, must be a positive integer.");
@@ -37,6 +40,7 @@ namespace StarMathLib
         /// <param name="p">The p.</param>
         /// <returns>System.Double[].</returns>
         /// <exception cref="System.ArithmeticException">The size, p, must be a positive integer.</exception>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float[] makeZeroVectorFloat(int p)
         {
             if (p <= 0) throw new ArithmeticException("The size, p, must be a positive integer.");
@@ -53,6 +57,7 @@ namespace StarMathLib
         /// <exception cref="System.ArithmeticException">The number of rows, numRows, must be a positive integer.
         /// or
         /// The number of columns, numCols, must be a positive integer.</exception>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float[,] makeZeroFloat(int numRows, int numCols)
         {
             if (numRows <= 0) throw new ArithmeticException("The number of rows, numRows, must be a positive integer.");
@@ -67,6 +72,7 @@ namespace StarMathLib
         /// <param name="p">The size (number of both rows and columns).</param>
         /// <returns>the identity matrix, I.</returns>
         /// <exception cref="System.ArithmeticException">The size, p, must be a positive integer.</exception>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float[,] makeIdentityFloat(int p)
         {
             if (p <= 0) throw new ArithmeticException("The size, p, must be a positive integer.");
@@ -88,6 +94,7 @@ namespace StarMathLib
         /// <param name="start">The starting value (the value of the first element).</param>
         /// <returns>Returns a float array with a series of numbers starting from start until the end
         /// with a distance of the interval between any pair of numbers.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float[] makeLinearProgression(float end, float interval, float start = 0.0f)
         {
             var NumOfElements = (int)((end - start) / interval);
@@ -108,6 +115,7 @@ namespace StarMathLib
         /// <param name="start">The starting value (the value of the first element).</param>
         /// <returns>Returns a float array with a series of numbers starting from start until the end
         /// with a distance of the interval between any pair of numbers.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float[] makeLinearProgression(float end, int numElements, float start = 0.0f)
         {
             var prog = new float[numElements];
@@ -126,6 +134,7 @@ namespace StarMathLib
         /// <param name="A">a.</param>
         /// <param name="optionalTolerance">An optional tolerance.</param>
         /// <returns>SparseMatrix.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static SparseMatrix ConvertDenseToSparseMatrix(this float[,] A, double optionalTolerance = DefaultEqualityTolerance)
         {
             var numRows = A.GetLength(0);
@@ -156,6 +165,7 @@ namespace StarMathLib
         /// <param name="A">The matrix, A.</param>
         /// <param name="colIndex">The column index.</param>
         /// <returns>A float array that contains the requested column</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float[] GetColumn(this float[,] A, int colIndex)
         {
             return GetColumn(colIndex, A);
@@ -172,6 +182,7 @@ namespace StarMathLib
         ///                                     + colIndex
         ///                                     +  for getColumn is not in required range from 0 up to (but not including) 
         ///                                     + numRows + .</exception>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float[] GetColumn(int colIndex, float[,] A)
         {
             var numRows = A.GetLength(0);
@@ -193,6 +204,7 @@ namespace StarMathLib
         /// <param name="A">2D float array from which columns need to be extracted</param>
         /// <param name="ColumnList">The column list indices.</param>
         /// <returns>A  2D float array that contains all the requested columns</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float[,] GetColumns(this float[,] A, IList<int> ColumnList)
         {
             return GetColumns(ColumnList, A);
@@ -204,6 +216,7 @@ namespace StarMathLib
         /// <param name="ColumnList">The column list indices.</param>
         /// <param name="A">2D float array from which columns need to be extracted</param>
         /// <returns>A  2D float array that contains all the requested columns</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float[,] GetColumns(IList<int> ColumnList, float[,] A)
         {
             var columns = new float[A.GetLength(0), ColumnList.Count];
@@ -219,6 +232,7 @@ namespace StarMathLib
         /// <param name="A">The matrix, A.</param>
         /// <param name="rowIndex">The row index.</param>
         /// <returns>A float array that contains the requested row</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float[] GetRow(this float[,] A, int rowIndex)
         {
             return GetRow(rowIndex, A);
@@ -234,6 +248,7 @@ namespace StarMathLib
         ///                                     + rowIndex
         ///                                     +  for getRow is not in required range from 0 up to (but not including) 
         ///                                     + numRows + .</exception>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float[] GetRow(int rowIndex, float[,] A)
         {
             var numRows = A.GetLength(0);
@@ -256,6 +271,7 @@ namespace StarMathLib
         /// <param name="A">2D float array from which rows need to be extracted</param>
         /// <param name="RowList">The row list indices.</param>
         /// <returns>A  2D float array that contains all the requested rows</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float[,] GetRows(this float[,] A, IList<int> RowList)
         {
             return GetRows(RowList, A);
@@ -268,6 +284,7 @@ namespace StarMathLib
         /// <param name="RowList">The row list indices.</param>
         /// <param name="A">2D float array from which rows need to be extracted</param>
         /// <returns>A  2D float array that contains all the requested rows</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float[,] GetRows(IList<int> RowList, float[,] A)
         {
             var Rows = new float[RowList.Count, A.GetLength(1)];
@@ -287,6 +304,7 @@ namespace StarMathLib
         /// <param name="A">The matrix, A.</param>
         /// <param name="rowIndex">The index of the row, rowIndex.</param>
         /// <param name="v">The vector, v.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void SetRow(this float[,] A, int rowIndex, IList<float> v)
         {
             SetRow(rowIndex, A, v);
@@ -302,6 +320,7 @@ namespace StarMathLib
         ///                                     + rowIndex
         ///                                     +  for getRow is not in required range from 0 up to (but not including) 
         ///                                     + numRows + .</exception>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void SetRow(int rowIndex, float[,] A, IList<float> v)
         {
             var numRows = A.GetLength(0);
@@ -321,6 +340,7 @@ namespace StarMathLib
         /// <param name="A">The matrix, A.</param>
         /// <param name="colIndex">The index of the column, rowIndex.</param>
         /// <param name="v">The vector, v.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void SetColumn(this float[,] A, int colIndex, IList<float> v)
         {
             SetColumn(colIndex, A, v);
@@ -336,6 +356,7 @@ namespace StarMathLib
         ///                                     + colIndex
         ///                                     +  for getColumn is not in required range from 0 up to (but not including) 
         ///                                     + numCols + .</exception>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void SetColumn(int colIndex, float[,] A, IList<float> v)
         {
             var numRows = A.GetLength(0);
@@ -362,6 +383,7 @@ namespace StarMathLib
         ///                                     + rowIndex
         ///                                     +  for RemoveRow is not in required range from 0 up to (but not including) 
         ///                                     + numRows + .</exception>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float[,] RemoveRow(this float[,] A, int rowIndex)
         {
             var numRows = A.GetLength(0);
@@ -389,6 +411,7 @@ namespace StarMathLib
         ///                                     + colIndex
         ///                                     +  for RemoveColumn is not in required range from 0 up to (but not including) 
         ///                                     + numCols + .</exception>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float[,] RemoveColumn(this float[,] A, int colIndex)
         {
             var numRows = A.GetLength(0);
@@ -423,6 +446,7 @@ namespace StarMathLib
         ///                                     ) than there are rows in the matrix provided to RemoveRows (number of rows =  +
         ///                                     numRows + ).
         /// </exception>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float[,] RemoveRows(this float[,] A, IList<int> rowIndices)
         {
             var numRows = A.GetLength(0);
@@ -472,6 +496,7 @@ namespace StarMathLib
         /// StarMath Size Error: An there are more rows to remove (rowIndices.Count =
         /// + colIndices.Count +
         /// ) than there are rows in the matrix provided to RemoveColumns (number of rows =  + numCols + ).</exception>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float[,] RemoveColumns(this float[,] A, IList<int> colIndices)
         {
             var numRows = A.GetLength(0);
@@ -488,8 +513,8 @@ namespace StarMathLib
                                     ") than there are rows in the matrix provided to RemoveColumns (number of rows = " +
                                     numCols + ").");
             var B = new float[numRows, numCols - colIndices.Count];
-         var sortedColIndices = colIndices.OrderBy(x => x).ToArray();
-           var k = 0; //colIndices position
+            var sortedColIndices = colIndices.OrderBy(x => x).ToArray();
+            var k = 0; //colIndices position
             for (var i = 0; i < numCols; i++)
                 if (k < numToRemove && sortedColIndices[k] == i) k++;
                 else B.SetColumn(i - k, A.GetColumn(i));
@@ -504,6 +529,7 @@ namespace StarMathLib
         /// <param name="A">1D float array from which elements need to be extracted</param>
         /// <param name="indexList">The indices of the elements.</param>
         /// <returns>A single 1D float array that contains all the requested elements.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float[] GetPartialVector(this IList<float> A, IList<int> indexList)
         {
             var result = new float[indexList.Count];
@@ -526,6 +552,7 @@ namespace StarMathLib
         /// + index
         /// +  for RemoveVectorCell is not in required range from 0 up to (but not including)
         /// + length + .</exception>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float[] RemoveVectorCell(this IList<float> A, int index)
         {
             var length = A.Count;
@@ -558,6 +585,7 @@ namespace StarMathLib
         /// + index
         /// +  for RemoveVectorCell is not in required range from 0 up to (but not including)
         /// + length + .</exception>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float[] RemoveVectorCells(this IList<float> A, IList<int> indices)
         {
             var length = A.Count;
@@ -592,6 +620,7 @@ namespace StarMathLib
         /// <param name="Matrix2">Matrix that is attached to the right</param>
         /// <returns>A 2D float array that has Matrix1 and Matrix2 side by side</returns>
         /// <exception cref="System.ArithmeticException">StarMath Size Error: Row dimensions do not match for matrix1 and matrix2</exception>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float[,] JoinCol(this float[,] Matrix1, float[,] Matrix2)
         {
             if (Matrix1.GetLength(0) != Matrix2.GetLength(0))
@@ -622,6 +651,7 @@ namespace StarMathLib
         /// <param name="Matrix2">Matrix that is attached to the bottom</param>
         /// <returns>A 2D float array that has Matrix1 and Matrix2 one below the other</returns>
         /// <exception cref="System.ArithmeticException">StarMath Size Error: Column dimensions do not match for matrix1 and matrix2</exception>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float[,] JoinRow(this float[,] Matrix1, float[,] Matrix2)
         {
             if (Matrix1.GetLength(1) != Matrix2.GetLength(1))
@@ -652,6 +682,7 @@ namespace StarMathLib
         /// <param name="Array1">Array that comes first.</param>
         /// <param name="Array2">Array that is appended to the end of the first array</param>
         /// <returns>An float array that has Array1 and Array2 side by side</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float[] JoinVectors(this IList<float> Array1, IList<float> Array2)
         {
             var Array1Length = Array1.Count;
@@ -674,6 +705,7 @@ namespace StarMathLib
         /// </summary>
         /// <param name="A">The matrix of doubles, A.</param>
         /// <returns>System.Double[].</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float[] JoinMatrixColumnsIntoVector(this float[,] A)
         {
             var numRows = A.GetLength(0);
@@ -689,6 +721,7 @@ namespace StarMathLib
         /// </summary>
         /// <param name="A">The matrix of doubles, A.</param>
         /// <returns>System.Double[].</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float[] JoinMatrixRowsIntoVector(this float[,] A)
         {
             var numRows = A.GetLength(0);
@@ -708,6 +741,7 @@ namespace StarMathLib
         /// </summary>
         /// <param name="list">The list.</param>
         /// <returns>List&lt;System.Double[]&gt;.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static List<float[]> DistinctVectors(this List<float[]> list)
         {
             var distinctList = new List<float[]>(list);

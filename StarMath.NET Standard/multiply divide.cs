@@ -28,7 +28,7 @@ namespace StarMathLib
         /// <returns>A 1D double array that contains the product</returns>
         public static double[] multiply(this IList<double> B, double a)
         {
-            return multiply(a, B, B.Count());
+            return multiply(a, B, B.Count);
         }
 
         /// <summary>
@@ -51,7 +51,7 @@ namespace StarMathLib
         /// <returns>A 1D double array that contains the product</returns>
         public static double[] multiply(double a, IList<double> B)
         {
-            return multiply(a, B, B.Count());
+            return multiply(a, B, B.Count);
         }
 
         /// <summary>
@@ -67,7 +67,7 @@ namespace StarMathLib
             // scale vector B by the amount of scalar a
             var c = new double[length];
             for (var i = 0; i != length; i++)
-                c[i] = a*B[i];
+                c[i] = a * B[i];
             return c;
         }
 
@@ -83,7 +83,7 @@ namespace StarMathLib
         /// <returns>A 1D double array that contains the product</returns>
         public static double[] multiply(this IList<int> B, double a)
         {
-            return multiply(a, B, B.Count());
+            return multiply(a, B, B.Count);
         }
 
         /// <summary>
@@ -106,7 +106,7 @@ namespace StarMathLib
         /// <returns>A 1D double array that contains the product</returns>
         public static double[] multiply(double a, IList<int> B)
         {
-            return multiply(a, B, B.Count());
+            return multiply(a, B, B.Count);
         }
 
         /// <summary>
@@ -122,7 +122,7 @@ namespace StarMathLib
             // scale vector B by the amount of scalar a
             var c = new double[length];
             for (var i = 0; i != length; i++)
-                c[i] = a*B[i];
+                c[i] = a * B[i];
             return c;
         }
 
@@ -134,7 +134,7 @@ namespace StarMathLib
         /// <returns>A 1D integer array that contains the product</returns>
         public static int[] multiply(this IList<int> B, int a)
         {
-            return multiply(a, B, B.Count());
+            return multiply(a, B, B.Count);
         }
 
         /// <summary>
@@ -157,7 +157,7 @@ namespace StarMathLib
         /// <returns>A 1D integer array that contains the product</returns>
         public static int[] multiply(int a, IList<int> B)
         {
-            return multiply(a, B, B.Count());
+            return multiply(a, B, B.Count);
         }
 
         /// <summary>
@@ -173,7 +173,7 @@ namespace StarMathLib
             // scale vector B by the amount of scalar a
             var c = new int[length];
             for (var i = 0; i != length; i++)
-                c[i] = a*B[i];
+                c[i] = a * B[i];
             return c;
         }
 
@@ -185,7 +185,7 @@ namespace StarMathLib
         /// <returns>A 1D double array that contains the product</returns>
         public static double[] divide(this IList<double> B, double a)
         {
-            return multiply((1/a), B);
+            return multiply((1 / a), B);
         }
 
         /// <summary>
@@ -198,7 +198,7 @@ namespace StarMathLib
         /// <returns>A 1D double array that contains the product</returns>
         public static double[] divide(this IList<double> B, double a, int length)
         {
-            return multiply((1/a), B, length);
+            return multiply((1 / a), B, length);
         }
 
         /// <summary>
@@ -209,7 +209,7 @@ namespace StarMathLib
         /// <returns>A 1D double array that contains the product</returns>
         public static double[] divide(this IList<int> B, double a)
         {
-            return multiply((1/a), B);
+            return multiply((1 / a), B);
         }
 
         /// <summary>
@@ -222,7 +222,7 @@ namespace StarMathLib
         /// <returns>A 1D double array that contains the product</returns>
         public static double[] divide(this IList<int> B, double a, int length)
         {
-            return multiply((1/a), B, length);
+            return multiply((1 / a), B, length);
         }
 
         #endregion
@@ -281,7 +281,7 @@ namespace StarMathLib
             var c = new double[numRows, numCols];
             for (var i = 0; i != numRows; i++)
                 for (var j = 0; j != numCols; j++)
-                    c[i, j] = a*B[i, j];
+                    c[i, j] = a * B[i, j];
             return c;
         }
 
@@ -337,7 +337,7 @@ namespace StarMathLib
             var c = new double[numRows, numCols];
             for (var i = 0; i != numRows; i++)
                 for (var j = 0; j != numCols; j++)
-                    c[i, j] = a*B[i, j];
+                    c[i, j] = a * B[i, j];
             return c;
         }
 
@@ -393,7 +393,7 @@ namespace StarMathLib
             var c = new int[numRows, numCols];
             for (var i = 0; i != numRows; i++)
                 for (var j = 0; j != numCols; j++)
-                    c[i, j] = a*B[i, j];
+                    c[i, j] = a * B[i, j];
             return c;
         }
 
@@ -405,7 +405,7 @@ namespace StarMathLib
         /// <returns>A 2D double array that contains the product</returns>
         public static double[,] divide(this double[,] B, double a)
         {
-            return multiply((1/a), B);
+            return multiply((1 / a), B);
         }
 
         /// <summary>
@@ -420,7 +420,7 @@ namespace StarMathLib
         /// <returns>A 2D double array that contains the product</returns>
         public static double[,] divide(this double[,] B, double a, int numRows, int numCols)
         {
-            return multiply((1/a), B, numRows, numCols);
+            return multiply((1 / a), B, numRows, numCols);
         }
 
         /// <summary>
@@ -431,7 +431,7 @@ namespace StarMathLib
         /// <returns>A 2D double array that contains the product</returns>
         public static double[,] divide(this int[,] B, double a)
         {
-            return multiply((1/a), B);
+            return multiply((1 / a), B);
         }
 
         /// <summary>
@@ -446,7 +446,7 @@ namespace StarMathLib
         /// <returns>A 2D double array that contains the product</returns>
         public static double[,] divide(this int[,] B, double a, int numRows, int numCols)
         {
-            return multiply((1/a), B, numRows, numCols);
+            return multiply((1 / a), B, numRows, numCols);
         }
 
         #endregion
@@ -462,8 +462,8 @@ namespace StarMathLib
         /// <exception cref="System.ArithmeticException">Matrix sizes do not match</exception>
         public static double dotProduct(this IList<double> A, IList<double> B)
         {
-            var length = A.Count();
-            if (length != B.Count())
+            var length = A.Count;
+            if (length != B.Count)
                 throw new ArithmeticException("Matrix sizes do not match");
             return dotProduct(A, B, length);
         }
@@ -480,7 +480,7 @@ namespace StarMathLib
         {
             var c = 0.0;
             for (var i = 0; i != length; i++)
-                c += A[i]*B[i];
+                c += A[i] * B[i];
             return c;
         }
 
@@ -493,8 +493,8 @@ namespace StarMathLib
         /// <exception cref="System.ArithmeticException">Matrix sizes do not match</exception>
         public static double dotProduct(this IList<int> A, IList<double> B)
         {
-            var length = A.Count();
-            if (length != B.Count())
+            var length = A.Count;
+            if (length != B.Count)
                 throw new ArithmeticException("Matrix sizes do not match");
             return dotProduct(A, B, length);
         }
@@ -511,7 +511,7 @@ namespace StarMathLib
         {
             var c = 0.0;
             for (var i = 0; i != length; i++)
-                c += A[i]*B[i];
+                c += A[i] * B[i];
             return c;
         }
 
@@ -525,8 +525,8 @@ namespace StarMathLib
         public static int dotProduct(this IList<int> A, IList<int> B)
         {
             // this is B dot term_i multiplication
-            var length = A.Count();
-            if (length != B.Count())
+            var length = A.Count;
+            if (length != B.Count)
                 throw new ArithmeticException("Matrix sizes do not match");
             return dotProduct(A, B, length);
         }
@@ -543,7 +543,7 @@ namespace StarMathLib
         {
             var c = 0;
             for (var i = 0; i != length; i++)
-                c += A[i]*B[i];
+                c += A[i] * B[i];
             return c;
         }
 
@@ -560,12 +560,12 @@ namespace StarMathLib
         /// <exception cref="System.ArithmeticException">Cross product is only possible for vectors of length: 1, 3, or 7</exception>
         public static double[] crossProduct(this IList<double> A, IList<double> B)
         {
-            var Alength = A.Count();
-            var Blength = B.Count();
+            var Alength = A.Count;
+            var Blength = B.Count;
             if ((Alength == 1) && (Blength == 1))
-                return new[] {0.0};
+                return new[] { 0.0 };
             if ((Alength == 2) && (Blength == 2))
-                return new[] {0.0, 0.0, crossProduct2(A, B)};
+                return new[] { 0.0, 0.0, crossProduct2(A, B) };
             if ((Alength == 3) && (Blength == 3))
                 return crossProduct3(A, B);
             if ((Alength == 7) && (Blength == 7))
@@ -582,12 +582,12 @@ namespace StarMathLib
         /// <exception cref="System.ArithmeticException">Cross product is only possible for vectors of length: 1, 3, or 7</exception>
         public static double[] crossProduct(this IList<int> A, IList<double> B)
         {
-            var Alength = A.Count();
-            var Blength = B.Count();
+            var Alength = A.Count;
+            var Blength = B.Count;
             if ((Alength == 1) && (Blength == 1))
-                return new[] {0.0};
+                return new[] { 0.0 };
             if ((Alength == 2) && (Blength == 2))
-                return new[] {0.0, 0.0, crossProduct2(A, B)};
+                return new[] { 0.0, 0.0, crossProduct2(A, B) };
             if ((Alength == 3) && (Blength == 3))
                 return crossProduct3(A, B);
             if ((Alength == 7) && (Blength == 7))
@@ -604,12 +604,12 @@ namespace StarMathLib
         /// <exception cref="System.ArithmeticException">Cross product is only possible for vectors of length: 1, 3, or 7</exception>
         public static double[] crossProduct(this IList<double> A, IList<int> B)
         {
-            var Alength = A.Count();
-            var Blength = B.Count();
+            var Alength = A.Count;
+            var Blength = B.Count;
             if ((Alength == 1) && (Blength == 1))
-                return new[] {0.0};
+                return new[] { 0.0 };
             if ((Alength == 2) && (Blength == 2))
-                return new[] {0.0, 0.0, crossProduct2(A, B)};
+                return new[] { 0.0, 0.0, crossProduct2(A, B) };
             if ((Alength == 3) && (Blength == 3))
                 return crossProduct3(A, B);
             if ((Alength == 7) && (Blength == 7))
@@ -626,12 +626,12 @@ namespace StarMathLib
         /// <exception cref="System.ArithmeticException">Cross product is only possible for vectors of length: 1, 3, or 7</exception>
         public static int[] crossProduct(this IList<int> A, IList<int> B)
         {
-            var Alength = A.Count();
-            var Blength = B.Count();
+            var Alength = A.Count;
+            var Blength = B.Count;
             if ((Alength == 1) && (Blength == 1))
-                return new[] {0};
+                return new[] { 0 };
             if ((Alength == 2) && (Blength == 2))
-                return new[] {0, 0, crossProduct2(A, B)};
+                return new[] { 0, 0, crossProduct2(A, B) };
             if ((Alength == 3) && (Blength == 3))
                 return crossProduct3(A, B);
             if ((Alength == 7) && (Blength == 7))
@@ -652,9 +652,9 @@ namespace StarMathLib
         ///                                 + would be, Z-direction.</exception>
         public static double crossProduct2(IList<double> A, IList<double> B)
         {
-            if (((A.Count() == 2) && (B.Count() == 2))
-                || ((A.Count() == 3) && (B.Count() == 3) && A[2] == 0.0 && B[2] == 0.0))
-                return A[0]*B[1] - B[0]*A[1];
+            if (((A.Count == 2) && (B.Count == 2))
+                || ((A.Count == 3) && (B.Count == 3) && A[2] == 0.0 && B[2] == 0.0))
+                return A[0] * B[1] - B[0] * A[1];
             throw new ArithmeticException("This cross product \"shortcut\" is only used with 2D vectors to get the single value in the,"
                                 + "would be, Z-direction.");
         }
@@ -672,9 +672,9 @@ namespace StarMathLib
         ///                                 + would be, Z-direction.</exception>
         public static double crossProduct2(IList<int> A, IList<double> B)
         {
-            if (((A.Count() == 2) && (B.Count() == 2))
-                || ((A.Count() == 3) && (B.Count() == 3) && A[2] == 0.0 && B[2] == 0.0))
-                return A[0]*B[1] - B[0]*A[1];
+            if (((A.Count == 2) && (B.Count == 2))
+                || ((A.Count == 3) && (B.Count == 3) && A[2] == 0.0 && B[2] == 0.0))
+                return A[0] * B[1] - B[0] * A[1];
             throw new ArithmeticException("This cross product \"shortcut\" is only used with 2D vectors to get the single value in the,"
                                 + "would be, Z-direction.");
         }
@@ -692,9 +692,9 @@ namespace StarMathLib
         ///                                 + would be, Z-direction.</exception>
         public static double crossProduct2(IList<double> A, IList<int> B)
         {
-            if (((A.Count() == 2) && (B.Count() == 2))
-                || ((A.Count() == 3) && (B.Count() == 3) && A[2] == 0.0 && B[2] == 0.0))
-                return A[0]*B[1] - B[0]*A[1];
+            if (((A.Count == 2) && (B.Count == 2))
+                || ((A.Count == 3) && (B.Count == 3) && A[2] == 0.0 && B[2] == 0.0))
+                return A[0] * B[1] - B[0] * A[1];
             throw new ArithmeticException("This cross product \"shortcut\" is only used with 2D vectors to get the single value in the,"
                                 + "would be, Z-direction.");
         }
@@ -712,9 +712,9 @@ namespace StarMathLib
         ///                                 + would be, Z-direction.</exception>
         public static int crossProduct2(IList<int> A, IList<int> B)
         {
-            if (((A.Count() == 2) && (B.Count() == 2))
-                || ((A.Count() == 3) && (B.Count() == 3) && A[2] == 0.0 && B[2] == 0.0))
-                return A[0]*B[1] - B[0]*A[1];
+            if (((A.Count == 2) && (B.Count == 2))
+                || ((A.Count == 3) && (B.Count == 3) && A[2] == 0.0 && B[2] == 0.0))
+                return A[0] * B[1] - B[0] * A[1];
             throw new ArithmeticException("This cross product \"shortcut\" is only used with 2D vectors to get the single value in the,"
                                 + "would be, Z-direction.");
         }
@@ -877,7 +877,7 @@ namespace StarMathLib
         /// <returns>2D double array product matrix, value of element [i,j] = A[i] * B[j]</returns>
         public static double[,] multiplyVectorsIntoAMatrix(this IList<double> A, IList<double> B)
         {
-            return multiplyVectorsIntoAMatrix(A, B, A.Count(), B.Count());
+            return multiplyVectorsIntoAMatrix(A, B, A.Count, B.Count);
         }
 
         /// <summary>
@@ -890,7 +890,7 @@ namespace StarMathLib
         /// <returns>2D double array product matrix, value of element [i,j] = A[i] * B[j]</returns>
         public static double[,] multiplyVectorsIntoAMatrix(this IList<int> A, IList<double> B)
         {
-            return multiplyVectorsIntoAMatrix(A, B, A.Count(), B.Count());
+            return multiplyVectorsIntoAMatrix(A, B, A.Count, B.Count);
         }
 
         /// <summary>
@@ -903,7 +903,7 @@ namespace StarMathLib
         /// <returns>2D double array product matrix, value of element [i,j] = A[i] * B[j]</returns>
         public static double[,] multiplyVectorsIntoAMatrix(this IList<double> A, IList<int> B)
         {
-            return multiplyVectorsIntoAMatrix(A, B, A.Count(), B.Count());
+            return multiplyVectorsIntoAMatrix(A, B, A.Count, B.Count);
         }
 
         /// <summary>
@@ -916,7 +916,7 @@ namespace StarMathLib
         /// <returns>2D double array product matrix, value of element [i,j] = A[i] * B[j]</returns>
         public static int[,] multiplyVectorsIntoAMatrix(this IList<int> A, IList<int> B)
         {
-            return multiplyVectorsIntoAMatrix(A, B, A.Count(), B.Count());
+            return multiplyVectorsIntoAMatrix(A, B, A.Count, B.Count);
         }
 
         /// <summary>
@@ -936,7 +936,7 @@ namespace StarMathLib
 
             for (var i = 0; i != numRows; i++)
                 for (var j = 0; j != numCols; j++)
-                    C[i, j] = A[i]*B[j];
+                    C[i, j] = A[i] * B[j];
             return C;
         }
 
@@ -957,7 +957,7 @@ namespace StarMathLib
 
             for (var i = 0; i != numRows; i++)
                 for (var j = 0; j != numCols; j++)
-                    C[i, j] = A[i]*B[j];
+                    C[i, j] = A[i] * B[j];
             return C;
         }
 
@@ -978,7 +978,7 @@ namespace StarMathLib
 
             for (var i = 0; i != numRows; i++)
                 for (var j = 0; j != numCols; j++)
-                    C[i, j] = A[i]*B[j];
+                    C[i, j] = A[i] * B[j];
             return C;
         }
 
@@ -999,7 +999,7 @@ namespace StarMathLib
 
             for (var i = 0; i != numRows; i++)
                 for (var j = 0; j != numCols; j++)
-                    C[i, j] = A[i]*B[j];
+                    C[i, j] = A[i] * B[j];
             return C;
         }
 
@@ -1081,7 +1081,7 @@ namespace StarMathLib
                 {
                     C[i, j] = 0.0;
                     for (var k = 0; k != A.GetLength(1); k++)
-                        C[i, j] += A[i, k]*B[k, j];
+                        C[i, j] += A[i, k] * B[k, j];
                 }
             return C;
         }
@@ -1103,7 +1103,7 @@ namespace StarMathLib
                 {
                     C[i, j] = 0.0;
                     for (var k = 0; k != A.GetLength(1); k++)
-                        C[i, j] += A[i, k]*B[k, j];
+                        C[i, j] += A[i, k] * B[k, j];
                 }
             return C;
         }
@@ -1125,7 +1125,7 @@ namespace StarMathLib
                 {
                     C[i, j] = 0.0;
                     for (var k = 0; k != A.GetLength(1); k++)
-                        C[i, j] += A[i, k]*B[k, j];
+                        C[i, j] += A[i, k] * B[k, j];
                 }
             return C;
         }
@@ -1147,7 +1147,7 @@ namespace StarMathLib
                 {
                     C[i, j] = 0;
                     for (var k = 0; k != A.GetLength(1); k++)
-                        C[i, j] += A[i, k]*B[k, j];
+                        C[i, j] += A[i, k] * B[k, j];
                 }
             return C;
         }
@@ -1168,7 +1168,7 @@ namespace StarMathLib
             // this is B dot term_i multiplication
             var numRows = A.GetLength(0);
             var numCols = A.GetLength(1);
-            if (numCols != B.Count())
+            if (numCols != B.Count)
                 throw new ArithmeticException("Column count in first matrix must be equal to row count in second matrix");
             return multiply(A, B, numRows, numCols);
         }
@@ -1185,7 +1185,7 @@ namespace StarMathLib
             // this is B dot term_i multiplication
             var numRows = A.GetLength(0);
             var numCols = A.GetLength(1);
-            if (numCols != B.Count())
+            if (numCols != B.Count)
                 throw new ArithmeticException("Column count in first matrix must be equal to row count in second matrix");
             return multiply(A, B, numRows, numCols);
         }
@@ -1202,7 +1202,7 @@ namespace StarMathLib
             // this is B dot term_i multiplication
             var numRows = A.GetLength(0);
             var numCols = A.GetLength(1);
-            if (numCols != B.Count())
+            if (numCols != B.Count)
                 throw new ArithmeticException("Column count in first matrix must be equal to row count in second matrix");
             return multiply(A, B, numRows, numCols);
         }
@@ -1219,7 +1219,7 @@ namespace StarMathLib
             // this is B dot term_i multiplication
             var numRows = A.GetLength(0);
             var numCols = A.GetLength(1);
-            if (numCols != B.Count())
+            if (numCols != B.Count)
                 throw new ArithmeticException("Column count in first matrix must be equal to row count in second matrix");
             return multiply(A, B, numRows, numCols);
         }
@@ -1236,7 +1236,7 @@ namespace StarMathLib
             // this is B dot term_i multiplication
             var numRows = A.GetLength(0);
             var numCols = A.GetLength(1);
-            if (numRows != B.Count())
+            if (numRows != B.Count)
                 throw new ArithmeticException("Column count in first matrix must be equal to row count in second matrix");
             return multiply(B, A, numRows, numCols);
         }
@@ -1253,7 +1253,7 @@ namespace StarMathLib
             // this is B dot term_i multiplication
             var numRows = A.GetLength(0);
             var numCols = A.GetLength(1);
-            if (numRows != B.Count())
+            if (numRows != B.Count)
                 throw new ArithmeticException("Column count in first matrix must be equal to row count in second matrix");
             return multiply(B, A, numRows, numCols);
         }
@@ -1270,7 +1270,7 @@ namespace StarMathLib
             // this is B dot term_i multiplication
             var numRows = A.GetLength(0);
             var numCols = A.GetLength(1);
-            if (numRows != B.Count())
+            if (numRows != B.Count)
                 throw new ArithmeticException("Column count in first matrix must be equal to row count in second matrix");
             return multiply(B, A, numRows, numCols);
         }
@@ -1287,7 +1287,7 @@ namespace StarMathLib
             // this is B dot term_i multiplication
             var numRows = A.GetLength(0);
             var numCols = A.GetLength(1);
-            if (numRows != B.Count())
+            if (numRows != B.Count)
                 throw new ArithmeticException("Column count in first matrix must be equal to row count in second matrix");
             return multiply(B, A, numRows, numCols);
         }
@@ -1308,7 +1308,7 @@ namespace StarMathLib
             {
                 C[i] = 0.0;
                 for (var j = 0; j != numCols; j++)
-                    C[i] += A[i, j]*B[j];
+                    C[i] += A[i, j] * B[j];
             }
             return C;
         }
@@ -1329,7 +1329,7 @@ namespace StarMathLib
             {
                 C[i] = 0.0;
                 for (var j = 0; j != numCols; j++)
-                    C[i] += A[i, j]*B[j];
+                    C[i] += A[i, j] * B[j];
             }
             return C;
         }
@@ -1350,7 +1350,7 @@ namespace StarMathLib
             {
                 C[i] = 0.0;
                 for (var j = 0; j != numCols; j++)
-                    C[i] += A[i, j]*B[j];
+                    C[i] += A[i, j] * B[j];
             }
             return C;
         }
@@ -1371,7 +1371,7 @@ namespace StarMathLib
             {
                 C[i] = 0;
                 for (var j = 0; j != numCols; j++)
-                    C[i] += A[i, j]*B[j];
+                    C[i] += A[i, j] * B[j];
             }
             return C;
         }
@@ -1392,7 +1392,7 @@ namespace StarMathLib
             {
                 C[i] = 0.0;
                 for (var j = 0; j != numRows; j++)
-                    C[i] += B[j]*A[j, i];
+                    C[i] += B[j] * A[j, i];
             }
             return C;
         }
@@ -1413,7 +1413,7 @@ namespace StarMathLib
             {
                 C[i] = 0.0;
                 for (var j = 0; j != numRows; j++)
-                    C[i] += B[j]*A[j, i];
+                    C[i] += B[j] * A[j, i];
             }
             return C;
         }
@@ -1434,7 +1434,7 @@ namespace StarMathLib
             {
                 C[i] = 0.0;
                 for (var j = 0; j != numRows; j++)
-                    C[i] += B[j]*A[j, i];
+                    C[i] += B[j] * A[j, i];
             }
             return C;
         }
@@ -1455,7 +1455,7 @@ namespace StarMathLib
             {
                 C[i] = 0;
                 for (var j = 0; j != numRows; j++)
-                    C[i] += B[j]*A[j, i];
+                    C[i] += B[j] * A[j, i];
             }
             return C;
         }
@@ -1475,8 +1475,8 @@ namespace StarMathLib
         /// <exception cref="System.ArithmeticException">Matrix sizes do not match</exception>
         public static double[] EltMultiply(this IList<double> A, IList<double> B)
         {
-            var length = A.Count();
-            if (length != B.Count())
+            var length = A.Count;
+            if (length != B.Count)
                 throw new ArithmeticException("Matrix sizes do not match");
             return EltMultiply(A, B, length);
         }
@@ -1506,8 +1506,8 @@ namespace StarMathLib
         /// <exception cref="System.ArithmeticException">Matrix sizes do not match</exception>
         public static double[] EltMultiply(this IList<int> A, IList<double> B)
         {
-            var length = A.Count();
-            if (length != B.Count())
+            var length = A.Count;
+            if (length != B.Count)
                 throw new ArithmeticException("Matrix sizes do not match");
             return EltMultiply(A, B, length);
         }
@@ -1538,8 +1538,8 @@ namespace StarMathLib
         public static int[] EltMultiply(this IList<int> A, IList<int> B)
         {
             // this is B dot term_i multiplication
-            var length = A.Count();
-            if (length != B.Count())
+            var length = A.Count;
+            if (length != B.Count)
                 throw new ArithmeticException("Matrix sizes do not match");
             return EltMultiply(A, B, length);
         }
@@ -1706,8 +1706,8 @@ namespace StarMathLib
         /// <exception cref="System.ArithmeticException">Matrix sizes do not match</exception>
         public static double[] EltDivide(this IList<double> A, IList<double> B)
         {
-            var length = A.Count();
-            if (length != B.Count())
+            var length = A.Count;
+            if (length != B.Count)
                 throw new ArithmeticException("Matrix sizes do not match");
             return EltDivide(A, B, length);
         }
@@ -1737,8 +1737,8 @@ namespace StarMathLib
         /// <exception cref="System.ArithmeticException">Matrix sizes do not match</exception>
         public static double[] EltDivide(this IList<int> A, IList<double> B)
         {
-            var length = A.Count();
-            if (length != B.Count())
+            var length = A.Count;
+            if (length != B.Count)
                 throw new ArithmeticException("Matrix sizes do not match");
             return EltDivide(A, B, length);
         }
@@ -1769,8 +1769,8 @@ namespace StarMathLib
         public static double[] EltDivide(this IList<int> A, IList<int> B)
         {
             // this is B dot term_i multiplication
-            var length = A.Count();
-            if (length != B.Count())
+            var length = A.Count;
+            if (length != B.Count)
                 throw new ArithmeticException("Matrix sizes do not match");
             return EltDivide(A, B, length);
         }

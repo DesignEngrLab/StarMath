@@ -20,6 +20,7 @@
 *************************************************************************/
 
 using System;
+using System.Runtime.CompilerServices;
 
 namespace StarMathLib
 {
@@ -33,10 +34,10 @@ namespace StarMathLib
         ///     The eigenvalues as two arrays of same length/order as A
         ///     (the first is the real component, the second is the imaginary component).
         /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float[][] GetEigenValues(this float[,] A)
         {
-            float[][] eigenVectors;
-            return GetEigenValuesAndVectors(A, out eigenVectors);
+            return GetEigenValuesAndVectors(A, out _);
         }
 
         /// <summary>
@@ -45,6 +46,7 @@ namespace StarMathLib
         /// <param name="A">the matrix in question, A.</param>
         /// <param name="eigenVectors">The eigenvectors as an array of arrays/vectors.</param>
         /// <returns></returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float[][] GetEigenValuesAndVectors(this float[,] A, out float[][] eigenVectors)
         {
             var length = A.GetLength(0);
@@ -289,7 +291,7 @@ namespace StarMathLib
                         }
                     }
 
-                    iter = iter + 1;
+                    iter++;
                     if (iter >= 30 * length)
                     {
                         throw new ArithmeticException("Eigen decomposition does not converge.");

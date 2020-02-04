@@ -13,6 +13,7 @@
 // ***********************************************************************
 
 using System;
+using System.Runtime.CompilerServices;
 
 namespace StarMathLib
 {
@@ -27,6 +28,7 @@ namespace StarMathLib
         /// <param name="ty">Amount of translation in y.</param>
         /// <param name="tz">Amount of translation in z.</param>
         /// <returns>4-by-4 matrix translated by the amount specified.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] 
         public static float[,] TranslateFloat(float tx, float ty, float tz)
         {
             var T = makeIdentityFloat(4);
@@ -44,6 +46,7 @@ namespace StarMathLib
         /// <param name="angle">The amount of angle in degrees (positive is counter-clockwise).</param>
         /// <param name="inRadians">if set to <c>true</c> [in radians].</param>
         /// <returns>4-by-4 matrix rotated by the amount specified.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float[,] RotationXFloat(float angle, bool inRadians = false)
         {
             var rotx = makeIdentityFloat(4);
@@ -63,6 +66,7 @@ namespace StarMathLib
         /// <param name="angle">The amount of angle in degrees (positive is counter-clockwise).</param>
         /// <param name="inRadians">if set to <c>true</c> [in radians].</param>
         /// <returns>4-by-4 matrix rotated by the amount specified.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] 
         public static float[,] RotationYFloat(float angle, bool inRadians = false)
         {
             var roty = makeIdentityFloat(4);
@@ -82,6 +86,7 @@ namespace StarMathLib
         /// <param name="angle">The amount of angle in degrees (positive is counter-clockwise).</param>
         /// <param name="inRadians">if set to <c>true</c> [in radians].</param>
         /// <returns>4-by-4 matrix rotated by the amount specified.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] 
         public static float[,] RotationZFloat(float angle, bool inRadians = false)
         {
             var rotz = makeIdentityFloat(4);

@@ -34,8 +34,7 @@ namespace StarMathLib
                 throw new ArithmeticException("Matrix cannnot be inverted. Can only invert sqare matrices.");
             if (length == 1) return new[,] { { 1 / A[0, 0] } };
 
-            int[] permutationVector;
-            var LU = LUDecomposition(A, out permutationVector, length);
+            var LU = LUDecomposition(A, out var permutationVector, length);
             return inverseWithLUResult(LU, permutationVector, length);
         }
 
@@ -52,8 +51,7 @@ namespace StarMathLib
             if (length != A.GetLength(1))
                 throw new ArithmeticException("Matrix cannnot be inverted. Can only invert sqare matrices.");
             if (length == 1) return new[,] { { 1 / (double)A[0, 0] } };
-            int[] permute;
-            var LU = LUDecomposition(A, out permute, length);
+            var LU = LUDecomposition(A, out var permute, length);
             return inverseWithLUResult(LU, permute, length);
         }
 
@@ -338,7 +336,7 @@ namespace StarMathLib
                 zeroIndices = new List<int>[length];
                 for (int i = 0; i < length; i++)
                 {
-                    zeroIndices[i]= new List<int>();
+                    zeroIndices[i] = new List<int>();
                     for (int j = 0; j < length; j++)
                         if (A[i, j] == 0) zeroIndices[i].Add(j);
                 }
@@ -550,8 +548,7 @@ namespace StarMathLib
         /// <returns>System.Double.</returns>
         private static double determinantBig(double[,] A, int length)
         {
-            int[] permute;
-            var L = LUDecomposition(A, out permute, length);
+            var L = LUDecomposition(A, out var permute, length);
             var result = 1.0;
             for (var i = 0; i < length; i++)
             {
@@ -601,8 +598,7 @@ namespace StarMathLib
         /// <returns>a single value representing the matrix's determinant.</returns>
         private static int determinantBig(int[,] A, int length)
         {
-            int[] permute;
-            var L = LUDecomposition(A, out permute, length);
+            var L = LUDecomposition(A, out var permute, length);
             var result = 1.0;
             for (var i = 0; i < length; i++)
                 if (double.IsNaN(L[permute[i], i]))

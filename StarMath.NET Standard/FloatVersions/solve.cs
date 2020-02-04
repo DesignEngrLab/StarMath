@@ -14,6 +14,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 
 namespace StarMathLib
 {
@@ -30,6 +31,7 @@ namespace StarMathLib
         /// <exception cref="System.ArithmeticException">Matrix, A, must be square.
         /// or
         /// Matrix, A, must be have the same number of rows as the vector, b.</exception>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float[] solve(float[,] A, IList<float> b, IList<float> initialGuess = null,
             Boolean IsASymmetric = false)
         {
@@ -42,8 +44,7 @@ namespace StarMathLib
                 return solveViaCramersRule3(A, b);
             if (length == 2)
                 return solveViaCramersRule2(A, b);
-            List<int>[] potentialDiagonals;
-            if (isGaussSeidelAppropriate(A, b, out potentialDiagonals, ref initialGuess, length))
+            if (isGaussSeidelAppropriate(A, b, out var potentialDiagonals, ref initialGuess, length))
                 return SolveIteratively(A, b, initialGuess, length, potentialDiagonals);
 
             return SolveAnalytically(A, b, IsASymmetric);
@@ -97,6 +98,7 @@ namespace StarMathLib
         /// <exception cref="System.ArithmeticException">Matrix, A, must be square.
         /// or
         /// Matrix, A, must be have the same number of rows as the vector, b.</exception>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float[] solve(int[,] A, IList<float> b, IList<float> initialGuess = null)
         {
             var length = A.GetLength(0);
@@ -122,6 +124,7 @@ namespace StarMathLib
         /// <exception cref="System.ArithmeticException">Matrix, A, must be square.
         /// or
         /// Matrix, A, must be have the same number of rows as the vector, b.</exception>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float[] solve(float[,] A, IList<int> b, IList<float> initialGuess = null)
         {
             return solve(A, b.Select(Convert.ToSingle).ToArray(), initialGuess);
@@ -135,6 +138,7 @@ namespace StarMathLib
         /// <param name="IsASymmetric">Is A known to be Symmetric?</param>
         /// <param name="potentialDiagonals">The potential diagonals.</param>
         /// <returns>System.Double[].</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float[] SolveAnalytically(float[,] A, IList<float> b, bool IsASymmetric = false)
         {
             var length = b.Count;
@@ -166,8 +170,7 @@ namespace StarMathLib
             }
             else
             {
-                int[] permutationVector;
-                var LU = LUDecomposition(A, out permutationVector, length);
+                var LU = LUDecomposition(A, out var permutationVector, length);
                 var x = new float[length];
                 // forward substitution
                 for (int i = 0; i < length; i++)
@@ -246,6 +249,7 @@ namespace StarMathLib
         /// <param name="length">The length.</param>
         /// <param name="potentialDiagonals">The potential indices.</param>
         /// <returns>System.Double[].</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float[] SolveIteratively(float[,] A, IList<float> b,
             IList<float> initialGuess = null, int length = -1, List<int>[] potentialDiagonals = null)
         {
@@ -355,7 +359,7 @@ namespace StarMathLib
                         }
                     }
                 }
-            } while (!solutionFound && stack.Any());
+            } while (!solutionFound && stack.Count > 0);
             if (solutionFound) return candidate;
             return null;
         }

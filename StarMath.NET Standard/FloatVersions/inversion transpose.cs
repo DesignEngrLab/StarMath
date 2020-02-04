@@ -14,6 +14,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 
 namespace StarMathLib
 {
@@ -27,6 +28,7 @@ namespace StarMathLib
         /// <param name="A">The matrix to invert. This matrix is unchanged by this function.</param>
         /// <returns>The inverted matrix, A^-1.</returns>
         /// <exception cref="System.ArithmeticException">Matrix cannnot be inverted. Can only invert sqare matrices.</exception>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float[,] inverse(this float[,] A) // need bool IsSymmetric to switch to Cholesky
         {
             var length = A.GetLength(0);
@@ -34,8 +36,7 @@ namespace StarMathLib
                 throw new ArithmeticException("Matrix cannnot be inverted. Can only invert sqare matrices.");
             if (length == 1) return new[,] { { 1 / A[0, 0] } };
 
-            int[] permutationVector;
-            var LU = LUDecomposition(A, out permutationVector, length);
+            var LU = LUDecomposition(A, out var permutationVector, length);
             return inverseWithLUResult(LU, permutationVector, length);
         }
 
@@ -130,6 +131,7 @@ namespace StarMathLib
         /// <param name="permute">The permute.</param>
         /// <exception cref="System.ArithmeticException">Matrix cannot be inverted. Can only invert sqyare matrices.</exception>
         /// <exception cref="ArithmeticException">LU Decomposition can only be determined for square matrices.</exception>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void LUDecomposition(float[,] A, out float[,] L, out float[,] U, out int[] permute)
         {
             var length = A.GetLength(0);
@@ -278,6 +280,7 @@ namespace StarMathLib
         /// <returns>System.Double[].</returns>
         /// <exception cref="System.ArithmeticException">Matrix cannot be inverted. Can only invert square matrices.</exception>
         /// <exception cref="ArithmeticException">Matrix cannot be inverted. Can only invert square matrices.</exception>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float[,] CholeskyDecomposition(float[,] A, bool NoSeparateDiagonal = false)
         {
             var length = A.GetLength(0);
@@ -323,6 +326,7 @@ namespace StarMathLib
         /// <returns>The transpose of A.</returns>
         /// <exception cref="ArithmeticException">The matrix, A, is null.</exception>
         /// <exception cref="System.ArithmeticException">The matrix, A, is null.</exception>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float[,] transpose(this float[,] A)
         {
             if (A == null) throw new ArithmeticException("The matrix, A, is null.");
@@ -351,6 +355,7 @@ namespace StarMathLib
         /// <exception cref="ArithmeticException">The matrix, A, is null.
         /// or
         /// The determinant is only possible for square matrices.</exception>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float determinant(this float[,] A)
         {
             if (A == null) throw new ArithmeticException("The matrix, A, is null.");
@@ -378,8 +383,7 @@ namespace StarMathLib
         /// <returns>System.Double.</returns>
         private static float determinantBig(float[,] A, int length)
         {
-            int[] permute;
-            var L = LUDecomposition(A, out permute, length);
+            var L = LUDecomposition(A, out var permute, length);
             var result = 1.0f;
             for (var i = 0; i < length; i++)
             {

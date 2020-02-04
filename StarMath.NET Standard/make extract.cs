@@ -856,8 +856,8 @@ namespace StarMathLib
                                     ") than there are rows in the matrix provided to RemoveColumns (number of rows = " +
                                     numCols + ").");
             var B = new double[numRows, numCols - colIndices.Count];
-         var sortedColIndices = colIndices.OrderBy(x => x).ToArray();
-           var k = 0; //colIndices position
+            var sortedColIndices = colIndices.OrderBy(x => x).ToArray();
+            var k = 0; //colIndices position
             for (var i = 0; i < numCols; i++)
                 if (k < numToRemove && sortedColIndices[k] == i) k++;
                 else B.SetColumn(i - k, A.GetColumn(i));

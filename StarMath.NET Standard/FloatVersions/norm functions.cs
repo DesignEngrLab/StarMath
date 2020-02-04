@@ -14,6 +14,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 
 namespace StarMathLib
 {
@@ -30,6 +31,7 @@ namespace StarMathLib
         /// <param name="x">The vector, x.</param>
         /// <returns>Scalar value of 1-norm.</returns>
         /// <exception cref="System.ArithmeticException">The vector, x, is null.</exception>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float norm1(this IEnumerable<float> x)
         {
             if (x == null) throw new ArithmeticException("The vector, x, is null.");
@@ -48,12 +50,13 @@ namespace StarMathLib
         /// The vector, y, is null.
         /// or
         /// The vectors are not the same size.</exception>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float norm1(this IList<float> x, IList<float> y)
         {
-            var xlength = x.Count();
+            var xlength = x.Count;
             if (x == null) throw new ArithmeticException("The vector, x, is null.");
             if (y == null) throw new ArithmeticException("The vector, y, is null.");
-            if (xlength != y.Count()) throw new ArithmeticException("The vectors are not the same size.");
+            if (xlength != y.Count) throw new ArithmeticException("The vectors are not the same size.");
             return norm1(x, y, xlength);
         }
 
@@ -65,6 +68,7 @@ namespace StarMathLib
         /// <param name="y">The vector, y.</param>
         /// <param name="length">The length of the vector.</param>
         /// <returns>Scalar value of 1-norm.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float norm1(this IList<float> x, IList<float> y, int length)
         {
             var norm = 0.0f;
@@ -80,6 +84,7 @@ namespace StarMathLib
         /// <param name="a">The matrix, A.</param>
         /// <returns>Scalar value of 1-norm.</returns>
         /// <exception cref="System.ArithmeticException">The matrix, A, is null.</exception>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float norm1(this float[,] a)
         {
             if (a == null) throw new ArithmeticException("The matrix, A, is null.");
@@ -94,6 +99,7 @@ namespace StarMathLib
         /// <param name="numRows">The number of rows.</param>
         /// <param name="numCols">The number of columns.</param>
         /// <returns>Scalar value of 1-norm.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float norm1(this float[,] a, int numRows, int numCols)
         {
             var norm = 0.0f;
@@ -120,12 +126,13 @@ namespace StarMathLib
         /// The vector, y, is null.
         /// or
         /// The vectors are not the same size.</exception>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float norm2(this IList<float> x, IList<float> y, Boolean dontDoSqrt = false)
         {
-            var xlength = x.Count();
+            var xlength = x.Count;
             if (x == null) throw new ArithmeticException("The vector, x, is null.");
             if (y == null) throw new ArithmeticException("The vector, y, is null.");
-            if (xlength != y.Count()) throw new ArithmeticException("The vectors are not the same size.");
+            if (xlength != y.Count) throw new ArithmeticException("The vectors are not the same size.");
             return norm2(x, y, xlength, dontDoSqrt);
         }
 
@@ -138,11 +145,12 @@ namespace StarMathLib
         /// <param name="length">The length of the vectors.</param>
         /// <param name="dontDoSqrt">if set to <c>true</c> [don't take the square root].</param>
         /// <returns>Scalar value of 2-norm.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float norm2(this IList<float> x, IList<float> y, int length, Boolean dontDoSqrt = false)
         {
             var norm = 0.0f;
             for (var i = 0; i != length; i++)
-                norm += (x[i] - y[i])*(x[i] - y[i]);
+                norm += (x[i] - y[i]) * (x[i] - y[i]);
             return dontDoSqrt ? norm : MathF.Sqrt(norm);
         }
         /// <summary>
@@ -153,10 +161,11 @@ namespace StarMathLib
         /// <param name="dontDoSqrt">if set to <c>true</c> [don't take the square root].</param>
         /// <returns>Scalar value of 2-norm.</returns>
         /// <exception cref="System.ArithmeticException">The vector, x, is null.</exception>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float norm2(this IEnumerable<float> x, Boolean dontDoSqrt = false)
         {
             if (x == null) throw new ArithmeticException("The vector, x, is null.");
-            return dontDoSqrt ? x.Sum(a => a*a) : MathF.Sqrt(x.Sum(a => a*a));
+            return dontDoSqrt ? x.Sum(a => a * a) : MathF.Sqrt(x.Sum(a => a * a));
         }
 
         /// <summary>
@@ -167,6 +176,7 @@ namespace StarMathLib
         /// <param name="dontDoSqrt">if set to <c>true</c> [don't take the square root].</param>
         /// <returns>Scalar value of 2-norm.</returns>
         /// <exception cref="System.ArithmeticException">The matrix, A, is null.</exception>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float norm2(this float[,] a, Boolean dontDoSqrt = false)
         {
             if (a == null) throw new ArithmeticException("The matrix, A, is null.");
@@ -182,12 +192,13 @@ namespace StarMathLib
         /// <param name="numCols">The number of columns.</param>
         /// <param name="dontDoSqrt">if set to <c>true</c> [don't take the square root].</param>
         /// <returns>Scalar value of 2-norm.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float norm2(this float[,] a, int numRows, int numCols, Boolean dontDoSqrt = false)
         {
             var norm = 0.0f;
             for (var i = 0; i != numRows; i++)
                 for (var j = 0; j != numCols; j++)
-                    norm += (a[i, j]*a[i, j]);
+                    norm += (a[i, j] * a[i, j]);
             return dontDoSqrt ? norm : MathF.Sqrt(norm);
         }
 
@@ -203,11 +214,12 @@ namespace StarMathLib
         /// <param name="dontDoPRoot">if set to <c>true</c> [don't take the P-root].</param>
         /// <returns>Scalar value of P-norm.</returns>
         /// <exception cref="System.ArithmeticException">The vector, x, is null.</exception>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float normP(this IEnumerable<float> x, float p, Boolean dontDoPRoot = false)
         {
             if (x == null) throw new ArithmeticException("The vector, x, is null.");
             var sum = x.Sum(a => MathF.Pow(a, p));
-            return dontDoPRoot ? sum : MathF.Pow(sum, 1/p);
+            return dontDoPRoot ? sum : MathF.Pow(sum, 1 / p);
         }
 
 
@@ -219,6 +231,7 @@ namespace StarMathLib
         /// <param name="dontDoPRoot">if set to <c>true</c> [don't take the P-root].</param>
         /// <returns>Scalar value of P-norm.</returns>
         /// <exception cref="System.ArithmeticException">The matrix, A, is null.</exception>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float normP(this float[,] a, float p, Boolean dontDoPRoot = false)
         {
             if (a == null) throw new ArithmeticException("The matrix, A, is null.");
@@ -234,13 +247,14 @@ namespace StarMathLib
         /// <param name="numCols">The number of columns.</param>
         /// <param name="dontDoPRoot">if set to <c>true</c> [don't take the P-root].</param>
         /// <returns>Scalar value of P-norm.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float normP(this float[,] a, float p, int numRows, int numCols, Boolean dontDoPRoot = false)
         {
             var norm = 0.0f;
             for (var i = 0; i != numRows; i++)
                 for (var j = 0; j != numCols; j++)
                     norm += MathF.Pow(a[i, j], p);
-            return dontDoPRoot ? (float)norm : MathF.Pow(norm, 1/p);
+            return dontDoPRoot ? (float)norm : MathF.Pow(norm, 1 / p);
         }
         #endregion
 
@@ -254,9 +268,10 @@ namespace StarMathLib
         /// </summary>
         /// <param name="x">The vector, x.</param>
         /// <returns>unit vector.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float[] normalize(this IList<float> x)
         {
-            return normalize(x, x.Count());
+            return normalize(x, x.Count);
         }
 
         /// <summary>
@@ -266,6 +281,7 @@ namespace StarMathLib
         /// <param name="x">The vector, x.</param>
         /// <param name="length">The length of the vector.</param>
         /// <returns>unit vector.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float[] normalize(this IList<float> x, int length)
         {
             return divide(x, norm2(x), length);
@@ -277,6 +293,7 @@ namespace StarMathLib
         /// </summary>
         /// <param name="x">The vector x.</param>
         /// <returns>IList&lt;System.Double&gt;.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static IList<float> normalizeInPlace(this float[] x)
         {
             return normalizeInPlace(x, x.GetLength(0));
@@ -288,6 +305,7 @@ namespace StarMathLib
         /// <param name="x">The x.</param>
         /// <param name="length">The length.</param>
         /// <returns>IList&lt;System.Double&gt;.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static IList<float> normalizeInPlace(this IList<float> x, int length)
         {
             var magnitude = norm2(x);
@@ -304,6 +322,7 @@ namespace StarMathLib
         /// </summary>
         /// <param name="b">Matrix (1D float) whose parameters need to be summed up</param>
         /// <returns>Returns the total (float)</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float SumAllElements(this IEnumerable<float> b)
         {
             return b.Sum();
@@ -315,6 +334,7 @@ namespace StarMathLib
         /// </summary>
         /// <param name="b">Matrix (2D float) whose parameters need to be summed up</param>
         /// <returns>Returns the total (float)</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float SumAllElements(this float[,] b)
         {
             return SumAllElements(b, b.GetLength(0), b.GetLength(1));
@@ -340,13 +360,14 @@ namespace StarMathLib
         /// Sums all of the rows into a 1D array.
         /// </summary>
         /// <returns>System.Double[].</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float[] SumAllRows(this float[,] A)
         {
             var numRows = A.GetLength(0);
             var numCols = A.GetLength(1);
             var rowSums = new float[numRows];
             for (int i = 0; i < numRows; i++)
-                rowSums[i] = A.SumRow(i,numCols);
+                rowSums[i] = A.SumRow(i, numCols);
             return rowSums;
         }
         /// <summary>
@@ -355,14 +376,16 @@ namespace StarMathLib
         /// <param name="A">a.</param>
         /// <param name="index">The index.</param>
         /// <returns>System.Double.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float SumRow(this float[,] A, int index)
         {
-           return SumRow(A,index,A.GetLength(1));
+            return SumRow(A, index, A.GetLength(1));
         }
         /// <summary>
         /// Sums the values of a specified row.
         /// </summary>
         /// <returns>System.Double[].</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float SumRow(this float[,] A, int index, int numCols)
         {
             var sum = 0.0f;
@@ -375,13 +398,13 @@ namespace StarMathLib
         /// </summary>
         /// <param name="A">a.</param>
         /// <returns>System.Double[].</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float[] SumAllColumns(this float[,] A)
         {
-            var numRows = A.GetLength(0);
             var numCols = A.GetLength(1);
             var colSums = new float[numCols];
             for (int i = 0; i < numCols; i++)
-                colSums[i] = SumColumn(A,i);
+                colSums[i] = SumColumn(A, i);
             return colSums;
         }
         /// <summary>
@@ -390,6 +413,7 @@ namespace StarMathLib
         /// <param name="A">a.</param>
         /// <param name="index">The index.</param>
         /// <returns>System.Double[].</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float SumColumn(this float[,] A, int index)
         {
             return SumColumn(A, index, A.GetLength(0));
@@ -401,6 +425,7 @@ namespace StarMathLib
         /// <param name="index">The index.</param>
         /// <param name="numRows">The number rows.</param>
         /// <returns>System.Double[].</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float SumColumn(this float[,] A, int index, int numRows)
         {
             var sum = 0.0f;
@@ -417,11 +442,12 @@ namespace StarMathLib
         /// </summary>
         /// <param name="A">An vector of doubles, A.</param>
         /// <returns>System.Double.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float standardDeviation(this IList<float> A)
         {
             var mean = A.Average();
-            var variance = A.Sum(a => (a - mean)*(a - mean));
-            return MathF.Sqrt(variance/A.Count);
+            var variance = A.Sum(a => (a - mean) * (a - mean));
+            return MathF.Sqrt(variance / A.Count);
         }
 
         /// <summary>
@@ -429,6 +455,7 @@ namespace StarMathLib
         /// </summary>
         /// <param name="a">A matrix in doubles, A.</param>
         /// <returns>System.Double.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float standardDeviation(this float[,] a)
         {
             return standardDeviation(JoinMatrixColumnsIntoVector(a));

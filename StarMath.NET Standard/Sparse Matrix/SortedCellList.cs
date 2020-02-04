@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
-namespace StarMathLib.Sparse_Matrix
+namespace StarMathLib
 {
     internal class SortedCellList : IEnumerable<KeyValuePair<int, SparseCell>>
     {
@@ -14,9 +11,9 @@ namespace StarMathLib.Sparse_Matrix
 
         internal int Count { get; private set; }
 
-        List<int> IndexKeys { get; } = new List<int>();
+        private List<int> IndexKeys { get; } = new List<int>();
 
-        List<SparseCell> Cells { get; } = new List<SparseCell>();
+        private List<SparseCell> Cells { get; } = new List<SparseCell>();
 
 
         internal void Add(int index, SparseCell cell)
@@ -74,7 +71,7 @@ namespace StarMathLib.Sparse_Matrix
             IndexKeys.RemoveAt(0);
             Cells.RemoveAt(0);
             Count--;
-            if (Count>0) FirstIndex = IndexKeys[0];
+            if (Count > 0) FirstIndex = IndexKeys[0];
             return top;
         }
 
@@ -112,11 +109,11 @@ namespace StarMathLib.Sparse_Matrix
             }
             else //inserting time at some intermediate value
             {
-                var upper = Count-1;
+                var upper = Count - 1;
                 var lower = 0;
                 while (true)
                 {
-                  var  i = lower + (upper - lower) / 2;
+                    var i = lower + (upper - lower) / 2;
                     if (searchIndex == IndexKeys[i])
                     {
                         position = i;
@@ -126,7 +123,7 @@ namespace StarMathLib.Sparse_Matrix
                     {
                         if (lower == i)
                         {
-                            position = i+1;
+                            position = i + 1;
                             return false;
                         }
                         lower = i;
@@ -153,12 +150,12 @@ namespace StarMathLib.Sparse_Matrix
         }
     }
 
-    class SortedCellEnumerator : IEnumerator<KeyValuePair<int, SparseCell>>
+    internal class SortedCellEnumerator : IEnumerator<KeyValuePair<int, SparseCell>>
     {
         private readonly SparseCell[] cells;
         private readonly int[] indices;
 
-        int _position = -1;
+        private int _position = -1;
         private readonly int _length;
         internal SortedCellEnumerator(int[] timeKeys, SparseCell[] parameterValues)
         {

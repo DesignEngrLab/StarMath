@@ -1,17 +1,14 @@
-﻿using System;
+﻿using StarMathLib;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Runtime.Serialization;
-using DotNumerics.LinearAlgebra.CSLapack;
-using StarMathLib;
 using DotNum = DotNumerics.LinearAlgebra;
-using MathDot = MathNet.Numerics.LinearAlgebra;
 
 namespace TestEXE_for_StarMath
 {
-    internal class Program
+    internal static class Program
     {
         private static void Main()
         {
@@ -34,9 +31,8 @@ namespace TestEXE_for_StarMath
             var watch = new Stopwatch();
             double[,] A = new double[,] { { 1, 2 }, { 4, 5 } };
             //  double[,] A = new double[,] { { 1, 2 }, { 3, 4 }, { 5, 6 } };
-            double[,] U, V;
             watch.Restart();
-            double[] sigma = A.SingularValueDecomposition(out U, out V);
+            double[] sigma = A.SingularValueDecomposition(out var U, out var V);
             var sigMatrix = new double[U.GetLength(0), V.GetLength(0)];
             for (int i = 0; i < sigma.Length; i++)
                 sigMatrix[i, i] = sigma[i];
@@ -46,17 +42,17 @@ namespace TestEXE_for_StarMath
             Console.WriteLine(error);
         }
 
-        static void testRBF()
+        private static void testRBF()
         {
-            var NumPoints = 3;
+            const int NumPoints = 3;
             var Values = new[] { 43.0, 16.4, 88.9 };// ,91.2, 23.4};
-            var EpsilonSquared = 3.0;
+            const double EpsilonSquared = 3.0;
             var NodePositions = new[]
             {
                 new[] { 1.3, 2.1, 3.0}, new[] { 1.0, 0.4, 2.9}, new[] { 7.3, 5.5, 2.8}
                // , new[] { 0.2, 6.3, 8.1}, new[] { 10.2,8.3, 2.1}
             };
-            var size = NumPoints + 3 + 1;
+            const int size = NumPoints + 3 + 1;
             var A = new double[size, size];
             /* x is comprised of the coeffs1 on the inverse quadric terms followed by the slopes
              * followed by the offset */
@@ -94,8 +90,7 @@ namespace TestEXE_for_StarMath
         private static void testStackFunctions()
         {
             var A = new[,] { { 0.1, 0.2, 0.3 }, { 1, 2, 3 }, { 10, 20, 30 }, { 100, 200, 300 } };
-            int i, j;
-            A.Max(out i, out j);
+            A.Max(out _, out _);
             Console.WriteLine(A.JoinMatrixColumnsIntoVector().MakePrintString());
         }
 
@@ -113,9 +108,7 @@ namespace TestEXE_for_StarMath
             Console.WriteLine(A.MakePrintString());
 
 
-            double[,] L, U;
-            int[] permute;
-            StarMath.LUDecomposition(A, out L, out U, out permute);
+            StarMath.LUDecomposition(A, out var L, out var U, out _);
             Console.WriteLine(" L = ");
             Console.WriteLine(L.MakePrintString());
             Console.WriteLine(" U = ");
@@ -158,8 +151,8 @@ namespace TestEXE_for_StarMath
             for (var index = 0; index < limits.GetLength(1); index++)
             {
                 int size = limits[0, index];
-                int numTrials = 1;//limits[1, index];
-                var probZero = -1.0;
+                const int numTrials = 1;//limits[1, index];
+                const double probZero = -1.0;
                 var rnd = new Random();
                 for (var k = 0; k <= numTrials; k++)
                 {
@@ -289,8 +282,8 @@ namespace TestEXE_for_StarMath
             for (var index = 0; index < limits.GetLength(1); index++)
             {
                 int size = limits[0, index];
-                int numTrials = 1;//limits[1, index];
-                var probZero = 0.2;
+                const int numTrials = 1;//limits[1, index];
+                const double probZero = 0.2;
                 var rnd = new Random();
                 for (var k = 0; k <= numTrials; k++)
                 {
@@ -307,12 +300,9 @@ namespace TestEXE_for_StarMath
                     #region ALGlib
 
                     Console.WriteLine("\n\n\nALGlib: start invert check for matrix of size: " + size);
-
-                    int info;
-                    alglib.matinvreport rep;
                     watch.Restart();
                     var B = (double[,])A.Clone();
-                    alglib.rmatrixinverse(ref B, out info, out rep);
+                    alglib.rmatrixinverse(ref B, out _, out _);
                     watch.Stop();
                     recordResults(result, A, B, watch, k);
 
@@ -393,8 +383,7 @@ namespace TestEXE_for_StarMath
             for (var i = 0; i < size; i++)
                 for (var j = i; j < size; j++)
                     A[i, j] = A[j, i] = (200 * r.NextDouble()) - 100.0;
-            var eigenVectors = new double[size][];
-            var λ = A.GetEigenValuesAndVectors(out eigenVectors);
+            var λ = A.GetEigenValuesAndVectors(out var eigenVectors);
             //Console.WriteLine(StarMath.MakePrintString(ans[0]));
             for (int i = 0; i < size; i++)
             {

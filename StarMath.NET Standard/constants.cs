@@ -82,7 +82,7 @@ namespace StarMathLib
         /// </summary>
         /// <value>The equality tolerance.</value>
         public static double EqualityTolerance { get; set; } = DefaultEqualityTolerance;
-        private const double DefaultEqualityTolerance  = 1e-15;
+        private const double DefaultEqualityTolerance = 1e-15;
         /// <summary>
         /// Determines whether [is practically same] [the specified x].
         /// the norm is within 1e-15

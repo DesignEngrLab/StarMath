@@ -12,6 +12,8 @@
 // <summary></summary>
 // ***********************************************************************
 using System;
+using System.Runtime.CompilerServices;
+
 namespace StarMathLib
 {
     public static partial class StarMath
@@ -21,6 +23,7 @@ namespace StarMathLib
         /// </summary>
         /// <param name="A">The matrix in question, A can be rectangular m-by-n.</param>
         /// <returns>The singular values of A in ascending value, often indicated as sigma (provided as a vector).</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float[] SingularValueDecomposition(this float[,] A)
         {
             float[,] U, V;
@@ -34,6 +37,7 @@ namespace StarMathLib
         /// <param name="U">The m-by-m uitary matrix that pre-multiplies the singular values.</param>
         /// <param name="V">The n-by-n conjugate transpose matrix of V that post-multiplies the singular values.</param>
         /// <returns>The singular values of A in ascending value, often indicated as sigma (provided as a vector).</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float[] SingularValueDecomposition(this float[,] A, out float[,] U, out float[,] V)
         {
             return SingularValueDecomposition(true, A, out U, out V);
@@ -132,7 +136,7 @@ namespace StarMathLib
                 for (i = lp1; i < e.Length; i++)
                     enorm += e[i] * e[i];
 
-                e[l] =MathF.Sqrt(enorm);
+                e[l] = MathF.Sqrt(enorm);
                 if (!e[l].IsNegligible())
                 {
                     if (!e[lp1].IsNegligible())

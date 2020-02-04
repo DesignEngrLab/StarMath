@@ -36,8 +36,7 @@ namespace StarMathLib
                 p = p.Remove(p.Length - 1);
                 p += " |\n";
             }
-            p = p.Remove(p.Length - 1);
-            return p;
+            return p.Remove(p.Length - 1);
         }
 
         /// <summary>
@@ -75,8 +74,7 @@ namespace StarMathLib
                 p = p.Remove(p.Length - 1);
                 p += " |\n";
             }
-            p = p.Remove(p.Length - 1);
-            return p;
+            return p.Remove(p.Length - 1);
         }
 
         /// <summary>
@@ -87,7 +85,7 @@ namespace StarMathLib
         public static string MakePrintString(this IEnumerable<int> A)
         {
             if (A == null) return "<null>";
-            var format = "{0:F}";
+            const string format = "{0:F}";
             var p = "{ ";
             foreach (var d in A)
                 p += formatCell(format, d) + ",";
@@ -107,8 +105,8 @@ namespace StarMathLib
             var numStr = string.Format(format, p);
             numStr = numStr.TrimEnd('0');
             numStr = numStr.TrimEnd('.');
-            var padAmt = ((double) (PrintCellWidth - numStr.Length))/2;
-            numStr = numStr.PadLeft((int) Math.Floor(padAmt + numStr.Length));
+            var padAmt = ((double)(PrintCellWidth - numStr.Length)) / 2;
+            numStr = numStr.PadLeft((int)Math.Floor(padAmt + numStr.Length));
             numStr = numStr.PadRight(PrintCellWidth);
             return numStr;
         }

@@ -15,6 +15,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 
 namespace StarMathLib
 {
@@ -29,6 +30,7 @@ namespace StarMathLib
         /// <param name="B">1D float array 2</param>
         /// <returns>1D float array that contains sum of vectros A and B</returns>
         /// <exception cref="System.ArithmeticException">Matrix sizes do not match</exception>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float[] add(this IList<float> A, IList<float> B)
         {
             var length = A.Count;
@@ -43,10 +45,11 @@ namespace StarMathLib
         /// <param name="B">1D float array 2</param>
         /// <returns>1D float array that contains sum of vectros A and B</returns>
         /// <exception cref="System.ArithmeticException">Matrix sizes do not match</exception>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float[] add(this IList<int> A, IList<float> B)
         {
-            var length = A.Count();
-            if (length != B.Count()) throw new ArithmeticException("Matrix sizes do not match");
+            var length = A.Count;
+            if (length != B.Count) throw new ArithmeticException("Matrix sizes do not match");
             return add(A, B, length);
         }
 
@@ -63,6 +66,7 @@ namespace StarMathLib
         ///     or
         ///     Matrix column count do not match
         /// </exception>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float[,] add(this float[,] A, float[,] B)
         {
             var numRows = A.GetLength(0);
@@ -86,6 +90,7 @@ namespace StarMathLib
         ///     or
         ///     Matrix column count do not match
         /// </exception>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float[,] add(this int[,] A, float[,] B)
         {
             var numRows = A.GetLength(0);
@@ -107,6 +112,7 @@ namespace StarMathLib
         /// <param name="B">1D float array 2</param>
         /// <param name="length">The length of the array.</param>
         /// <returns>1D float array that contains sum of vectros A and B</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float[] add(this IList<float> A, IList<float> B, int length)
         {
             var c = new float[length];
@@ -122,6 +128,7 @@ namespace StarMathLib
         /// <param name="B">1D float array 2</param>
         /// <param name="length">The length of the array.</param>
         /// <returns>1D float array that contains sum of vectros A and B</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float[] add(this IList<int> A, IList<float> B, int length)
         {
             var c = new float[length];
@@ -139,6 +146,7 @@ namespace StarMathLib
         /// <param name="numRows">The number of rows.</param>
         /// <param name="numCols">The number of columns.</param>
         /// <returns>2D float array that contains sum of vectros A and B</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float[,] add(this float[,] A, float[,] B, int numRows, int numCols)
         {
             var C = new float[numRows, numCols];
@@ -157,6 +165,7 @@ namespace StarMathLib
         /// <param name="numRows">The number of rows.</param>
         /// <param name="numCols">The number of columns.</param>
         /// <returns>2D float array that contains sum of vectros A and B</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float[,] add(this int[,] A, float[,] B, int numRows, int numCols)
         {
             var C = new float[numRows, numCols];
@@ -180,6 +189,7 @@ namespace StarMathLib
         /// <param name="B">The subtrahend vector, B (1D float)</param>
         /// <returns>Returns the difference vector, C (1D float)</returns>
         /// <exception cref="System.ArithmeticException">Matrix sizes do not match</exception>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float[] subtract(this IList<float> A, IList<float> B)
         {
             var length = A.Count;
@@ -195,6 +205,7 @@ namespace StarMathLib
         /// <param name="B">The subtrahend vector, B (1D float)</param>
         /// <returns>Returns the difference vector, C (1D float)</returns>
         /// <exception cref="System.ArithmeticException">Matrix sizes do not match</exception>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float[] subtract(this IList<int> A, IList<float> B)
         {
             var length = A.Count;
@@ -210,6 +221,7 @@ namespace StarMathLib
         /// <param name="B">The subtrahend vector, B (1D int)</param>
         /// <returns>Returns the difference vector, C (1D float)</returns>
         /// <exception cref="System.ArithmeticException">Matrix sizes do not match</exception>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float[] subtract(this IList<float> A, IList<int> B)
         {
             var length = A.Count;
@@ -229,6 +241,7 @@ namespace StarMathLib
         ///     or
         ///     Matrix column count do not match
         /// </exception>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float[,] subtract(this float[,] A, float[,] B)
         {
             var numRows = A.GetLength(0);
@@ -252,6 +265,7 @@ namespace StarMathLib
         ///     or
         ///     Matrix column count do not match
         /// </exception>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float[,] subtract(this int[,] A, float[,] B)
         {
             var numRows = A.GetLength(0);
@@ -275,6 +289,7 @@ namespace StarMathLib
         ///     or
         ///     Matrix column count do not match
         /// </exception>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float[,] subtract(this float[,] A, int[,] B)
         {
             var numRows = A.GetLength(0);
@@ -295,6 +310,7 @@ namespace StarMathLib
         /// <param name="B">The subtrahend vector, B (1D float)</param>
         /// <param name="length">The length of the vectors.</param>
         /// <returns>Returns the difference vector, C (1D float)</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float[] subtract(this IList<float> A, IList<float> B, int length)
         {
             var c = new float[length];
@@ -310,6 +326,7 @@ namespace StarMathLib
         /// <param name="B">The subtrahend vector, B (1D float)</param>
         /// <param name="length">The length of the vectors.</param>
         /// <returns>Returns the difference vector, C (1D float)</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float[] subtract(this IList<int> A, IList<float> B, int length)
         {
             var c = new float[length];
@@ -325,6 +342,7 @@ namespace StarMathLib
         /// <param name="B">The subtrahend vector, B (1D int)</param>
         /// <param name="length">The length of the vectors.</param>
         /// <returns>Returns the difference vector, C (1D float)</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float[] subtract(this IList<float> A, IList<int> B, int length)
         {
             var c = new float[length];
@@ -342,6 +360,7 @@ namespace StarMathLib
         /// <param name="numRows">The number of rows.</param>
         /// <param name="numCols">The number of columns.</param>
         /// <returns>Returns the difference matrix, C (2D float)</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float[,] subtract(this float[,] A, float[,] B, int numRows, int numCols)
         {
             var C = new float[numRows, numCols];
@@ -360,6 +379,7 @@ namespace StarMathLib
         /// <param name="numRows">The number of rows.</param>
         /// <param name="numCols">The number of columns.</param>
         /// <returns>Returns the difference matrix, C (2D float)</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float[,] subtract(this int[,] A, float[,] B, int numRows, int numCols)
         {
             var C = new float[numRows, numCols];
@@ -378,6 +398,7 @@ namespace StarMathLib
         /// <param name="numRows">The number of rows.</param>
         /// <param name="numCols">The number of columns.</param>
         /// <returns>Returns the difference matrix, C (2D float)</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float[,] subtract(this float[,] A, int[,] B, int numRows, int numCols)
         {
             var C = new float[numRows, numCols];

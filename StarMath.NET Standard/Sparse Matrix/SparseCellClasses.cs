@@ -14,7 +14,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace StarMathLib
 {
@@ -41,7 +40,7 @@ namespace StarMathLib
         internal override void Evaluate()
         {
             Value = ACell?.Value ?? 0.0;
-            for (int i = 0; i < termCount; i+=3)
+            for (int i = 0; i < termCount; i += 3)
                 Value -= terms[i].Value * terms[i + 1].Value * terms[i + 2].Value;
             Value /= DiagDenominatorCell.Value;
         }
@@ -66,7 +65,7 @@ namespace StarMathLib
         internal override void Evaluate()
         {
             Value = ACell?.Value ?? 0.0;
-            for (int i = 0; i < termCount; i+=2)
+            for (int i = 0; i < termCount; i += 2)
                 Value -= terms[i].Value * terms[i].Value * terms[i + 1].Value;
         }
     }

@@ -10,7 +10,7 @@
     <PackageId>StarMath</PackageId>
     <Description>A small library for performing matrix math, linear algebra - now including sparse matrix solve. Most functions are static and use simple arrays (e.g double[,]) making it easy to use in other projects.</Description>
     <Copyright>2017</Copyright>
-    <PackageLicenseUrl>https://github.com/DesignEngrLab/StarMath/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageLicenseUrl></PackageLicenseUrl>
     <PackageProjectUrl>http://designengrlab.github.io/StarMath/</PackageProjectUrl>
     <RepositoryUrl>https://github.com/DesignEngrLab/StarMath.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
@@ -18,12 +18,7 @@
     <NeutralLanguage />
     <AssemblyName>StarMath</AssemblyName>
     <RootNamespace>StarMathLib</RootNamespace>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageLicenseExpression>https://github.com/DesignEngrLab/StarMath/blob/master/LICENSE</PackageLicenseExpression>
   </PropertyGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.9.6">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-  </ItemGroup>
 </Project>

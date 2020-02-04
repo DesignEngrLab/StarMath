@@ -18,12 +18,13 @@ namespace TestEXE_for_StarMath
             //  testRBF();
             // SparseFunctionTest();
             // testStackFunctions();
-            testLUfunctions();
+            // testLUfunctions();
             //testSVD();
-           // benchMarkMatrixInversion();
+            benchMarkMatrixSolve();
+            //benchMarkMatrixInversion();
             //  compareSolvers_Inversion_to_GaussSeidel();
             //checkEigen();
-             Console.WriteLine("Press any key to close.");
+            Console.WriteLine("Press any key to close.");
             Console.ReadLine();
 
         }
@@ -107,7 +108,7 @@ namespace TestEXE_for_StarMath
             for (var i = 0; i < size; i++)
                 for (var j = 0; j < size; j++)
                     //if (i != j)
-                        A[i, j] = (200 * r.NextDouble()) - 100.0;
+                    A[i, j] = (200 * r.NextDouble()) - 100.0;
             Console.WriteLine("A =");
             Console.WriteLine(A.MakePrintString());
 
@@ -126,6 +127,137 @@ namespace TestEXE_for_StarMath
             var error = E.norm2();
             Console.WriteLine("error = " + error);
         }
+
+        private static void benchMarkMatrixSolve()
+        {
+            var watch = new Stopwatch();
+            var results = new List<List<string>>
+            {
+                new List<string>
+                {
+                    "",
+                    "",
+                    "ALGlib Err",
+                    "ALGlib Time",
+                    "Dot Numerics Err",
+                    "Dot Numerics Time",
+                    "Dot NumericsClass Err",
+                    "Dot NumericsClass Time",
+                    "Math.Net Err",
+                    "Math.Net Numerics Time",
+                    "Math.NetClass Err",
+                    "Math.NetClass Time",
+                    "StArMath Err",
+                    "StArMath Time"
+                }
+            };
+            var r = new Random();
+
+            var limits = new int[,] {{3,10,30,100,300,1000,2000},
+            {50,50,30,30,20,10,3}};
+            for (var index = 0; index < limits.GetLength(1); index++)
+            {
+                int size = limits[0, index];
+                int numTrials = 1;//limits[1, index];
+                var probZero = -1.0;
+                var rnd = new Random();
+                for (var k = 0; k <= numTrials; k++)
+                {
+                    var A = new double[size, size];
+                    var x = new double[size];
+                    for (var i = 0; i < size; i++)
+                    {
+                        x[i] = (200 * r.NextDouble()) - 100.0;
+                        for (var j = 0; j < size; j++)
+                        {
+                            if (rnd.NextDouble() > probZero)
+                                A[i, j] = (200 * r.NextDouble()) - 100.0;
+                        }
+                    }
+                    var b = A.multiply(x);
+                    var result = new List<string> { size.ToString(), k.ToString() };
+
+                    #region ALGlib
+
+                    //Console.WriteLine("\n\n\nALGlib: start invert check for matrix of size: " + size);
+
+                    //int info;
+                    //alglib.matinvreport rep;
+                    //watch.Restart();
+                    //var B = (double[,])A.Clone();
+
+                    //alglib.rmatrixinverse(ref B, out info, out rep);
+                    //watch.Stop();
+                    //recordResults(result, A, B, watch, k);
+
+                    //#endregion
+
+                    //#region Dot Numerics
+
+                    //Console.WriteLine("\n\n\nDot Numerics: start invert check for matrix of size: " + size);
+                    //var A_DN = new DotNum.Matrix(A);
+                    //watch.Restart();
+                    //var B_DN = A_DN.Inverse();
+                    //watch.Stop();
+                    //recordResults(result, A, B_DN.CopyToArray(), watch, k);
+
+                    //#endregion
+                    //#region Dot Numerics
+
+                    //Console.WriteLine("\n\n\nDot Numerics: start invert check for matrix of size: " + size);
+                    //watch.Restart();
+                    //A_DN = new DotNum.Matrix(A);
+                    //B_DN = A_DN.Inverse();
+                    //watch.Stop();
+                    //recordResults(result, A, B_DN.CopyToArray(), watch, k);
+
+                    //#endregion
+
+
+                    //#region Math.Net
+
+                    //Console.WriteLine("\n\n\nMath.Net: start invert check for matrix of size: " + size);
+                    //var matrixBuilder = MathNet.Numerics.LinearAlgebra.Matrix<double>.Build;
+                    //var A_MD = matrixBuilder.DenseOfArray(A);
+                    ////var A_MD = new MathDot.deMatrix<double>();
+                    ////    .Create(A);
+                    //watch.Restart();
+                    //var B_MD = A_MD.Inverse();
+                    //watch.Stop();
+                    //recordResults(result, A, B_MD.ToArray(), watch, k);
+
+                    //#endregion
+
+                    //#region Math.Net
+
+                    //Console.WriteLine("\n\n\nMath.Net: start invert check for matrix of size: " + size);
+
+                    //watch.Restart();
+                    //A_MD = matrixBuilder.DenseOfArray(A);
+                    //B_MD = A_MD.Inverse();
+                    //watch.Stop();
+
+                    //recordResults(result, A, B_MD.ToArray(), watch, k);
+
+                    #endregion
+
+                    #region StarMath
+
+                    Console.WriteLine("\n\n\nSTARMATH: start solve check for matrix of size: " + size);
+
+                    watch.Restart();
+                    var x2 = StarMath.solve(A, b);
+                    watch.Stop();
+                    recordResults(result, x, x2, watch, k);
+                    #endregion
+                    results.Add(result);
+                }
+            }
+            SaveResultsToCSV("results.csv", results);
+
+
+        }
+
 
         private static void benchMarkMatrixInversion()
         {
@@ -174,77 +306,77 @@ namespace TestEXE_for_StarMath
 
                     #region ALGlib
 
-                    //Console.WriteLine("\n\n\nALGlib: start invert check for matrix of size: " + size);
+                    Console.WriteLine("\n\n\nALGlib: start invert check for matrix of size: " + size);
 
-                    //int info;
-                    //alglib.matinvreport rep;
-                    //watch.Restart();
-                    //var B = (double[,])A.Clone();
-                    //alglib.rmatrixinverse(ref B, out info, out rep);
-                    //watch.Stop();
-                    //recordResults(result, A, B, watch, k);
-
-                    //#endregion
-
-                    //#region Dot Numerics
-
-                    //Console.WriteLine("\n\n\nDot Numerics: start invert check for matrix of size: " + size);
-                    //var A_DN = new DotNum.Matrix(A);
-                    //watch.Restart();
-                    //var B_DN = A_DN.Inverse();
-                    //watch.Stop();
-                    //recordResults(result, A, B_DN.CopyToArray(), watch, k);
-
-                    //#endregion
-                    //#region Dot Numerics
-
-                    //Console.WriteLine("\n\n\nDot Numerics: start invert check for matrix of size: " + size);
-                    //watch.Restart();
-                    //A_DN = new DotNum.Matrix(A);
-                    //B_DN = A_DN.Inverse();
-                    //watch.Stop();
-                    //recordResults(result, A, B_DN.CopyToArray(), watch, k);
-
-                    //#endregion
-
-
-                    //#region Math.Net
-
-                    //Console.WriteLine("\n\n\nMath.Net: start invert check for matrix of size: " + size);
-                    //var matrixBuilder =MathNet.Numerics.LinearAlgebra.Matrix<double>.Build;
-                    //var A_MD =matrixBuilder.DenseOfArray(A);
-                    ////var A_MD = new MathDot.deMatrix<double>();
-                    ////    .Create(A);
-                    //watch.Restart();
-                    //var B_MD = A_MD.Inverse();
-                    //watch.Stop();
-                    //recordResults(result, A, B_MD.ToArray(), watch, k);
-
-                    //#endregion
-
-                    //#region Math.Net
-
-                    //Console.WriteLine("\n\n\nMath.Net: start invert check for matrix of size: " + size);
-
-                    //watch.Restart();
-                    //A_MD =matrixBuilder.DenseOfArray(A);
-                    //B_MD = A_MD.Inverse();
-                    //watch.Stop();
-
-                    //recordResults(result, A, B_MD.ToArray(), watch, k);
-
-                    #endregion
-
-                    #region StarMath
-
-                    Console.WriteLine("\n\n\nSTARMATH: start invert check for matrix of size: " + size);
-
+                    int info;
+                    alglib.matinvreport rep;
                     watch.Restart();
-                    var B = A.inverse();
+                    var B = (double[,])A.Clone();
+                    alglib.rmatrixinverse(ref B, out info, out rep);
                     watch.Stop();
                     recordResults(result, A, B, watch, k);
+
                     #endregion
-                    results.Add(result);
+
+                    #region Dot Numerics
+
+                    Console.WriteLine("\n\n\nDot Numerics: start invert check for matrix of size: " + size);
+                    var A_DN = new DotNum.Matrix(A);
+                    watch.Restart();
+                    var B_DN = A_DN.Inverse();
+                    watch.Stop();
+                    recordResults(result, A, B_DN.CopyToArray(), watch, k);
+
+                    #endregion
+                    #region Dot Numerics
+
+                    Console.WriteLine("\n\n\nDot Numerics: start invert check for matrix of size: " + size);
+                    watch.Restart();
+                    A_DN = new DotNum.Matrix(A);
+                    B_DN = A_DN.Inverse();
+                    watch.Stop();
+                    recordResults(result, A, B_DN.CopyToArray(), watch, k);
+
+                    #endregion
+
+
+                    #region Math.Net
+
+                    Console.WriteLine("\n\n\nMath.Net: start invert check for matrix of size: " + size);
+                    var matrixBuilder = MathNet.Numerics.LinearAlgebra.Matrix<double>.Build;
+                    var A_MD = matrixBuilder.DenseOfArray(A);
+                    //var A_MD = new MathDot.deMatrix<double>();
+                    //    .Create(A);
+                    watch.Restart();
+                    var B_MD = A_MD.Inverse();
+                    watch.Stop();
+                    recordResults(result, A, B_MD.ToArray(), watch, k);
+
+                    #endregion
+
+                    #region Math.Net
+
+                    Console.WriteLine("\n\n\nMath.Net: start invert check for matrix of size: " + size);
+
+                    watch.Restart();
+                    A_MD = matrixBuilder.DenseOfArray(A);
+                    B_MD = A_MD.Inverse();
+                    watch.Stop();
+
+                    recordResults(result, A, B_MD.ToArray(), watch, k);
+
+                    #endregion
+
+                    //#region StarMath
+
+                    //Console.WriteLine("\n\n\nSTARMATH: start invert check for matrix of size: " + size);
+
+                    //watch.Restart();
+                    //B = A.inverse();
+                    //watch.Stop();
+                    //recordResults(result, A, B, watch, k);
+                    //#endregion
+                    //results.Add(result);
                 }
             }
             SaveResultsToCSV("results.csv", results);
@@ -349,9 +481,9 @@ namespace TestEXE_for_StarMath
                                 {
                                     randomPosition = r.Next(size);
                                 } while (ii == randomPosition || formerRandomPositions.Contains(randomPosition));
-                               // formerRandomPositions.Add(randomPosition);
+                                // formerRandomPositions.Add(randomPosition);
                                 var value = (200 * r.NextDouble()) - 100.0;
-                                A[ii, randomPosition] = A[randomPosition,ii] = value;
+                                A[ii, randomPosition] = A[randomPosition, ii] = value;
                             }
                         }
 
@@ -408,6 +540,17 @@ namespace TestEXE_for_StarMath
             if (k == 0) return; //it seems that the first time you call a new function there may be a delay. This is especially
             // true if the function is in another dll.
             var C = A.multiply(invA).subtract(StarMath.makeIdentity(A.GetLength(0)));
+            var error = C.norm2();
+            Console.WriteLine("end invert, error = " + error);
+            Console.WriteLine("time = " + watch.Elapsed);
+            result.Add(error.ToString());
+            result.Add(watch.Elapsed.TotalMilliseconds.ToString());
+        }
+        private static void recordResults(List<string> result, double[] x1, double[] x2, Stopwatch watch, int k)
+        {
+            if (k == 0) return; //it seems that the first time you call a new function there may be a delay. This is especially
+            // true if the function is in another dll.
+            var C = x1.subtract(x2);
             var error = C.norm2();
             Console.WriteLine("end invert, error = " + error);
             Console.WriteLine("time = " + watch.Elapsed);

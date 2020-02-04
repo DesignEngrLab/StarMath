@@ -44,6 +44,7 @@ namespace StarMathLib
         ///     The gauss seidel diagonal dominance ratio
         /// </summary>
         internal static double GaussSeidelDiagonalDominanceRatio { get; set; } = 0.3;
+        internal static float GaussSeidelDiagonalDominanceRatioFloat { get; set; } = 0.3f;
 
         /* in some simple studies, GaussSeidel failed when ALL diagonals were lower than 0.3 (and higher than -0.5)
          * so it may seem imprudent to set the diagonal dominance ratio so high. But this is only to throw out
@@ -63,6 +64,7 @@ namespace StarMathLib
         ///     The gauss seidel relaxation omega
         /// </summary>
         internal static double GaussSeidelRelaxationOmega { get; set; } = 1.25;
+        internal static float GaussSeidelRelaxationOmegaFloat { get; set; } = 1.25f;
 
         /// <summary>
         ///     The maximum sv diter
@@ -150,6 +152,80 @@ namespace StarMathLib
         /// <param name="y">The y.</param>
         /// <returns><c>true</c> if [is less than non negligible] [the specified y]; otherwise, <c>false</c>.</returns>
         public static bool IsLessThanNonNegligible(this double x, double y = 0)
+        {
+            return (x < y && !IsPracticallySame(x, y));
+        }
+
+
+        /// <summary>
+        /// Determines whether [is practically same] [the specified x].
+        /// the norm is within 1e-15
+        /// </summary>
+        /// <param name="x">The x.</param>
+        /// <param name="y">The y.</param>
+        /// <param name="optionalTolerance">An optional tolerance.</param>
+        /// <returns><c>true</c> if [is practically same] [the specified x]; otherwise, <c>false</c>.</returns>
+        public static bool IsPracticallySame(this float x, float y, double optionalTolerance = DefaultEqualityTolerance)
+        {
+            return IsNegligible(x - y, optionalTolerance);
+        }
+
+        /// <summary>
+        /// Determines whether [is practically same] [the specified x].
+        /// the norm is within 1e-15
+        /// </summary>
+        /// <param name="x">The x.</param>
+        /// <param name="y">The y.</param>
+        /// <param name="optionalTolerance">An optional tolerance.</param>
+        /// <returns><c>true</c> if [is practically same] [the specified x]; otherwise, <c>false</c>.</returns>
+        public static bool IsPracticallySame(this float[] x, float[] y, double optionalTolerance = float.NaN)
+        {
+            if (double.IsNaN(optionalTolerance)) optionalTolerance = EqualityTolerance;
+            var n = x.GetLength(0);
+            if (n != y.GetLength(0)) return false;
+            return IsNegligible(x.subtract(y), optionalTolerance);
+        }
+
+        /// <summary>
+        /// Determines whether the specified x is negligible (|x| lte 1e-15).
+        /// </summary>
+        /// <param name="x">The x.</param>
+        /// <param name="optionalTolerance">An optional tolerance.</param>
+        /// <returns><c>true</c> if the specified x is negligible; otherwise, <c>false</c>.</returns>
+        public static bool IsNegligible(this float[] x, double optionalTolerance = DefaultEqualityTolerance)
+        {
+            return (x.norm2(true) <= optionalTolerance);
+        }
+
+        /// <summary>
+        /// Determines whether the specified x is negligible (|x| lte 1e-15).
+        /// </summary>
+        /// <param name="x">The x.</param>
+        /// <param name="optionalTolerance">An optional tolerance.</param>
+        /// <returns><c>true</c> if the specified x is negligible; otherwise, <c>false</c>.</returns>
+        public static bool IsNegligible(this float x, double optionalTolerance = DefaultEqualityTolerance)
+        {
+            return (Math.Abs(x) <= optionalTolerance);
+        }
+
+        /// <summary>
+        ///     Determines whether [is greater than] [the specified y] and not practically the same.
+        /// </summary>
+        /// <param name="x">The x.</param>
+        /// <param name="y">The y.</param>
+        /// <returns><c>true</c> if [is greater than non negligible] [the specified y]; otherwise, <c>false</c>.</returns>
+        public static bool IsGreaterThanNonNegligible(this float x, float y = 0)
+        {
+            return (x > y && !IsPracticallySame(x, y));
+        }
+
+        /// <summary>
+        ///     Determines whether [is less than] [the specified y] and not practically the same.
+        /// </summary>
+        /// <param name="x">The x.</param>
+        /// <param name="y">The y.</param>
+        /// <returns><c>true</c> if [is less than non negligible] [the specified y]; otherwise, <c>false</c>.</returns>
+        public static bool IsLessThanNonNegligible(this float x, float y = 0)
         {
             return (x < y && !IsPracticallySame(x, y));
         }

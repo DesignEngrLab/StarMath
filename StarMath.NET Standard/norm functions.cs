@@ -293,7 +293,7 @@ namespace StarMathLib
         public static double norm2(this IEnumerable<int> x, Boolean dontDoSqrt = false)
         {
             if (x == null) throw new ArithmeticException("The vector, x, is null.");
-            return dontDoSqrt ? x.Sum(a => a*a) : Math.Sqrt(x.Sum(a => a*a));
+            return dontDoSqrt ? x.Sum(a => a*a) : System.MathF.Sqrt(x.Sum(a => a*a));
         }
 
 
@@ -376,7 +376,8 @@ namespace StarMathLib
         public static double normP(this IEnumerable<double> x, double p, Boolean dontDoPRoot = false)
         {
             if (x == null) throw new ArithmeticException("The vector, x, is null.");
-            return dontDoPRoot ? x.Sum(a => Math.Pow(a, p)) : Math.Pow(x.Sum(a => a*a), 1/p);
+            var sum = x.Sum(a => Math.Pow(a, p));
+            return dontDoPRoot ? sum : Math.Pow(sum, 1/p);
         }
 
         /// <summary>
@@ -390,7 +391,8 @@ namespace StarMathLib
         public static double normP(this IEnumerable<int> x, double p, Boolean dontDoPRoot = false)
         {
             if (x == null) throw new ArithmeticException("The vector, x, is null.");
-            return dontDoPRoot ? x.Sum(a => Math.Pow(a, p)) : Math.Pow(x.Sum(a => a*a), 1/p);
+            var sum = x.Sum(a => Math.Pow(a, p));
+            return dontDoPRoot ?sum : Math.Pow(sum, 1/p);
         }
 
 

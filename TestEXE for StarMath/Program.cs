@@ -16,14 +16,14 @@ namespace TestEXE_for_StarMath
         private static void Main()
         {
             //  testRBF();
-             SparseFunctionTest();
+            // SparseFunctionTest();
             // testStackFunctions();
-            //testLUfunctions();
+            testLUfunctions();
             //testSVD();
-            //benchMarkMatrixInversion();
+           // benchMarkMatrixInversion();
             //  compareSolvers_Inversion_to_GaussSeidel();
             //checkEigen();
-            Console.WriteLine("Press any key to close.");
+             Console.WriteLine("Press any key to close.");
             Console.ReadLine();
 
         }
@@ -106,7 +106,7 @@ namespace TestEXE_for_StarMath
             var A = new double[size, size];
             for (var i = 0; i < size; i++)
                 for (var j = 0; j < size; j++)
-                    if (i != j)
+                    //if (i != j)
                         A[i, j] = (200 * r.NextDouble()) - 100.0;
             Console.WriteLine("A =");
             Console.WriteLine(A.MakePrintString());
@@ -122,7 +122,6 @@ namespace TestEXE_for_StarMath
 
             Console.WriteLine("L * U =");
             Console.WriteLine(L.multiply(U).MakePrintString());
-
             var E = A.subtract(L.multiply(U));
             var error = E.norm2();
             Console.WriteLine("error = " + error);
@@ -212,11 +211,14 @@ namespace TestEXE_for_StarMath
                     //#region Math.Net
 
                     //Console.WriteLine("\n\n\nMath.Net: start invert check for matrix of size: " + size);
-                    //var A_MD = MathDot.Matrix.Create(A);
+                    //var matrixBuilder =MathNet.Numerics.LinearAlgebra.Matrix<double>.Build;
+                    //var A_MD =matrixBuilder.DenseOfArray(A);
+                    ////var A_MD = new MathDot.deMatrix<double>();
+                    ////    .Create(A);
                     //watch.Restart();
                     //var B_MD = A_MD.Inverse();
                     //watch.Stop();
-                    //recordResults(result, A, B_MD.CopyToArray(), watch, k);
+                    //recordResults(result, A, B_MD.ToArray(), watch, k);
 
                     //#endregion
 
@@ -225,11 +227,11 @@ namespace TestEXE_for_StarMath
                     //Console.WriteLine("\n\n\nMath.Net: start invert check for matrix of size: " + size);
 
                     //watch.Restart();
-                    //A_MD = MathDot.Matrix.Create(A);
+                    //A_MD =matrixBuilder.DenseOfArray(A);
                     //B_MD = A_MD.Inverse();
                     //watch.Stop();
 
-                    //recordResults(result, A, B_MD.CopyToArray(), watch, k);
+                    //recordResults(result, A, B_MD.ToArray(), watch, k);
 
                     #endregion
 

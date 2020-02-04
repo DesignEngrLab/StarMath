@@ -27,9 +27,9 @@ namespace StarMathLib
         /// <param name="ty">Amount of translation in y.</param>
         /// <param name="tz">Amount of translation in z.</param>
         /// <returns>4-by-4 matrix translated by the amount specified.</returns>
-        public static double[,] Translate(double tx, double ty, double tz)
+        public static float[,] TranslateFloat(float tx, float ty, float tz)
         {
-            var T = makeIdentity(4);
+            var T = makeIdentityFloat(4);
 
             T[0, 3] = tx;
             T[1, 3] = ty;
@@ -44,14 +44,14 @@ namespace StarMathLib
         /// <param name="angle">The amount of angle in degrees (positive is counter-clockwise).</param>
         /// <param name="inRadians">if set to <c>true</c> [in radians].</param>
         /// <returns>4-by-4 matrix rotated by the amount specified.</returns>
-        public static double[,] RotationX(double angle, bool inRadians = false)
+        public static float[,] RotationXFloat(float angle, bool inRadians = false)
         {
-            var rotx = makeIdentity(4);
+            var rotx = makeIdentityFloat(4);
             if (!inRadians)
-                angle = (Math.PI*angle)/180;
+                angle = MathF.PI * angle / 180f;
 
-            rotx[1, 1] = rotx[2, 2] = Math.Cos(angle);
-            rotx[2, 1] = Math.Sin(angle);
+            rotx[1, 1] = rotx[2, 2] = MathF.Cos(angle);
+            rotx[2, 1] = MathF.Sin(angle);
             rotx[1, 2] = -rotx[2, 1];
 
             return rotx;
@@ -63,14 +63,14 @@ namespace StarMathLib
         /// <param name="angle">The amount of angle in degrees (positive is counter-clockwise).</param>
         /// <param name="inRadians">if set to <c>true</c> [in radians].</param>
         /// <returns>4-by-4 matrix rotated by the amount specified.</returns>
-        public static double[,] RotationY(double angle, bool inRadians = false)
+        public static float[,] RotationYFloat(float angle, bool inRadians = false)
         {
-            var roty = makeIdentity(4);
+            var roty = makeIdentityFloat(4);
             if (!inRadians)
-                angle = (Math.PI*angle)/180;
+                angle = MathF.PI * angle / 180f;
 
-            roty[0, 0] = roty[2, 2] = Math.Cos(angle);
-            roty[0, 2] = Math.Sin(angle);
+            roty[0, 0] = roty[2, 2] = MathF.Cos(angle);
+            roty[0, 2] = MathF.Sin(angle);
             roty[2, 0] = -roty[0, 2];
 
             return roty;
@@ -82,14 +82,14 @@ namespace StarMathLib
         /// <param name="angle">The amount of angle in degrees (positive is counter-clockwise).</param>
         /// <param name="inRadians">if set to <c>true</c> [in radians].</param>
         /// <returns>4-by-4 matrix rotated by the amount specified.</returns>
-        public static double[,] RotationZ(double angle, bool inRadians = false)
+        public static float[,] RotationZFloat(float angle, bool inRadians = false)
         {
-            var rotz = makeIdentity(4);
+            var rotz = makeIdentityFloat(4);
             if (!inRadians)
-                angle = (Math.PI*angle)/180;
+                angle = MathF.PI * angle / 180f;
 
-            rotz[0, 0] = rotz[1, 1] = Math.Cos(angle);
-            rotz[1, 0] = Math.Sin(angle);
+            rotz[0, 0] = rotz[1, 1] = MathF.Cos(angle);
+            rotz[1, 0] = MathF.Sin(angle);
             rotz[0, 1] = -rotz[1, 0];
 
             return rotz;
